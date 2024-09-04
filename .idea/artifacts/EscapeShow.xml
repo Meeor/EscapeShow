@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="EscapeShow">
+    <output-path>$USER_HOME$/Desktop/Project Escape/Escape Show (테스트용)/plugins</output-path>
+    <root id="archive" name="EscapeShow.jar">
+      <element id="module-output" name="commandtest.main" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
+    </root>
+  </artifact>
+</component>

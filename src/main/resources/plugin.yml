@@ -1,0 +1,29 @@
+name: EscapeShow
+version: 1.2.0
+author: rion
+main: kr.rion.plugin.Loader
+api-version: 1.20
+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.9.25
+  - org.jetbrains.kotlin:kotlin-reflect:1.9.25
+
+commands:
+  리셋:
+    description: 게임맵을 리셋합니다.
+    usage: /<command> <게임/로비>
+    permission: world.reset
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
+  좌표공개:
+    description: 서바이벌및 모험모드의 플레이어들의 좌표를 공개합니다.
+    usage: /<command>
+  랜덤티피:
+    description: 게임월드의 랜덤티피위치를확인하거나 리셋합니다.
+    usage: /<command> <목록/재설정>
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
+  아이템지급:
+    description: 게임에 필요한 아이템들을 지급합니다.
+    usage: /<command> <아이템이름>
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
