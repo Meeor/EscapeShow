@@ -4,18 +4,30 @@ import com.onarandombox.MultiverseCore.MultiverseCore
 import com.onarandombox.MultiverseCore.api.MVWorldManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.World
 import org.bukkit.command.CommandSender
-import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.Plugin
 
-class WorldManager(plugin: JavaPlugin) {
+object WorldManager {
     private var worldManager: MVWorldManager? = null
     private val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.RED}"
     private val console = plugin.server.consoleSender
 
-    init {
-        // MultiverseCore 플러그인에서 MVWorldManager 를 초기화합니다.
+    lateinit var plugin: Plugin
+
+    fun init(plugin: Plugin) {
+        this.plugin = plugin
+    }
+
+    fun initialize() {
+        // MultiverseCore 플러그인에서 MVWorldManager를 초기화
         val multiverseCore = Bukkit.getPluginManager().getPlugin("Multiverse-Core") as? MultiverseCore
-        worldManager = multiverseCore?.mvWorldManager // getMVWorldManager() 메서드를 사용
+        if (multiverseCore != null) {
+            worldManager = multiverseCore.mvWorldManager
+            Bukkit.getLogger().info("Multiverse-Core 초기화 완료.")
+        } else {
+            Bukkit.getLogger().warning("Multiverse-Core 플러그인을 찾을 수 없습니다.")
+        }
     }
 
     fun deleteWorld(worldName: String, sender: CommandSender): Boolean {
@@ -67,6 +79,11 @@ class WorldManager(plugin: JavaPlugin) {
             sender.sendMessage("$prefix 월드 ${ChatColor.GREEN}[$copyWorldName] ${ChatColor.RED}를 찾을 수 없습니다.")
             false
         }
+    }
+
+    fun getMultiverseWorld(worldName: String): World? {
+        val mvWorld = worldManager?.getMVWorld(worldName)
+        return mvWorld?.cbWorld  // CraftBukkit 월드를 반환
     }
 }
 

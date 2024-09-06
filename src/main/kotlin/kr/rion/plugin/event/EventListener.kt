@@ -2,6 +2,7 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.item.ItemAction.handleFlameGun
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -21,8 +22,23 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 
 
+/*
+
+init {
+    // 각종 이벤트 리스너 등록
+    Bukkit.getPluginManager().registerEvents(PlayerInteractListener(), Bukkit.getPluginManager().plugins[0])
+    Bukkit.getPluginManager().registerEvents(MovementListener(), Bukkit.getPluginManager().plugins[0])
+    Bukkit.getPluginManager().registerEvents(EntityDamageListener(), Bukkit.getPluginManager().plugins[0])
+    // 다른 이벤트 리스너들도 추가 가능
+}
+
+*/
+
+
+
+
+/////////////////////파일 분리 예정/////////////////
 class EventListener(private val plugin: Loader) : Listener {
-    val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
     val line = "=".repeat(40)
     val teleport = plugin.getTeleport()
 

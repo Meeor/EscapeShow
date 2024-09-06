@@ -1,5 +1,6 @@
 package kr.rion.plugin.command
 
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -8,7 +9,6 @@ import org.bukkit.inventory.ItemStack
 
 private val TagType = org.bukkit.persistence.PersistentDataType.STRING
 private val TagValue = true.toString()
-private val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
 
 object GiveItem {
 

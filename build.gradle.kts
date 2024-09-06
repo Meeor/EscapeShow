@@ -27,3 +27,13 @@ dependencies {
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
 }
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "kr.rion.plugin.Loader"
+        )
+    }
+    from(sourceSets.main.get().output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
