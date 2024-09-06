@@ -1,12 +1,12 @@
 package kr.rion.plugin.util
 
+import kr.rion.plugin.manager.WorldManager.getMultiverseWorld
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
@@ -18,8 +18,8 @@ object teleport{
     lateinit var safeLocations: List<Location>
     private val designatedWorldName = "lobby"
     private val destinationWorldName = "game"
-    private val designatedWorld: World? = Bukkit.getWorld(designatedWorldName)
-    private val destinationWorld: World? = Bukkit.getWorld(destinationWorldName)
+    private val designatedWorld: World? = getMultiverseWorld(designatedWorldName)
+    private val destinationWorld: World? = getMultiverseWorld(destinationWorldName)
 
     var hasInitializedSafeLocations = false
 
