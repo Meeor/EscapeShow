@@ -1,10 +1,11 @@
 package kr.rion.plugin
 
+import com.onarandombox.MultiverseCore.MultiverseCore
+import com.onarandombox.MultiverseCore.api.MVWorldManager
 import kr.rion.plugin.command.CommandHandler
 import kr.rion.plugin.event.EventListener
-import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.TabComplete
-import kr.rion.plugin.util.teleport
+import kr.rion.plugin.util.Teleport
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -17,10 +18,11 @@ import org.bukkit.scheduler.BukkitTask
 
 
 class Loader : JavaPlugin() {
+    private var worldManager: MVWorldManager? = null
     private var playerCheckTask: BukkitTask? = null
 
-    fun getTeleport(): teleport {
-        return teleport
+    fun getTeleport(): Teleport {
+        return Teleport
     }
 
     companion object {
@@ -36,8 +38,8 @@ class Loader : JavaPlugin() {
         CommandHandler(this).registerCommands()
         server.pluginManager.registerEvents(EventListener(), this)
         */
-        val commandHandler = CommandHandler(this, teleport)
-        teleport.initialize(this)
+        val commandHandler = CommandHandler(this, Teleport)
+        Teleport.initialize(this)
         val line = "=".repeat(50)
         console.sendMessage("${ChatColor.GOLD}$line")
         console.sendMessage("")
@@ -59,9 +61,12 @@ class Loader : JavaPlugin() {
                 checkPlayersWithTag("Escape")
             }
         }.runTaskTimer(this, 0L, 1L) // 1 ticks마다 실행 (0.05초마다)
-
-        WorldManager.init(this)
-        WorldManager.initialize()
+        val core = server.pluginManager.getPlugin("Multiverse-Core") as MultiverseCore?
+        if (core != null) {
+            worldManager = core.mvWorldManager
+        } else {
+            logger.severe("Multiverse-Core 플러그인이 필요합니다!")
+        }
 
         //자동완성 등록
         getCommand("리셋")?.tabCompleter = TabComplete()
@@ -119,9 +124,9 @@ class Loader : JavaPlugin() {
             override fun run() {
                 Bukkit.getOnlinePlayers().forEach { player ->
                     val loc = player.location
-                    if (teleport.isInDesignatedArea(loc)) {
+                    if (Teleport.isInDesignatedArea(loc)) {
                         Bukkit.getLogger().warning("지금 텔레포트합니다.")
-                        teleport.teleportToRandomLocation(player)
+                        Teleport.teleportToRandomLocation(player)
                     }
                 }
             }

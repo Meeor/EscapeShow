@@ -1,10 +1,9 @@
 package kr.rion.plugin.command
 
 
-import kr.rion.plugin.manager.WorldManager.copyWorld
-import kr.rion.plugin.manager.WorldManager.deleteWorld
+import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.global.prefix
-import kr.rion.plugin.util.teleport
+import kr.rion.plugin.util.Teleport
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -31,9 +30,10 @@ fun registerCommands() {
 
 
 /////////////파일 분리 예정/////////////
-class CommandHandler(plugin: JavaPlugin, private val teleport: teleport) : CommandExecutor {
+class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : CommandExecutor {
 
     private var UserCount: Int = 0
+    private val worldManager = WorldManager(plugin)
 
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
@@ -162,12 +162,12 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: teleport) : Comma
         Bukkit.broadcastMessage("${ChatColor.GOLD}** 게임맵을 리셋하는 도중에는 잠시 서버가 렉이 걸릴수있습니다. ** \n** 움직임을 최소화 해주시길 바랍니다. **")
         // 월드 제거
         Bukkit.broadcastMessage("$prefix 사용한 게임맵을 제거중입니다..")
-        if (!deleteWorld("game", sender)) {
+        if (!worldManager.deleteWorld("game", sender)) {
             return false
         }
         // 월드 복사
         Bukkit.broadcastMessage("$prefix 백업된 게임맵을 불러오는 중입니다...")
-        if (!copyWorld("backupgame", "game", sender)) {
+        if (!worldManager.copyWorld("backupgame", "game", sender)) {
             return false
         }
 
@@ -187,12 +187,12 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: teleport) : Comma
         movePlayersToLobby("lobby")
         // 월드 제거
         sender.sendMessage("$prefix 사용한 로비맵을 제거중입니다..")
-        if (!deleteWorld("lobby", sender)) {
+        if (!worldManager.deleteWorld("lobby", sender)) {
             return false
         }
         // 월드 복사
         sender.sendMessage("$prefix 백업된 로비맵을 불러오는 중입니다...")
-        if (!copyWorld("backuplobby", "lobby", sender)) {
+        if (!worldManager.copyWorld("backuplobby", "lobby", sender)) {
             return false
         }
 

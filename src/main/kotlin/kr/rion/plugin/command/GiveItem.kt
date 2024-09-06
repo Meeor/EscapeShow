@@ -17,7 +17,7 @@ object GiveItem {
         val quantity = 1
         val flamegun = NamespacedKey("EscapeShow", "flamegun")
 
-        val item = ItemStack(Material.FIRE_CHARGE, quantity) // Fire Charge를 예시로 사용
+        val item = ItemStack(Material.FLINT, quantity)
         val meta = item.itemMeta
         meta.setDisplayName(itemName)
         meta.persistentDataContainer.set(flamegun, TagType, TagValue)

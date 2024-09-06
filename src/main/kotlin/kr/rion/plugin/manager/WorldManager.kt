@@ -6,28 +6,17 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.World
 import org.bukkit.command.CommandSender
-import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.java.JavaPlugin
 
-object WorldManager {
+class WorldManager(plugin: JavaPlugin) {
     private var worldManager: MVWorldManager? = null
     private val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.RED}"
     private val console = plugin.server.consoleSender
 
-    lateinit var plugin: Plugin
-
-    fun init(plugin: Plugin) {
-        this.plugin = plugin
-    }
-
-    fun initialize() {
-        // MultiverseCore 플러그인에서 MVWorldManager를 초기화
+    init {
+        // MultiverseCore 플러그인에서 MVWorldManager 를 초기화합니다.
         val multiverseCore = Bukkit.getPluginManager().getPlugin("Multiverse-Core") as? MultiverseCore
-        if (multiverseCore != null) {
-            worldManager = multiverseCore.mvWorldManager
-            Bukkit.getLogger().info("Multiverse-Core 초기화 완료.")
-        } else {
-            Bukkit.getLogger().warning("Multiverse-Core 플러그인을 찾을 수 없습니다.")
-        }
+        worldManager = multiverseCore?.mvWorldManager // getMVWorldManager() 메서드를 사용
     }
 
     fun deleteWorld(worldName: String, sender: CommandSender): Boolean {

@@ -1,6 +1,6 @@
 package kr.rion.plugin.util
 
-import kr.rion.plugin.manager.WorldManager.getMultiverseWorld
+import kr.rion.plugin.manager.WorldManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -12,14 +12,25 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 
 
-object teleport{
+object Teleport {
+
+
+    private var worldManager: WorldManager? = null
+
+    fun initialize(plugin: JavaPlugin) {
+        Bukkit.getScheduler().runTaskLater(plugin, object : Runnable {
+            override fun run() {
+                worldManager = WorldManager(plugin)
+            }
+        }, 100L) // 100틱 (5초) 지연
+    }
 
     private lateinit var plugin: JavaPlugin
     lateinit var safeLocations: List<Location>
     private val designatedWorldName = "lobby"
     private val destinationWorldName = "game"
-    private val designatedWorld: World? = getMultiverseWorld(designatedWorldName)
-    private val destinationWorld: World? = getMultiverseWorld(destinationWorldName)
+    private val designatedWorld: World? = worldManager?.getMultiverseWorld(designatedWorldName)
+    private val destinationWorld: World? = worldManager?.getMultiverseWorld(destinationWorldName)
 
     var hasInitializedSafeLocations = false
 
@@ -57,7 +68,8 @@ object teleport{
             val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
             if (isLocationSafe(location) && !safeLocationList.contains(location)) {
                 safeLocationList.add(location)
-                Bukkit.getLogger().info("안전한 좌표 발견: ${location.x}, ${location.y}, ${location.z} 총 찾은갯수 : ${safeLocationList.size}")
+                Bukkit.getLogger()
+                    .info("안전한 좌표 발견: ${location.x}, ${location.y}, ${location.z} 총 찾은갯수 : ${safeLocationList.size}")
             }
             attempts++
         }
@@ -147,10 +159,6 @@ object teleport{
 
     fun setInitializedSafeLocations(status: Boolean) {
         hasInitializedSafeLocations = status
-    }
-
-    fun initialize(plugin: JavaPlugin) {
-        this.plugin = plugin
     }
 
 }

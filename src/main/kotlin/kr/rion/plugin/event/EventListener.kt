@@ -125,7 +125,7 @@ class EventListener(private val plugin: Loader) : Listener {
                     teleport.initializeSafeLocations()
                     plugin.startPlayerCheckTask()
                 }
-            }.runTaskLater(plugin, 100L)
+            }.runTaskLater(plugin, 200L)
         }
     }
 
