@@ -29,7 +29,7 @@ object HealAction {
                 if (currentCount >= count) {
                     val effect = PotionEffect(PotionEffectType.SLOW, 3, 1, false, false)
                     player.addPotionEffect(effect)
-                    inventory.removeItemFromInventory(player, Material.PAPER,1)
+                    inventory.removeItemFromInventory(player, Material.PAPER, 1)
                     val maxHealth = player.maxHealth
                     val newHealth = (player.health + 5).coerceAtMost(maxHealth)
                     player.health = newHealth

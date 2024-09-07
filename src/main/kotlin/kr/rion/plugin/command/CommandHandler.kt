@@ -3,8 +3,8 @@ package kr.rion.plugin.command
 
 import kr.rion.plugin.item.ItemAction.handleResetContract
 import kr.rion.plugin.manager.WorldManager
-import kr.rion.plugin.util.global.prefix
 import kr.rion.plugin.util.Teleport
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -110,8 +110,8 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
         }
     }
 
-    private fun handleItemReset(sender: CommandSender){
-        if(sender.isOp){
+    private fun handleItemReset(sender: CommandSender) {
+        if (sender.isOp) {
             handleResetContract()
             sender.sendMessage("전체 플레이어의 계약서 상태를 초기화 시켰습니다.")
         }

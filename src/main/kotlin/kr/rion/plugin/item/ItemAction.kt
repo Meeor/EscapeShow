@@ -6,19 +6,24 @@ object ItemAction {
     fun handleFlameGun(player: Player) {
         FlameGunActions.launchFlare(player)
     }
-    fun handleHeal(player: Player){
+
+    fun handleHeal(player: Player) {
         HealAction.lunchHeal(player)
     }
-    fun handleBerries(player: Player){
+
+    fun handleBerries(player: Player) {
         BerriesAction.lunchBerries(player)
     }
-    fun handleContract(player:Player){
+
+    fun handleContract(player: Player) {
         ContractAction.lunchContract(player)
     }
-    fun handleMap(player: Player){
+
+    fun handleMap(player: Player) {
         MapAction.lunchMap(player)
     }
-    fun handleResetContract(){
+
+    fun handleResetContract() {
         ContractAction.resetContract()
     }
 }

@@ -17,28 +17,30 @@ object Teleport {
 
     private var worldManager: WorldManager? = null
 
+
+    private lateinit var plugin: JavaPlugin
+    lateinit var safeLocations: MutableList<Location>
+    private val designatedWorldName = "lobby"
+    private val destinationWorldName = "game"
+    private var designatedWorld: World? = null
+    private var destinationWorld: World? = null
+
+    var hasInitializedSafeLocations = false
+
     fun initialize(plugin: JavaPlugin) {
         Bukkit.getScheduler().runTaskLater(plugin, object : Runnable {
             override fun run() {
                 worldManager = WorldManager(plugin)
+                safeLocations = mutableListOf()
             }
-        }, 100L) // 100틱 (5초) 지연
+        }, 20L) // 20틱 (1초) 지연
     }
 
-    private lateinit var plugin: JavaPlugin
-    lateinit var safeLocations: List<Location>
-    private val designatedWorldName = "lobby"
-    private val destinationWorldName = "game"
-    private val designatedWorld: World? = worldManager?.getMultiverseWorld(designatedWorldName)
-    private val destinationWorld: World? = worldManager?.getMultiverseWorld(destinationWorldName)
-
-    var hasInitializedSafeLocations = false
-
     fun initializeSafeLocations() {
-        Bukkit.getLogger().info("로비 변수 : $designatedWorldName")
-        Bukkit.getLogger().info("게임 변수 : $destinationWorldName")
-        Bukkit.getLogger().info("월드 불러오기(로비) : ${designatedWorld.toString()}")
-        Bukkit.getLogger().info("월드 불러오기(게임) : ${destinationWorld.toString()}")
+
+        destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)
+
+        val destinationWorld: World? = worldManager?.getMultiverseWorld(destinationWorldName)
         if (hasInitializedSafeLocations) return
 
         val world = destinationWorld
@@ -47,7 +49,7 @@ object Teleport {
             return
         }
 
-        val safeLocationList = mutableListOf<Location>()
+
         val rand = Random()
         val startTime = System.currentTimeMillis()
         Bukkit.getLogger().info("이동될 안전한좌표탐색을 시작합니다.")
@@ -64,21 +66,18 @@ object Teleport {
         val maxAttempts = 10000 // 시도 횟수 제한 (필요에 따라 조정 가능)
         var attempts = 0
 
-        while (safeLocationList.size < requiredSafeLocations && attempts < maxAttempts) {
+        while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
             val x = rand.nextInt(maxX - minX + 1) + minX
             val y = rand.nextInt(maxY - minY + 1) + minY
             val z = rand.nextInt(maxZ - minZ + 1) + minZ
 
             val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
-            if (isLocationSafe(location) && !safeLocationList.contains(location)) {
-                safeLocationList.add(location)
-                Bukkit.getLogger()
-                    .info("안전한 좌표 발견: ${location.x}, ${location.y}, ${location.z} 총 찾은갯수 : ${safeLocationList.size}")
+            if (isLocationSafe(location) && !safeLocations.contains(location)) {
+                safeLocations.add(location)
             }
             attempts++
         }
 
-        safeLocations = safeLocationList
         val endTime = System.currentTimeMillis()
         Bukkit.getLogger().info("안전한 좌표 ${safeLocations.size} 개를 찾았습니다. 걸린시간 : ${endTime - startTime}ms")
         hasInitializedSafeLocations = true
@@ -86,6 +85,7 @@ object Teleport {
 
 
     fun isInDesignatedArea(loc: Location): Boolean {
+        designatedWorld = worldManager?.getMultiverseWorld(designatedWorldName)
         val world = loc.world ?: return false
         if (world != designatedWorld) {
             return false
@@ -96,7 +96,7 @@ object Teleport {
     }
 
     fun teleportToRandomLocation(player: Player) {
-        destinationWorld ?: return
+        destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)?: return
         val startTime = System.currentTimeMillis()
         val maxAttempts = 100
         var randomLocation: Location? = null
@@ -115,7 +115,9 @@ object Teleport {
             return
         }
 
+
         player.teleport(randomLocation)
+        safeLocations.remove(randomLocation)
         val endTime = System.currentTimeMillis()
         Bukkit.getLogger().info("teleportToRandomLocation 지연시간: ${endTime - startTime}ms")
         setImmune(player, 3000)

@@ -7,7 +7,11 @@ import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.item.ItemAction.handleHeal
 import kr.rion.plugin.item.ItemAction.handleMap
 import kr.rion.plugin.util.global.prefix
-import org.bukkit.*
+import net.md_5.bungee.api.ChatColor
+import org.bukkit.Bukkit
+import org.bukkit.GameMode
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -24,7 +28,6 @@ import org.bukkit.event.world.WorldLoadEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
-import net.md_5.bungee.api.ChatColor
 
 
 /*
@@ -125,12 +128,7 @@ class EventListener(private val plugin: Loader) : Listener {
         if (loadedWorld == destinationWorld) {// 월드 이름을 이용해 월드 객체를 가져옵니다.
             Bukkit.getLogger().info("월드가 로딩중인것을 확인하였습니다. 랜덤티피기능이 작동할수있게하기위하여 5초뒤 안전위치 탐색을 시작합니다.")
 
-            object : BukkitRunnable() {
-                override fun run() {
-                    teleport.initializeSafeLocations()
-                    plugin.startPlayerCheckTask()
-                }
-            }.runTaskLater(plugin, 200L)
+
         }
     }
 
@@ -186,7 +184,8 @@ class EventListener(private val plugin: Loader) : Listener {
                             handleContract(player)
                         }
                     }
-                    Material.MOJANG_BANNER_PATTERN ->{
+
+                    Material.MOJANG_BANNER_PATTERN -> {
                         if (itemMeta.displayName == "${ChatColor.GRAY}지도" && itemMeta.persistentDataContainer.has(
                                 map,
                                 PersistentDataType.STRING

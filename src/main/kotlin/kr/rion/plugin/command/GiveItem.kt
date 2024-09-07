@@ -30,8 +30,9 @@ object GiveItem {
         player.inventory.addItem(item)
         player.sendMessage("$prefix $itemName${ChatColor.GREEN}을(를) 지급하였습니다.")
     }
+
     ///붕대
-    fun Heal(player: Player){
+    fun Heal(player: Player) {
         val itemName = "${ChatColor.GREEN}붕대"
         val quantity = 1
         val heal = NamespacedKey("EscapeShow", "heal")
@@ -50,8 +51,9 @@ object GiveItem {
         player.inventory.addItem(item)
         player.sendMessage("$prefix $itemName${ChatColor.GREEN}을(를) 지급하였습니다.")
     }
+
     /////농축된 열매
-    fun Berries(player: Player){
+    fun Berries(player: Player) {
         val itemName = "${ChatColor.GREEN}농축된 열매"
         val quantity = 1
         val berries = NamespacedKey("EscapeShow", "berries")
@@ -70,14 +72,15 @@ object GiveItem {
         player.inventory.addItem(item)
         player.sendMessage("$prefix $itemName${ChatColor.GREEN}을(를) 지급하였습니다.")
     }
-    fun Contract(player: Player){
+
+    fun Contract(player: Player) {
         val itemName = "${ChatColor.GREEN}계약서"
         val quantity = 1
         val contract = NamespacedKey("EscapeShow", "contract")
         val item = ItemStack(Material.SKULL_BANNER_PATTERN, quantity)
         val meta = item.itemMeta
         meta.setDisplayName(itemName)
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES , ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_POTION_EFFECTS)
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_POTION_EFFECTS)
         meta.persistentDataContainer.set(contract, TagType, TagValue)
         item.itemMeta = meta
 
@@ -85,14 +88,14 @@ object GiveItem {
         player.sendMessage("$prefix $itemName${ChatColor.GREEN}을(를) 지급하였습니다.")
     }
 
-    fun Map(player: Player){
+    fun Map(player: Player) {
         val itemName = "${ChatColor.GREEN}지도"
         val quantity = 1
         val map = NamespacedKey("EscapeShow", "map")
         val item = ItemStack(Material.MOJANG_BANNER_PATTERN, quantity)
         val meta = item.itemMeta
         meta.setDisplayName(itemName)
-       meta.persistentDataContainer.set(map, TagType, TagValue)
+        meta.persistentDataContainer.set(map, TagType, TagValue)
         item.itemMeta = meta
 
         player.inventory.addItem(item)

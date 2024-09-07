@@ -40,7 +40,7 @@ class TabComplete : TabCompleter {
 
     private fun GiveItem(args: Array<out String>): List<String> {
         return if (args.size == 1) {
-            listOf("플레어건", "붕대","농축된열매","계약서","지도").filter { it.startsWith(args[0], ignoreCase = true) }
+            listOf("플레어건", "붕대", "농축된열매", "계약서", "지도").filter { it.startsWith(args[0], ignoreCase = true) }
         } else {
             emptyList()
         }
