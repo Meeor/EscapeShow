@@ -24,7 +24,7 @@ class TabComplete : TabCompleter {
 
     private fun RandomTP(args: Array<out String>): List<String> {
         return if (args.size == 1) {
-            listOf("목록", "재설정").filter { it.startsWith(args[0], ignoreCase = true) }
+            listOf("목록", "재설정","초기화").filter { it.startsWith(args[0], ignoreCase = true) }
         } else {
             emptyList()
         }

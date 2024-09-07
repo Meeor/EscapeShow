@@ -4,6 +4,7 @@ package kr.rion.plugin.command
 import kr.rion.plugin.item.ItemAction.handleResetContract
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.Teleport
+import kr.rion.plugin.util.Teleport.safeLocations
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -149,6 +150,7 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
                 sender.sendMessage("$prefix 랜덤이동좌표를 새롭게 설정하였습니다. ${ChatColor.YELLOW}총설정된 갯수 : ${coordinates.size}")
 
             }
+            "초기화" -> handleRandomListClear(sender)
 
             else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. <게임/로비>를 입력하세요.")
         }
@@ -166,6 +168,17 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
             sender.sendMessage("$prefix 저장된 좌표가 없습니다.")
         }
         return true
+    }
+    private fun handleRandomListClear(sender: CommandSender){
+        val coordinates = safeLocations
+        if (coordinates.isNotEmpty()) {
+            coordinates.forEachIndexed { index, location ->
+                safeLocations.remove(location)
+            }
+            sender.sendMessage("$prefix 저장된 좌표가 모두 지워졌습니다.")
+        } else {
+            sender.sendMessage("$prefix 저장된 좌표가 없습니다.")
+        }
     }
 
     private fun handleGameReset(sender: CommandSender): Boolean {
@@ -189,6 +202,8 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
         val console: CommandSender = Bukkit.getConsoleSender()
         val cmd = "plugman reload Multiverse-Portals" // 실행할 명령어
 
+        sender.sendMessage("$prefix 랜덤좌표를 선정 중입니다.....")
+        Teleport.initializeSafeLocations()
 
         Bukkit.dispatchCommand(console, cmd)
         Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")
