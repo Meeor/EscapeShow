@@ -27,3 +27,8 @@ commands:
     usage: /<command> <아이템이름>
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
+  계약서초기화:
+    description: 아이템 계약서로 수정된 플레이어의 체력과 데미지를 원상복구시킵니다.
+    usage: /<command>
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.

@@ -43,6 +43,7 @@ class Loader : JavaPlugin() {
         getCommand("좌표공개")?.setExecutor(commandHandler)
         getCommand("랜덤티피")?.setExecutor(commandHandler)
         getCommand("아이템지급")?.setExecutor(commandHandler)
+        getCommand("계약서초기화")?.setExecutor(commandHandler)
         object : BukkitRunnable() {
             override fun run() {
                 global.checkPlayersWithTag("Escape")
