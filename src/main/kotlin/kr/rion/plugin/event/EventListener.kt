@@ -103,9 +103,11 @@ class EventListener(private val plugin: Loader) : Listener {
     //탈출한 플레이어가 받는 모든데미지 무시
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onDamage(event: EntityDamageEvent) {
-        val player = event.entity as Player
-        if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
-            event.isCancelled = true
+        if (event.entity is Player) {
+            val player = event.entity as Player
+            if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
+                event.isCancelled = true
+            }
         }
     }
 
