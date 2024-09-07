@@ -44,7 +44,6 @@ object FlameGunActions {
                 override fun run() {
                     t += 1
                     loc.add(0.0, 1.0, 0.0) // 매 틱마다 위치를 위로 이동
-                    console.sendMessage("현재틱 : $t || 현재 좌표 : $loc")
                     onlinePlayer.world.spawnParticle(
                         Particle.CLOUD,
                         loc,
