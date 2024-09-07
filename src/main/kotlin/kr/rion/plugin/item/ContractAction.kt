@@ -1,6 +1,8 @@
 package kr.rion.plugin.item
 
+import kr.rion.plugin.util.inventory
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -26,5 +28,24 @@ object ContractAction {
         val currentAttackDamage = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue ?: 1.0
         player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.baseValue = currentAttackDamage * 2
         player.damage(0.1)
+        inventory.removeItemFromInventory(player, Material.SKULL_BANNER_PATTERN, 1)
+
+        player.addScoreboardTag("Contract_Activate")
+    }
+
+    fun resetContract() {
+        for (player in Bukkit.getOnlinePlayers()) {
+            if (player.scoreboardTags.contains("Contract_Activate")) {
+                val playerhealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)
+                playerhealth?.baseValue = 20.0 // 최대 체력을 설정합니다.
+                player.health = 20.0 // 현재 체력도 최대 체력에 맞춰줍니다.
+
+                val playerdamage = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)
+                if (playerdamage != null) {
+                    val currentDamage = playerdamage.baseValue
+                    playerdamage.baseValue = currentDamage / 2
+                }
+            }
+        }
     }
 }

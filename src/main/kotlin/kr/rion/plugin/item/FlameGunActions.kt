@@ -53,7 +53,7 @@ object FlameGunActions {
                     // 80틱 작업 끝나면 중지
                     if (t > 80) {
                         cancel()
-                        val movedLoc = loc.clone().add(0.0, 75.0, 0.0)
+                        val movedLoc = loc.clone().add(0.0, -5.0, 0.0)
                         onlinePlayer.world.spawnParticle(
                             Particle.REDSTONE,
                             movedLoc,

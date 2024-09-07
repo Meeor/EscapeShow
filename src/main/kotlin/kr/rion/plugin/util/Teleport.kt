@@ -35,6 +35,10 @@ object Teleport {
     var hasInitializedSafeLocations = false
 
     fun initializeSafeLocations() {
+        Bukkit.getLogger().info("로비 변수 : $designatedWorldName")
+        Bukkit.getLogger().info("게임 변수 : $destinationWorldName")
+        Bukkit.getLogger().info("월드 불러오기(로비) : ${designatedWorld.toString()}")
+        Bukkit.getLogger().info("월드 불러오기(게임) : ${destinationWorld.toString()}")
         if (hasInitializedSafeLocations) return
 
         val world = destinationWorld

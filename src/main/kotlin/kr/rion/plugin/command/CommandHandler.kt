@@ -1,6 +1,7 @@
 package kr.rion.plugin.command
 
 
+import kr.rion.plugin.item.ItemAction.handleResetContract
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.global.prefix
 import kr.rion.plugin.util.Teleport
@@ -42,6 +43,7 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
             label.equals("좌표공개", ignoreCase = true) -> handleCoordinatesCommand(sender)
             label.equals("랜덤티피", ignoreCase = true) -> handleRandomTP(sender, args)
             label.equals("아이템지급", ignoreCase = true) -> handleitem(sender, args)
+            label.equals("계약서초기화", ignoreCase = true) -> handleItemReset(sender)
             else -> return false
         }
         return true
@@ -99,11 +101,19 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
                 "붕대" -> GiveItem.Heal(itemplayer)
                 "농축된열매" -> GiveItem.Berries(itemplayer)
                 "계약서" -> GiveItem.Contract(itemplayer)
+                "지도" -> GiveItem.Map(itemplayer)
                 else -> sender.sendMessage("$prefix ${ChatColor.RED} 아이템이름을 정확히 입력해주세요 (자동완성 지원됩니다.)")
             }
         } else {
             sender.sendMessage("$prefix ${ChatColor.RED}플레이어만 받을수 있습니다.")
             return
+        }
+    }
+
+    private fun handleItemReset(sender: CommandSender){
+        if(sender.isOp){
+            handleResetContract()
+            sender.sendMessage("전체 플레이어의 계약서 상태를 초기화 시켰습니다.")
         }
     }
 

@@ -15,4 +15,10 @@ object ItemAction {
     fun handleContract(player:Player){
         ContractAction.lunchContract(player)
     }
+    fun handleMap(player: Player){
+        MapAction.lunchMap(player)
+    }
+    fun handleResetContract(){
+        ContractAction.resetContract()
+    }
 }

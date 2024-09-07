@@ -5,6 +5,7 @@ import kr.rion.plugin.item.ItemAction.handleBerries
 import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.item.ItemAction.handleHeal
+import kr.rion.plugin.item.ItemAction.handleMap
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.*
 import org.bukkit.entity.Player
@@ -142,11 +143,12 @@ class EventListener(private val plugin: Loader) : Listener {
         val heal = NamespacedKey("EscapeShow", "heal")
         val berries = NamespacedKey("EscapeShow", "berries")
         val contract = NamespacedKey("EscapeShow", "contract")
+        val map = NamespacedKey("EscapeShow", "map")
         if (event.hand == EquipmentSlot.HAND) {
             if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
                 when (item.type) {
                     Material.FLINT -> {
-                        if (itemMeta.displayName == "${ChatColor.RED}${ChatColor.ITALIC}플레어건" && itemMeta.persistentDataContainer.has(
+                        if (itemMeta.displayName == "${ChatColor.RED}플레어건" && itemMeta.persistentDataContainer.has(
                                 flamegun,
                                 PersistentDataType.STRING
                             )
@@ -156,7 +158,7 @@ class EventListener(private val plugin: Loader) : Listener {
                     }
 
                     Material.PAPER -> {
-                        if (itemMeta.displayName == "${ChatColor.GREEN}${ChatColor.ITALIC}붕대" && itemMeta.persistentDataContainer.has(
+                        if (itemMeta.displayName == "${ChatColor.GREEN}붕대" && itemMeta.persistentDataContainer.has(
                                 heal,
                                 PersistentDataType.STRING
                             )
@@ -166,7 +168,7 @@ class EventListener(private val plugin: Loader) : Listener {
                     }
 
                     Material.GLOW_BERRIES -> {
-                        if (itemMeta.displayName == "${ChatColor.GREEN}${ChatColor.ITALIC}농축된 열매" && itemMeta.persistentDataContainer.has(
+                        if (itemMeta.displayName == "${ChatColor.GREEN}농축된 열매" && itemMeta.persistentDataContainer.has(
                                 berries,
                                 PersistentDataType.STRING
                             )
@@ -176,12 +178,21 @@ class EventListener(private val plugin: Loader) : Listener {
                     }
 
                     Material.SKULL_BANNER_PATTERN -> {
-                        if (itemMeta.displayName == "${ChatColor.of("#FF4242")}${ChatColor.ITALIC}계약서" && itemMeta.persistentDataContainer.has(
+                        if (itemMeta.displayName == "${ChatColor.of("#FF4242")}계약서" && itemMeta.persistentDataContainer.has(
                                 contract,
                                 PersistentDataType.STRING
                             )
                         ) {
                             handleContract(player)
+                        }
+                    }
+                    Material.MOJANG_BANNER_PATTERN ->{
+                        if (itemMeta.displayName == "${ChatColor.GRAY}지도" && itemMeta.persistentDataContainer.has(
+                                map,
+                                PersistentDataType.STRING
+                            )
+                        ) {
+                            handleMap(player)
                         }
                     }
 
