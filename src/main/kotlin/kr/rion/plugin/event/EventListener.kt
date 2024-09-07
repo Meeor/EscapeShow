@@ -121,17 +121,6 @@ class EventListener(private val plugin: Loader) : Listener {
         }
     }
 
-    @EventHandler
-    fun onWorldLoad(event: WorldLoadEvent) {
-        val loadedWorld = event.world
-        val destinationWorld = Bukkit.getWorld("game")
-        if (loadedWorld == destinationWorld) {// 월드 이름을 이용해 월드 객체를 가져옵니다.
-            Bukkit.getLogger().info("월드가 로딩중인것을 확인하였습니다. 랜덤티피기능이 작동할수있게하기위하여 5초뒤 안전위치 탐색을 시작합니다.")
-
-
-        }
-    }
-
     @EventHandler(priority = EventPriority.NORMAL)
     fun onPlayerUse(event: PlayerInteractEvent) {
         val item = event.item ?: return
@@ -194,7 +183,6 @@ class EventListener(private val plugin: Loader) : Listener {
                             handleMap(player)
                         }
                     }
-
                     else -> null
                 }
             }

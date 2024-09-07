@@ -96,7 +96,7 @@ object Teleport {
     }
 
     fun teleportToRandomLocation(player: Player) {
-        destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)?: return
+        destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName) ?: return
         val startTime = System.currentTimeMillis()
         val maxAttempts = 100
         var randomLocation: Location? = null
