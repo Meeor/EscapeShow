@@ -26,11 +26,12 @@ object Teleport {
     private val destinationWorldName = "game"
     private var designatedWorld: World? = null
     private var destinationWorld: World? = null
-    private val console = Bukkit.getServer().consoleSender
+    val console = Bukkit.getServer().consoleSender
 
     var hasInitializedSafeLocations = false
 
     fun initialize(plugin: JavaPlugin) {
+        this.plugin = plugin
         Bukkit.getScheduler().runTaskLater(plugin, object : Runnable {
             override fun run() {
                 worldManager = WorldManager(plugin)

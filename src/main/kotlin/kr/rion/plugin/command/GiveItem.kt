@@ -3,12 +3,12 @@ package kr.rion.plugin.command
 import kr.rion.plugin.util.global.prefix
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import net.md_5.bungee.api.ChatColor
 
 private val TagType = org.bukkit.persistence.PersistentDataType.STRING
 private val TagValue = true.toString()
@@ -74,7 +74,7 @@ object GiveItem {
     }
 
     fun Contract(player: Player) {
-        val itemName = "${ChatColor.GREEN}계약서"
+        val itemName = "${ChatColor.of("#FF4242")}계약서"
         val quantity = 1
         val contract = NamespacedKey("EscapeShow", "contract")
         val item = ItemStack(Material.SKULL_BANNER_PATTERN, quantity)
@@ -89,7 +89,7 @@ object GiveItem {
     }
 
     fun Map(player: Player) {
-        val itemName = "${ChatColor.GREEN}지도"
+        val itemName = "${ChatColor.GRAY}지도"
         val quantity = 1
         val map = NamespacedKey("EscapeShow", "map")
         val item = ItemStack(Material.MOJANG_BANNER_PATTERN, quantity)

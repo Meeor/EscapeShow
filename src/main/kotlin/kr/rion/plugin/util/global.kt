@@ -1,8 +1,10 @@
 package kr.rion.plugin.util
 
+import kr.rion.plugin.util.Teleport.console
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
+import org.bukkit.GameRule
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
@@ -67,5 +69,18 @@ object global {
                 }
             }
         }.runTaskTimer(plugin, 0L, 20L) // 20L은 주기, 1초마다 실행
+    }
+    fun setGameRulesForAllWorlds() {
+        // 서버의 모든 월드에 대해 게임룰을 설정합니다
+        for (world in Bukkit.getWorlds()) {
+            // 즉시 respawn 설정
+            world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true)
+            // 커맨드 블록 출력 비활성화
+            world.setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, false)
+            //플레이어 커맨드 로그 출력 비활성화
+            world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK,false)
+
+            console.sendMessage("Game rules set for world: ${world.name}")
+        }
     }
 }

@@ -1,8 +1,13 @@
 package kr.rion.plugin.item
 
 import kr.rion.plugin.Loader
+import net.kyori.adventure.text.Component
+import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.*
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 
 object FlameGunActions {
@@ -13,6 +18,7 @@ object FlameGunActions {
             playerall.playSound(player.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.5f)
             playerall.playSound(player.location, Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.5f)
         }
+
         val flamegun = NamespacedKey("EscapeShow", "flamegun")
         // 사용한 아이템의 메타데이터 변경
         val item = player.inventory.itemInMainHand
@@ -25,6 +31,11 @@ object FlameGunActions {
         val loc = player.location.clone().add(0.0, 1.0, 0.0) // 플레이어 머리 위치 (약간 위로) 복제본 생성
         val particleData1 = Particle.DustOptions(Color.fromRGB(1, 0, 0), 1.5f)
         val particleData2 = Particle.DustOptions(Color.fromRGB(1, 0, 0), 1.0f)
+
+        val console: CommandSender = Bukkit.getConsoleSender()
+        val cmd = "summon minecraft:armor_stand ${loc.x} ${loc.y} ${loc.z} {Tags:[ArmorStandTags],Invisible:1b}" // 실행할 명령어
+        Bukkit.dispatchCommand(console, cmd)
+
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             object : BukkitRunnable() {
                 private var t = 0.0
@@ -51,8 +62,8 @@ object FlameGunActions {
                         0.0
                     )
                     // 80틱 작업 끝나면 중지
-                    if (t > 80) {
-                        cancel()
+                    if (t > 240) {
+
                         val movedLoc = loc.clone().add(0.0, -5.0, 0.0)
                         onlinePlayer.world.spawnParticle(
                             Particle.REDSTONE,
@@ -76,6 +87,9 @@ object FlameGunActions {
                             particleData2,
                             true
                         )
+                        cancel()
+                        //flare function 명령어 사용추가
+
 
                     }
                 }

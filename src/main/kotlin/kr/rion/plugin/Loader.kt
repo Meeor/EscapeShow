@@ -67,6 +67,9 @@ class Loader : JavaPlugin() {
                 console.sendMessage("        ${ChatColor.AQUA}플러그인이 적용되어있습니다.")
                 console.sendMessage("")
                 console.sendMessage("${ChatColor.GOLD}$line")
+                console.sendMessage("")
+                global.setGameRulesForAllWorlds()
+                console.sendMessage("")
                 Teleport.initializeSafeLocations()
                 global.startPlayerCheckTask(this@Loader)
             }
