@@ -26,7 +26,7 @@ class Loader : JavaPlugin() {
     }
 
     companion object {
-        var instance: Loader? = null
+        lateinit var instance: Loader
             private set
     }
 
@@ -76,7 +76,6 @@ class Loader : JavaPlugin() {
 
     override fun onDisable() {
         playerCheckTask?.cancel()
-        instance = null
     }
 
     private fun checkPlayersWithTag(tag: String) {

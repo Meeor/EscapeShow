@@ -7,4 +7,7 @@ object ItemAction {
         // 플레어건 행동을 호출
         FlameGunActions.launchFlare(player)
     }
+    fun handleHeal(player: Player){
+        HealAction.lunchHeal(player)
+    }
 }

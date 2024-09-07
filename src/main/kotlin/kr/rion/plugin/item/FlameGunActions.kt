@@ -9,8 +9,10 @@ object FlameGunActions {
 
     fun launchFlare(player: Player) {
         // 플레이어에게 사운드 재생
-        player.playSound(player.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.5f)
-        player.playSound(player.location, Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.5f)
+        for (playerall in Bukkit.getOnlinePlayers()) {
+            playerall.playSound(player.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.0f, 0.5f)
+            playerall.playSound(player.location, Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.5f)
+        }
         val flamegun = NamespacedKey("EscapeShow", "flamegun")
         // 사용한 아이템의 메타데이터 변경
         val item = player.inventory.itemInMainHand

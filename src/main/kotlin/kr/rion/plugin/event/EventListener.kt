@@ -2,6 +2,7 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.item.ItemAction.handleFlameGun
+import kr.rion.plugin.item.ItemAction.handleHeal
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.*
 import org.bukkit.entity.Player
@@ -135,6 +136,7 @@ class EventListener(private val plugin: Loader) : Listener {
         val itemMeta = item.itemMeta ?: return
         val player = event.player
         val flamegun = NamespacedKey("EscapeShow", "flamegun")
+        val heal = NamespacedKey("EscapeShow", "heal")
         if (event.hand == EquipmentSlot.HAND) {
             if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
                 when (item.type) {
@@ -145,6 +147,16 @@ class EventListener(private val plugin: Loader) : Listener {
                             )
                         ) {
                             handleFlameGun(player)
+                        }
+                    }
+
+                    Material.PAPER -> {
+                        if (itemMeta.displayName == "${ChatColor.GREEN}${ChatColor.ITALIC}붕대" && itemMeta.persistentDataContainer.has(
+                                heal,
+                                PersistentDataType.STRING
+                            )
+                        ) {
+                            handleHeal(player)
                         }
                     }
 
