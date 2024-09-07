@@ -1,6 +1,8 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.manager.WorldManager
+import kr.rion.plugin.util.global.prefix
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -24,6 +26,7 @@ object Teleport {
     private val destinationWorldName = "game"
     private var designatedWorld: World? = null
     private var destinationWorld: World? = null
+    private val console = Bukkit.getServer().consoleSender
 
     var hasInitializedSafeLocations = false
 
@@ -45,14 +48,14 @@ object Teleport {
 
         val world = destinationWorld
         if (world == null) {
-            Bukkit.getLogger().warning("월드 '${destinationWorldName}'가 로드되지 않았습니다.")
+            console.sendMessage("$prefix 월드 ${ChatColor.YELLOW}'${destinationWorldName}'${ChatColor.GREEN}가 로드되지 않았습니다.")
             return
         }
 
 
         val rand = Random()
         val startTime = System.currentTimeMillis()
-        Bukkit.getLogger().info("이동될 안전한좌표탐색을 시작합니다.")
+        console.sendMessage("$prefix 이동될 안전한좌표탐색을 시작합니다.")
 
 
         val minX = -372
@@ -79,7 +82,7 @@ object Teleport {
         }
 
         val endTime = System.currentTimeMillis()
-        Bukkit.getLogger().info("안전한 좌표 ${safeLocations.size} 개를 찾았습니다. 걸린시간 : ${endTime - startTime}ms")
+        console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.AQUA}${endTime - startTime}ms")
         hasInitializedSafeLocations = true
     }
 
@@ -111,7 +114,7 @@ object Teleport {
         }
 
         if (randomLocation == null) {
-            Bukkit.getLogger().warning(" $maxAttempts 회를 시도했지만 안전위치를 찾을수 없었습니다.")
+            console.sendMessage("$prefix ${ChatColor.YELLOW}$maxAttempts ${ChatColor.GREEN}회를 시도했지만 안전위치를 찾을수 없었습니다.")
             return
         }
 
@@ -119,7 +122,7 @@ object Teleport {
         player.teleport(randomLocation)
         safeLocations.remove(randomLocation)
         val endTime = System.currentTimeMillis()
-        Bukkit.getLogger().info("teleportToRandomLocation 지연시간: ${endTime - startTime}ms")
+        console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
         setImmune(player, 3000)
     }
 
