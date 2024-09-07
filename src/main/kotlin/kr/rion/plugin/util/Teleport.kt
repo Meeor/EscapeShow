@@ -3,10 +3,7 @@ package kr.rion.plugin.util
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatColor
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.World
+import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
@@ -100,13 +97,19 @@ object Teleport {
     }
 
     fun teleportToRandomLocation(player: Player) {
+
         destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName) ?: return
+        val world = loadWorldIfNeeded(destinationWorldName) ?: return
         val startTime = System.currentTimeMillis()
         val maxAttempts = 100
         var randomLocation: Location? = null
 
         for (attempt in 1..maxAttempts) {
             val safeLocation = safeLocations.randomOrNull() ?: continue
+
+            if (safeLocation.world?.name != world.name) {
+                continue
+            }
 
             if (isLocationSafe(safeLocation)) {
                 randomLocation = safeLocation
@@ -170,6 +173,15 @@ object Teleport {
 
     fun setInitializedSafeLocations(status: Boolean) {
         hasInitializedSafeLocations = status
+    }
+
+    fun loadWorldIfNeeded(worldName: String): World? {
+        var world = Bukkit.getWorld(worldName)
+        if (world == null) {
+            // 월드가 언로드된 상태라면, WorldCreator를 사용하여 월드를 로드합니다.
+            world = WorldCreator(worldName).createWorld()
+        }
+        return world
     }
 
 }
