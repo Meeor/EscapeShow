@@ -28,21 +28,23 @@ object FlameGunActions {
         item.itemMeta = itemMeta
 
 
-        val loc = player.location.clone().add(0.0, 1.0, 0.0) // 플레이어 머리 위치 (약간 위로) 복제본 생성
-        val particleData1 = Particle.DustOptions(Color.fromRGB(1, 0, 0), 1.5f)
-        val particleData2 = Particle.DustOptions(Color.fromRGB(1, 0, 0), 1.0f)
+        val initialLoc = player.location.clone().add(0.0, 1.0, 0.0) // 플레이어 머리 위치 (약간 위로) 복제본 생성
+        val particleData1 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.5f)
+        val particleData2 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0f)
 
         val console: CommandSender = Bukkit.getConsoleSender()
-        val cmd = "summon minecraft:armor_stand ${loc.x} ${loc.y} ${loc.z} {Tags:[ArmorStandTags],Invisible:1b}" // 실행할 명령어
+        val cmd = "summon minecraft:armor_stand ${initialLoc.x} ${initialLoc.y} ${initialLoc.z} {Tags:[ArmorStandTags],Invisible:1b}" // 실행할 명령어
         Bukkit.dispatchCommand(console, cmd)
 
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             object : BukkitRunnable() {
                 private var t = 0.0
+                private val loc = initialLoc.clone()
 
                 override fun run() {
                     t += 1
                     loc.add(0.0, 1.0, 0.0) // 매 틱마다 위치를 위로 이동
+                    console.sendMessage("현재틱 : $t || 현재 좌표 : $loc")
                     onlinePlayer.world.spawnParticle(
                         Particle.CLOUD,
                         loc,
@@ -63,7 +65,6 @@ object FlameGunActions {
                     )
                     // 80틱 작업 끝나면 중지
                     if (t > 240) {
-
                         val movedLoc = loc.clone().add(0.0, -5.0, 0.0)
                         onlinePlayer.world.spawnParticle(
                             Particle.REDSTONE,
