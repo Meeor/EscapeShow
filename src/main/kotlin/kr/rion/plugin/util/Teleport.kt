@@ -82,7 +82,7 @@ object Teleport {
         }
 
         val endTime = System.currentTimeMillis()
-        console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.AQUA}${endTime - startTime}ms")
+        console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
         hasInitializedSafeLocations = true
     }
 
