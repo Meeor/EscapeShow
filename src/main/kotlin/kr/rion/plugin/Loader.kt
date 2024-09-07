@@ -35,7 +35,7 @@ class Loader : JavaPlugin() {
         */
         val commandHandler = CommandHandler(this, Teleport)
         Teleport.initialize(this)
-        val line = "=".repeat(50)
+        val line = "=".repeat(42)
 
         server.pluginManager.registerEvents(EventListener(this), this)
 
@@ -62,7 +62,7 @@ class Loader : JavaPlugin() {
                 console.sendMessage("    ${ChatColor.GREEN}Escape Show 서버가 시작되었습니다.")
                 console.sendMessage("")
                 console.sendMessage("        ${ChatColor.AQUA}서버에는 왁타버스 마크조공")
-                console.sendMessage("        ${ChatColor.AQUA}Escape Show 를 위한 자체제작")
+                console.sendMessage("       ${ChatColor.AQUA}Escape Show 를 위한 자체제작")
                 console.sendMessage("        ${ChatColor.AQUA}플러그인이 적용되어있습니다.")
                 console.sendMessage("")
                 console.sendMessage("${ChatColor.GOLD}$line")
