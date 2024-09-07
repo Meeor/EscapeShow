@@ -115,7 +115,8 @@ object Teleport {
         }
 
         if (randomLocation == null) {
-            console.sendMessage("$prefix ${ChatColor.YELLOW}$maxAttempts ${ChatColor.GREEN}회를 시도했지만 안전위치를 찾을수 없었습니다.")
+            console.sendMessage("$prefix 좌표를 찾을수 없습니다. 재설정을 해주세요")
+            player.sendMessage("$prefix 저장된 좌표값이 없어 이동에 실패하였습니다.\n$prefix 운영자에게 좌표설정을 부탁하시길 바랍니다.")
             return
         }
 
