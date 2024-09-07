@@ -170,11 +170,8 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
         return true
     }
     private fun handleRandomListClear(sender: CommandSender){
-        val coordinates = safeLocations
-        if (coordinates.isNotEmpty()) {
-            coordinates.forEachIndexed { index, location ->
-                safeLocations.remove(location)
-            }
+        if (safeLocations.isNotEmpty()) {
+            safeLocations.clear()  // 리스트의 모든 요소를 제거
             sender.sendMessage("$prefix 저장된 좌표가 모두 지워졌습니다.")
         } else {
             sender.sendMessage("$prefix 저장된 좌표가 없습니다.")
