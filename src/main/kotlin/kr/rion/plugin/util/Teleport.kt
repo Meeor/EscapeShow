@@ -63,7 +63,7 @@ object Teleport {
         val maxZ = 45
 
         val requiredSafeLocations = 100 // 목표: 100개
-        val maxAttempts = 10000 // 시도 횟수 제한 (필요에 따라 조정 가능)
+        val maxAttempts = 50000 // 시도 횟수 제한 (필요에 따라 조정 가능)
         var attempts = 0
 
         while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
