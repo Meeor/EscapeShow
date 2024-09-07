@@ -68,7 +68,7 @@ class Loader : JavaPlugin() {
                 Teleport.initializeSafeLocations()
                 global.startPlayerCheckTask(this@Loader)
             }
-        }.runTaskLater(this, 200L)
+        }.runTaskLater(this, 40L)
 
         //자동완성 등록
         getCommand("리셋")?.tabCompleter = TabComplete()
