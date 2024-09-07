@@ -128,20 +128,33 @@ object Teleport {
     }
 
     fun isLocationSafe(loc: Location): Boolean {
-        val block = loc.block
-        val blockAbove = loc.clone().add(0.0, 1.0, 0.0).block
-        val blockBelow = loc.clone().subtract(0.0, 1.0, 0.0).block
 
-        // 바닥 블록이 공기가 아니고 안전하지 않은 경우
-        return block.type == Material.AIR &&
-                blockAbove.type == Material.AIR &&
+        // 3x3 범위의 안전 여부를 검사하는 함수
+        fun isSafeInArea(center: Location, yOffset: Int): Boolean {
+            for (x in -1..1) {
+                for (z in -1..1) {
+                    val block = center.clone().add(x.toDouble(), yOffset.toDouble(), z.toDouble()).block
+                    if (block.type != Material.AIR) {
+                        return false
+                    }
+                }
+            }
+            return true
+        }
+
+        // 바닥과 머리 위의 3x3 영역을 검사
+        val isFloorSafe = isSafeInArea(loc.clone().subtract(0.0, 1.0, 0.0), 0)
+        val isAboveSafe = isSafeInArea(loc.clone().add(0.0, 1.0, 0.0), 1)
+
+        val blockBelow = loc.clone().subtract(0.0, 1.0, 0.0).block
+        return isFloorSafe && isAboveSafe &&
                 blockBelow.type.isSolid &&
                 blockBelow.type !in setOf(
-            Material.AZALEA_LEAVES, // 진달래잎
-            Material.FERN, // 고사리
-            Material.LARGE_FERN, // 큰고사리
-            Material.GRASS, // 잔디
-            Material.CRIMSON_BUTTON    //진홍빛버튼
+            Material.AZALEA_LEAVES,
+            Material.FERN,
+            Material.LARGE_FERN,
+            Material.GRASS,
+            Material.CRIMSON_BUTTON
         )
     }
 
