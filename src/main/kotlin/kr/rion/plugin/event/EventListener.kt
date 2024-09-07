@@ -1,6 +1,8 @@
 package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.item.ItemAction.handleBerries
+import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.item.ItemAction.handleHeal
 import kr.rion.plugin.util.global.prefix
@@ -21,6 +23,7 @@ import org.bukkit.event.world.WorldLoadEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
+import net.md_5.bungee.api.ChatColor
 
 
 /*
@@ -137,6 +140,8 @@ class EventListener(private val plugin: Loader) : Listener {
         val player = event.player
         val flamegun = NamespacedKey("EscapeShow", "flamegun")
         val heal = NamespacedKey("EscapeShow", "heal")
+        val berries = NamespacedKey("EscapeShow", "berries")
+        val contract = NamespacedKey("EscapeShow", "contract")
         if (event.hand == EquipmentSlot.HAND) {
             if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
                 when (item.type) {
@@ -157,6 +162,26 @@ class EventListener(private val plugin: Loader) : Listener {
                             )
                         ) {
                             handleHeal(player)
+                        }
+                    }
+
+                    Material.GLOW_BERRIES -> {
+                        if (itemMeta.displayName == "${ChatColor.GREEN}${ChatColor.ITALIC}농축된 열매" && itemMeta.persistentDataContainer.has(
+                                berries,
+                                PersistentDataType.STRING
+                            )
+                        ) {
+                            handleBerries(player)
+                        }
+                    }
+
+                    Material.SKULL_BANNER_PATTERN -> {
+                        if (itemMeta.displayName == "${ChatColor.of("#FF4242")}${ChatColor.ITALIC}계약서" && itemMeta.persistentDataContainer.has(
+                                contract,
+                                PersistentDataType.STRING
+                            )
+                        ) {
+                            handleContract(player)
                         }
                     }
 

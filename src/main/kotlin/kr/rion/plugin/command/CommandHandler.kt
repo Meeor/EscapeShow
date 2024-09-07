@@ -97,6 +97,8 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
             when (args[0].lowercase(Locale.getDefault())) {
                 "플레어건" -> GiveItem.FlameGun(itemplayer)
                 "붕대" -> GiveItem.Heal(itemplayer)
+                "농축된열매" -> GiveItem.Berries(itemplayer)
+                "계약서" -> GiveItem.Contract(itemplayer)
                 else -> sender.sendMessage("$prefix ${ChatColor.RED} 아이템이름을 정확히 입력해주세요 (자동완성 지원됩니다.)")
             }
         } else {
