@@ -160,10 +160,10 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
         // 좌표 리스트를 문자열로 변환하여 출력
         val coordinates = teleport.safeLocations
         if (coordinates.isNotEmpty()) {
-            sender.sendMessage("$prefix 현재 저장된 좌표 목록${ChatColor.GOLD}(${coordinates.size}개)${ChatColor.GREEN}:")
             coordinates.forEachIndexed { index, location ->
                 sender.sendMessage("§e${index + 1}: ${location.x}, ${location.y}, ${location.z}")
             }
+            sender.sendMessage("$prefix 현재 저장된 좌표 목록${ChatColor.GOLD}(${coordinates.size}개)${ChatColor.GREEN}:")
         } else {
             sender.sendMessage("$prefix 저장된 좌표가 없습니다.")
         }
