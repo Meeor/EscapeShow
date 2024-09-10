@@ -32,6 +32,7 @@ object FlameGunActions {
         val cmd1 =
             "summon minecraft:armor_stand ${initialLoc.x} ${initialLoc.y} ${initialLoc.z} {Tags:[ArmorStandTags],Invisible:1b}" // 실행할 명령어
         val cmd2 = "function server_datapack:flare"
+        val cmd3 = "function server_datapack:helicopter"
         Bukkit.dispatchCommand(console, cmd1)
 
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
@@ -61,7 +62,7 @@ object FlameGunActions {
                         0.0
                     )
                     // 80틱 작업 끝나면 중지
-                    if (t > 240) {
+                    if (t > 120) {
                         val movedLoc = loc.clone().add(0.0, -5.0, 0.0)
                         onlinePlayer.world.spawnParticle(
                             Particle.REDSTONE,
@@ -86,6 +87,9 @@ object FlameGunActions {
                             true
                         )
                         Bukkit.dispatchCommand(console, cmd2)
+                        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                            Bukkit.dispatchCommand(console, cmd3)
+                        }, 4 * 20L)
                         cancel()
 
 

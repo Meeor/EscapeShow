@@ -145,7 +145,9 @@ object Teleport {
             Material.FERN, // 고사리
             Material.LARGE_FERN, // 큰고사리
             Material.GRASS, // 잔디
-            Material.CRIMSON_BUTTON    //진홍빛버튼
+            Material.CRIMSON_BUTTON, //진홍빛버튼
+            Material.WATER, //물
+            Material.LAVA //용암
         )
     }
 

@@ -80,7 +80,10 @@ object global {
             world.setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, false)
             //플레이어 커맨드 로그 출력 비활성화
             world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false)
+            //낙하 데미지 비활성화
             world.setGameRule(GameRule.FALL_DAMAGE, false)
+            //몹 스폰 비활성화
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, false)
 
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
