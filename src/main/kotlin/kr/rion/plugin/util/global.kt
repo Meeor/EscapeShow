@@ -17,10 +17,10 @@ object global {
 
     var playerCheckTask: BukkitTask? = null
 
-    fun checkPlayersWithTag(tag: String) {
+    fun checkPlayersWithTag() {
         // 모든 플레이어를 순회하며 태그 확인
         for (player in Bukkit.getOnlinePlayers()) {
-            if (player.scoreboardTags.contains(tag)) { // 태그가 권한으로 설정되어 있다고 가정
+            if (player.scoreboardTags.contains("Escape")) {
                 performAction(player)
             }
             if (!player.scoreboardTags.contains("EscapeComplete")) {
@@ -63,7 +63,6 @@ object global {
                 Bukkit.getOnlinePlayers().forEach { player ->
                     val loc = player.location
                     if (Teleport.isInDesignatedArea(loc)) {
-                        Bukkit.getLogger().warning("지금 텔레포트합니다.")
                         Teleport.teleportToRandomLocation(player)
                     }
                 }

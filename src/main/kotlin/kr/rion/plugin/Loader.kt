@@ -46,7 +46,7 @@ class Loader : JavaPlugin() {
         getCommand("계약서초기화")?.setExecutor(commandHandler)
         object : BukkitRunnable() {
             override fun run() {
-                global.checkPlayersWithTag("Escape")
+                global.checkPlayersWithTag()
             }
         }.runTaskTimer(this, 0L, 1L) // 1 ticks마다 실행 (0.05초마다)
         val core = server.pluginManager.getPlugin("Multiverse-Core") as MultiverseCore?
