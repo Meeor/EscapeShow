@@ -150,6 +150,7 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
                 sender.sendMessage("$prefix 랜덤이동좌표를 새롭게 설정하였습니다. ${ChatColor.YELLOW}총설정된 갯수 : ${coordinates.size}")
 
             }
+
             "초기화" -> handleRandomListClear(sender)
 
             else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. <게임/로비>를 입력하세요.")
@@ -169,7 +170,8 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
         }
         return true
     }
-    private fun handleRandomListClear(sender: CommandSender){
+
+    private fun handleRandomListClear(sender: CommandSender) {
         if (safeLocations.isNotEmpty()) {
             safeLocations.clear()  // 리스트의 모든 요소를 제거
             sender.sendMessage("$prefix 저장된 좌표가 모두 지워졌습니다.")

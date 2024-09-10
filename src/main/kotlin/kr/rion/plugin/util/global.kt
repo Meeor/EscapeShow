@@ -70,6 +70,7 @@ object global {
             }
         }.runTaskTimer(plugin, 0L, 20L) // 20L은 주기, 1초마다 실행
     }
+
     fun setGameRulesForAllWorlds() {
         // 서버의 모든 월드에 대해 게임룰을 설정합니다
         for (world in Bukkit.getWorlds()) {
@@ -78,8 +79,8 @@ object global {
             // 커맨드 블록 출력 비활성화
             world.setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, false)
             //플레이어 커맨드 로그 출력 비활성화
-            world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK,false)
-            world.setGameRule(GameRule.FALL_DAMAGE,false)
+            world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false)
+            world.setGameRule(GameRule.FALL_DAMAGE, false)
 
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }

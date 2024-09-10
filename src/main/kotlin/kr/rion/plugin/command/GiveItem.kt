@@ -3,12 +3,12 @@ package kr.rion.plugin.command
 import kr.rion.plugin.util.global.prefix
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import net.md_5.bungee.api.ChatColor
 
 private val TagType = org.bukkit.persistence.PersistentDataType.STRING
 private val TagValue = true.toString()

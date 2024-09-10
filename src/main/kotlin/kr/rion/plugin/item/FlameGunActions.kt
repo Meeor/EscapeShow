@@ -1,13 +1,9 @@
 package kr.rion.plugin.item
 
 import kr.rion.plugin.Loader
-import net.kyori.adventure.text.Component
-import net.minecraft.world.entity.decoration.ArmorStand
 import org.bukkit.*
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 
 object FlameGunActions {
@@ -33,8 +29,10 @@ object FlameGunActions {
         val particleData2 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0f)
 
         val console: CommandSender = Bukkit.getConsoleSender()
-        val cmd = "summon minecraft:armor_stand ${initialLoc.x} ${initialLoc.y} ${initialLoc.z} {Tags:[ArmorStandTags],Invisible:1b}" // 실행할 명령어
-        Bukkit.dispatchCommand(console, cmd)
+        val cmd1 =
+            "summon minecraft:armor_stand ${initialLoc.x} ${initialLoc.y} ${initialLoc.z} {Tags:[ArmorStandTags],Invisible:1b}" // 실행할 명령어
+        val cmd2 = "function server_datapack:flare"
+        Bukkit.dispatchCommand(console, cmd1)
 
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             object : BukkitRunnable() {
@@ -87,13 +85,13 @@ object FlameGunActions {
                             particleData2,
                             true
                         )
+                        Bukkit.dispatchCommand(console, cmd2)
                         cancel()
-                        //flare function 명령어 사용추가
 
 
                     }
                 }
-            }.runTaskTimer(Loader.instance ?: throw IllegalStateException("플러그인이 제대로 동작하지 않는것 같습니다."), 0L, 1L)
+            }.runTaskTimer(Loader.instance, 0L, 1L)
         }
     }
 }

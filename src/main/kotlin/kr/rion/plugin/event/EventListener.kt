@@ -184,6 +184,7 @@ class EventListener(private val plugin: Loader) : Listener {
                             handleMap(player)
                         }
                     }
+
                     else -> null
                 }
             }
