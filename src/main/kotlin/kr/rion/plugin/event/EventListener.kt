@@ -6,6 +6,7 @@ import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.item.ItemAction.handleHeal
 import kr.rion.plugin.item.ItemAction.handleMap
+import kr.rion.plugin.util.global.displaySurvivalPlayers
 import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
@@ -55,7 +56,7 @@ class EventListener(private val plugin: Loader) : Listener {
     fun onDeath(event: PlayerDeathEvent) {
         val player: Player = event.player
         player.gameMode = GameMode.SPECTATOR
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님께서 ${ChatColor.RED}사망${ChatColor.RESET}하였습니다.")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님께서 ${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${displaySurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
     }
 
     //사망시 리스폰위치변경

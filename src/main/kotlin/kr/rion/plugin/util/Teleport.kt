@@ -16,7 +16,6 @@ object Teleport {
 
     private var worldManager: WorldManager? = null
 
-
     private lateinit var plugin: JavaPlugin
     lateinit var safeLocations: MutableList<Location>
     private val designatedWorldName = "lobby"

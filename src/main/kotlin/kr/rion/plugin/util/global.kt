@@ -1,5 +1,6 @@
 package kr.rion.plugin.util
 
+import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -11,6 +12,9 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
+
+private var worldManager: WorldManager? = null
+private var survivalPlayerCount = 0
 
 object global {
     val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
@@ -43,10 +47,9 @@ object global {
         // 투명화 버프 부여 (무한지속시간)
         val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
         player.addPotionEffect(invisibilityEffect)
-
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다.")
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${displaySurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
     }
 
@@ -86,5 +89,14 @@ object global {
 
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
+    }
+
+    fun displaySurvivalPlayers(): Int {
+        val world = worldManager?.getMultiverseWorld("game")
+        if (world != null) {
+            val survivalPlayers = world.players.filter { it.gameMode == GameMode.SURVIVAL }
+            survivalPlayerCount = survivalPlayers.size
+        }
+        return survivalPlayerCount
     }
 }

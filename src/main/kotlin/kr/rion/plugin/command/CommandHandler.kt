@@ -153,7 +153,7 @@ class CommandHandler(plugin: JavaPlugin, private val teleport: Teleport) : Comma
 
             "초기화" -> handleRandomListClear(sender)
 
-            else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. <게임/로비>를 입력하세요.")
+            else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. ")
         }
     }
 
