@@ -18,6 +18,7 @@ class TabComplete : TabCompleter {
             "리셋" -> MapReset(args)
             "랜덤티피" -> RandomTP(args)
             "아이템지급" -> GiveItem(args)
+            "탈출인원" -> EscapeSettingTab(args)
             else -> null
         }
     }
@@ -41,6 +42,13 @@ class TabComplete : TabCompleter {
     private fun GiveItem(args: Array<out String>): List<String> {
         return if (args.size == 1) {
             listOf("플레어건", "붕대", "농축된열매", "계약서", "지도").filter { it.startsWith(args[0], ignoreCase = true) }
+        } else {
+            emptyList()
+        }
+    }
+    private fun EscapeSettingTab(args: Array<out String>): List<String>{
+        return if (args.size == 1) {
+            listOf("설정","확인").filter { it.startsWith(args[0], ignoreCase = true) }
         } else {
             emptyList()
         }

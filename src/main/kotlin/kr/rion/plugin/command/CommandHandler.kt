@@ -3,6 +3,7 @@ package kr.rion.plugin.command
 
 import kr.rion.plugin.command.Coordinates.handleCoordinatesCommand
 import kr.rion.plugin.command.EscapeEndGame.handleEscapeEndGame
+import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.Playeritem.handleItemReset
 import kr.rion.plugin.command.Playeritem.handleitem
 import kr.rion.plugin.command.RandomTP.handleRandomTP
@@ -21,6 +22,7 @@ class CommandHandler() : CommandExecutor {
             label.equals("아이템지급", ignoreCase = true) -> handleitem(sender, args)
             label.equals("계약서초기화", ignoreCase = true) -> handleItemReset(sender)
             label.equals("게임종료", ignoreCase = true) -> handleEscapeEndGame(sender)
+            label.equals("탈출인원",ignoreCase = true) -> HandleSetting(sender,args)
             else -> return false
         }
         return true

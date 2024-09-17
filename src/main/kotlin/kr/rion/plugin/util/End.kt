@@ -8,6 +8,7 @@ object End {
     val world = worldManager?.getMultiverseWorld("game")
     val worldWait = worldManager?.getMultiverseWorld("vip")
     var EscapePlayerCount: Int = 0
+    var EscapePlayerMaxCount: Int = 6
     var EscapePlayers: MutableList<String> = mutableListOf()
     val soundName = "custom.bye"
     fun EndAction() {

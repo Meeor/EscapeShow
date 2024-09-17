@@ -2,10 +2,8 @@ package kr.rion.plugin
 
 import com.onarandombox.MultiverseCore.MultiverseCore
 import com.onarandombox.MultiverseCore.api.MVWorldManager
-import kr.rion.plugin.command.CommandHandler
 import kr.rion.plugin.event.EventListener
 import kr.rion.plugin.manager.CommandManager
-import kr.rion.plugin.util.TabComplete
 import kr.rion.plugin.util.Teleport
 import kr.rion.plugin.util.global
 import org.bukkit.ChatColor
@@ -16,10 +14,6 @@ import org.bukkit.scheduler.BukkitRunnable
 class Loader : JavaPlugin() {
     private var worldManager: MVWorldManager? = null
 
-    fun getTeleport(): Teleport {
-        return Teleport
-    }
-
     companion object {
         lateinit var instance: Loader
             private set
@@ -29,12 +23,6 @@ class Loader : JavaPlugin() {
     override fun onEnable() {
         instance = this
 
-
-
-
-        /*
-        server.pluginManager.registerEvents(EventListener(), this)
-        */
         Teleport.initialize(this)
         val line = "=".repeat(42)
 
@@ -71,8 +59,6 @@ class Loader : JavaPlugin() {
                 global.startPlayerCheckTask(this@Loader)
             }
         }.runTaskLater(this, 40L)
-
-        //자동완성 등록
 
     }
 
