@@ -2,16 +2,28 @@ package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.item.ItemAction.handleResetContract
+import kr.rion.plugin.manager.WorldManager
 import org.bukkit.*
 
 object End {
-    val world = worldManager?.getMultiverseWorld("game")
-    val worldWait = worldManager?.getMultiverseWorld("vip")
+    private var worldManager: WorldManager? = null
+
     var EscapePlayerCount: Int = 0
     var EscapePlayerMaxCount: Int = 6
     var EscapePlayers: MutableList<String> = mutableListOf()
     val soundName = "custom.bye"
     fun EndAction() {
+        val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기
+        val worldWait = Bukkit.getWorld("vip") // vip 월드도 동일하게 Bukkit API로 가져옴
+
+        // 월드가 null인 경우 로그 출력
+        if (world == null) {
+            Bukkit.getLogger().warning("game 월드를 가져오지 못했습니다. worldManager 또는 해당 월드 확인 필요.")
+        }
+        if (worldWait == null) {
+            Bukkit.getLogger().warning("vip 월드를 가져오지 못했습니다. worldManager 또는 해당 월드 확인 필요.")
+        }
+
         EscapePlayerCount = 0
         Helicopter.remove()
         Bukkit.broadcastMessage("${global.prefix} 게임이 종료되었습니다.")
@@ -36,7 +48,11 @@ object End {
                     player.removePotionEffect(effect.type)
                 }
                 player.removeScoreboardTag("EscapeComplete")
-                player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
+                if (worldWait != null) {
+                    player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
+                } else {
+                    player.sendMessage("${global.prefix}${ChatColor.RED}플러그인에 버그가 발생하였습니다. 운영자에게 이동을 요청하시길 바랍니다.")
+                }
             }
             val line = "=".repeat(40)
             val message =
