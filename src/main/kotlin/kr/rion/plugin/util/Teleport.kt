@@ -4,6 +4,9 @@ import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.*
+import org.bukkit.block.BlockFace
+import org.bukkit.block.data.type.Slab
+import org.bukkit.block.data.type.Stairs
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
