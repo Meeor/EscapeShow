@@ -60,7 +60,7 @@ object End {
             }
             val line = "=".repeat(40)
             val message =
-                "${global.prefix} 탈출한 플레이어 \n${ChatColor.YELLOW} ${EscapePlayers.joinToString(" \n${ChatColor.YELLOW}")}"
+                "             ${ChatColor.GREEN}탈출한 플레이어 \n${ChatColor.YELLOW} ${EscapePlayers.joinToString(" \n${ChatColor.YELLOW}")}"
 
             // 메시지를 모든 플레이어에게 브로드캐스트
             Bukkit.broadcastMessage("${ChatColor.GOLD}$line")
