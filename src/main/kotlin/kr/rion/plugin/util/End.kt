@@ -1,6 +1,7 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.item.ItemAction.handleResetContract
 import org.bukkit.*
 
 object End {
@@ -48,5 +49,6 @@ object End {
             // EscapePlayers 리스트를 초기화 (비우기)
             EscapePlayers.clear()
         }, 20L * 8)
+        handleResetContract()
     }
 }
