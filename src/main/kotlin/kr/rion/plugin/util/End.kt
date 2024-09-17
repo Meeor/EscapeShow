@@ -2,17 +2,21 @@ package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.item.ItemAction.handleResetContract
-import kr.rion.plugin.manager.WorldManager
 import org.bukkit.*
 
 object End {
-    private var worldManager: WorldManager? = null
+    var isEnding: Boolean = false
 
     var EscapePlayerCount: Int = 0
     var EscapePlayerMaxCount: Int = 6
     var EscapePlayers: MutableList<String> = mutableListOf()
     val soundName = "custom.bye"
     fun EndAction() {
+        if (isEnding) {
+            // 게임이 이미 끝나고 있는 중이면 함수가 중복 실행되지 않도록 리턴
+            return
+        }
+        isEnding = true
         val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기
         val worldWait = Bukkit.getWorld("vip") // vip 월드도 동일하게 Bukkit API로 가져옴
 
@@ -67,5 +71,8 @@ object End {
             EscapePlayers.clear()
         }, 20L * 8)
         handleResetContract()
+
+        // 게임 종료 처리 완료 후 플래그 해제
+        isEnding = false
     }
 }
