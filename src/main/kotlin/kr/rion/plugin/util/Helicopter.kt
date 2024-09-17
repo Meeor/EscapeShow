@@ -12,7 +12,9 @@ import org.bukkit.block.data.type.Stairs
 
 object Helicopter {
     private var HelicopterLoc: Location? = null
+    var HelicopterisSpawn = false
     fun spawn(getloc: Location) {
+        if(HelicopterisSpawn == true) return
         HelicopterLoc = getloc
         setBlockWithAttributes(
             setloc(getloc, 1.0, 0.0, 2.0), Material.ANDESITE_STAIRS, stairsHalf = Half.TOP, blockFace = BlockFace.WEST
@@ -385,6 +387,7 @@ object Helicopter {
             slabType = Slab.Type.BOTTOM
         )
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
+        HelicopterisSpawn = true
     }
 
     fun remove() {

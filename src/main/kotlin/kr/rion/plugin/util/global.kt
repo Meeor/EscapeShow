@@ -40,16 +40,19 @@ object global {
 
         // 투명화 버프 부여 (무한지속시간)
         val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
+        val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
         player.addPotionEffect(invisibilityEffect)
+        player.addPotionEffect(blindEffect)
         End.EscapePlayerCount++
         End.EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
-        if (End.EscapePlayerCount == 6) {
+        if (End.EscapePlayerCount == 6 || SurvivalPlayers() == 0) {
             End.EndAction()
         }
+
     }
 
 

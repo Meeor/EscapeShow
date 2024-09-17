@@ -4,6 +4,7 @@ import com.onarandombox.MultiverseCore.MultiverseCore
 import com.onarandombox.MultiverseCore.api.MVWorldManager
 import kr.rion.plugin.command.CommandHandler
 import kr.rion.plugin.event.EventListener
+import kr.rion.plugin.manager.CommandManager
 import kr.rion.plugin.util.TabComplete
 import kr.rion.plugin.util.Teleport
 import kr.rion.plugin.util.global
@@ -29,21 +30,17 @@ class Loader : JavaPlugin() {
         instance = this
 
 
+
+
         /*
-        CommandHandler(this).registerCommands()
         server.pluginManager.registerEvents(EventListener(), this)
         */
-        val commandHandler = CommandHandler(this, Teleport)
         Teleport.initialize(this)
         val line = "=".repeat(42)
 
         server.pluginManager.registerEvents(EventListener(), this)
+        CommandManager(this).registerCommands()
 
-        getCommand("리셋")?.setExecutor(commandHandler)
-        getCommand("좌표공개")?.setExecutor(commandHandler)
-        getCommand("랜덤티피")?.setExecutor(commandHandler)
-        getCommand("아이템지급")?.setExecutor(commandHandler)
-        getCommand("계약서초기화")?.setExecutor(commandHandler)
         object : BukkitRunnable() {
             override fun run() {
                 global.checkPlayersWithTag()
@@ -76,9 +73,7 @@ class Loader : JavaPlugin() {
         }.runTaskLater(this, 40L)
 
         //자동완성 등록
-        getCommand("리셋")?.tabCompleter = TabComplete()
-        getCommand("랜덤티피")?.tabCompleter = TabComplete()
-        getCommand("아이템지급")?.tabCompleter = TabComplete()
+
     }
 
     override fun onDisable() {
