@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 
-private var worldManager: WorldManager? = null
+var worldManager: WorldManager? = null
 private var survivalPlayerCount = 0
 
 object global {
@@ -26,11 +26,6 @@ object global {
         for (player in Bukkit.getOnlinePlayers()) {
             if (player.scoreboardTags.contains("Escape")) {
                 performAction(player)
-            }
-            if (!player.scoreboardTags.contains("EscapeComplete")) {
-                if (player.gameMode == GameMode.ADVENTURE || player.gameMode == GameMode.SURVIVAL) {
-                    noFly(player)
-                }
             }
         }
     }
@@ -47,17 +42,17 @@ object global {
         // 투명화 버프 부여 (무한지속시간)
         val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
         player.addPotionEffect(invisibilityEffect)
+        End.EscapePlayerCount++
+        End.EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${displaySurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
+        if(End.EscapePlayerCount == 6){
+            End.EndAction()
+        }
     }
 
-    //탈출완료태그없을때 작업
-    fun noFly(player: Player) {
-        player.allowFlight = false
-        player.isFlying = false
-    }
 
     fun startPlayerCheckTask(plugin: JavaPlugin) {
         playerCheckTask?.cancel()
@@ -90,13 +85,13 @@ object global {
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
     }
-
-    fun displaySurvivalPlayers(): Int {
+    fun SurvivalPlayers(): Int {
         val world = worldManager?.getMultiverseWorld("game")
-        if (world != null) {
+        return if (world != null) {
             val survivalPlayers = world.players.filter { it.gameMode == GameMode.SURVIVAL }
-            survivalPlayerCount = survivalPlayers.size
+            survivalPlayers.size  // 필터링된 생존 플레이어의 수 반환
+        } else {
+            0  // world가 null인 경우 0 반환
         }
-        return survivalPlayerCount
     }
 }
