@@ -1,6 +1,5 @@
 package kr.rion.plugin.event
 
-import kr.rion.plugin.Loader
 import kr.rion.plugin.item.ItemAction.handleBerries
 import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
@@ -46,9 +45,8 @@ init {
 
 
 /////////////////////파일 분리 예정/////////////////
-class EventListener(private val plugin: Loader) : Listener {
+class EventListener : Listener {
     val line = "=".repeat(40)
-    val teleport = plugin.getTeleport()
 
 
     //사망시 관전모드

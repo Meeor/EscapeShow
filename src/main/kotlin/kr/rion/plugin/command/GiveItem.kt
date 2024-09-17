@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
 private val TagType = org.bukkit.persistence.PersistentDataType.STRING
-private val TagValue = true.toString()
+private const val TagValue = true.toString()
 
 object GiveItem {
 

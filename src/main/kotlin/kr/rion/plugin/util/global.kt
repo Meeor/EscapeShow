@@ -47,7 +47,7 @@ object global {
         player.removeScoreboardTag("Escape")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
-        if(End.EscapePlayerCount == 6){
+        if (End.EscapePlayerCount == 6) {
             End.EndAction()
         }
     }
@@ -84,6 +84,7 @@ object global {
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
     }
+
     fun SurvivalPlayers(): Int {
         val world = worldManager?.getMultiverseWorld("game")
         return if (world != null) {

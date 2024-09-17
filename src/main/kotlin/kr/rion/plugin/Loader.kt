@@ -37,7 +37,7 @@ class Loader : JavaPlugin() {
         Teleport.initialize(this)
         val line = "=".repeat(42)
 
-        server.pluginManager.registerEvents(EventListener(this), this)
+        server.pluginManager.registerEvents(EventListener(), this)
 
         getCommand("리셋")?.setExecutor(commandHandler)
         getCommand("좌표공개")?.setExecutor(commandHandler)

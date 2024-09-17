@@ -1,11 +1,7 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.GameMode
-import org.bukkit.Location
-import org.bukkit.SoundCategory
+import org.bukkit.*
 
 object End {
     val world = worldManager?.getMultiverseWorld("game")
@@ -41,7 +37,8 @@ object End {
                 player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
             }
             val line = "=".repeat(40)
-            val message = "${global.prefix} 탈출한 플레이어 \n${ChatColor.YELLOW} ${EscapePlayers.joinToString(" \n${ChatColor.YELLOW}")}"
+            val message =
+                "${global.prefix} 탈출한 플레이어 \n${ChatColor.YELLOW} ${EscapePlayers.joinToString(" \n${ChatColor.YELLOW}")}"
 
             // 메시지를 모든 플레이어에게 브로드캐스트
             Bukkit.broadcastMessage("${ChatColor.GOLD}$line")
