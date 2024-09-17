@@ -37,6 +37,7 @@ object End {
                 for (effect in player.activePotionEffects) {
                     player.removePotionEffect(effect.type)
                 }
+                player.removeScoreboardTag("EscapeComplete")
                 player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
             }
             val line = "=".repeat(40)
