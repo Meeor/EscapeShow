@@ -391,6 +391,7 @@ object Helicopter {
     }
 
     fun remove() {
+        if(HelicopterLoc == null) return
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
             // 블럭을 공기로 변경
             HelicopterLoc?.let { getloc ->
