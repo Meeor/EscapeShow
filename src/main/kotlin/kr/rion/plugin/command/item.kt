@@ -10,7 +10,7 @@ import java.util.*
 object Playeritem {
     fun handleitem(sender: CommandSender, args: Array<out String>) {
         if (args.isEmpty()) {
-            sender.sendMessage("$prefix 사용법: /리셋 <게임/로비>")
+            sender.sendMessage("$prefix 사용법: /아이템지급 <아이템이름>")
             return
         }
         if (sender is Player) {
