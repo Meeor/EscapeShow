@@ -12,10 +12,6 @@ object End {
     var EscapePlayers: MutableList<String> = mutableListOf()
     val soundName = "custom.bye"
     fun EndAction() {
-        if (isEnding) {
-            // 게임이 이미 끝나고 있는 중이면 함수가 중복 실행되지 않도록 리턴
-            return
-        }
         isEnding = true
         val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기
         val worldWait = Bukkit.getWorld("vip") // vip 월드도 동일하게 Bukkit API로 가져옴

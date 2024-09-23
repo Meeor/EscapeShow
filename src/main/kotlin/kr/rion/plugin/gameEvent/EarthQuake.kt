@@ -1,6 +1,7 @@
 package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Particle
@@ -14,12 +15,12 @@ object EarthQuake {
 
     fun start() {
         if (earthquakeRunning) {
-            Bukkit.broadcastMessage("지진이 이미 발생 중입니다!")
+            Bukkit.broadcastMessage("$prefix 지진이 이미 발생 중입니다!")
             return
         }
 
         earthquakeRunning = true
-        Bukkit.broadcastMessage("지진 이벤트가 시작되었습니다!")
+        Bukkit.broadcastMessage("$prefix 지진 이벤트가 시작되었습니다!")
 
         object : BukkitRunnable() {
             private var elapsedTime = 0
@@ -28,7 +29,7 @@ object EarthQuake {
                 if (elapsedTime >= 20 * 20) { // 20초 후 멈춤 (20틱 * 20초 = 400틱)
                     earthquakeRunning = false
                     cancel() // Task 종료
-                    Bukkit.broadcastMessage("지진이 멈췄습니다!")
+                    Bukkit.broadcastMessage("$prefix 지진이 멈췄습니다!")
                     return
                 }
 
