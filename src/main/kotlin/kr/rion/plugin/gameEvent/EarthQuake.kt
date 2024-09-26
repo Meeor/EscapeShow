@@ -21,7 +21,7 @@ object EarthQuake {
         }
 
         earthquakeRunning = true
-        Bukkit.broadcastMessage("$prefix 지진 이벤트가 시작되었습니다!")
+        Bukkit.broadcastMessage("$prefix 지진이 발생하였습니다")
 
         object : BukkitRunnable() {
             private var elapsedTime = 0

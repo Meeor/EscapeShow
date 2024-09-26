@@ -1,6 +1,8 @@
 package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.global.prefix
+import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -18,7 +20,7 @@ object Gravity {
             // 엔드 포탈 스폰 사운드 (1번만 적용)
             player.playSound(player.location, Sound.BLOCK_END_PORTAL_SPAWN, 0.5f, 1.0f)
             // 텍스트 출력 (1번만 적용)
-            player.sendMessage("\n\n\n\n\n§l중력이상이 발생합니다!") // bold 효과
+            player.sendMessage("\n\n\n\n\n$prefix ${ChatColor.BOLD}중력이상이 발생합니다!") // bold 효과
             // 포탈 소리 재생 (1번만 적용)
             player.playSound(player.location, Sound.BLOCK_PORTAL_AMBIENT, 0.2f, 1.0f)
         }
@@ -73,7 +75,7 @@ object Gravity {
         player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3, 1.0)
 
         // Action bar 메시지
-        player.sendActionBar("§c§l중력이 강화됩니다")
+        player.sendActionBar("$prefix ${ChatColor.BOLD}${ChatColor.RED}중력이 강화됩니다")
     }
 
     // 중력 약화 (중력 이상 상태일 때 적용)
@@ -87,7 +89,7 @@ object Gravity {
         player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3, 1.0)
 
         // Action bar 메시지
-        player.sendActionBar("§a§l중력이 약화됩니다")
+        player.sendActionBar("$prefix ${ChatColor.BOLD}중력이 약화됩니다")
     }
 
     // 플레이어의 위치에 따라 중력 강화/약화 효과를 적용

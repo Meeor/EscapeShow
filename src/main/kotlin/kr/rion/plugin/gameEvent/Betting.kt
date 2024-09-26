@@ -1,5 +1,6 @@
 package kr.rion.plugin.gameEvent
 
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 
 object Betting {
@@ -8,7 +9,7 @@ object Betting {
         // 베팅 사운드 재생 및 메세지 출력
         Bukkit.getOnlinePlayers().forEach { player ->
             player.playSound(player.location, "minecraft:custom.betting", 1f, 1f)
-            player.sendMessage("베팅이 시작됩니다\n누군가가 강해졌습니다")
+            player.sendMessage("$prefix 베팅이 시작됩니다\n누군가가 강해졌습니다")
         }
 
         // 스코어보드 objectives 추가

@@ -1,5 +1,6 @@
 package kr.rion.plugin.gameEvent
 
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
@@ -16,7 +17,7 @@ object DeathCoin {
         // 데스코인 시작 사운드 및 메세지
         Bukkit.getOnlinePlayers().forEach { player ->
             player.playSound(player.location, "minecraft:custom.deathcoin", 1f, 1f)
-            player.sendMessage("데스코인이 시작됩니다!!\n죽일 때 마다 강해지죠")
+            player.sendMessage("$prefix 데스코인이 시작됩니다!!\n죽일 때 마다 강해지죠")
         }
 
         // 스코어보드 점수 초기화 및 데스코인 효과 적용

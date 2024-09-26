@@ -1,5 +1,6 @@
 package kr.rion.plugin.gameEvent
 
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 
@@ -25,7 +26,7 @@ object WeatherRain {
             player.playSound(player.location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
             player.playSound(player.location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.5f, 0f)
             // 메세지 출력
-            player.sendMessage("폭우가 내립니다\n주위를 조심해주세요!")
+            player.sendMessage("$prefix 폭우가 내립니다\n주위를 조심해주세요!")
         }
     }
 }
