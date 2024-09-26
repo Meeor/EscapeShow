@@ -31,12 +31,6 @@ object FlameGunActions {
         val particleData1 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.5f)
         val particleData2 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0f)
 
-        val console: CommandSender = Bukkit.getConsoleSender()
-        val cmd1 =
-            "summon minecraft:armor_stand ${initialLoc.x} ${initialLoc.y} ${initialLoc.z} {Tags:[helicop],Invisible:1b}" // 실행할 명령어
-        val cmd2 = "function server_datapack:flare"
-        Bukkit.dispatchCommand(console, cmd1)
-
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             object : BukkitRunnable() {
                 private var t = 0.0
@@ -88,7 +82,6 @@ object FlameGunActions {
                             particleData2,
                             true
                         )
-                        Bukkit.dispatchCommand(console, cmd2)
                         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                             Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0))
                             startEscape(player)
