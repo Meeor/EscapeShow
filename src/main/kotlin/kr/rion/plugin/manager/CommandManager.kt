@@ -16,10 +16,12 @@ class CommandManager(private val plugin: JavaPlugin) {
         plugin.getCommand("계약서초기화")?.setExecutor(commandHandler)
         plugin.getCommand("탈출인원")?.setExecutor(commandHandler)
         plugin.getCommand("게임종료")?.setExecutor(commandHandler)
+        plugin.getCommand("이벤트")?.setExecutor(commandHandler)
         // TabCompleter 등록도 필요에 가
         plugin.getCommand("리셋")?.tabCompleter = TabComplete()
         plugin.getCommand("랜덤티피")?.tabCompleter = TabComplete()
         plugin.getCommand("아이템지급")?.tabCompleter = TabComplete()
         plugin.getCommand("탈출인원")?.tabCompleter = TabComplete()
+        plugin.getCommand("이벤트")?.tabCompleter = TabComplete()
     }
 }

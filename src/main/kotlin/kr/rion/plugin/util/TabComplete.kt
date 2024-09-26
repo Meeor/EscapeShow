@@ -19,6 +19,7 @@ class TabComplete : TabCompleter {
             "랜덤티피" -> RandomTP(args)
             "아이템지급" -> GiveItem(args)
             "탈출인원" -> EscapeSettingTab(args)
+            "이벤트" -> GameEvent(args)
             else -> null
         }
     }
@@ -46,9 +47,23 @@ class TabComplete : TabCompleter {
             emptyList()
         }
     }
-    private fun EscapeSettingTab(args: Array<out String>): List<String>{
+
+    private fun EscapeSettingTab(args: Array<out String>): List<String> {
         return if (args.size == 1) {
-            listOf("설정","확인").filter { it.startsWith(args[0], ignoreCase = true) }
+            listOf("설정", "확인").filter { it.startsWith(args[0], ignoreCase = true) }
+        } else {
+            emptyList()
+        }
+    }
+
+    private fun GameEvent(args: Array<out String>): List<String> {
+        return if (args.size == 1) {
+            listOf("맑음", "폭우", "중력이상", "지진", "후원", "데스코인", "베팅", "랜덤").filter {
+                it.startsWith(
+                    args[0],
+                    ignoreCase = true
+                )
+            }
         } else {
             emptyList()
         }

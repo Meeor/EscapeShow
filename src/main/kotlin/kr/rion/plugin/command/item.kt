@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.util.*
 
-object Playeritem {
+object item {
     fun handleitem(sender: CommandSender, args: Array<out String>) {
         if (args.isEmpty()) {
             sender.sendMessage("$prefix 사용법: /아이템지급 <아이템이름>")
@@ -30,10 +30,11 @@ object Playeritem {
             return
         }
     }
+
     fun handleItemReset(sender: CommandSender) {
         if (sender.isOp) {
             handleResetContract()
-            sender.sendMessage("전체 플레이어의 계약서 상태를 초기화 시켰습니다.")
+            sender.sendMessage("$prefix 전체 플레이어의 계약서 상태를 초기화 시켰습니다.")
         }
     }
 }

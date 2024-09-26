@@ -36,22 +36,22 @@ object Reset {
         movePlayersToLobby("game")
         Bukkit.broadcastMessage("${ChatColor.GOLD}** 게임맵을 리셋하는 도중에는 잠시 서버가 렉이 걸릴수있습니다. ** \n** 움직임을 최소화 해주시길 바랍니다. **")
         // 월드 제거
-        Bukkit.broadcastMessage("$prefix 사용한 게임맵을 제거중입니다..")
+        //Bukkit.broadcastMessage("$prefix 사용한 게임맵을 제거중입니다..")
         if (!worldManager.deleteWorld("game", sender)) {
             return false
         }
         // 월드 복사
-        Bukkit.broadcastMessage("$prefix 백업된 게임맵을 불러오는 중입니다...")
+        //Bukkit.broadcastMessage("$prefix 백업된 게임맵을 불러오는 중입니다...")
         if (!worldManager.copyWorld("backupgame", "game", sender)) {
             return false
         }
 
         // 포탈 플러그인 설정 리로드
-        Bukkit.broadcastMessage("$prefix 포탈 정보를 다시 불러오고 있습니다...")
+        //Bukkit.broadcastMessage("$prefix 포탈 정보를 다시 불러오고 있습니다...")
         val console: CommandSender = Bukkit.getConsoleSender()
         val cmd = "plugman reload Multiverse-Portals" // 실행할 명령어
 
-        sender.sendMessage("$prefix 랜덤좌표를 선정 중입니다.....")
+        //sender.sendMessage("$prefix 랜덤좌표를 선정 중입니다.....")
         Teleport.initializeSafeLocations()
 
         Bukkit.dispatchCommand(console, cmd)
@@ -63,18 +63,18 @@ object Reset {
         sender.sendMessage("$prefix 로비월드 리셋을 시작합니다.")
         movePlayersToLobby("lobby")
         // 월드 제거
-        sender.sendMessage("$prefix 사용한 로비맵을 제거중입니다..")
+        //sender.sendMessage("$prefix 사용한 로비맵을 제거중입니다..")
         if (!worldManager.deleteWorld("lobby", sender)) {
             return false
         }
         // 월드 복사
-        sender.sendMessage("$prefix 백업된 로비맵을 불러오는 중입니다...")
+        //sender.sendMessage("$prefix 백업된 로비맵을 불러오는 중입니다...")
         if (!worldManager.copyWorld("backuplobby", "lobby", sender)) {
             return false
         }
 
         // 포탈 플러그인 설정 리로드
-        sender.sendMessage("$prefix 포탈 정보를 다시 불러오고 있습니다...")
+        //sender.sendMessage("$prefix 포탈 정보를 다시 불러오고 있습니다...")
         val console: CommandSender = Bukkit.getConsoleSender()
         val cmd = "plugman reload Multiverse-Portals" // 실행할 명령어
 
@@ -82,6 +82,7 @@ object Reset {
         sender.sendMessage("$prefix 로비맵 리셋이 완료되었습니다.")
         return true
     }
+
     private fun movePlayersToLobby(world: String) {
         val worldName = Bukkit.getWorld(world) ?: return
         val lobbyLocation = Location(Bukkit.getWorld("vip"), 15.5, 58.5, -44.5)

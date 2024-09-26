@@ -6,6 +6,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -13,9 +14,9 @@ object EarthQuake {
     private var earthquakeRunning = false
     private val playerStages = mutableMapOf<Player, Int>()
 
-    fun start() {
+    fun start(sender: CommandSender) {
         if (earthquakeRunning) {
-            Bukkit.broadcastMessage("$prefix 지진이 이미 발생 중입니다!")
+            sender.sendMessage("$prefix 지진이 이미 발생 중입니다!")
             return
         }
 

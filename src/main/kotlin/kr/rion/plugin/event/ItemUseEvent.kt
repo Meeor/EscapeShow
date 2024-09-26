@@ -5,6 +5,7 @@ import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.item.ItemAction.handleHeal
 import kr.rion.plugin.item.ItemAction.handleMap
+import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -36,6 +37,7 @@ class ItemUseEvent : Listener {
                                 PersistentDataType.STRING
                             )
                         ) {
+                            player.sendMessage("$prefix 아이템 ${item.itemMeta.displayName} 을 사용하셨습니다.")
                             handleFlameGun(player)
                         }
                     }
@@ -46,6 +48,7 @@ class ItemUseEvent : Listener {
                                 PersistentDataType.STRING
                             )
                         ) {
+                            player.sendMessage("$prefix 아이템 ${item.itemMeta.displayName} 을 사용하셨습니다.")
                             handleHeal(player)
                         }
                     }
@@ -56,6 +59,7 @@ class ItemUseEvent : Listener {
                                 PersistentDataType.STRING
                             )
                         ) {
+                            player.sendMessage("$prefix 아이템 ${item.itemMeta.displayName} 을 사용하셨습니다.")
                             handleBerries(player)
                         }
                     }
@@ -66,6 +70,7 @@ class ItemUseEvent : Listener {
                                 PersistentDataType.STRING
                             )
                         ) {
+                            player.sendMessage("$prefix 아이템 ${item.itemMeta.displayName} 을 사용하셨습니다.")
                             handleContract(player)
                         }
                     }
@@ -76,6 +81,7 @@ class ItemUseEvent : Listener {
                                 PersistentDataType.STRING
                             )
                         ) {
+                            player.sendMessage("$prefix 아이템 ${item.itemMeta.displayName} 을 사용하셨습니다.")
                             handleMap(player)
                         }
                     }
