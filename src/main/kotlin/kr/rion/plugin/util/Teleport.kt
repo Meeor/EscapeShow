@@ -53,6 +53,7 @@ object Teleport {
         val rand = Random()
         val startTime = System.currentTimeMillis()
         console.sendMessage("$prefix 이동될 안전한좌표탐색을 시작합니다.")
+        safeLocations.clear()
 
 
         val minX = -372
