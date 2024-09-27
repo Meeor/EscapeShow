@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import java.util.*
 
 object Reset {
@@ -53,6 +54,15 @@ object Reset {
 
         //sender.sendMessage("$prefix 랜덤좌표를 선정 중입니다.....")
         Teleport.initializeSafeLocations()
+
+        //모든월드의 엔티티제거(플레이어제외)
+        Bukkit.getWorlds().forEach { world ->
+            world.entities.forEach { entity ->
+                if (entity !is Player) {
+                    entity.remove() // 플레이어가 아닌 엔티티를 제거
+                }
+            }
+        }
 
         Bukkit.dispatchCommand(console, cmd)
         Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")

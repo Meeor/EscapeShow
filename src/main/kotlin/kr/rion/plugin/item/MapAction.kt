@@ -22,7 +22,7 @@ object MapAction {
 
         // 각 플레이어에게 발광 효과 부여
         for (nearbyPlayer in nearbyPlayers) {
-            nearbyPlayer.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 10, 1, false, false))
+            nearbyPlayer.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 14, 1, false, false))
         }
         inventory.removeItemFromInventory(player, Material.MOJANG_BANNER_PATTERN, 1)
 

@@ -1,8 +1,11 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.item.FlameGunActions.escapeCancelled
+import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.item.ItemAction.handleResetContract
 import org.bukkit.*
+import org.bukkit.command.CommandSender
 
 object End {
     var isEnding: Boolean = false
@@ -15,6 +18,8 @@ object End {
         isEnding = true
         val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기
         val worldWait = Bukkit.getWorld("vip") // vip 월드도 동일하게 Bukkit API로 가져옴
+        val console: CommandSender = Bukkit.getConsoleSender()
+        val cmd = "function server_datapack:reset" // 실행할 명령어
 
         // 월드가 null인 경우 로그 출력
         if (world == null) {
@@ -26,6 +31,10 @@ object End {
 
         EscapePlayerCount = 0
         Helicopter.remove()
+        //플레어건 탈출끝내기
+        escapeCancelled = true
+        //플레어건 탈출파티클 끝내기
+        startEscape = false
         Bukkit.broadcastMessage("${global.prefix} 게임이 종료되었습니다.")
         for (player in Bukkit.getOnlinePlayers()) {
             player.playSound(player.location, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
@@ -43,11 +52,11 @@ object End {
             for (player in Bukkit.getOnlinePlayers()) {
                 player.allowFlight = false
                 player.isFlying = false
-                player.gameMode = GameMode.SURVIVAL
+                Bukkit.dispatchCommand(console, cmd)
                 for (effect in player.activePotionEffects) {
                     player.removePotionEffect(effect.type)
                 }
-                player.removeScoreboardTag("EscapeComplete")
+
                 if (worldWait != null) {
                     player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
                 } else {
@@ -70,5 +79,7 @@ object End {
 
         // 게임 종료 처리 완료 후 플래그 해제
         isEnding = false
+        //플레어건 탈출 가능상태로 변경
+        escapeCancelled = false
     }
 }

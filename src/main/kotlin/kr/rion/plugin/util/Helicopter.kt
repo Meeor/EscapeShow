@@ -11,7 +11,7 @@ import org.bukkit.block.data.type.Slab
 import org.bukkit.block.data.type.Stairs
 
 object Helicopter {
-    private var HelicopterLoc: Location? = null
+    var HelicopterLoc: Location? = null
     var HelicopterisSpawn = false
     fun spawn(getloc: Location) {
         if(HelicopterisSpawn == true) return

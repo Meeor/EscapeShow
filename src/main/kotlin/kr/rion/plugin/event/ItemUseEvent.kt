@@ -30,9 +30,10 @@ class ItemUseEvent : Listener {
         val map = NamespacedKey("EscapeShow", "map")
         if (event.hand == EquipmentSlot.HAND) {
             if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
+                event.isCancelled = true
                 when (item.type) {
                     Material.FLINT -> {
-                        if (itemMeta.displayName == "${ChatColor.RED}플레어건" && itemMeta.persistentDataContainer.has(
+                        if (ChatColor.stripColor(itemMeta.displayName) == "플레어건" && itemMeta.persistentDataContainer.has(
                                 flamegun,
                                 PersistentDataType.STRING
                             )
@@ -43,7 +44,7 @@ class ItemUseEvent : Listener {
                     }
 
                     Material.PAPER -> {
-                        if (itemMeta.displayName == "${ChatColor.GREEN}붕대" && itemMeta.persistentDataContainer.has(
+                        if (ChatColor.stripColor(itemMeta.displayName) == "붕대" && itemMeta.persistentDataContainer.has(
                                 heal,
                                 PersistentDataType.STRING
                             )
@@ -54,7 +55,7 @@ class ItemUseEvent : Listener {
                     }
 
                     Material.GLOW_BERRIES -> {
-                        if (itemMeta.displayName == "${ChatColor.GREEN}농축된 열매" && itemMeta.persistentDataContainer.has(
+                        if (ChatColor.stripColor(itemMeta.displayName) == "농축된 열매" && itemMeta.persistentDataContainer.has(
                                 berries,
                                 PersistentDataType.STRING
                             )
@@ -65,7 +66,7 @@ class ItemUseEvent : Listener {
                     }
 
                     Material.SKULL_BANNER_PATTERN -> {
-                        if (itemMeta.displayName == "${ChatColor.of("#FF4242")}계약서" && itemMeta.persistentDataContainer.has(
+                        if (ChatColor.stripColor(itemMeta.displayName) == "계약서" && itemMeta.persistentDataContainer.has(
                                 contract,
                                 PersistentDataType.STRING
                             )
@@ -76,7 +77,7 @@ class ItemUseEvent : Listener {
                     }
 
                     Material.MOJANG_BANNER_PATTERN -> {
-                        if (itemMeta.displayName == "${ChatColor.GRAY}지도" && itemMeta.persistentDataContainer.has(
+                        if (ChatColor.stripColor(itemMeta.displayName) == "지도" && itemMeta.persistentDataContainer.has(
                                 map,
                                 PersistentDataType.STRING
                             )
