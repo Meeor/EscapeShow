@@ -7,8 +7,9 @@ import org.bukkit.command.CommandSender
 
 object GameEvent {
     val survivalPlayers = Bukkit.getOnlinePlayers().filter { player ->
-        player.gameMode == org.bukkit.GameMode.SURVIVAL
+        !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete")
     }
+
 
     fun weatherClear() {
         WeatherClear.applyClearWeather()

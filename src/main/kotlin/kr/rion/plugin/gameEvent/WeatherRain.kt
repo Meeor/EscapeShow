@@ -11,7 +11,9 @@ object WeatherRain {
         Bukkit.getWorlds().forEach { world -> world.setStorm(true); world.setThundering(true) }
 
         // 플레이어에게 어둠 효과 적용 (30초간)
-        Bukkit.getOnlinePlayers().forEach { player ->
+        Bukkit.getOnlinePlayers().filter { player ->
+            !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete")
+        }.forEach { player ->
             player.addPotionEffect(
                 org.bukkit.potion.PotionEffect(
                     org.bukkit.potion.PotionEffectType.DARKNESS,
@@ -28,5 +30,6 @@ object WeatherRain {
             // 메세지 출력
             player.sendMessage("$prefix 폭우가 내립니다\n주위를 조심해주세요!")
         }
+
     }
 }

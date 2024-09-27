@@ -30,8 +30,10 @@ object EarthQuake {
                     Bukkit.broadcastMessage("$prefix 지진이 멈췄습니다!")
                     return
                 }
-                // 서바이벌 모드에 있는 플레이어들에 대해서만 지진 효과 적용
-                for (player in Bukkit.getOnlinePlayers().filter { it.gameMode == GameMode.SURVIVAL }) {
+                // manager 또는 EscapeComplete 태그가 없는 플레이어들에 대해서만 지진 효과 적용
+                Bukkit.getOnlinePlayers().filter { player ->
+                    !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete")
+                }.forEach { player ->
                     val currentStage = playerStages.getOrDefault(player, 0)
                     applyEarthquakeEffects(player, currentStage)
                     playerStages[player] = (currentStage + 1) % 8 // 0 ~ 7 스테이지 순환
