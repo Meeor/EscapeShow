@@ -41,7 +41,10 @@ object End {
         }
         world?.players?.forEach { player ->
             // 플레이어가 서바이벌 모드인 경우
-            if (player.gameMode == GameMode.SURVIVAL) {
+            if (player.gameMode == GameMode.SURVIVAL && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains(
+                    "EscapeComplete"
+                )
+            ) {
                 Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                     player.health = 0.0 // 플레이어의 체력을 0으로 설정하여 죽이기
                 }, 20L * 3)
@@ -65,7 +68,11 @@ object End {
             }
             val line = "=".repeat(40)
             val message =
-                "                      ${ChatColor.GREEN}탈출한 플레이어 \n${ChatColor.YELLOW}                       ${EscapePlayers.joinToString(" \n${ChatColor.YELLOW}")}"
+                "                      ${ChatColor.GREEN}탈출한 플레이어 \n${ChatColor.YELLOW}                       ${
+                    EscapePlayers.joinToString(
+                        " \n${ChatColor.YELLOW}"
+                    )
+                }"
 
             // 메시지를 모든 플레이어에게 브로드캐스트
             Bukkit.broadcastMessage("${ChatColor.GOLD}$line")
