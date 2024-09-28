@@ -17,16 +17,16 @@ import org.bukkit.command.CommandSender
 class CommandHandler : CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        when {
-            label.equals("리셋", ignoreCase = true) -> handleResetCommand(sender, args)
-            label.equals("좌표공개", ignoreCase = true) -> handleCoordinatesCommand(sender)
-            label.equals("랜덤티피", ignoreCase = true) -> handleRandomTP(sender, args)
-            label.equals("아이템지급", ignoreCase = true) -> handleitem(sender, args)
-            label.equals("계약서초기화", ignoreCase = true) -> handleItemReset(sender)
-            label.equals("게임종료", ignoreCase = true) -> handleEscapeEndGame(sender)
-            label.equals("탈출인원", ignoreCase = true) -> HandleSetting(sender, args)
-            label.equals("이벤트", ignoreCase = true) -> handleEvent(sender, args)
-            label.equals("엔티티리스트",ignoreCase = true) -> sendEntityList(sender)
+        when (label.lowercase()) {
+            "리셋" -> handleResetCommand(sender, args)
+            "좌표공개" -> handleCoordinatesCommand(sender)
+            "랜덤티피" -> handleRandomTP(sender, args)
+            "아이템지급" -> handleitem(sender, args)
+            "계약서초기화" -> handleItemReset(sender)
+            "게임종료" -> handleEscapeEndGame(sender)
+            "탈출인원" -> HandleSetting(sender, args)
+            "이벤트" -> handleEvent(sender, args)
+            "엔티티리스트" -> sendEntityList(sender)
             else -> return false
         }
         return true

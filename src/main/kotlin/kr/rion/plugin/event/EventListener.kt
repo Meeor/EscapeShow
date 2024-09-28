@@ -6,13 +6,24 @@ import org.bukkit.event.Listener
 
 /////////////////////파일 분리 예정/////////////////
 class EventListener : Listener {
+
     init {
-        // 각종 이벤트 리스너 등록
-        Bukkit.getPluginManager().registerEvents(ChatEvent(), Bukkit.getPluginManager().plugins[0])
-        Bukkit.getPluginManager().registerEvents(DamageEvent(), Bukkit.getPluginManager().plugins[0])
-        Bukkit.getPluginManager().registerEvents(DeathEvent(), Bukkit.getPluginManager().plugins[0])
-        Bukkit.getPluginManager().registerEvents(ItemUseEvent(), Bukkit.getPluginManager().plugins[0])
-        Bukkit.getPluginManager().registerEvents(JoinEvent(), Bukkit.getPluginManager().plugins[0])
-        Bukkit.getPluginManager().registerEvents(RespawnEvent(), Bukkit.getPluginManager().plugins[0])
+        val pluginManager = Bukkit.getPluginManager()
+        val plugin = pluginManager.plugins[0]
+
+        // 이벤트 리스너들을 리스트로 관리
+        val events = listOf(
+            ChatEvent(),
+            DamageEvent(),
+            DeathEvent(),
+            ItemUseEvent(),
+            JoinEvent(),
+            RespawnEvent()
+        )
+
+        // 한 번에 모든 이벤트 등록
+        events.forEach { event ->
+            pluginManager.registerEvents(event, plugin)
+        }
     }
 }
