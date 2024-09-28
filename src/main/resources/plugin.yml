@@ -3,7 +3,7 @@ version: 1.2.0
 author: rion
 main: kr.rion.plugin.Loader
 api-version: 1.20
-depend: [Multiverse-Core]
+depend: [Multiverse-Core,NBTAPI]
 
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.9.25
