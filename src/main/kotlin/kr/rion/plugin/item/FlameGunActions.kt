@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable
 object FlameGunActions {
     var escapeCancelled = false
     var startEscape = false
+    private var playerloc: Location? = null
 
     fun launchFlare(player: Player) {
         // 플레이어에게 사운드 재생
@@ -88,6 +89,7 @@ object FlameGunActions {
                         )
                         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                             Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0))
+                            playerloc = player.location
                             startEscape(player)
                         }, 4 * 20L)
                         cancel()
@@ -108,9 +110,9 @@ object FlameGunActions {
             return  // 탈출이 이미 진행 중이면 함수 종료
         }
 
-        // 파티클 소환 및 탈출 체크
         object : BukkitRunnable() {
             var tickCount = 0L
+            val playerTickCount = mutableMapOf<Player, Long>() // 플레이어가 움직이지 않은 시간 기록
 
             override fun run() {
                 if (escapeCancelled) {
@@ -121,45 +123,55 @@ object FlameGunActions {
                 // 모든 플레이어가 탈출 인식 대상
                 Bukkit.getOnlinePlayers().forEach { currentPlayer ->
 
-                    // 플레이어가 움직였는지 확인
-                    if (currentPlayer.location.distance(startLocation) > 0.5) {
+                    // playerloc 변수가 null인 경우 처리 (헬기 아래 파티클 위치)
+                    val startLocation = playerloc ?: run {
+                        Bukkit.getLogger().warning("playerloc이 null입니다. 탈출 성공 여부를 확인할 수 없습니다.")
+                        return@forEach
+                    }
+
+                    // 플레이어의 현재 위치와 playerloc 비교
+                    val currentLocation = currentPlayer.location
+
+                    // 플레이어가 playerloc에서 0.5칸 이상 움직였는지 확인
+                    if (currentLocation.distance(startLocation) > 0.5) {
                         try {
                             currentPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${ChatColor.RED}탈출 실패!"))
+                            playerTickCount[currentPlayer] = 0L // 탈출 실패 시 다시 0으로 초기화
                         } catch (e: Exception) {
                             Bukkit.getLogger().warning("액션바 전송 중 오류 발생: ${e.message}")
                         }
-                        // 탈출 실패해도 코드 종료는 하지 않음
+                    } else {
+                        // 플레이어가 playerloc 근처에서 가만히 있었을 경우
+                        playerTickCount[currentPlayer] = playerTickCount.getOrDefault(currentPlayer, 0L) + 1
                     }
-                }
 
-                // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)
-                if (HelicopterLoc != null) {
-                    try {
-                        for (i in 0..50) {
-                            val particleLocation = HelicopterLoc!!.clone().subtract(0.0, i.toDouble(), 0.0)
-                            HelicopterLoc!!.world?.spawnParticle(Particle.END_ROD, particleLocation, 1, 0.0, 0.0, 0.0, 0.0)
+                    // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)
+                    if (HelicopterLoc != null) {
+                        try {
+                            for (i in 0..50) {
+                                val particleLocation = HelicopterLoc!!.clone().subtract(0.0, i.toDouble(), 0.0)
+                                HelicopterLoc!!.world?.spawnParticle(Particle.END_ROD, particleLocation, 1, 0.0, 0.0, 0.0, 0.0)
+                            }
+                        } catch (e: Exception) {
+                            Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
                         }
-                    } catch (e: Exception) {
-                        Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
+                    } else {
+                        Bukkit.getLogger().warning("HelicopterLoc의 저장된 좌표가 없습니다. 파티클을 생성할 수 없습니다.")
                     }
-                } else {
-                    Bukkit.getLogger().warning("HelicopterLoc의 저장된좌표가 없습니다. 파티클을 생성할 수 없습니다.")
-                }
 
-                // 3초가 지났으면 탈출 성공 처리
-                tickCount += 1
-                if (tickCount >= escapeDuration) {
-                    try {
-                        Bukkit.getOnlinePlayers().forEach { currentPlayer ->
+                    // 3초 동안 가만히 있었으면 탈출 성공 처리
+                    if (playerTickCount[currentPlayer]!! >= escapeDuration) {
+                        try {
                             currentPlayer.sendTitle("${ChatColor.GREEN}탈출 성공!", "", 10, 70, 20)
                             currentPlayer.playSound(currentPlayer.location, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f)
                             currentPlayer.addScoreboardTag("Escape")
+                            playerTickCount[currentPlayer] = 0L // 성공 후 카운터 초기화
+                        } catch (e: Exception) {
+                            Bukkit.getLogger().warning("타이틀 전송 중 오류 발생: ${e.message}")
                         }
-                    } catch (e: Exception) {
-                        Bukkit.getLogger().warning("타이틀 전송 중 오류 발생: ${e.message}")
                     }
-                    // 코드 종료는 하지 않고 End 함수가 호출될 때까지 대기
                 }
+                tickCount += 1
             }
         }.runTaskTimer(Loader.instance, 0L, 5L)  // 매 5틱마다 실행
     }
