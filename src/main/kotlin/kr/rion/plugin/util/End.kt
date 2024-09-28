@@ -1,9 +1,10 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.item.FlameGunActions.escapeCancelled
+import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.item.ItemAction.handleResetContract
+import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import org.bukkit.*
 import org.bukkit.command.CommandSender
 
@@ -31,11 +32,12 @@ object End {
 
         EscapePlayerCount = 0
         Helicopter.remove()
-        //플레어건 탈출끝내기
-        escapeCancelled = true
+        HelicopterisSpawn = false
         //플레어건 탈출파티클 끝내기
         startEscape = false
         Bukkit.broadcastMessage("${global.prefix} 게임이 종료되었습니다.")
+        flaregunstart?.cancel()
+        flaregunstart = null
         for (player in Bukkit.getOnlinePlayers()) {
             player.playSound(player.location, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
@@ -86,7 +88,5 @@ object End {
 
         // 게임 종료 처리 완료 후 플래그 해제
         isEnding = false
-        //플레어건 탈출 가능상태로 변경
-        escapeCancelled = false
     }
 }

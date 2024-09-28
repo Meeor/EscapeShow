@@ -41,7 +41,7 @@ class ItemUseEvent : Listener {
                 val expectedName = getExpectedNameForItem(tag) // 예상되는 아이템 이름을 가져옴
                 if (itemName == expectedName) {
                     event.isCancelled = true
-                    player.sendMessage("$prefix 아이템 ${itemMeta.displayName} 을(를) 사용하셨습니다.")
+                    player.sendMessage("$prefix 아이템 ${itemMeta.displayName}${ChatColor.RESET}${ChatColor.GREEN} 을(를) 사용하셨습니다.")
                     handleAction(player, tag)
                 }
             }

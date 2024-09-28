@@ -7,14 +7,15 @@ import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
-import org.bukkit.command.CommandSender
+import de.tr7zw.nbtapi.NBTItem
+import kr.rion.plugin.util.Helicopter.playerloc
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scheduler.BukkitTask
 
 object FlameGunActions {
-    var escapeCancelled = false
     var startEscape = false
-    private var playerloc: Location? = null
+    var flaregunstart: BukkitTask? = null
 
     fun launchFlare(player: Player) {
         // 플레이어에게 사운드 재생
@@ -23,13 +24,16 @@ object FlameGunActions {
             playerall.playSound(player.location, Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.5f)
         }
 
-        val flamegun = NamespacedKey("EscapeShow", "flamegun")
+
         // 사용한 아이템의 메타데이터 변경
         val item = player.inventory.itemInMainHand
         val itemMeta = item.itemMeta ?: return
         itemMeta.setDisplayName("${ChatColor.RED}${ChatColor.ITALIC}${ChatColor.STRIKETHROUGH}플레어건")
-        itemMeta.persistentDataContainer.remove(flamegun)
         item.itemMeta = itemMeta
+
+        val nbtItem = NBTItem(item)
+        nbtItem.setBoolean("flamegun", false)
+        item.itemMeta = nbtItem.item.itemMeta
 
 
         val initialLoc = player.location.clone().add(0.0, 1.0, 0.0) // 플레이어 머리 위치 (약간 위로) 복제본 생성
@@ -40,6 +44,7 @@ object FlameGunActions {
             object : BukkitRunnable() {
                 private var t = 0.0
                 private val loc = initialLoc.clone()
+                private val playerloc = player.location.clone()
 
                 override fun run() {
                     t += 1
@@ -88,8 +93,7 @@ object FlameGunActions {
                             true
                         )
                         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                            Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0))
-                            playerloc = player.location
+                            Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0), playerloc)
                             startEscape(player)
                         }, 4 * 20L)
                         cancel()
@@ -102,24 +106,21 @@ object FlameGunActions {
     }
 
     fun startEscape(player: Player) {
-        val startLocation = player.location.clone()  // 시작 시 위치 저장
         val escapeDuration = 12L // 3초간 대기 (20틱 = 1초, 3초 = 60틱)
 
         if (startEscape) {
             player.sendMessage("$prefix ${ChatColor.RED}이미 헬기가 소환되어있습니다! ${ChatColor.YELLOW}(헬기 위치 >> x: ${HelicopterLoc?.x}, y: ${HelicopterLoc?.y}, z: ${HelicopterLoc?.z})")
             return  // 탈출이 이미 진행 중이면 함수 종료
+        }else{
+            startEscape = true
         }
 
-        object : BukkitRunnable() {
+        flaregunstart = object : BukkitRunnable() {
             var tickCount = 0L
             val playerTickCount = mutableMapOf<Player, Long>() // 플레이어가 움직이지 않은 시간 기록
+            val failedPlayers = mutableSetOf<Player>() // 탈출 실패 메시지를 한 번만 보낸 플레이어 목록
 
             override fun run() {
-                if (escapeCancelled) {
-                    cancel()
-                    return
-                }
-
                 // 모든 플레이어가 탈출 인식 대상
                 Bukkit.getOnlinePlayers().forEach { currentPlayer ->
 
@@ -134,12 +135,17 @@ object FlameGunActions {
 
                     // 플레이어가 playerloc에서 0.5칸 이상 움직였는지 확인
                     if (currentLocation.distance(startLocation) > 0.5) {
-                        try {
-                            currentPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${ChatColor.RED}탈출 실패!"))
-                            playerTickCount[currentPlayer] = 0L // 탈출 실패 시 다시 0으로 초기화
-                        } catch (e: Exception) {
-                            Bukkit.getLogger().warning("액션바 전송 중 오류 발생: ${e.message}")
+                        // 탈출 실패 메시지를 한 번만 보내기 위해 확인
+                        if (!failedPlayers.contains(currentPlayer)) {
+                            try {
+                                currentPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${ChatColor.RED}탈출 실패!"))
+                                failedPlayers.add(currentPlayer) // 실패한 플레이어 등록
+                            } catch (e: Exception) {
+                                Bukkit.getLogger().warning("액션바 전송 중 오류 발생: ${e.message}")
+                            }
                         }
+                        // 탈출 실패로 인한 카운터 초기화
+                        playerTickCount[currentPlayer] = 0L
                     } else {
                         // 플레이어가 playerloc 근처에서 가만히 있었을 경우
                         playerTickCount[currentPlayer] = playerTickCount.getOrDefault(currentPlayer, 0L) + 1

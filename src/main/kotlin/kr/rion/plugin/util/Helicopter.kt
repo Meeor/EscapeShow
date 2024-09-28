@@ -9,12 +9,15 @@ import org.bukkit.block.data.Bisected.Half
 import org.bukkit.block.data.type.Piston
 import org.bukkit.block.data.type.Slab
 import org.bukkit.block.data.type.Stairs
+import org.bukkit.entity.Player
 
 object Helicopter {
+    var playerloc: Location? = null
     var HelicopterLoc: Location? = null
     var HelicopterisSpawn = false
-    fun spawn(getloc: Location) {
+    fun spawn(getloc: Location,player: Location) {
         if(HelicopterisSpawn == true) return
+        playerloc = player
         HelicopterLoc = getloc
         setBlockWithAttributes(
             setloc(getloc, 1.0, 0.0, 2.0), Material.ANDESITE_STAIRS, stairsHalf = Half.TOP, blockFace = BlockFace.WEST
