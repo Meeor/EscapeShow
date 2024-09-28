@@ -1,6 +1,7 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.command.Reset
 import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.item.ItemAction.handleResetContract
@@ -58,6 +59,7 @@ object End {
                 player.allowFlight = false
                 player.isFlying = false
                 Bukkit.dispatchCommand(console, cmd)
+                player.inventory.clear()
                 for (effect in player.activePotionEffects) {
                     player.removePotionEffect(effect.type)
                 }
@@ -83,6 +85,7 @@ object End {
 
             // EscapePlayers 리스트를 초기화 (비우기)
             EscapePlayers.clear()
+            Reset.handleGameReset()
         }, 20L * 8)
         handleResetContract()
 

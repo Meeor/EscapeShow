@@ -1,5 +1,6 @@
 package kr.rion.plugin.command
 
+import GiveItem
 import kr.rion.plugin.item.ItemAction.handleResetContract
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.ChatColor

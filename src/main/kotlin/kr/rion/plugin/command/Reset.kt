@@ -25,25 +25,25 @@ object Reset {
             return  // 명령어 처리 완료
         }
         when (args[0].lowercase(Locale.getDefault())) {
-            "게임" -> handleGameReset(sender)
+            "게임" -> handleGameReset()
             "로비" -> handleLobbyReset(sender)
             else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. <게임/로비>를 입력하세요.")
         }
     }
 
-    private fun handleGameReset(sender: CommandSender): Boolean {
+    fun handleGameReset(): Boolean {
         setInitializedSafeLocations(false)
         Bukkit.broadcastMessage("$prefix 게임월드 리셋을 시작합니다.")
         movePlayersToLobby("game")
         Bukkit.broadcastMessage("${ChatColor.GOLD}** 게임맵을 리셋하는 도중에는 잠시 서버가 렉이 걸릴수있습니다. ** \n** 움직임을 최소화 해주시길 바랍니다. **")
         // 월드 제거
         //Bukkit.broadcastMessage("$prefix 사용한 게임맵을 제거중입니다..")
-        if (!worldManager.deleteWorld("game", sender)) {
+        if (!worldManager.deleteWorld("game")) {
             return false
         }
         // 월드 복사
         //Bukkit.broadcastMessage("$prefix 백업된 게임맵을 불러오는 중입니다...")
-        if (!worldManager.copyWorld("backupgame", "game", sender)) {
+        if (!worldManager.copyWorld("backupgame", "game")) {
             return false
         }
 
@@ -74,12 +74,12 @@ object Reset {
         movePlayersToLobby("lobby")
         // 월드 제거
         //sender.sendMessage("$prefix 사용한 로비맵을 제거중입니다..")
-        if (!worldManager.deleteWorld("lobby", sender)) {
+        if (!worldManager.deleteWorld("lobby")) {
             return false
         }
         // 월드 복사
         //sender.sendMessage("$prefix 백업된 로비맵을 불러오는 중입니다...")
-        if (!worldManager.copyWorld("backuplobby", "lobby", sender)) {
+        if (!worldManager.copyWorld("backuplobby", "lobby")) {
             return false
         }
 

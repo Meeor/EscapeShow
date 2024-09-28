@@ -1,14 +1,14 @@
 package kr.rion.plugin.item
 
+import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
+import kr.rion.plugin.util.Helicopter.playerloc
 import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
-import de.tr7zw.nbtapi.NBTItem
-import kr.rion.plugin.util.Helicopter.playerloc
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
@@ -111,7 +111,7 @@ object FlameGunActions {
         if (startEscape) {
             player.sendMessage("$prefix ${ChatColor.RED}이미 헬기가 소환되어있습니다! ${ChatColor.YELLOW}(헬기 위치 >> x: ${HelicopterLoc?.x}, y: ${HelicopterLoc?.y}, z: ${HelicopterLoc?.z})")
             return  // 탈출이 이미 진행 중이면 함수 종료
-        }else{
+        } else {
             startEscape = true
         }
 
@@ -138,7 +138,8 @@ object FlameGunActions {
                         // 탈출 실패 메시지를 한 번만 보내기 위해 확인
                         if (!failedPlayers.contains(currentPlayer)) {
                             try {
-                                currentPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${ChatColor.RED}탈출 실패!"))
+                                currentPlayer.spigot()
+                                    .sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${ChatColor.RED}탈출 실패!"))
                                 failedPlayers.add(currentPlayer) // 실패한 플레이어 등록
                             } catch (e: Exception) {
                                 Bukkit.getLogger().warning("액션바 전송 중 오류 발생: ${e.message}")
@@ -156,7 +157,15 @@ object FlameGunActions {
                         try {
                             for (i in 0..50) {
                                 val particleLocation = HelicopterLoc!!.clone().subtract(0.0, i.toDouble(), 0.0)
-                                HelicopterLoc!!.world?.spawnParticle(Particle.END_ROD, particleLocation, 1, 0.0, 0.0, 0.0, 0.0)
+                                HelicopterLoc!!.world?.spawnParticle(
+                                    Particle.END_ROD,
+                                    particleLocation,
+                                    1,
+                                    0.0,
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                )
                             }
                         } catch (e: Exception) {
                             Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")

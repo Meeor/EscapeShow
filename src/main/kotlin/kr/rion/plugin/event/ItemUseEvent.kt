@@ -57,6 +57,7 @@ class ItemUseEvent : Listener {
             "map" -> handleMap(player)
         }
     }
+
     private fun getExpectedNameForItem(tag: String): String {
         return when (tag) {
             "flamegun" -> "플레어건"

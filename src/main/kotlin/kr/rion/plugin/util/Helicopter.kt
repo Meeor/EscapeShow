@@ -9,14 +9,13 @@ import org.bukkit.block.data.Bisected.Half
 import org.bukkit.block.data.type.Piston
 import org.bukkit.block.data.type.Slab
 import org.bukkit.block.data.type.Stairs
-import org.bukkit.entity.Player
 
 object Helicopter {
     var playerloc: Location? = null
     var HelicopterLoc: Location? = null
     var HelicopterisSpawn = false
-    fun spawn(getloc: Location,player: Location) {
-        if(HelicopterisSpawn == true) return
+    fun spawn(getloc: Location, player: Location) {
+        if (HelicopterisSpawn == true) return
         playerloc = player
         HelicopterLoc = getloc
         setBlockWithAttributes(
@@ -394,7 +393,7 @@ object Helicopter {
     }
 
     fun remove() {
-        if(HelicopterLoc == null) return
+        if (HelicopterLoc == null) return
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
             // 블럭을 공기로 변경
             HelicopterLoc?.let { getloc ->

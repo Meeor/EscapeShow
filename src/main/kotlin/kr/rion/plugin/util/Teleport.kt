@@ -130,14 +130,14 @@ object Teleport {
                 blockAbove.type == Material.AIR &&
                 blockBelow.type.isSolid &&
                 !setOf(
-            Material.AZALEA_LEAVES, // 진달래잎
-            Material.FERN, // 고사리
-            Material.LARGE_FERN, // 큰고사리
-            Material.GRASS, // 잔디
-            Material.CRIMSON_BUTTON, //진홍빛버튼
-            Material.WATER, //물
-            Material.LAVA //용암
-        ).contains(blockBelow.type)
+                    Material.AZALEA_LEAVES, // 진달래잎
+                    Material.FERN, // 고사리
+                    Material.LARGE_FERN, // 큰고사리
+                    Material.GRASS, // 잔디
+                    Material.CRIMSON_BUTTON, //진홍빛버튼
+                    Material.WATER, //물
+                    Material.LAVA //용암
+                ).contains(blockBelow.type)
     }
 
     private val immunePlayers = mutableMapOf<Player, Long>() // 플레이어와 면역 시간 맵
