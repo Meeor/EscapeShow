@@ -23,8 +23,9 @@ object GiveItem {
                 LegacyComponentSerializer.legacySection().deserialize(line)
             })
         }
+        item.itemMeta = meta
         val nbtItem = NBTItem(item)
-        nbtItem.setString(nbtKey, "true")
+        nbtItem.setBoolean(nbtKey, true)
         item.itemMeta = nbtItem.item.itemMeta
         player.inventory.addItem(item)
         player.sendMessage("$prefix ${meta.displayName}${ChatColor.GREEN}을(를) 지급하였습니다.")
