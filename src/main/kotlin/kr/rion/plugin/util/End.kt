@@ -40,7 +40,7 @@ object End {
         flaregunstart?.cancel()
         flaregunstart = null
         for (player in Bukkit.getOnlinePlayers()) {
-            player.playSound(player.location, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+            player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
         world?.players?.forEach { player ->
             // 플레이어가 서바이벌 모드인 경우
