@@ -4,6 +4,7 @@
     <root id="archive" name="EscapeShow.jar">
       <element id="module-output" name="kr.rion.plugin.commandtest.main" />
       <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
+      <element id="file-copy" path="$PROJECT_DIR$/libs/item-nbt-api-plugin-2.13.1.jar" />
     </root>
   </artifact>
 </component>

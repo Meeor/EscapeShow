@@ -37,52 +37,54 @@ object Teleport {
     }
 
     fun initializeSafeLocations() {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)
 
-        destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)
+            if (hasInitializedSafeLocations) return@Runnable
 
-        val destinationWorld: World? = worldManager?.getMultiverseWorld(destinationWorldName)
-        if (hasInitializedSafeLocations) return
-
-        val world = destinationWorld
-        if (world == null) {
-            console.sendMessage("$prefix 월드 ${ChatColor.YELLOW}'${destinationWorldName}'${ChatColor.GREEN}가 로드되지 않았습니다.")
-            return
-        }
-
-
-        val rand = Random()
-        val startTime = System.currentTimeMillis()
-        console.sendMessage("$prefix 이동될 안전한좌표탐색을 시작합니다.")
-        safeLocations.clear()
-
-
-        val minX = -372
-        val maxX = 718
-        val minY = 53
-        val maxY = 97
-        val minZ = -710
-        val maxZ = 45
-
-        val requiredSafeLocations = 100 // 목표: 100개
-        val maxAttempts = 20000 // 시도 횟수 제한 (필요에 따라 조정 가능)
-        var attempts = 0
-
-        while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
-            val x = rand.nextInt(maxX - minX + 1) + minX
-            val y = rand.nextInt(maxY - minY + 1) + minY
-            val z = rand.nextInt(maxZ - minZ + 1) + minZ
-
-            val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
-            if (isLocationSafe(location) && !safeLocations.contains(location)) {
-                safeLocations.add(location)
+            val world = destinationWorld
+            if (world == null) {
+                console.sendMessage("$prefix 월드 ${ChatColor.YELLOW}'${destinationWorldName}'${ChatColor.GREEN}가 로드되지 않았습니다.")
+                return@Runnable
             }
-            attempts++
-        }
 
-        val endTime = System.currentTimeMillis()
-        console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
-        hasInitializedSafeLocations = true
+            val rand = Random()
+            val safeLocationsFound = mutableListOf<Location>()
+
+            val minX = -372
+            val maxX = 718
+            val minY = 53
+            val maxY = 97
+            val minZ = -710
+            val maxZ = 45
+
+            val requiredSafeLocations = 100
+            val maxAttempts = 20000
+            var attempts = 0
+
+            while (safeLocationsFound.size < requiredSafeLocations && attempts < maxAttempts) {
+                val x = rand.nextInt(maxX - minX + 1) + minX
+                val y = rand.nextInt(maxY - minY + 1) + minY
+                val z = rand.nextInt(maxZ - minZ + 1) + minZ
+
+                val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
+                if (isLocationSafe(location) && !safeLocationsFound.contains(location)) {
+                    safeLocationsFound.add(location)
+                }
+                attempts++
+            }
+
+            // 비동기 작업이 완료되면 동기적으로 안전 좌표 설정
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                safeLocations.clear()
+                safeLocations.addAll(safeLocationsFound)
+                console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다.")
+                hasInitializedSafeLocations = true
+            })
+        })
     }
+
+
 
 
     fun isInDesignatedArea(loc: Location): Boolean {
@@ -97,39 +99,29 @@ object Teleport {
     }
 
     fun teleportToRandomLocation(player: Player) {
+        if (!hasInitializedSafeLocations) {
+            player.sendMessage("$prefix 안전한 좌표가 초기화되지 않았습니다. 나중에 다시 시도해주세요.")
+            return
+        }
 
         destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName) ?: return
         val world = loadWorldIfNeeded(destinationWorldName) ?: return
         val startTime = System.currentTimeMillis()
-        val maxAttempts = 100
-        var randomLocation: Location? = null
 
-        for (attempt in 1..maxAttempts) {
-            val safeLocation = safeLocations.randomOrNull() ?: continue
-
-            if (safeLocation.world?.name != world.name) {
-                continue
-            }
-
-            if (isLocationSafe(safeLocation)) {
-                randomLocation = safeLocation
-                break
-            }
-        }
-
-        if (randomLocation == null) {
-            console.sendMessage("$prefix 좌표를 찾을수 없습니다. 재설정을 해주세요")
+        val safeLocation = safeLocations.randomOrNull()
+        if (safeLocation == null) {
+            console.sendMessage("$prefix 좌표를 찾을 수 없습니다. 재설정을 해주세요.")
             player.sendMessage("$prefix 저장된 좌표값이 없어 이동에 실패하였습니다.\n$prefix 운영자에게 좌표설정을 부탁하시길 바랍니다.")
             return
         }
 
-
-        player.teleport(randomLocation)
-        safeLocations.remove(randomLocation)
+        player.teleport(safeLocation)
+        safeLocations.remove(safeLocation)
         val endTime = System.currentTimeMillis()
         console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
         setImmune(player, 3000)
     }
+
 
     fun isLocationSafe(loc: Location): Boolean {
         val block = loc.block

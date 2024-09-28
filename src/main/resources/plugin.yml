@@ -3,6 +3,7 @@ version: 1.2.0
 author: rion
 main: kr.rion.plugin.Loader
 api-version: 1.20
+depend: [Multiverse-Core]
 
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.9.25
@@ -45,5 +46,10 @@ commands:
   이벤트:
     description: 이벤트를 발생시킵니다.
     usage: /<command> <이벤트이름>
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
+  엔티티리스트:
+    description: 서버에있는 엔티티의 리스트를 나열합니다.
+    usage: /<command>
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.

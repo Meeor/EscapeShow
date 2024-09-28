@@ -15,12 +15,14 @@ version = "1.0"
 repositories {
     mavenCentral()
     maven("https://repo.onarandombox.com/content/groups/public/")
+    maven("https://repo.codemc.org/repository/maven-public/" )
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
     implementation("net.kyori:adventure-api:4.17.0")
+    implementation(files("libs/item-nbt-api-plugin-2.13.1.jar"))
     compileOnly("com.onarandombox.multiversecore:multiverse-core:4.3.12")
 
 

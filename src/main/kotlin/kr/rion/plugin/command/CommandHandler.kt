@@ -2,6 +2,7 @@ package kr.rion.plugin.command
 
 
 import kr.rion.plugin.command.Coordinates.handleCoordinatesCommand
+import kr.rion.plugin.command.EntityList.sendEntityList
 import kr.rion.plugin.command.EscapeEndGame.handleEscapeEndGame
 import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.GameEventCommand.handleEvent
@@ -25,6 +26,7 @@ class CommandHandler : CommandExecutor {
             label.equals("게임종료", ignoreCase = true) -> handleEscapeEndGame(sender)
             label.equals("탈출인원", ignoreCase = true) -> HandleSetting(sender, args)
             label.equals("이벤트", ignoreCase = true) -> handleEvent(sender, args)
+            label.equals("엔티티리스트",ignoreCase = true) -> sendEntityList(sender)
             else -> return false
         }
         return true
