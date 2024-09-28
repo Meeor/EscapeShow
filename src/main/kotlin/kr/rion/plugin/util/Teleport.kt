@@ -38,18 +38,19 @@ object Teleport {
 
     fun initializeSafeLocations() {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)
+            val world = worldManager?.getMultiverseWorld(destinationWorldName)
 
             if (hasInitializedSafeLocations) return@Runnable
 
-            val world = destinationWorld
             if (world == null) {
                 console.sendMessage("$prefix 월드 ${ChatColor.YELLOW}'${destinationWorldName}'${ChatColor.GREEN}가 로드되지 않았습니다.")
                 return@Runnable
             }
 
+            console.sendMessage("$prefix 이동될 안전한좌표 탐색을 시작합니다.")
+
             val rand = Random()
-            val safeLocationsFound = mutableListOf<Location>()
+            val startTime = System.currentTimeMillis()
 
             val minX = -372
             val maxX = 718
@@ -61,6 +62,7 @@ object Teleport {
             val requiredSafeLocations = 100
             val maxAttempts = 20000
             var attempts = 0
+            val safeLocationsFound = mutableListOf<Location>()
 
             while (safeLocationsFound.size < requiredSafeLocations && attempts < maxAttempts) {
                 val x = rand.nextInt(maxX - minX + 1) + minX
@@ -74,15 +76,17 @@ object Teleport {
                 attempts++
             }
 
-            // 비동기 작업이 완료되면 동기적으로 안전 좌표 설정
+            val endTime = System.currentTimeMillis()
+
             Bukkit.getScheduler().runTask(plugin, Runnable {
                 safeLocations.clear()
                 safeLocations.addAll(safeLocationsFound)
-                console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다.")
+                console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocationsFound.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
                 hasInitializedSafeLocations = true
             })
         })
     }
+
 
 
 
