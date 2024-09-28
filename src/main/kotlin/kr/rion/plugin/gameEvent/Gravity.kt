@@ -72,7 +72,7 @@ object Gravity {
         player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 100, 1, true, true)) // 5초간 유지
 
         // 파티클 효과 (강화 시 붉은색)
-        player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3, 1.0)
+        player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0)
 
         // Action bar 메시지
         player.sendActionBar("$prefix ${ChatColor.BOLD}${ChatColor.RED}중력이 강화됩니다")
@@ -86,7 +86,7 @@ object Gravity {
         player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 100, 1, true, true)) // 5초간 유지
 
         // 파티클 효과 (약화 시 연두색)
-        player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3, 1.0)
+        player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3,new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1.0)
 
         // Action bar 메시지
         player.sendActionBar("$prefix ${ChatColor.BOLD}중력이 약화됩니다")
