@@ -2,10 +2,8 @@ package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.global.prefix
-import org.bukkit.ChatColor
-import org.bukkit.Location
-import org.bukkit.Particle
-import org.bukkit.Sound
+import net.md_5.bungee.api.ChatMessageType
+import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -68,28 +66,56 @@ object Gravity {
     // 중력 강화 (중력 이상 상태일 때 적용)
     private fun applyGravityStrength(player: Player) {
         // 플레이어에게 효과 적용
-        player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 100, 128, true, true)) // 5초간 유지
-        player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 100, 1, true, true)) // 5초간 유지
+        player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20, 128, true, true)) // 1초간 유지
+        player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 20, 1, true, true)) // 1초간 유지
 
         // 파티클 효과 (강화 시 붉은색)
-        player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0)
+        player.world.spawnParticle(
+            Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3, Particle.DustOptions(
+                Color.fromRGB(255, 0, 0),
+                1.0F
+            )
+        )
+
+        // 상대적 위치로 두 번째 파티클 효과 적용
+        val particleLocation = player.location.clone().add(-0.3, 0.2, 0.5)
+        player.world.spawnParticle(
+            Particle.REDSTONE, particleLocation, 10, 0.2, 0.0, 0.2, Particle.DustOptions(
+                Color.fromRGB(255, 0, 0),
+                1.0F
+            )
+        )
 
         // Action bar 메시지
         player.sendActionBar("$prefix ${ChatColor.BOLD}${ChatColor.RED}중력이 강화됩니다")
     }
 
     // 중력 약화 (중력 이상 상태일 때 적용)
-    private fun applyGravityWeakness(player: Player) {
+    private fun applyGravityWeakness(player: Player, particleColor: Color, message: String) {
         // 플레이어에게 효과 적용
-        player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 100, 3, true, true)) // 5초간 유지
-        player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 100, 3, true, true)) // 5초간 유지
-        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 100, 1, true, true)) // 5초간 유지
+        player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 20, 3, true, true)) // 1초간 유지
+        player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 20, 3, true, true)) // 1초간 유지
+        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20, 1, true, true)) // 1초간 유지
 
-        // 파티클 효과 (약화 시 연두색)
-        player.world.spawnParticle(Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3,new Particle.DustOptions(Color.fromRGB(0, 255, 0), 1.0)
+        // 파티클 효과 (약화 시 해당 색상 적용)
+        player.world.spawnParticle(
+            Particle.REDSTONE, player.location, 10, 0.3, 0.0, 0.3, Particle.DustOptions(
+                particleColor,
+                1.0F
+            )
+        )
+
+        // 상대적 위치로 두 번째 파티클 효과 적용
+        val particleLocation = player.location.clone().add(-0.3, 0.2, 0.5)
+        player.world.spawnParticle(
+            Particle.REDSTONE, particleLocation, 10, 0.2, 0.0, 0.2, Particle.DustOptions(
+                particleColor,
+                1.0F
+            )
+        )
 
         // Action bar 메시지
-        player.sendActionBar("$prefix ${ChatColor.BOLD}중력이 약화됩니다")
+        player.sendActionBar(message)
     }
 
     // 플레이어의 위치에 따라 중력 강화/약화 효과를 적용
@@ -98,13 +124,22 @@ object Gravity {
         val z = location.z
 
         // 중력 강화 조건
-        if (x > 118 && z > -341) {
+        if (x > 118 && x <= 1118 && z > -341 && z <= 659) {
             applyGravityStrength(player)
         }
         // 중력 약화 조건
-        else if (x < 118 && z < -341) {
-            applyGravityWeakness(player)
+        else if (x < 118 && x >= -882 && z < -341 && z >= -1341) {
+            applyGravityWeakness(player, Color.fromRGB(153, 178, 76), "$prefix ${ChatColor.BOLD}${ChatColor.YELLOW}중력이 약화됩니다")
+        }
+        // 중력 약화 추가 조건 (연두색)
+        else if (x < 118 && x >= -882 && z > -341 && z <= 659) {
+            applyGravityWeakness(player, Color.fromRGB(25, 255, 25), "$prefix ${ChatColor.BOLD}${ChatColor.GREEN}중력이 약화됩니다")
+        }
+        // 중력 약화 추가 조건 (파란색)
+        else if (x > 118 && x <= 1118 && z < -341 && z >= -1341) {
+            applyGravityWeakness(player, Color.fromRGB(0, 77, 255), "$prefix ${ChatColor.BOLD}${ChatColor.BLUE}중력이 약화됩니다")
         }
     }
+
 }
 
