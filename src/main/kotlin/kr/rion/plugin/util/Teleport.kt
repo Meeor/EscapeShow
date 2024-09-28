@@ -37,58 +37,51 @@ object Teleport {
     }
 
     fun initializeSafeLocations() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            val world = worldManager?.getMultiverseWorld(destinationWorldName)
 
-            if (hasInitializedSafeLocations) return@Runnable
+        destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)
 
-            if (world == null) {
-                console.sendMessage("$prefix 월드 ${ChatColor.YELLOW}'${destinationWorldName}'${ChatColor.GREEN}가 로드되지 않았습니다.")
-                return@Runnable
+        val destinationWorld: World? = worldManager?.getMultiverseWorld(destinationWorldName)
+        if (hasInitializedSafeLocations) return
+
+        val world = destinationWorld
+        if (world == null) {
+            console.sendMessage("$prefix 월드 ${ChatColor.YELLOW}'${destinationWorldName}'${ChatColor.GREEN}가 로드되지 않았습니다.")
+            return
+        }
+
+
+        val rand = Random()
+        val startTime = System.currentTimeMillis()
+        console.sendMessage("$prefix 이동될 안전한좌표탐색을 시작합니다.")
+
+
+        val minX = -372
+        val maxX = 718
+        val minY = 53
+        val maxY = 97
+        val minZ = -710
+        val maxZ = 45
+
+        val requiredSafeLocations = 100 // 목표: 100개
+        val maxAttempts = 20000 // 시도 횟수 제한 (필요에 따라 조정 가능)
+        var attempts = 0
+
+        while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
+            val x = rand.nextInt(maxX - minX + 1) + minX
+            val y = rand.nextInt(maxY - minY + 1) + minY
+            val z = rand.nextInt(maxZ - minZ + 1) + minZ
+
+            val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
+            if (isLocationSafe(location) && !safeLocations.contains(location)) {
+                safeLocations.add(location)
             }
+            attempts++
+        }
 
-            console.sendMessage("$prefix 이동될 안전한좌표 탐색을 시작합니다.")
-
-            val rand = Random()
-            val startTime = System.currentTimeMillis()
-
-            val minX = -372
-            val maxX = 718
-            val minY = 53
-            val maxY = 97
-            val minZ = -710
-            val maxZ = 45
-
-            val requiredSafeLocations = 100
-            val maxAttempts = 20000
-            var attempts = 0
-            val safeLocationsFound = mutableListOf<Location>()
-
-            while (safeLocationsFound.size < requiredSafeLocations && attempts < maxAttempts) {
-                val x = rand.nextInt(maxX - minX + 1) + minX
-                val y = rand.nextInt(maxY - minY + 1) + minY
-                val z = rand.nextInt(maxZ - minZ + 1) + minZ
-
-                val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
-                if (isLocationSafe(location) && !safeLocationsFound.contains(location)) {
-                    safeLocationsFound.add(location)
-                }
-                attempts++
-            }
-
-            val endTime = System.currentTimeMillis()
-
-            Bukkit.getScheduler().runTask(plugin, Runnable {
-                safeLocations.clear()
-                safeLocations.addAll(safeLocationsFound)
-                console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocationsFound.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
-                hasInitializedSafeLocations = true
-            })
-        })
+        val endTime = System.currentTimeMillis()
+        console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
+        hasInitializedSafeLocations = true
     }
-
-
-
 
 
     fun isInDesignatedArea(loc: Location): Boolean {
@@ -136,7 +129,7 @@ object Teleport {
         return block.type == Material.AIR &&
                 blockAbove.type == Material.AIR &&
                 blockBelow.type.isSolid &&
-                blockBelow.type !in setOf(
+                !setOf(
             Material.AZALEA_LEAVES, // 진달래잎
             Material.FERN, // 고사리
             Material.LARGE_FERN, // 큰고사리
@@ -144,7 +137,7 @@ object Teleport {
             Material.CRIMSON_BUTTON, //진홍빛버튼
             Material.WATER, //물
             Material.LAVA //용암
-        )
+        ).contains(blockBelow.type)
     }
 
     private val immunePlayers = mutableMapOf<Player, Long>() // 플레이어와 면역 시간 맵
