@@ -122,7 +122,13 @@ object FlameGunActions {
 
             override fun run() {
                 // 모든 플레이어가 탈출 인식 대상
-                Bukkit.getOnlinePlayers().forEach { currentPlayer ->
+                Bukkit.getOnlinePlayers()
+                    .filter {
+                        !it.scoreboardTags.contains("manager") &&
+                                !it.scoreboardTags.contains("EscapeComplete") &&
+                                !it.scoreboardTags.contains("death")
+                    }
+                    .forEach { currentPlayer ->
 
                     // playerloc 변수가 null인 경우 처리 (헬기 아래 파티클 위치)
                     val startLocation = playerloc ?: run {

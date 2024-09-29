@@ -6,6 +6,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Bisected.Half
+import org.bukkit.block.data.Directional
 import org.bukkit.block.data.type.Piston
 import org.bukkit.block.data.type.Slab
 import org.bukkit.block.data.type.Stairs
@@ -556,9 +557,13 @@ object Helicopter {
                 blockData.isExtended = pistonExtended  // 피스톤의 확장 여부 설정
                 blockData.facing = blockFace  // 피스톤의 방향 설정
             }
+            // 피스톤 머리 처리
+            blockData is Directional && material == Material.PISTON_HEAD && blockFace != null -> {
+                blockData.facing = blockFace  // 피스톤 머리의 방향 설정
+            }
         }
 
-        block.blockData = blockData  // 마지막에 blockData 한 번만 설정
+        block.blockData = blockData
     }
 
     // fillBlocks 함수를 Location 객체로 좌표를 받도록 수정
