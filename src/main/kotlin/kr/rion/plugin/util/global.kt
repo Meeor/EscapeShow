@@ -53,6 +53,7 @@ object global {
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
         if (End.EscapePlayerCount == End.EscapePlayerMaxCount || SurvivalPlayers() == 0 ) {
             if(!isEnding) {
+                isEnding = true
                 End.EndAction()
             }
         }
