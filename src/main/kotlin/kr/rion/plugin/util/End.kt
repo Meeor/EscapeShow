@@ -5,6 +5,7 @@ import kr.rion.plugin.command.Reset
 import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.item.ItemAction.handleResetContract
+import kr.rion.plugin.util.Bossbar.bossBars
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import org.bukkit.*
 import org.bukkit.command.CommandSender
@@ -38,6 +39,7 @@ object End {
         Bukkit.broadcastMessage("${global.prefix} 게임이 종료되었습니다.")
         flaregunstart?.cancel()
         flaregunstart = null
+        bossBars.clear()
         for (player in Bukkit.getOnlinePlayers()) {
             player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }

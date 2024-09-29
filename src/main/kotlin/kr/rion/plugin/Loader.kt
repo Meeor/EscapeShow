@@ -65,6 +65,4 @@ class Loader : JavaPlugin() {
     override fun onDisable() {
         global.playerCheckTask?.cancel()
     }
-
-
 }

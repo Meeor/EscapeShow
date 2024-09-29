@@ -2,6 +2,7 @@ package kr.rion.plugin.item
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.Bossbar
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
 import kr.rion.plugin.util.Helicopter.playerloc
@@ -95,6 +96,7 @@ object FlameGunActions {
                         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                             Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0), playerloc)
                             startEscape(player)
+                            Bossbar.createDirectionBossBar(player, playerloc)
                         }, 4 * 20L)
                         cancel()
 
@@ -174,6 +176,7 @@ object FlameGunActions {
                                     0.0
                                 )
                             }
+                            Bossbar.updateDirectionBossBar(player, playerloc!!)
                         } catch (e: Exception) {
                             Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
                         }

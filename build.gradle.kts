@@ -27,7 +27,6 @@ dependencies {
     compileOnly("com.onarandombox.multiversecore:multiverse-core:4.3.12")
     compileOnly(group = "org.popcraft", name = "chunky-common", version = "1.4.10")
 
-
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
 }
