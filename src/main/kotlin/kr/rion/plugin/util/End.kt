@@ -17,7 +17,6 @@ object End {
     var EscapePlayers: MutableList<String> = mutableListOf()
     val soundName = "custom.bye"
     fun EndAction() {
-        isEnding = true
         val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기
         val worldWait = Bukkit.getWorld("vip") // vip 월드도 동일하게 Bukkit API로 가져옴
         val console: CommandSender = Bukkit.getConsoleSender()

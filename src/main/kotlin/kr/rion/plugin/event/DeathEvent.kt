@@ -21,6 +21,7 @@ class DeathEvent : Listener {
         player.addScoreboardTag("death")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님께서 ${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${global.SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         if (global.SurvivalPlayers() == 0 && !isEnding) {
+            isEnding = true
             End.EndAction()
         }
     }
