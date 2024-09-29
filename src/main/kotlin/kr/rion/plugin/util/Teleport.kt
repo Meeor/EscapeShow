@@ -1,5 +1,6 @@
 package kr.rion.plugin.util
 
+import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatColor
@@ -53,6 +54,7 @@ object Teleport {
         val rand = Random()
         val startTime = System.currentTimeMillis()
         console.sendMessage("$prefix 이동될 안전한좌표탐색을 시작합니다.")
+        safeLocations.clear()
 
 
         val minX = -372
@@ -101,22 +103,39 @@ object Teleport {
             return
         }
 
-        destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName) ?: return
-        val world = loadWorldIfNeeded(destinationWorldName) ?: return
         val startTime = System.currentTimeMillis()
 
         val safeLocation = safeLocations.randomOrNull()
+        val targetChunk = safeLocation?.chunk
+        if (targetChunk != null) {
+            if (!targetChunk.isLoaded) {
+                targetChunk.load()  // 청크 강제 로드
+            }
+        }
         if (safeLocation == null) {
             console.sendMessage("$prefix 좌표를 찾을 수 없습니다. 재설정을 해주세요.")
             player.sendMessage("$prefix 저장된 좌표값이 없어 이동에 실패하였습니다.\n$prefix 운영자에게 좌표설정을 부탁하시길 바랍니다.")
             return
         }
 
-        player.teleport(safeLocation)
-        safeLocations.remove(safeLocation)
-        val endTime = System.currentTimeMillis()
-        console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
-        setImmune(player, 3000)
+        // 메인 스레드에서 텔레포트 작업 수행
+        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+            try {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mv tp ${player.name} game")
+                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                    player.teleport(safeLocation)
+                }, 10L)
+                // 텔레포트 완료 후 작업 처리
+                safeLocations.remove(safeLocation) // 성공 시 좌표 제거
+
+                val endTime = System.currentTimeMillis()
+                console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
+
+                setImmune(player, 3000) // 텔레포트 후 면역 처리
+            } catch (e: Exception) {
+                console.sendMessage("$prefix 텔레포트 중 오류가 발생했습니다: ${e.message}")
+            }
+        })
     }
 
 

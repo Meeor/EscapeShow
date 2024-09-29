@@ -1,5 +1,6 @@
 package kr.rion.plugin.util
 
+import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.Bukkit
@@ -63,7 +64,9 @@ object global {
                 Bukkit.getOnlinePlayers().forEach { player ->
                     val loc = player.location
                     if (Teleport.isInDesignatedArea(loc)) {
-                        Teleport.teleportToRandomLocation(player)
+                        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+                            Teleport.teleportToRandomLocation(player)
+                        })
                     }
                 }
             }

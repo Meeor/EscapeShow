@@ -9,6 +9,7 @@ import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
+import org.bukkit.WorldCreator
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.util.*
@@ -33,6 +34,7 @@ object Reset {
     }
 
     fun handleGameReset(): Boolean {
+        var removedCount = 0
         setInitializedSafeLocations(false)
         Bukkit.broadcastMessage("$prefix 게임월드 리셋을 시작합니다.")
         movePlayersToLobby("game")
@@ -48,26 +50,37 @@ object Reset {
             return false
         }
 
-        // 포탈 플러그인 설정 리로드
-        //Bukkit.broadcastMessage("$prefix 포탈 정보를 다시 불러오고 있습니다...")
-        val console: CommandSender = Bukkit.getConsoleSender()
-        val cmd = "plugman reload Multiverse-Portals" // 실행할 명령어
 
-        //sender.sendMessage("$prefix 랜덤좌표를 선정 중입니다.....")
-        Teleport.initializeSafeLocations()
 
         //모든월드의 엔티티제거(플레이어제외)
         Bukkit.getWorlds().forEach { world ->
             world.entities.forEach { entity ->
                 if (entity !is Player) {
                     entity.remove() // 플레이어가 아닌 엔티티를 제거
+                    removedCount++
                 }
             }
         }
-        if (!ChunkyManager.loadchunky("game")) return false
 
-        Bukkit.dispatchCommand(console, cmd)
-        Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")
+
+        val console: CommandSender = Bukkit.getConsoleSender()
+
+        val consolemessage = Bukkit.getServer().consoleSender
+        consolemessage.sendMessage("$prefix 총 ${ChatColor.YELLOW}$removedCount ${ChatColor.GREEN}개의 엔티티가 제거되었습니다.")
+
+        Bukkit.dispatchCommand(console, "save-all")
+        Bukkit.dispatchCommand(console, "mv unload game")
+        Bukkit.dispatchCommand(console, "mv load game")
+        Bukkit.dispatchCommand(console, "plugman reload Multiverse-Portals")
+        ChunkyManager.loadchunky()
+
+        //sender.sendMessage("$prefix 랜덤좌표를 선정 중입니다.....")
+        Teleport.initializeSafeLocations()
+
+        Bukkit.broadcastMessage(
+            "$prefix 게임맵 리셋이 완료되었습니다. \n" +
+                    " ${ChatColor.GOLD}맵의 청크로딩이 완료될때까지 대기하시길 바랍니다."
+        )
         return true
     }
 
@@ -89,8 +102,6 @@ object Reset {
         //sender.sendMessage("$prefix 포탈 정보를 다시 불러오고 있습니다...")
         val console: CommandSender = Bukkit.getConsoleSender()
         val cmd = "plugman reload Multiverse-Portals" // 실행할 명령어
-
-        if (!ChunkyManager.loadchunky("lobby")) return false
 
         Bukkit.dispatchCommand(console, cmd)
         sender.sendMessage("$prefix 로비맵 리셋이 완료되었습니다.")
