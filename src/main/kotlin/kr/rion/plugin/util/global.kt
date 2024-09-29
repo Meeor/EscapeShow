@@ -2,6 +2,7 @@ package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
+import kr.rion.plugin.util.End.isEnding
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -50,8 +51,10 @@ object global {
         player.removeScoreboardTag("Escape")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
-        if (End.EscapePlayerCount == End.EscapePlayerMaxCount || SurvivalPlayers() == 0) {
-            End.EndAction()
+        if (End.EscapePlayerCount == End.EscapePlayerMaxCount || SurvivalPlayers() == 0 ) {
+            if(!isEnding) {
+                End.EndAction()
+            }
         }
 
     }
