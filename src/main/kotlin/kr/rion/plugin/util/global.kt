@@ -96,7 +96,7 @@ object global {
 
     fun SurvivalPlayers(): Int {
         val survivalPlayers = Bukkit.getOnlinePlayers()
-            .filter { !it.scoreboardTags.contains("manager") && !it.scoreboardTags.contains("EscapeComplete") }
+            .filter { !it.scoreboardTags.contains("manager") && !it.scoreboardTags.contains("EscapeComplete") && !it.scoreboardTags.contains("death") }
         return survivalPlayers.size  // 필터링된 생존 플레이어의 수 반환
     }
 }

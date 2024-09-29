@@ -58,6 +58,7 @@ object End {
             for (player in Bukkit.getOnlinePlayers()) {
                 player.allowFlight = false
                 player.isFlying = false
+                player.removeScoreboardTag("death")
                 Bukkit.dispatchCommand(console, cmd)
                 player.inventory.clear()
                 for (effect in player.activePotionEffects) {

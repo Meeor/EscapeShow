@@ -18,6 +18,7 @@ class DeathEvent : Listener {
     fun onDeath(event: PlayerDeathEvent) {
         val player: Player = event.player
         player.gameMode = GameMode.SPECTATOR
+        player.addScoreboardTag("death")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님께서 ${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${global.SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         if (global.SurvivalPlayers() == 0 && isEnding == false) {
             End.EndAction()
