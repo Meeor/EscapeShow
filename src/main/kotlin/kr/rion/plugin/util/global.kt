@@ -90,6 +90,8 @@ object global {
             world.setGameRule(GameRule.FALL_DAMAGE, false)
             //몹 스폰 비활성화
             world.setGameRule(GameRule.DO_MOB_SPAWNING, false)
+            //사망메세지 제거
+            world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false)
 
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
