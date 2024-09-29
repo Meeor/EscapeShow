@@ -95,12 +95,8 @@ object global {
     }
 
     fun SurvivalPlayers(): Int {
-        val world = worldManager?.getMultiverseWorld("game")
-        return if (world != null) {
-            val survivalPlayers = Bukkit.getOnlinePlayers().filter {  !it.scoreboardTags.contains("manager") && !it.scoreboardTags.contains("EscapeComplete") }
-            survivalPlayers.size  // 필터링된 생존 플레이어의 수 반환
-        } else {
-            0  // world가 null인 경우 0 반환
-        }
+        val survivalPlayers = Bukkit.getOnlinePlayers()
+            .filter { !it.scoreboardTags.contains("manager") && !it.scoreboardTags.contains("EscapeComplete") }
+        return survivalPlayers.size  // 필터링된 생존 플레이어의 수 반환
     }
 }
