@@ -15,7 +15,7 @@ object Bossbar {
 
     // 보스바를 생성하고 플레이어에게 방향을 표시
     fun createDirectionBossBar(player: Player, targetLocation: Location) {
-        val bossBar = Bukkit.createBossBar("목표 방향", BarColor.GREEN, BarStyle.SOLID)
+        val bossBar = Bukkit.createBossBar("헬기 방향", BarColor.GREEN, BarStyle.SOLID)
         bossBar.addPlayer(player)
         bossBars[player] = bossBar
 
