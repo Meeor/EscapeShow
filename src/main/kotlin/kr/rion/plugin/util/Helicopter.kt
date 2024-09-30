@@ -4,6 +4,7 @@ import kr.rion.plugin.Loader
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.SoundCategory
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Bisected.Half
 import org.bukkit.block.data.Directional
@@ -15,6 +16,7 @@ object Helicopter {
     var playerloc: Location? = null
     var HelicopterLoc: Location? = null
     var HelicopterisSpawn = false
+    private val soundName = "custom.hellicop"
     fun spawn(getloc: Location, player: Location) {
         if (HelicopterisSpawn == true) return
         playerloc = player
@@ -390,6 +392,9 @@ object Helicopter {
             slabType = Slab.Type.BOTTOM
         )
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
+        for (player in Bukkit.getOnlinePlayers()) {
+            player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+        }
         HelicopterisSpawn = true
     }
 
