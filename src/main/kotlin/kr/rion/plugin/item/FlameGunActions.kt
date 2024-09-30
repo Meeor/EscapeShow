@@ -143,7 +143,7 @@ object FlameGunActions {
 
                     // 플레이어가 playerloc에서 0.5칸 이상 움직였는지 확인(y좌표는 위아래로1씩 추가확인)
                         if (Math.abs(currentLocation.getY() - startLocation.getY()) <= 1 &&
-                            currentLocation.distance(startLocation) > 0.5) {
+                            currentLocation.distance(startLocation) > 1.0) {
                         // 탈출 실패 메시지를 한 번만 보내기 위해 확인
                         if (!failedPlayers.contains(currentPlayer)) {
                             try {
