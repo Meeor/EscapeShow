@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable
 
 object HealAction {
     fun lunchHeal(player: Player) {
-
+                     inventory.removeItemFromInventory(player, Material.PAPER, 1)
         for (playerall in Bukkit.getOnlinePlayers()) {
             playerall.playSound(player.location, Sound.BLOCK_WOOL_FALL, 0.3f, 0.0f)
         }
@@ -29,7 +29,6 @@ object HealAction {
                 if (currentCount >= count) {
                     val effect = PotionEffect(PotionEffectType.SLOW, 3, 1, false, false)
                     player.addPotionEffect(effect)
-                    inventory.removeItemFromInventory(player, Material.PAPER, 1)
                     val maxHealth = player.maxHealth
                     val newHealth = (player.health + 5).coerceAtMost(maxHealth)
                     player.health = newHealth
