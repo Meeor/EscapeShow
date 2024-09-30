@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable
 
 object HealAction {
     fun lunchHeal(player: Player) {
-                     inventory.removeItemFromInventory(player, Material.PAPER, 1)
+        inventory.removeItemFromInventory(player, Material.PAPER, 1)
         for (playerall in Bukkit.getOnlinePlayers()) {
             playerall.playSound(player.location, Sound.BLOCK_WOOL_FALL, 0.3f, 0.0f)
         }
