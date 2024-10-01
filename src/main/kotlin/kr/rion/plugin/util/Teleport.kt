@@ -4,10 +4,11 @@ import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatColor
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.World
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 
@@ -24,6 +25,7 @@ object Teleport {
     private var designatedWorld: World? = null
     private var destinationWorld: World? = null
     val console = Bukkit.getServer().consoleSender
+    val immunePlayers = mutableMapOf<Player, Long>() // 플레이어와 면역 시간 맵
 
     var hasInitializedSafeLocations = false
 
@@ -121,17 +123,13 @@ object Teleport {
         // 메인 스레드에서 텔레포트 작업 수행
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             try {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mv tp ${player.name} game")
-                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                    player.teleport(safeLocation)
-                }, 10L)
+                setImmune(player, 5000) // 텔레포트 후 면역 처리
+                player.teleport(safeLocation)
                 // 텔레포트 완료 후 작업 처리
                 safeLocations.remove(safeLocation) // 성공 시 좌표 제거
 
                 val endTime = System.currentTimeMillis()
                 console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
-
-                setImmune(player, 3000) // 텔레포트 후 면역 처리
             } catch (e: Exception) {
                 console.sendMessage("$prefix 텔레포트 중 오류가 발생했습니다: ${e.message}")
             }
@@ -142,11 +140,13 @@ object Teleport {
     fun isLocationSafe(loc: Location): Boolean {
         val block = loc.block
         val blockAbove = loc.clone().add(0.0, 1.0, 0.0).block
+        val blockAboveTwo = loc.clone().add(0.0, 2.0, 0.0).block
         val blockBelow = loc.clone().subtract(0.0, 1.0, 0.0).block
 
         // 바닥 블록이 공기가 아니고 안전하지 않은 경우
         return block.type == Material.AIR &&
                 blockAbove.type == Material.AIR &&
+                blockAboveTwo.type == Material.AIR &&
                 blockBelow.type.isSolid &&
                 !setOf(
                     Material.AZALEA_LEAVES, // 진달래잎
@@ -157,20 +157,6 @@ object Teleport {
                     Material.WATER, //물
                     Material.LAVA //용암
                 ).contains(blockBelow.type)
-    }
-
-    private val immunePlayers = mutableMapOf<Player, Long>() // 플레이어와 면역 시간 맵
-
-    @EventHandler
-    fun onPlayerDamage(event: EntityDamageEvent) {
-        if (event.entity is Player) {
-            val player = event.entity as Player
-            val currentTime = System.currentTimeMillis()
-            // 플레이어가 면역 상태인지 확인
-            if (immunePlayers[player]?.let { it > currentTime } == true) {
-                event.isCancelled = true // 면역 상태일 경우 데미지 무시
-            }
-        }
     }
 
     fun setImmune(player: Player, duration: Long) {
@@ -185,13 +171,5 @@ object Teleport {
         hasInitializedSafeLocations = status
     }
 
-    fun loadWorldIfNeeded(worldName: String): World? {
-        var world = Bukkit.getWorld(worldName)
-        if (world == null) {
-            // 월드가 언로드된 상태라면, WorldCreator를 사용하여 월드를 로드합니다.
-            world = WorldCreator(worldName).createWorld()
-        }
-        return world
-    }
 
 }
