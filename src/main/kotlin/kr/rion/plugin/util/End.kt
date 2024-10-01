@@ -3,9 +3,11 @@ package kr.rion.plugin.util
 import kr.rion.plugin.Loader
 import kr.rion.plugin.command.Reset
 import kr.rion.plugin.item.FlameGunActions.flaregunstart
+import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.item.ItemAction.handleResetContract
 import kr.rion.plugin.util.Bossbar.bossBars
+import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import org.bukkit.*
 import org.bukkit.command.CommandSender
@@ -31,36 +33,40 @@ object End {
             Bukkit.getLogger().warning("vip 월드를 가져오지 못했습니다. worldManager 또는 해당 월드 확인 필요.")
         }
 
+        //게임종료후 각종변수및 정보들 리셋작업.
         EscapePlayerCount = 0
         Helicopter.remove()
         HelicopterisSpawn = false
         //플레어건 탈출파티클 끝내기
         startEscape = false
-        Bukkit.broadcastMessage("${global.prefix} 게임이 종료되었습니다.")
         flaregunstart?.cancel()
         flaregunstart = null
-        bossBars.clear()
+        Bukkit.broadcastMessage("${global.prefix} 게임이 종료되었습니다.")
+
+        //여기까지.종료직후리셋.
+        //모든플레이어에게 게임종료사운드보내기.
         for (player in Bukkit.getOnlinePlayers()) {
             player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
+
+        //사망자,탈출자,운영자를제외한 남은플레이어 죽이기!
         world?.players?.forEach { player ->
             // 플레이어가 서바이벌 모드인 경우
-            if (player.gameMode == GameMode.SURVIVAL && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains(
-                    "EscapeComplete"
-                )
-            ) {
+            if (!player.scoreboardTags.contains("death") && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete")) {
                 Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                     player.health = 0.0 // 플레이어의 체력을 0으로 설정하여 죽이기
                 }, 20L * 3)
             }
         }
 
+        //모든플레이어들.. 게임모드나 플라이등의 설정변경.
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
             for (player in Bukkit.getOnlinePlayers()) {
                 player.allowFlight = false
                 player.isFlying = false
+                removeDirectionBossBar(player)
                 player.removeScoreboardTag("death")
-                Bukkit.dispatchCommand(console, cmd)
+                player.removeScoreboardTag("EscapeComplete")
                 player.inventory.clear()
                 for (effect in player.activePotionEffects) {
                     player.removePotionEffect(effect.type)
@@ -73,8 +79,9 @@ object End {
                 }
             }
             val line = "=".repeat(40)
+            val gongback = " ".repeat(22)
             val message =
-                "                      ${ChatColor.GREEN}탈출한 플레이어 \n${ChatColor.YELLOW}${EscapePlayers.joinToString(" \n                       ${ChatColor.YELLOW}")}"
+                "$gongback${ChatColor.GREEN}탈출한 플레이어 \n${ChatColor.YELLOW}${EscapePlayers.joinToString(" \n$gongback${ChatColor.YELLOW}")}"
 
             // 메시지를 모든 플레이어에게 브로드캐스트
             Bukkit.broadcastMessage("${ChatColor.GOLD}$line")
@@ -83,8 +90,10 @@ object End {
 
             // EscapePlayers 리스트를 초기화 (비우기)
             EscapePlayers.clear()
-            Reset.handleGameReset()
         }, 20L * 8)
+        //게임종료 마지막부분에 리셋되어야할것들
+        playersAtParticle.clear()
+        Reset.handleGameReset()
         handleResetContract()
 
         // 게임 종료 처리 완료 후 플래그 해제

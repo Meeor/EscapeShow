@@ -17,6 +17,7 @@ repositories {
     maven("https://repo.onarandombox.com/content/groups/public/")
     maven("https://repo.codemc.org/repository/maven-public/" )
     maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://maven.maxhenkel.de/repository/public") // VoiceChat API와 같은 외부 라이브러리
 }
 
 dependencies {
@@ -28,7 +29,7 @@ dependencies {
     compileOnly(group = "org.popcraft", name = "chunky-common", version = "1.4.10")
 
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
-
+    implementation("de.maxhenkel.voicechat:voicechat-api:2.3.3")
 }
 
 tasks.jar {

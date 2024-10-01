@@ -394,6 +394,9 @@ object Helicopter {
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
         for (player in Bukkit.getOnlinePlayers()) {
             player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+            if(!player.scoreboardTags.contains("manager") || !player.scoreboardTags.contains("EscapeComplete") || !player.scoreboardTags.contains("death")){
+                Bossbar.createDirectionBossBar(player, player.location)
+            }
         }
         HelicopterisSpawn = true
     }
