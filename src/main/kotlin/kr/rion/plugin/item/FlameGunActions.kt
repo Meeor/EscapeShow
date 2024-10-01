@@ -108,7 +108,7 @@ object FlameGunActions {
     }
 
     fun startEscape(player: Player) {
-        val escapeDuration = 12L // 3초간 대기 (20틱 = 1초, 3초 = 60틱)
+        val escapeDuration = 3L // 1초간 대기 
 
         if (startEscape) {
             player.sendMessage("$prefix ${ChatColor.RED}이미 헬기가 소환되어있습니다! ${ChatColor.YELLOW}(헬기 위치 >> x: ${HelicopterLoc?.x}, y: ${HelicopterLoc?.y}, z: ${HelicopterLoc?.z})")
@@ -198,7 +198,7 @@ object FlameGunActions {
                 }
                 tickCount += 1
             }
-        }.runTaskTimer(Loader.instance, 0L, 5L)  // 매 5틱마다 실행
+        }.runTaskTimer(Loader.instance, 0L, 20L)  // 1초마다 실행
     }
 
 }
