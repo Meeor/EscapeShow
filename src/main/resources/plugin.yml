@@ -3,7 +3,7 @@ version: 1.2.0
 author: rion
 main: kr.rion.plugin.Loader
 api-version: 1.20
-depend: [Multiverse-Core,NBTAPI,Chunky]
+depend: [Multiverse-Core,NBTAPI,Chunky,voicechat]
 
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.9.25
