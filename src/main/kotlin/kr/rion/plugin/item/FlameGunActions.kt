@@ -99,6 +99,7 @@ object FlameGunActions {
                         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                             Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0), playerloc)
                             startEscape(player)
+                            startEscape = true
                         }, 4 * 20L)
                         cancel()
 
@@ -115,8 +116,6 @@ object FlameGunActions {
         if (startEscape) {
             player.sendMessage("$prefix ${ChatColor.RED}이미 헬기가 소환되어있습니다! ${ChatColor.YELLOW}(헬기 위치 >> x: ${HelicopterLoc?.x}, y: ${HelicopterLoc?.y}, z: ${HelicopterLoc?.z})")
             return  // 탈출이 이미 진행 중이면 함수 종료
-        } else {
-            startEscape = true
         }
 
         flaregunstart = object : BukkitRunnable() {
