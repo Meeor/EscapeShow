@@ -54,6 +54,10 @@ class VoiceChatEvent : VoicechatPlugin {
                     val locationalSoundPacket = event.packet.toLocationalSoundPacket(senderPosition)
                     api.sendLocationalSoundPacketTo(connection, locationalSoundPacket)
                 }
+                else {
+                    // 태그가 없는 플레이어는 소리 전송 안 함
+                    continue
+                }
             }
         }
     }
