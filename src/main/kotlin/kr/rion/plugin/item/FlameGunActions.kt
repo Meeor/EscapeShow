@@ -211,7 +211,9 @@ object FlameGunActions {
                                         0.0
                                     )
                                 }
-                                Bossbar.updateDirectionBossBar(player, playerloc!!)
+                                for (onlineplayerBossbar in Bukkit.getOnlinePlayers()) {
+                                    Bossbar.updateDirectionBossBar(onlineplayerBossbar, playerloc!!)
+                                }
                             } catch (e: Exception) {
                                 Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
                             }
