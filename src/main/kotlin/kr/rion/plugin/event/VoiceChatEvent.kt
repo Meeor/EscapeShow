@@ -23,14 +23,18 @@ class VoiceChatEvent : VoicechatPlugin {
     }
 
     fun onMicrophonePacket(event: MicrophonePacketEvent) {
+
         val api = event.voicechat  // VoiceChat API 인스턴스 가져오기
         val senderUUID = event.senderConnection?.player?.uuid // 송신자 UUID 가져오기
         val sender = senderUUID?.let { Bukkit.getPlayer(it) }  // 송신자 Player 객체
+
+
 
         // 송신자 태그 확인
         if (sender != null && (sender.scoreboardTags.contains("EscapeComplete") ||
                     sender.scoreboardTags.contains("death"))
         ) {
+            event.cancel()
 
             // 서버에 있는 모든 플레이어 순회
             for (onlinePlayer in Bukkit.getServer().onlinePlayers) {
