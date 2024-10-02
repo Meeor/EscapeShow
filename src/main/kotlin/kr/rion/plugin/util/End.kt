@@ -81,7 +81,7 @@ object End {
             val line = "=".repeat(40)
             val gongback = " ".repeat(22)
             val message =
-                "$gongback${ChatColor.GREEN}탈출한 플레이어 \n${ChatColor.YELLOW}${EscapePlayers.joinToString(" \n$gongback${ChatColor.YELLOW}")}"
+                "$gongback${ChatColor.GREEN}탈출한 플레이어 \n$gongback${ChatColor.YELLOW}${EscapePlayers.joinToString(" \n$gongback${ChatColor.YELLOW}")}"
 
             // 메시지를 모든 플레이어에게 브로드캐스트
             Bukkit.broadcastMessage("${ChatColor.GOLD}$line")
