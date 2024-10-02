@@ -1,6 +1,7 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.Bossbar.createDirectionBossBarForAll
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -394,10 +395,8 @@ object Helicopter {
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
         for (player in Bukkit.getOnlinePlayers()) {
             player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
-            if(!player.scoreboardTags.contains("manager") || !player.scoreboardTags.contains("EscapeComplete") || !player.scoreboardTags.contains("death")){
-                Bossbar.createDirectionBossBar(player, player.location)
-            }
         }
+        createDirectionBossBarForAll(playerloc!!)
         HelicopterisSpawn = true
     }
 
