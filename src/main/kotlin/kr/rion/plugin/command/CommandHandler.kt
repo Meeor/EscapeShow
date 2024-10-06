@@ -35,7 +35,7 @@ class CommandHandler : CommandExecutor {
                 "탈출인원" -> HandleSetting(sender, args)
                 "이벤트" -> handleEvent(sender, args)
                 "엔티티리스트" -> sendEntityList(sender)
-                "플레어건소환" -> location?.let { FlameGunSpawn.spawnFlareGunChest(it) }
+                "플레어건소환" -> location?.let { FlameGunSpawn.spawnFlareGunChest(sender,it) }
                 else -> return false
             }
         return true

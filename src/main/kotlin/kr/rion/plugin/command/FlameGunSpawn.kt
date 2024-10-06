@@ -2,8 +2,10 @@ package kr.rion.plugin.command
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.global.prefix
 import org.bukkit.*
 import org.bukkit.block.Chest
+import org.bukkit.command.CommandSender
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
@@ -13,7 +15,11 @@ object FlameGunSpawn {
     var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
 
     // 플레어건 상자 생성 함수
-    fun spawnFlareGunChest(location: Location) {
+    fun spawnFlareGunChest(sender: CommandSender, location: Location) {
+        if(chestLocation !== null){
+            sender.sendMessage("$prefix 이미 플레어건이 소환되어있는것 같습니다.")
+            return
+        }
         chestLocation = location // 상자 위치 저장
         location.block.type = Material.CHEST
         val chest = location.block.state as Chest
@@ -33,7 +39,11 @@ object FlameGunSpawn {
                 }
             }
         }.runTaskTimer(Loader.instance, 0, 20) // 1초마다 반복
-        Bukkit.broadcastMessage("플레어건이 나타났습니다 (${location.blockX}, ${location.blockY}, ${location.blockZ})")
+        Bukkit.broadcastMessage("$prefix 플레어건이 나타났습니다 (${location.blockX}, ${location.blockY}, ${location.blockZ})")
+        Bukkit.getOnlinePlayers().forEach { player ->
+        player.sendTitle("${ChatColor.RED}플레어건${ChatColor.YELLOW}이 등장하였습니다!","${ChatColor.GOLD}좌표 : ${ChatColor.AQUA}X :${location.blockX}, Y : ${location.blockY}, Z : ${location.blockZ}",10,20*60,10)
+        }
+
     }
 
     // 플레어건 아이템 생성 함수
