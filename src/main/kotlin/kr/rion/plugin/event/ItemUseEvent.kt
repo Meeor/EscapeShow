@@ -1,8 +1,8 @@
 package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTItem
-import kr.rion.plugin.GUI.playerTeleport.openTeleportGUI
 import kr.rion.plugin.Loader
+import kr.rion.plugin.gui.PlayerTeleport.openTeleportGUI
 import kr.rion.plugin.item.ItemAction.handleBerries
 import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun

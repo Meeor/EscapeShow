@@ -17,6 +17,7 @@ import kotlin.math.abs
 
 object FlameGunActions {
     var startEscape = false
+    var startEscapecheck = false
     var flaregunstart: BukkitTask? = null
 
     val playersAtParticle = mutableSetOf<Player>()
@@ -96,14 +97,16 @@ object FlameGunActions {
                             particleData2,
                             true
                         )
-                        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                            Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0), playerloc)
-                            startEscape(player)
-                            startEscape = true
-                        }, 4 * 20L)
+                        if(!startEscapecheck) {
+                            startEscapecheck = true
+                            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                                Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0), playerloc)
+                                startEscape(player)
+                                startEscape = true
+                                startEscapecheck = false
+                            }, 4 * 20L)
+                        }
                         cancel()
-
-
                     }
                 }
             }.runTaskTimer(Loader.instance, 0L, 1L)

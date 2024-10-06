@@ -65,7 +65,7 @@ object End {
                 player.allowFlight = false
                 player.isFlying = false
                 removeDirectionBossBar(player)
-                player.removeScoreboardTag("death")
+                player.removeScoreboardTag("EscapeComplete")
                 player.removeScoreboardTag("EscapeComplete")
                 player.inventory.clear()
                 for (effect in player.activePotionEffects) {
@@ -90,13 +90,14 @@ object End {
 
             // EscapePlayers 리스트를 초기화 (비우기)
             EscapePlayers.clear()
+            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                //게임종료 마지막부분에 리셋되어야할것들
+                playersAtParticle.clear()
+                Reset.handleGameReset()
+                handleResetContract()
+                // 게임 종료 처리 완료 후 플래그 해제
+                isEnding = false
+            },20L * 10)
         }, 20L * 8)
-        //게임종료 마지막부분에 리셋되어야할것들
-        playersAtParticle.clear()
-        Reset.handleGameReset()
-        handleResetContract()
-
-        // 게임 종료 처리 완료 후 플래그 해제
-        isEnding = false
     }
 }

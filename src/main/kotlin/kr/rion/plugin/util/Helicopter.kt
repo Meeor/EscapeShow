@@ -19,7 +19,7 @@ object Helicopter {
     var HelicopterisSpawn = false
     private val soundName = "custom.hellicop"
     fun spawn(getloc: Location, player: Location) {
-        if (HelicopterisSpawn == true) return
+        if (HelicopterisSpawn) return
         playerloc = player
         HelicopterLoc = getloc
         setBlockWithAttributes(
@@ -393,8 +393,8 @@ object Helicopter {
             slabType = Slab.Type.BOTTOM
         )
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
-        for (player in Bukkit.getOnlinePlayers()) {
-            player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+        for (allplayer in Bukkit.getOnlinePlayers()) {
+            allplayer.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
         createDirectionBossBarForAll(playerloc!!)
         HelicopterisSpawn = true

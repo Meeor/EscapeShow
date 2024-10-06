@@ -13,11 +13,10 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 class InventoryCloseEvent : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
-        val player = event.player as Player
         val inventory = event.inventory
 
         // 플레어건 상자 위치와 닫힌 상자 위치가 일치하는지 확인
-        if (chestLocation != null && player.location.distance(chestLocation!!) < 2) {
+        if (chestLocation != null) {
             if (inventory.isEmpty) {
                 chestLocation!!.block.type = Material.AIR // 상자 부수기
                 particleTask?.cancel() // 파티클 반복 종료
