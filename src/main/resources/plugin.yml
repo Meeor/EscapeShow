@@ -53,3 +53,13 @@ commands:
     usage: /<command>
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
+  플레어건소환:
+    description: 플레어건을 소환합니다.
+    usage: /<command>
+    permission: EscapeShow.FlameGun.spawn
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
+
+permissions:
+  EscapeShow.FlameGun.spawn:
+    description: 플레어건 소환 명령어를 사용할 수 있는 권한입니다.
+    default: false

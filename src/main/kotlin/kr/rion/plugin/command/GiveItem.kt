@@ -1,12 +1,30 @@
 import de.tr7zw.nbtapi.NBTItem
+import kr.rion.plugin.Loader
 import kr.rion.plugin.util.global.prefix
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+private val TagType = org.bukkit.persistence.PersistentDataType.STRING
+private val TagValue = true.toString()
 
 object GiveItem {
+
+    fun Compass(player: Player){
+        val itemName = "${ChatColor.AQUA}플레이어에게 텔레포트"
+        val quantity = 1
+        val compass = NamespacedKey(Loader.instance, "teleport")
+
+        val item = ItemStack(Material.COMPASS, quantity) // Fire Charge를 예시로 사용
+        val meta = item.itemMeta
+        meta.setDisplayName(itemName)
+        meta.persistentDataContainer.set(compass, TagType, TagValue)
+        item.itemMeta = meta
+
+        player.inventory.setItem(8,item)
+    }
 
     private fun giveCustomItem(
         player: Player,

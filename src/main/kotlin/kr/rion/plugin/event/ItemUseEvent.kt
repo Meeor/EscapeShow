@@ -1,6 +1,8 @@
 package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTItem
+import kr.rion.plugin.GUI.playerTeleport.openTeleportGUI
+import kr.rion.plugin.Loader
 import kr.rion.plugin.item.ItemAction.handleBerries
 import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
@@ -9,6 +11,7 @@ import kr.rion.plugin.item.ItemAction.handleMap
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -16,6 +19,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.persistence.PersistentDataType
 
 
 class ItemUseEvent : Listener {
@@ -27,6 +32,15 @@ class ItemUseEvent : Listener {
         val player = event.player
 
         if (event.hand == EquipmentSlot.HAND && (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK)) {
+
+            // 나침반인지 확인
+            if (item.type == Material.COMPASS) {
+                val meta = item.itemMeta
+                if (meta != null && hasCustomTag(meta,"teleport")) {
+                    openTeleportGUI(player)
+                }
+            }
+
             val nbtItem = NBTItem(item)
             val tag = when (item.type) {
                 Material.FLINT -> "flamegun"
@@ -67,5 +81,10 @@ class ItemUseEvent : Listener {
             "map" -> "지도"
             else -> ""
         }
+    }
+    // 태그가 있는지 확인하는 함수
+    private fun hasCustomTag(meta: ItemMeta,tag :String): Boolean {
+        val key = NamespacedKey(Loader.instance, tag)
+        return meta.persistentDataContainer.has(key, PersistentDataType.STRING)
     }
 }

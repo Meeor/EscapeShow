@@ -1,5 +1,6 @@
 package kr.rion.plugin.util
 
+import GiveItem.Compass
 import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.End.isEnding
@@ -46,6 +47,8 @@ object global {
         val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
         player.addPotionEffect(invisibilityEffect)
         player.addPotionEffect(blindEffect)
+        player.inventory.clear()
+        Compass(player)
         End.EscapePlayerCount++
         End.EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
