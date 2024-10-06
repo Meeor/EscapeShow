@@ -3,6 +3,7 @@ package kr.rion.plugin.command
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.global.prefix
+import net.minecraft.world.entity.player.Player
 import org.bukkit.*
 import org.bukkit.block.Chest
 import org.bukkit.command.CommandSender
@@ -15,13 +16,14 @@ object FlameGunSpawn {
     var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
 
     // 플레어건 상자 생성 함수
-    fun spawnFlareGunChest(sender: CommandSender, location: Location) {
+    fun spawnFlareGunChest(sender: CommandSender,location:Location) {
         if(chestLocation !== null){
             sender.sendMessage("$prefix 이미 플레어건이 소환되어있는것 같습니다.")
             return
         }
+
         chestLocation = location // 상자 위치 저장
-        location.block.type = Material.CHEST
+        location.block.type  = Material.CHEST
         val chest = location.block.state as Chest
 
         // 플레어건을 상자의 14번 칸(정중앙)에 배치
