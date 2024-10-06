@@ -52,10 +52,7 @@ class CommandHandler : CommandExecutor {
                     }
                 }
 
-                else -> {
-                    sender.sendMessage("${ChatColor.RED}알 수 없는 명령어입니다.") // 디버그 메시지 추가
-                    return false
-                }
+                else -> return false
             }
         return true
     }

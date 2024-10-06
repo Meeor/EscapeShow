@@ -18,6 +18,7 @@ class CommandManager(private val plugin: JavaPlugin) {
         plugin.getCommand("게임종료")?.setExecutor(commandHandler)
         plugin.getCommand("이벤트")?.setExecutor(commandHandler)
         plugin.getCommand("엔티티리스트")?.setExecutor(commandHandler)
+        plugin.getCommand("플레어건소환")?.setExecutor(commandHandler)
         // TabCompleter
         plugin.getCommand("리셋")?.tabCompleter = TabComplete()
         plugin.getCommand("랜덤티피")?.tabCompleter = TabComplete()
