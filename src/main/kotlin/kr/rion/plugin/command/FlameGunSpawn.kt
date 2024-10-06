@@ -29,13 +29,18 @@ object FlameGunSpawn {
 
         chest.update()
 
-        // 파티클을 상자 위에 반복적으로 소환
+        // 파티클을 상자 위아래로 y 좌표 50칸씩 늘려서 반복적으로 소환
         particleTask = object : BukkitRunnable() {
             override fun run() {
                 if (location.block.type == Material.CHEST) {
-                    location.world.spawnParticle(Particle.END_ROD, location.add(0.5, 1.0, 0.5), 5)
+                    val world = location.world
+                    // 상자 기준으로 y 좌표 -50칸에서 +50칸까지 파티클 소환
+                    for (yOffset in -50..50) {
+                        val particleLocation = location.clone().add(0.5, yOffset.toDouble(), 0.5)
+                        world.spawnParticle(Particle.END_ROD, particleLocation, 5)
+                    }
                 } else {
-                    cancel()
+                    cancel() // 상자가 아니면 반복 종료
                 }
             }
         }.runTaskTimer(Loader.instance, 0, 20) // 1초마다 반복
