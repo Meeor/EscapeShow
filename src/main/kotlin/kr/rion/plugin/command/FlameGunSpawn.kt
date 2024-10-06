@@ -9,8 +9,8 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 
 object FlameGunSpawn {
-    private var chestLocation: Location? = null // 플레어건 상자의 위치 저장
-    private var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
+    var chestLocation: Location? = null // 플레어건 상자의 위치 저장
+    var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
 
     // 플레어건 상자 생성 함수
     fun spawnFlareGunChest(location: Location) {
