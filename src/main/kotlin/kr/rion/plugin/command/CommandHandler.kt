@@ -29,7 +29,7 @@ class CommandHandler : CommandExecutor {
             val player: Player = sender
             location = player.location // 플레이어의 위치 가져오기
         }
-            when (label.lowercase()) {
+            when (command.name.lowercase()) {
                 "리셋" -> handleResetCommand(sender, args)
                 "좌표공개" -> handleCoordinatesCommand(sender)
                 "랜덤티피" -> handleRandomTP(sender, args)
@@ -52,7 +52,10 @@ class CommandHandler : CommandExecutor {
                     }
                 }
 
-                else -> return false
+                else -> {
+                    sender.sendMessage("${ChatColor.RED}알 수 없는 명령어입니다.") // 디버그 메시지 추가
+                    return false
+                }
             }
         return true
     }
