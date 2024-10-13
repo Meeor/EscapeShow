@@ -17,7 +17,7 @@ object PlayerTeleport {
 
         // GUI 크기 계산 (플레이어 수에 맞게 9의 배수로)
         val inventorySize = ((targetPlayers.size / 9) + 1) * 9
-        val gui = Bukkit.createInventory(null, inventorySize, "${ChatColor.GREEN}텔레포트할 플레이어 선택")
+        val gui = Bukkit.createInventory(null, inventorySize, "${ChatColor.DARK_GREEN}텔레포트할 플레이어 선택")
 
         // 플레이어의 머리 아이템을 GUI에 추가
         for (target in targetPlayers) {

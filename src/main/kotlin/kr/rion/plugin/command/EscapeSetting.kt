@@ -1,6 +1,6 @@
 package kr.rion.plugin.command
 
-import kr.rion.plugin.util.End.EscapePlayerMaxCount
+import kr.rion.plugin.game.End.EscapePlayerMaxCount
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender

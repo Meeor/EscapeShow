@@ -1,4 +1,4 @@
-package kr.rion.plugin.command
+package kr.rion.plugin.game
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.ChunkyManager
@@ -9,30 +9,12 @@ import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
-import org.bukkit.WorldCreator
+import org.bukkit.attribute.Attribute
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.util.*
 
 object Reset {
     private val worldManager = WorldManager(Loader.instance)
-    fun handleResetCommand(sender: CommandSender, args: Array<out String>) {
-        if (args.isEmpty()) {
-            sender.sendMessage("$prefix 사용법: /리셋 <게임/로비>")
-            return
-        }
-        //권한 체크
-        if (!sender.hasPermission("world.reset")) {
-            sender.sendMessage("$prefix ${ChatColor.RED}이 명령어를 사용할 권한이 없습니다.")
-            return  // 명령어 처리 완료
-        }
-        when (args[0].lowercase(Locale.getDefault())) {
-            "게임" -> handleGameReset()
-            "로비" -> handleLobbyReset(sender)
-            else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. <게임/로비>를 입력하세요.")
-        }
-    }
-
     fun handleGameReset(): Boolean {
         var removedCount = 0
         setInitializedSafeLocations(false)
@@ -73,19 +55,10 @@ object Reset {
         Bukkit.dispatchCommand(console, "mv load game")
         Bukkit.dispatchCommand(console, "plugman reload Multiverse-Portals")
         ChunkyManager.loadchunky()
-
-        //sender.sendMessage("$prefix 랜덤좌표를 선정 중입니다.....")
-        Teleport.initializeSafeLocations()
-
-        Bukkit.broadcastMessage(
-            "$prefix 게임맵 리셋이 완료되었습니다. \n" +
-                    " ${ChatColor.GOLD}맵의 청크로딩이 완료될때까지 대기하시길 바랍니다."
-        )
         return true
     }
-
-    private fun handleLobbyReset(sender: CommandSender): Boolean {
-        sender.sendMessage("$prefix 로비월드 리셋을 시작합니다.")
+    fun handleLobbyReset(player: Player): Boolean {
+        player.sendMessage("$prefix 로비월드 리셋을 시작합니다.")
         movePlayersToLobby("lobby")
         // 월드 제거
         //sender.sendMessage("$prefix 사용한 로비맵을 제거중입니다..")
@@ -104,7 +77,7 @@ object Reset {
         val cmd = "plugman reload Multiverse-Portals" // 실행할 명령어
 
         Bukkit.dispatchCommand(console, cmd)
-        sender.sendMessage("$prefix 로비맵 리셋이 완료되었습니다.")
+        player.sendMessage("$prefix 로비맵 리셋이 완료되었습니다.")
         return true
     }
 
@@ -114,6 +87,18 @@ object Reset {
         for (player in worldName.players) {
             player.teleport(lobbyLocation)
             player.sendMessage("$prefix ${ChatColor.YELLOW}맵 리셋작업이 시작되어 대기실로 이동되었습니다.")
+        }
+    }
+    fun resetplayerAttribute() {
+        for (player in Bukkit.getOnlinePlayers()) {
+
+            val playerhealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)
+            playerhealth?.baseValue = 20.0 // 최대 체력을 설정합니다.
+            player.health = 20.0 // 현재 체력도 최대 체력에 맞춰줍니다.
+            val playerdamage = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)
+            if (playerdamage != null) {
+                playerdamage.baseValue = 1.0
+            }
         }
     }
 }

@@ -32,21 +32,4 @@ object ContractAction {
 
         player.addScoreboardTag("Contract_Activate")
     }
-
-    fun resetContract() {
-        for (player in Bukkit.getOnlinePlayers()) {
-            if (player.scoreboardTags.contains("Contract_Activate")) {
-                val playerhealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)
-                playerhealth?.baseValue = 20.0 // 최대 체력을 설정합니다.
-                player.health = 20.0 // 현재 체력도 최대 체력에 맞춰줍니다.
-                player.removeScoreboardTag("Contract_Activate")
-
-                val playerdamage = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)
-                if (playerdamage != null) {
-                    val currentDamage = playerdamage.baseValue
-                    playerdamage.baseValue = currentDamage / 2
-                }
-            }
-        }
-    }
 }

@@ -1,5 +1,7 @@
 package kr.rion.plugin.gameEvent
 
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 
 object WeatherClear {
@@ -11,6 +13,6 @@ object WeatherClear {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives add weather_GravityAbnormality dummy")
 
         // Action bar 초기화
-        Bukkit.getOnlinePlayers().forEach { player -> player.sendActionBar("") }
+        Bukkit.getOnlinePlayers().forEach { player -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("")) }
     }
 }

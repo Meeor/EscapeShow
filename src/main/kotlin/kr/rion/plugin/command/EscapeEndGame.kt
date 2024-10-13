@@ -1,6 +1,6 @@
 package kr.rion.plugin.command
 
-import kr.rion.plugin.util.End
+import kr.rion.plugin.game.End
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender

@@ -22,8 +22,4 @@ object ItemAction {
     fun handleMap(player: Player) {
         MapAction.lunchMap(player)
     }
-
-    fun handleResetContract() {
-        ContractAction.resetContract()
-    }
 }

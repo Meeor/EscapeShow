@@ -16,7 +16,6 @@ object Item {
         itemLore: List<String>, // 필수: 아이템 로어 (리스트 형식)
         itemType: Material, // 필수: 아이템 종류 (Material)
         persistentDataKey: String? = null, // 선택적: PersistentDataContainer 키
-        persistentDataValue: Boolean? = null, // 선택적: PersistentDataContainer 값
         nbtKey: String? = null, // 선택적: NBT 태그 키
         nbtValue: Boolean? = null // 선택적: NBT 태그 값
     ): ItemStack {
@@ -33,9 +32,9 @@ object Item {
         meta?.lore = itemLore
 
         // PersistentDataContainer에 태그 추가 (키와 값이 둘 다 있을 때만)
-        if (persistentDataKey != null && persistentDataValue != null) {
+        if (persistentDataKey != null) {
             val namespacedKey = NamespacedKey(Loader.instance, persistentDataKey)
-            meta?.persistentDataContainer?.set(namespacedKey, PersistentDataType.STRING, persistentDataValue.toString())
+            meta?.persistentDataContainer?.set(namespacedKey, PersistentDataType.BOOLEAN, true)
         }
 
         // 아이템 메타 설정
@@ -99,16 +98,20 @@ object Item {
     }
 
     fun teleportCompass(): ItemStack {
-        val itemName = "${ChatColor.AQUA}플레이어에게 텔레포트"
-        val itemlore = listOf("${ChatColor.AQUA}관전용 플레이어 텔레포트 도구", "", "${ChatColor.GRAY}우클릭으로 사용가능합니다.")
+        val itemName = "${ChatColor.LIGHT_PURPLE}플레이어에게 텔레포트"
+        val itemlore = listOf("${ChatColor.AQUA}관전용 플레이어 텔레포트 도구", "", "우클릭으로 사용가능합니다.")
         val item = createCustomItem(
             itemName,
             itemlore,
-            Material.COMPASS,
-            persistentDataKey = "teleport",
-            persistentDataValue = true
+            Material.RECOVERY_COMPASS,
+            persistentDataKey = "teleport"
         )
         return item
-
+    }
+    fun mainMenu():ItemStack{
+        val itemName = "${ChatColor.AQUA}메뉴창 열기"
+        val itemlore = listOf("${ChatColor.GREEN}메뉴창을 열수있는 아이템입니다.","","우클릭으로 사용가능합니다.")
+        val item = createCustomItem(itemName,itemlore,Material.CLOCK, persistentDataKey = "mainmenu")
+        return item
     }
 }

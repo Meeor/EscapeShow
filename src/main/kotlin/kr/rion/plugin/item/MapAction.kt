@@ -24,10 +24,9 @@ object MapAction {
                         !nearbyPlayer.scoreboardTags.contains("EscapeComplete")
             }
 
-
         // 각 플레이어에게 발광 효과 부여
         for (nearbyPlayer in nearbyPlayers) {
-            nearbyPlayer.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 14, 1, false, false))
+            nearbyPlayer.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 14*20, 1, false, false))
         }
         inventory.removeItemFromInventory(player, Material.MOJANG_BANNER_PATTERN, 1)
 

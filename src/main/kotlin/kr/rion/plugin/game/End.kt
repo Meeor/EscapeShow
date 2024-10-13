@@ -1,16 +1,16 @@
-package kr.rion.plugin.util
+package kr.rion.plugin.game
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.command.Reset
+import kr.rion.plugin.game.Reset.handleGameReset
+import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.item.FlameGunActions.startEscape
-import kr.rion.plugin.item.ItemAction.handleResetContract
-import kr.rion.plugin.util.Bossbar.bossBars
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
+import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
+import kr.rion.plugin.util.global
 import org.bukkit.*
-import org.bukkit.command.CommandSender
 
 object End {
     var isEnding: Boolean = false
@@ -22,8 +22,6 @@ object End {
     fun EndAction() {
         val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기
         val worldWait = Bukkit.getWorld("vip") // vip 월드도 동일하게 Bukkit API로 가져옴
-        val console: CommandSender = Bukkit.getConsoleSender()
-        val cmd = "function server_datapack:reset" // 실행할 명령어
 
         // 월드가 null인 경우 로그 출력
         if (world == null) {
@@ -55,7 +53,7 @@ object End {
             if (!player.scoreboardTags.contains("death") && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete")) {
                 Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                     player.health = 0.0 // 플레이어의 체력을 0으로 설정하여 죽이기
-                }, 20L * 3)
+                }, 20L * 10)
             }
         }
 
@@ -93,11 +91,11 @@ object End {
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 //게임종료 마지막부분에 리셋되어야할것들
                 playersAtParticle.clear()
-                Reset.handleGameReset()
-                handleResetContract()
+                handleGameReset()
+                resetplayerAttribute()
                 // 게임 종료 처리 완료 후 플래그 해제
                 isEnding = false
-            },20L * 10)
-        }, 20L * 8)
+            },20L * 5)
+        }, 20L * 12)
     }
 }

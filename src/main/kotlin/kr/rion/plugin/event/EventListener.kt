@@ -19,8 +19,9 @@ class EventListener : Listener {
             ItemUseEvent(),
             JoinEvent(),
             RespawnEvent(),
-            InventoryClickEvent(),
-            InventoryCloseEvent()
+            InventoryClickListener(),
+            InventoryCloseEvent(),
+            PlayerMoveListener()
         )
 
         // 한 번에 모든 이벤트 등록

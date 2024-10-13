@@ -4,10 +4,7 @@ import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatColor
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.World
+import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
@@ -134,6 +131,10 @@ object Teleport {
 
                 val endTime = System.currentTimeMillis()
                 console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
+                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable{
+                    player.playSound(player,"custom.start",SoundCategory.MASTER,1.0f,1.0f)
+                    player.sendTitle("${ChatColor.GREEN}게임을 시작합니다.","${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요.")
+                },30)
             } catch (e: Exception) {
                 console.sendMessage("$prefix 텔레포트 중 오류가 발생했습니다: ${e.message}")
             }

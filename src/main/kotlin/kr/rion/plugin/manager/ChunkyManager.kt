@@ -1,6 +1,7 @@
 package kr.rion.plugin.manager
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.Teleport
 import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -22,7 +23,8 @@ object ChunkyManager {
                 it.onGenerationComplete {
                         _: GenerationCompleteEvent ->
                     Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                        Bukkit.broadcastMessage("$prefix 게임 월드가 정상로딩 되었습니다.")
+                        Teleport.initializeSafeLocations()
+                        Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")
                     },100L)
                     }
                 }

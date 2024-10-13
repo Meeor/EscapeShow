@@ -1,8 +1,8 @@
 package kr.rion.plugin.event
 
 import kr.rion.plugin.util.Bossbar
-import kr.rion.plugin.util.End
-import kr.rion.plugin.util.End.isEnding
+import kr.rion.plugin.game.End
+import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.util.global
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit

@@ -1,8 +1,9 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.End
 import kr.rion.plugin.util.Item.teleportCompass
-import kr.rion.plugin.util.End.isEnding
+import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
