@@ -52,30 +52,33 @@ object Teleport {
             return
         }
 
-
         val rand = Random()
         val startTime = System.currentTimeMillis()
-        console.sendMessage("$prefix 이동될 안전한좌표탐색을 시작합니다.")
+        console.sendMessage("$prefix 이동될 안전한 좌표 탐색을 시작합니다.")
         safeLocations.clear()
 
+        // 중심 좌표 설정
+        val centerX = 80
+        val centerZ = -377
 
-        val minX = -372
-        val maxX = 718
-        val minY = 53
-        val maxY = 97
-        val minZ = -710
-        val maxZ = 45
+        // 반경 및 Y 좌표 범위 설정
+        val radius = 326 // 반경 326 블록
+        val minY = 53  // 최소 Y 좌표
+        val maxY = 97  // 최대 Y 좌표
 
-        val requiredSafeLocations = 100 // 목표: 100개
+        val requiredSafeLocations = 60 // 목표: 60개
         val maxAttempts = 20000 // 시도 횟수 제한 (필요에 따라 조정 가능)
         var attempts = 0
 
         while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
-            val x = rand.nextInt(maxX - minX + 1) + minX
-            val y = rand.nextInt(maxY - minY + 1) + minY
-            val z = rand.nextInt(maxZ - minZ + 1) + minZ
+            // 원형 범위 안에서 무작위 좌표 생성
+            val angle = rand.nextDouble() * 2 * Math.PI  // 0에서 2π 사이의 랜덤 각도
+            val distance = rand.nextDouble() * radius   // 반경 내의 랜덤 거리
+            val x = centerX + distance * Math.cos(angle)  // 중심점에서 X 좌표
+            val z = centerZ + distance * Math.sin(angle)  // 중심점에서 Z 좌표
+            val y = rand.nextInt(maxY - minY + 1) + minY  // Y 좌표는 범위 내에서 랜덤 선택
 
-            val location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
+            val location = Location(world, x, y.toDouble(), z)
             if (isLocationSafe(location) && !safeLocations.contains(location)) {
                 safeLocations.add(location)
             }
@@ -86,6 +89,7 @@ object Teleport {
         console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
         hasInitializedSafeLocations = true
     }
+
 
 
     fun isInDesignatedArea(loc: Location): Boolean {

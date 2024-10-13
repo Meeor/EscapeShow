@@ -1,23 +1,19 @@
 package kr.rion.plugin.util
 
-import GiveItem.Compass
 import kr.rion.plugin.Loader
-import kr.rion.plugin.manager.WorldManager
+import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.End.isEnding
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.GameRule
-import org.bukkit.entity.Boss
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
-
-private var worldManager: WorldManager? = null
 
 object global {
     val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
@@ -34,7 +30,7 @@ object global {
     }
 
     //탈출시 작업
-    fun performAction(player: Player) {
+    private fun performAction(player: Player) {
         // 게임 모드 변경
         player.gameMode = GameMode.ADVENTURE
 
@@ -48,7 +44,7 @@ object global {
         player.addPotionEffect(invisibilityEffect)
         player.addPotionEffect(blindEffect)
         player.inventory.clear()
-        Compass(player)
+        player.inventory.setItem(8, teleportCompass())
         End.EscapePlayerCount++
         End.EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
@@ -56,8 +52,8 @@ object global {
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
         Bossbar.removeDirectionBossBar(player)
-        if (End.EscapePlayerCount == End.EscapePlayerMaxCount || SurvivalPlayers() == 0 ) {
-            if(!isEnding) {
+        if (End.EscapePlayerCount == End.EscapePlayerMaxCount || SurvivalPlayers() == 0) {
+            if (!isEnding) {
                 isEnding = true
                 End.EndAction()
             }
@@ -104,7 +100,11 @@ object global {
 
     fun SurvivalPlayers(): Int {
         val survivalPlayers = Bukkit.getOnlinePlayers()
-            .filter { !it.scoreboardTags.contains("manager") && !it.scoreboardTags.contains("EscapeComplete") && !it.scoreboardTags.contains("death") }
+            .filter {
+                !it.scoreboardTags.contains("manager")
+                        && !it.scoreboardTags.contains("EscapeComplete")
+                        && !it.scoreboardTags.contains("death")
+            }
         return survivalPlayers.size  // 필터링된 생존 플레이어의 수 반환
     }
 }
