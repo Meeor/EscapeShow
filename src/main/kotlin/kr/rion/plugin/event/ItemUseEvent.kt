@@ -39,9 +39,7 @@ class ItemUseEvent : Listener {
             // 나침반인지 확인
             if (item.type == Material.RECOVERY_COMPASS) {
                 val meta = item.itemMeta
-                Bukkit.getLogger().info("아이템타입을 확인하였습니다. ${item.type}")
                 if (meta != null && hasCustomTag(meta, "teleport")) {
-                    Bukkit.getLogger().info("태그확인이 되었습니다.")
                     openTeleportGUI(player)
                 }
             }

@@ -235,7 +235,6 @@ class InventoryClickListener : Listener {
 
     @EventHandler
     fun gameEventClick(event: InventoryClickEvent) {
-        println(event.view.title)
         if (event.view.title != "${ChatColor.DARK_BLUE}이벤트") return
         val player = event.whoClicked as? Player ?: return
         val item = event.currentItem
