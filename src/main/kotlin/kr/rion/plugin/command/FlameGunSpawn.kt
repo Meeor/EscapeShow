@@ -22,19 +22,16 @@ object FlameGunSpawn {
             return
         }
 
-        chestLocation = location // 상자 위치 저장
+
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             location.block.type = Material.CHEST
+            chestLocation = location.block.location // 상자 위치 저장
             val chest = location.block.state as Chest
             // 플레어건을 상자의 14번 칸(정중앙)에 배치
             val item = createFlareGunItem()
             chest.inventory.setItem(13, item) // 인덱스는 0부터 시작하므로 13번이 14번째 칸
 
-            if (chest.inventory.getItem(13) != null) {
-                sender.sendMessage("${ChatColor.GREEN}플레어건이 상자에 성공적으로 추가되었습니다.")
-            } else {
-                sender.sendMessage("${ChatColor.RED}플레어건을 상자에 추가하는데 실패했습니다.")
-            }
+
         })
 
         // 파티클을 상자 위아래로 y 좌표 50칸씩 늘려서 반복적으로 소환
@@ -44,7 +41,7 @@ object FlameGunSpawn {
                     val world = location.world
                     // 상자 기준으로 y 좌표 -50칸에서 +50칸까지 파티클 소환
                     for (yOffset in -50..50) {
-                        val particleLocation = location.clone().add(0.5, yOffset.toDouble(), 0.5)
+                        val particleLocation = location.clone().add(0.0, yOffset.toDouble(), 0.0)
                         world.spawnParticle(
                             Particle.END_ROD,
                             particleLocation,
