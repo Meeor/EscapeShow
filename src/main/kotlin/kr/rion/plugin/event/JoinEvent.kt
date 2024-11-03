@@ -1,5 +1,6 @@
 package kr.rion.plugin.event
 
+import kr.rion.plugin.Loader
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -30,6 +31,6 @@ class JoinEvent : Listener {
                 event.player.sendMessage("")
                 event.player.sendMessage("${ChatColor.GOLD}$line")
             }
-        }.runTask(Bukkit.getPluginManager().getPlugin("EscapeShow")!!) // YourPluginName을 실제 플러그인 이름으로 변경
+        }.runTask(Loader.instance)
     }
 }
