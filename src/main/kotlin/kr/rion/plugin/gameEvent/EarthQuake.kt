@@ -1,7 +1,7 @@
 package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.util.global.prefix
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

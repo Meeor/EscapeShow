@@ -1,12 +1,11 @@
 package kr.rion.plugin.game
 
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Teleport.initializeSafeLocations
 import kr.rion.plugin.util.Teleport.safeLocations
 import kr.rion.plugin.util.Teleport.setInitializedSafeLocations
-import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 object RandomTp {

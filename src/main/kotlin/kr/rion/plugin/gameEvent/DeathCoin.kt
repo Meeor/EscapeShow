@@ -1,6 +1,6 @@
 package kr.rion.plugin.gameEvent
 
-import kr.rion.plugin.util.global.prefix
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable

@@ -1,7 +1,7 @@
 package kr.rion.plugin.command
 
 import kr.rion.plugin.gameEvent.GameEvent
-import kr.rion.plugin.util.global.prefix
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import java.util.*

@@ -10,11 +10,14 @@ import kr.rion.plugin.game.Reset.handleLobbyReset
 import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startAction
+import kr.rion.plugin.gameEvent.Coordinates.revealCoordinates
+import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
 import kr.rion.plugin.gui.Giveitem.ItemGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.randomTP.RandomTpGUI
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Item.berries
 import kr.rion.plugin.util.Item.contract
 import kr.rion.plugin.util.Item.flamegun
@@ -22,7 +25,6 @@ import kr.rion.plugin.util.Item.heal
 import kr.rion.plugin.util.Item.mainMenu
 import kr.rion.plugin.util.Item.map
 import kr.rion.plugin.util.Item.teleportCompass
-import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -72,56 +74,67 @@ class InventoryClickListener : Listener {
 
             when {
                 hasCustomTag(meta, "game-start") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     if (!isStarting && !isStart) {
                         startAction()
-                        event.isCancelled = true
-                        player.closeInventory()
+                    }else{
+                        player.sendMessage("$prefix 이미 시작중입니다.")
                     }
                 }
 
                 hasCustomTag(meta, "game-stop") -> {
-                    if (isStarting) {
+                    event.isCancelled = true
+                    player.closeInventory()
+                    if (isStarting && !isStart) {
                         EndAction()
-                        event.isCancelled = true
-                        player.closeInventory()
+                    }else{
+                        player.sendMessage("$prefix 게임이 시작되지 않았습니다.")
                     }
                 }
 
-                hasCustomTag(meta, "game-setting") -> {
-                    player.sendMessage("기능 제작중입니다")
+                hasCustomTag(meta, "game-flamegun") -> {
                     event.isCancelled = true
                     player.closeInventory()
+                    if (isStarting) {
+                        spawnFlareGunChest(player, player.location)
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
-                hasCustomTag(meta, "game-contorl") -> {
-                    player.sendMessage("기능 제작중입니다")
+                hasCustomTag(meta, "game-coord") -> {
                     event.isCancelled = true
                     player.closeInventory()
+                    if (isStarting) {
+                        revealCoordinates(player)
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "game-giveitem") -> {
+                    event.isCancelled = true
                     player.closeInventory()
                     ItemGUI(player)
-                    event.isCancelled = true
                 }
 
                 hasCustomTag(meta, "game-event") -> {
+                    event.isCancelled = true
                     player.closeInventory()
                     eventGUI(player)
-                    event.isCancelled = true
-
                 }
 
                 hasCustomTag(meta, "game-randomtp") -> {
+                    event.isCancelled = true
                     player.closeInventory()
                     RandomTpGUI(player)
-                    event.isCancelled = true
                 }
 
                 hasCustomTag(meta, "game-reset") -> {
+                    event.isCancelled = true
                     player.closeInventory()
                     ResetGUI(player)
-                    event.isCancelled = true
                 }
             }
         }
@@ -137,45 +150,45 @@ class InventoryClickListener : Listener {
 
             when {
                 hasCustomTag(meta, "give-flamegun") -> {
-                    player.inventory.addItem(flamegun())
                     event.isCancelled = true
                     player.closeInventory()
+                    player.inventory.addItem(flamegun())
                 }
 
                 hasCustomTag(meta, "give-heal") -> {
-                    player.inventory.addItem(heal())
                     event.isCancelled = true
                     player.closeInventory()
+                    player.inventory.addItem(heal())
                 }
 
                 hasCustomTag(meta, "give-berries") -> {
-                    player.inventory.addItem(berries())
                     event.isCancelled = true
                     player.closeInventory()
+                    player.inventory.addItem(berries())
                 }
 
                 hasCustomTag(meta, "give-contract") -> {
-                    player.inventory.addItem(contract())
                     event.isCancelled = true
                     player.closeInventory()
+                    player.inventory.addItem(contract())
                 }
 
                 hasCustomTag(meta, "give-map") -> {
-                    player.inventory.addItem(map())
                     event.isCancelled = true
                     player.closeInventory()
+                    player.inventory.addItem(map())
                 }
 
                 hasCustomTag(meta, "give-teleportCompass") -> {
-                    player.inventory.addItem(teleportCompass())
                     event.isCancelled = true
                     player.closeInventory()
+                    player.inventory.addItem(teleportCompass())
                 }
 
                 hasCustomTag(meta, "give-mainMenu") -> {
-                    player.inventory.addItem(mainMenu())
                     event.isCancelled = true
                     player.closeInventory()
+                    player.inventory.addItem(mainMenu())
                 }
             }
         }
@@ -192,14 +205,14 @@ class InventoryClickListener : Listener {
             when {
                 hasCustomTag(meta, "reset-game") -> {
                     event.isCancelled = true
-                    handleGameReset()
                     player.closeInventory()
+                    handleGameReset()
                 }
 
                 hasCustomTag(meta, "reset-lobby") -> {
                     event.isCancelled = true
-                    handleLobbyReset(player)
                     player.closeInventory()
+                    handleLobbyReset(player)
                 }
             }
         }
@@ -215,19 +228,21 @@ class InventoryClickListener : Listener {
 
             when {
                 hasCustomTag(meta, "randomtp-list") -> {
-                    handleRandomTPList(player)
                     event.isCancelled = true
                     player.closeInventory()
+                    handleRandomTPList(player)
                 }
+
                 hasCustomTag(meta, "randomtp-reset") -> {
                     event.isCancelled = true
-                    handleRandomReset(player)
                     player.closeInventory()
+                    handleRandomReset(player)
                 }
+
                 hasCustomTag(meta, "randomtp-delete") -> {
-                    handleRandomListClear(player)
                     event.isCancelled = true
                     player.closeInventory()
+                    handleRandomListClear(player)
                 }
             }
         }
@@ -243,46 +258,54 @@ class InventoryClickListener : Listener {
 
             when {
                 hasCustomTag(meta, "event-sun") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     GameEvent.weatherClear()
-                    event.isCancelled = true
-                    player.closeInventory()
                 }
+
                 hasCustomTag(meta, "event-rain") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     GameEvent.weatherRain()
-                    event.isCancelled = true
-                    player.closeInventory()
                 }
+
                 hasCustomTag(meta, "event-gravity") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     GameEvent.gravity()
-                    event.isCancelled = true
-                    player.closeInventory()
                 }
+
                 hasCustomTag(meta, "event-earthQuake") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     GameEvent.earthQuake(player)
-                    event.isCancelled = true
-                    player.closeInventory()
                 }
+
                 hasCustomTag(meta, "event-donation") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     GameEvent.donation()
-                    event.isCancelled = true
-                    player.closeInventory()
                 }
+
                 hasCustomTag(meta, "event-deathCoin") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     GameEvent.deathCoin()
-                    event.isCancelled = true
-                    player.closeInventory()
                 }
+
                 hasCustomTag(meta, "event-betting") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
                     GameEvent.betting()
-                    event.isCancelled = true
-                    player.closeInventory()
                 }
+
                 hasCustomTag(meta, "event-random") -> {
-                    GameEvent.randomEvent(player)
                     event.isCancelled = true
                     player.closeInventory()
+                    GameEvent.randomEvent(player)
                 }
-                hasCustomTag(meta,"nothing") -> {
+
+                hasCustomTag(meta, "nothing") -> {
                     event.isCancelled = true
                 }
             }

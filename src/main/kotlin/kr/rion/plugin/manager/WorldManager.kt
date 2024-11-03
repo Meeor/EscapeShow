@@ -4,9 +4,7 @@ import com.onarandombox.MultiverseCore.MultiverseCore
 import com.onarandombox.MultiverseCore.api.MVWorldManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
 class WorldManager(plugin: JavaPlugin) {

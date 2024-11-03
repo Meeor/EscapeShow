@@ -16,10 +16,10 @@ object BerriesAction {
         for (playerall in Bukkit.getOnlinePlayers()) {
             playerall.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 0.2f, 0.0f)
         }
-        val regenerationeffect = PotionEffect(PotionEffectType.REGENERATION, 5*20, 1, false, false)
+        val regenerationeffect = PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 1, false, false)
         player.addPotionEffect(regenerationeffect)
-        val feedeffect = PotionEffect(PotionEffectType.SATURATION, 1*20, 4, false, false)
-        player.addPotionEffect(feedeffect)
+        val currentHunger = player.foodLevel
+        player.foodLevel = (currentHunger + 6).coerceAtMost(20)
         inventory.removeItemFromInventory(player, Material.GLOW_BERRIES, 1)
 
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {

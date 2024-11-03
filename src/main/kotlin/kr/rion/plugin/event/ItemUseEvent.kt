@@ -2,7 +2,6 @@ package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
-import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.PlayerTeleport.openTeleportGUI
 import kr.rion.plugin.item.ItemAction.handleBerries
@@ -10,8 +9,7 @@ import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.item.ItemAction.handleHeal
 import kr.rion.plugin.item.ItemAction.handleMap
-import kr.rion.plugin.util.global.prefix
-import org.bukkit.Bukkit
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey

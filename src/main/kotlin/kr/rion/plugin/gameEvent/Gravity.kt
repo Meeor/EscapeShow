@@ -1,8 +1,7 @@
 package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.util.global.prefix
-import net.md_5.bungee.api.ChatMessageType
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect

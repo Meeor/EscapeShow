@@ -1,11 +1,10 @@
 package kr.rion.plugin.event
 
-import kr.rion.plugin.command.FlameGunSpawn.chestLocation
-import kr.rion.plugin.command.FlameGunSpawn.particleTask
-import kr.rion.plugin.util.global.prefix
+import kr.rion.plugin.gameEvent.FlameGunSpawn.chestLocation
+import kr.rion.plugin.gameEvent.FlameGunSpawn.particleTask
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryCloseEvent

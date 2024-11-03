@@ -1,9 +1,9 @@
 package kr.rion.plugin.event
 
-import kr.rion.plugin.util.Bossbar
 import kr.rion.plugin.game.End
 import kr.rion.plugin.game.End.isEnding
-import kr.rion.plugin.util.global
+import kr.rion.plugin.util.Bossbar
+import kr.rion.plugin.util.Global
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -20,11 +20,13 @@ class DeathEvent : Listener {
         val player: Player = event.player
         player.gameMode = GameMode.SPECTATOR
         player.addScoreboardTag("death")
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${global.SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${Global.SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         Bossbar.removeDirectionBossBar(player)
-        if (global.SurvivalPlayers() == 0 && !isEnding) {
-            isEnding = true
-            End.EndAction()
+        if(!isEnding) {
+            if (Global.SurvivalPlayers() == 0) {
+                isEnding = true
+                End.EndAction()
+            }
         }
     }
 }

@@ -10,19 +10,6 @@ libraries:
   - org.jetbrains.kotlin:kotlin-reflect:1.9.25
 
 commands:
-  좌표공개:
-    description: 서바이벌및 모험모드의 플레이어들의 좌표를 공개합니다.
-    usage: /<command>
-  랜덤티피:
-    description: 게임월드의 랜덤티피위치를확인하거나 리셋합니다.
-    usage: /<command> <목록/재설정>
-    permission: default.op
-    permission-message: 이 명령어를 사용할 권한이 없습니다.
-  게임종료:
-    description: 강제로 게임을 종료시키며 종료시 행동들을 시작합니다.
-    usage: /<command>
-    permission: default.op
-    permission-message: 이 명령어를 사용할 권한이 없습니다.
   탈출인원:
     description: 자동게임종료가 몇명이되어야 탈출하는지 설정하거나 확인합니다.
     usage: /<command> <확인/설정>
@@ -33,23 +20,13 @@ commands:
     usage: /<command> <이벤트이름>
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
-  엔티티리스트:
-    description: 서버에있는 엔티티의 리스트를 나열합니다.
-    usage: /<command>
-    permission: default.op
-    permission-message: 이 명령어를 사용할 권한이 없습니다.
-  플레어건소환:
-    description: 플레어건을 소환합니다.
-    usage: /<command>
-    permission: escapeShow.flameGun.spawn
-    permission-message: 이 명령어를 사용할 권한이 없습니다.
   게임:
     description: 게임GUI를 여는 아이템을 받습니다.
     usage: /<command>
-    permission: default.op
+    permission: EscapeShow.Game.GUI
     permission-message: 이 명령어를 사용할 권한이 없습니다.
 
 permissions:
-  escapeShow.flameGun.spawn:
-    description: 플레어건 소환 명령어를 사용할 수 있는 권한입니다.
-    default: false
+  EscapeShow.Game.GUI:
+    description: 게임 관리 GUI를 여는 권한입니다.
+    default: op

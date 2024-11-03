@@ -2,8 +2,10 @@ package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End
-import kr.rion.plugin.util.Item.teleportCompass
+import kr.rion.plugin.game.End.EscapePlayerCount
+import kr.rion.plugin.game.End.EscapePlayerMaxCount
 import kr.rion.plugin.game.End.isEnding
+import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -16,7 +18,7 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 
-object global {
+object Global {
     val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
 
     var playerCheckTask: BukkitTask? = null
@@ -46,14 +48,19 @@ object global {
         player.addPotionEffect(blindEffect)
         player.inventory.clear()
         player.inventory.setItem(8, teleportCompass())
-        End.EscapePlayerCount++
+        EscapePlayerCount++
         End.EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
+        val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
+
+        if (remainingPlayers > 0) {
+            Bukkit.broadcastMessage("${ChatColor.YELLOW}$remainingPlayers ${ChatColor.LIGHT_PURPLE}명이 탈출 가능합니다.")
+        }
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
         Bossbar.removeDirectionBossBar(player)
-        if (End.EscapePlayerCount == End.EscapePlayerMaxCount || SurvivalPlayers() == 0) {
+        if (EscapePlayerCount == EscapePlayerMaxCount || SurvivalPlayers() == 0) {
             if (!isEnding) {
                 isEnding = true
                 End.EndAction()

@@ -1,12 +1,11 @@
-package kr.rion.plugin.command
+package kr.rion.plugin.gameEvent
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
-import kr.rion.plugin.util.global.prefix
-import net.minecraft.world.entity.player.Player
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.*
 import org.bukkit.block.Chest
-import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
@@ -15,13 +14,12 @@ object FlameGunSpawn {
     var chestLocation: Location? = null // 플레어건 상자의 위치 저장
     var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
 
-    // 플레어건 상자 생성 함수
-    fun spawnFlareGunChest(sender: CommandSender,location:Location) {
-        if(chestLocation !== null){
-            sender.sendMessage("$prefix 이미 플레어건이 소환되어있는것 같습니다.")
+    // 플레어건 상자 생성 함수 (GUI 클릭 이벤트에서 호출할 수 있도록 수정)
+    fun spawnFlareGunChest(player: Player, location: Location) {
+        if (chestLocation !== null) {
+            player.sendMessage("$prefix 이미 플레어건이 소환되어있는것 같습니다.")
             return
         }
-
 
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             location.block.type = Material.CHEST
@@ -30,8 +28,6 @@ object FlameGunSpawn {
             // 플레어건을 상자의 14번 칸(정중앙)에 배치
             val item = createFlareGunItem()
             chest.inventory.setItem(13, item) // 인덱스는 0부터 시작하므로 13번이 14번째 칸
-
-
         })
 
         // 파티클을 상자 위아래로 y 좌표 50칸씩 늘려서 반복적으로 소환
@@ -57,11 +53,16 @@ object FlameGunSpawn {
                 }
             }
         }.runTaskTimer(Loader.instance, 0, 20) // 1초마다 반복
-        Bukkit.broadcastMessage("$prefix 플레어건이 나타났습니다 (${location.blockX}, ${location.blockY}, ${location.blockZ})")
-        Bukkit.getOnlinePlayers().forEach { player ->
-        player.sendTitle("${ChatColor.RED}플레어건${ChatColor.YELLOW}이 등장하였습니다!","${ChatColor.GOLD}좌표 : ${ChatColor.AQUA}X :${location.blockX}, Y : ${location.blockY}, Z : ${location.blockZ}",10,20*5,10)
-        }
 
+        // 모든 플레이어에게 플레어건 소환 메시지와 타이틀 표시
+        Bukkit.broadcastMessage("$prefix 플레어건이 나타났습니다 (${location.blockX}, ${location.blockY}, ${location.blockZ})")
+        Bukkit.getOnlinePlayers().forEach { onlinePlayer ->
+            onlinePlayer.sendTitle(
+                "${ChatColor.RED}플레어건${ChatColor.YELLOW}이 등장하였습니다!",
+                "${ChatColor.GOLD}좌표 : ${ChatColor.AQUA}X :${location.blockX}, Y : ${location.blockY}, Z : ${location.blockZ}",
+                10, 20 * 3, 10
+            )
+        }
     }
 
     // 플레어건 아이템 생성 함수

@@ -2,11 +2,10 @@ package kr.rion.plugin.item
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
-import kr.rion.plugin.util.Bossbar
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
 import kr.rion.plugin.util.Helicopter.playerloc
-import kr.rion.plugin.util.global.prefix
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*

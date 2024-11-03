@@ -6,8 +6,8 @@ import de.maxhenkel.voicechat.api.BukkitVoicechatService
 import kr.rion.plugin.event.EventListener
 import kr.rion.plugin.event.VoiceChatEvent
 import kr.rion.plugin.manager.CommandManager
+import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Teleport
-import kr.rion.plugin.util.global
 import org.bukkit.ChatColor
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
@@ -44,7 +44,7 @@ class Loader : JavaPlugin() {
 
         object : BukkitRunnable() {
             override fun run() {
-                global.checkPlayersWithTag()
+                Global.checkPlayersWithTag()
             }
         }.runTaskTimer(this, 0L, 1L) // 1 ticks마다 실행 (0.05초마다)
         val core = server.pluginManager.getPlugin("Multiverse-Core") as MultiverseCore?
@@ -66,16 +66,16 @@ class Loader : JavaPlugin() {
                 console.sendMessage("")
                 console.sendMessage("${ChatColor.GOLD}$line")
                 console.sendMessage("")
-                global.setGameRulesForAllWorlds()
+                Global.setGameRulesForAllWorlds()
                 console.sendMessage("")
                 Teleport.initializeSafeLocations()
-                global.startPlayerCheckTask(this@Loader)
+                Global.startPlayerCheckTask(this@Loader)
             }
         }.runTaskLater(this, 40L)
 
     }
 
     override fun onDisable() {
-        global.playerCheckTask?.cancel()
+        Global.playerCheckTask?.cancel()
     }
 }

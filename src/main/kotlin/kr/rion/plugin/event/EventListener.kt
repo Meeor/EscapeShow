@@ -21,7 +21,8 @@ class EventListener : Listener {
             RespawnEvent(),
             InventoryClickListener(),
             InventoryCloseEvent(),
-            PlayerMoveListener()
+            PlayerMoveListener(),
+            PlayerAttackEvent()
         )
 
         // 한 번에 모든 이벤트 등록

@@ -7,10 +7,13 @@ import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
+import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
-import kr.rion.plugin.util.global
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.Location
+import org.bukkit.SoundCategory
 
 object End {
     var isEnding: Boolean = false
@@ -39,7 +42,7 @@ object End {
         startEscape = false
         flaregunstart?.cancel()
         flaregunstart = null
-        Bukkit.broadcastMessage("${global.prefix} 게임이 종료되었습니다.")
+        Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
         //여기까지.종료직후리셋.
         //모든플레이어에게 게임종료사운드보내기.
@@ -73,7 +76,7 @@ object End {
                 if (worldWait != null) {
                     player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
                 } else {
-                    player.sendMessage("${global.prefix}${ChatColor.RED}플러그인에 버그가 발생하였습니다. 운영자에게 이동을 요청하시길 바랍니다.")
+                    player.sendMessage("${Global.prefix}${ChatColor.RED}플러그인에 버그가 발생하였습니다. 운영자에게 이동을 요청하시길 바랍니다.")
                 }
             }
             val line = "=".repeat(40)
@@ -93,8 +96,6 @@ object End {
                 playersAtParticle.clear()
                 handleGameReset()
                 resetplayerAttribute()
-                // 게임 종료 처리 완료 후 플래그 해제
-                isEnding = false
             },20L * 5)
         }, 20L * 12)
     }

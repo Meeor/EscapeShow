@@ -1,6 +1,6 @@
 package kr.rion.plugin.event
 
-import kr.rion.plugin.util.global.prefix
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener

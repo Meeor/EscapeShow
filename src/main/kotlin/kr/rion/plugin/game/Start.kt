@@ -1,8 +1,8 @@
 package kr.rion.plugin.game
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.End.isEnding
 import org.bukkit.*
-import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -10,9 +10,10 @@ object Start {
     var isStart = false //시작작업상태 플래그
     var isStarting = false //게임 상태 플래그
 
-    fun startAction(){
+    fun startAction() {
         isStart = true
         executeBlockFillingAndEffect()
+        isEnding = false
     }
 
 
@@ -23,7 +24,6 @@ object Start {
             override fun run() {
                 if (step > 155) {
                     // 작업 완료 시 추가 작업 실행
-                    isStart = false
                     isStarting = true
                     for (player: Player in Bukkit.getOnlinePlayers()) {
                         if (player.scoreboardTags.contains("manager")) {
@@ -31,6 +31,12 @@ object Start {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
                         }
                     }
+                    // 3분 후 isStart를 false로 설정하는 작업 추가
+                    object : BukkitRunnable() {
+                        override fun run() {
+                            isStart = false
+                        }
+                    }.runTaskLater(Loader.instance, 20L * 180) // 3분 (180초) 후 실행
                     cancel() // 반복 종료
                     return
                 }
@@ -40,6 +46,7 @@ object Start {
             }
         }.runTaskTimer(Loader.instance, 0L, 1L) // 0틱 이후 실행, 1틱 간격으로 실행
     }
+
     // 특정 단계에서 블록을 공기로 설정하고 파괴 효과 적용
     private fun fillBlocksWithDestroyEffect(step: Int) {
         // 월드를 '로비'로 고정
@@ -93,7 +100,12 @@ object Start {
                     // 소리와 파티클 효과 추가
                     for (player in Bukkit.getOnlinePlayers()) {
                         player.playSound(block.location, Sound.BLOCK_STONE_BREAK, 1.0f, 1.0f)
-                        player.world.spawnParticle(Particle.BLOCK_CRACK, block.location.add(0.5, 0.5, 0.5), 30, block.blockData)
+                        player.world.spawnParticle(
+                            Particle.BLOCK_CRACK,
+                            block.location.add(0.5, 0.5, 0.5),
+                            30,
+                            block.blockData
+                        )
                     }
                 }
             }

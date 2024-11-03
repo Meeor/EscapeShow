@@ -3,9 +3,8 @@ package kr.rion.plugin.game
 import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.ChunkyManager
 import kr.rion.plugin.manager.WorldManager
-import kr.rion.plugin.util.Teleport
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Teleport.setInitializedSafeLocations
-import kr.rion.plugin.util.global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
