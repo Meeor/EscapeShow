@@ -3,6 +3,8 @@ package kr.rion.plugin.game
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.Reset.handleGameReset
 import kr.rion.plugin.game.Reset.resetplayerAttribute
+import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.game.Start.startportal
 import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.item.FlameGunActions.startEscape
@@ -12,15 +14,10 @@ import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
-import kr.rion.plugin.util.Helicopter.setloc
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.SoundCategory
+import org.bukkit.*
 
 object End {
-    var isEnding: Boolean = false
+    var isEnding: Boolean = true
 
     var EscapePlayerCount: Int = 0
     var EscapePlayerMaxCount: Int = 6
@@ -37,8 +34,8 @@ object End {
         if (worldWait == null) {
             Bukkit.getLogger().warning("vip 월드를 가져오지 못했습니다. worldManager 또는 해당 월드 확인 필요.")
         }
-        fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.OAK_FENCE)
-        setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.OAK_FENCE)
+        fillBlocks(Location(worldWait, 23.0, 60.0, -46.0), Location(worldWait, 23.0, 57.0, -44.0), Material.OAK_FENCE)
+        setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.OAK_FENCE)
 
         //게임종료후 각종변수및 정보들 리셋작업.
         EscapePlayerCount = 0
@@ -48,6 +45,9 @@ object End {
         startEscape = false
         flaregunstart?.cancel()
         flaregunstart = null
+        startportal = false
+        isStarting = false
+        isEnding = true
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
         //여기까지.종료직후리셋.
@@ -59,7 +59,10 @@ object End {
         //사망자,탈출자,운영자를제외한 남은플레이어 죽이기!
         world?.players?.forEach { player ->
             // 플레이어가 서바이벌 모드인 경우
-            if (!player.scoreboardTags.contains("death") && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete")) {
+            if (!player.scoreboardTags.contains("death") && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains(
+                    "EscapeComplete"
+                )
+            ) {
                 Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                     player.health = 0.0 // 플레이어의 체력을 0으로 설정하여 죽이기
                 }, 20L * 10)
@@ -102,7 +105,7 @@ object End {
                 playersAtParticle.clear()
                 handleGameReset()
                 resetplayerAttribute()
-            },20L * 5)
+            }, 20L * 30)
         }, 20L * 12)
     }
 }

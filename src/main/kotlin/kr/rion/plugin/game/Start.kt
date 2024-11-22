@@ -9,9 +9,11 @@ import org.bukkit.scheduler.BukkitRunnable
 object Start {
     var isStart = false //시작작업상태 플래그
     var isStarting = false //게임 상태 플래그
+    var startportal = false //텔레포트 플래그
 
     fun startAction() {
         isStart = true
+        startportal = true
         executeBlockFillingAndEffect()
         isEnding = false
     }
@@ -25,6 +27,7 @@ object Start {
                 if (step > 155) {
                     // 작업 완료 시 추가 작업 실행
                     isStarting = true
+                    isStart = false
                     for (player: Player in Bukkit.getOnlinePlayers()) {
                         if (player.scoreboardTags.contains("manager")) {
                             // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
@@ -34,7 +37,7 @@ object Start {
                     // 3분 후 isStart를 false로 설정하는 작업 추가
                     object : BukkitRunnable() {
                         override fun run() {
-                            isStart = false
+                            startportal = false
                         }
                     }.runTaskLater(Loader.instance, 20L * 180) // 3분 (180초) 후 실행
                     cancel() // 반복 종료

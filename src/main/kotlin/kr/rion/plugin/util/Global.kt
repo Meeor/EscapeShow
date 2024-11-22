@@ -62,7 +62,6 @@ object Global {
         Bossbar.removeDirectionBossBar(player)
         if (EscapePlayerCount == EscapePlayerMaxCount || SurvivalPlayers() == 0) {
             if (!isEnding) {
-                isEnding = true
                 End.EndAction()
             }
         }
