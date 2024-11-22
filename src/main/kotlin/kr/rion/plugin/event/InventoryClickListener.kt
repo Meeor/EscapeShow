@@ -142,10 +142,12 @@ class InventoryClickListener : Listener {
                     if(door){
                         fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.AIR)
                         setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.AIR)
+                        door = !door
                         player.sendMessage("$prefix ${ChatColor.YELLOW}문을 열었습니다.")
                     }else{
                         fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.OAK_FENCE)
                         setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.OAK_FENCE)
+                        door = !door
                         player.sendMessage("$prefix ${ChatColor.YELLOW}문을 닫았습니다.")
                     }
                 }
