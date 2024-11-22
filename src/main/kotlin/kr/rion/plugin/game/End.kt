@@ -10,9 +10,13 @@ import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
+import kr.rion.plugin.util.Helicopter.fillBlocks
+import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
+import kr.rion.plugin.util.Helicopter.setloc
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.SoundCategory
 
 object End {
@@ -33,6 +37,8 @@ object End {
         if (worldWait == null) {
             Bukkit.getLogger().warning("vip 월드를 가져오지 못했습니다. worldManager 또는 해당 월드 확인 필요.")
         }
+        fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.OAK_FENCE)
+        setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.OAK_FENCE)
 
         //게임종료후 각종변수및 정보들 리셋작업.
         EscapePlayerCount = 0

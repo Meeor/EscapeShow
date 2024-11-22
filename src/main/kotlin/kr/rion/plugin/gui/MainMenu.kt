@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
 
 object MainMenu {
     fun openMainGUI(player: Player) {
-        val gui = Bukkit.createInventory(null, 18, "${ChatColor.DARK_BLUE}메뉴")
+        val gui = Bukkit.createInventory(null, 27, "${ChatColor.DARK_BLUE}메뉴")
 
         val game: ItemStack
         //게임시작및 종료
@@ -92,6 +92,12 @@ object MainMenu {
             createCustomItem(resetGUIName, resetGUILore, Material.CRYING_OBSIDIAN, persistentDataKey = "game-reset")
 
 
+        val doorName = "${ChatColor.GREEN}대기실 문"
+        val doorLore = listOf("대기실 문을 열거나 닫습니다.")
+        val dooritem = createCustomItem(doorName,doorLore,Material.OAK_FENCE, persistentDataKey = "game-door")
+
+
+
         gui.setItem(1, game)
         gui.setItem(3, flamegun)
         gui.setItem(5, coord)
@@ -99,6 +105,7 @@ object MainMenu {
         gui.setItem(11, eventGUI)
         gui.setItem(13, randomtp)
         gui.setItem(15, resetGUI)
+        gui.setItem(22, dooritem)
         player.openInventory(gui) // 인벤토리열기
     }
 }

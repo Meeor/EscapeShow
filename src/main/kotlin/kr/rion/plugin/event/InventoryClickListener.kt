@@ -18,6 +18,8 @@ import kr.rion.plugin.gui.Giveitem.ItemGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.randomTP.RandomTpGUI
 import kr.rion.plugin.util.Global.prefix
+import kr.rion.plugin.util.Helicopter.fillBlocks
+import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Item.berries
 import kr.rion.plugin.util.Item.contract
 import kr.rion.plugin.util.Item.flamegun
@@ -25,10 +27,7 @@ import kr.rion.plugin.util.Item.heal
 import kr.rion.plugin.util.Item.mainMenu
 import kr.rion.plugin.util.Item.map
 import kr.rion.plugin.util.Item.teleportCompass
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
+import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -38,6 +37,8 @@ import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
 
 class InventoryClickListener : Listener {
+    private var door = true
+    private val worldWait = Bukkit.getWorld("vip")
     @EventHandler
     fun escapePlayerTeleport(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
@@ -135,6 +136,18 @@ class InventoryClickListener : Listener {
                     event.isCancelled = true
                     player.closeInventory()
                     ResetGUI(player)
+                }
+                hasCustomTag(meta,"game-door") ->{
+                    event.isCancelled = true
+                    if(door){
+                        fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.AIR)
+                        setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.AIR)
+                        player.sendMessage("$prefix ${ChatColor.YELLOW}문을 열었습니다.")
+                    }else{
+                        fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.OAK_FENCE)
+                        setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.OAK_FENCE)
+                        player.sendMessage("$prefix ${ChatColor.YELLOW}문을 닫았습니다.")
+                    }
                 }
             }
         }
