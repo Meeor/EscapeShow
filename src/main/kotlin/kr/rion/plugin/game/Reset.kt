@@ -11,12 +11,17 @@ import org.bukkit.Location
 import org.bukkit.attribute.Attribute
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 object Reset {
     private val worldManager = WorldManager(Loader.instance)
     fun handleGameReset(): Boolean {
         var removedCount = 0
         setInitializedSafeLocations(false)
+        for(player in Bukkit.getOnlinePlayers()){
+            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300 * 20, 1, false, false))
+        }
         Bukkit.broadcastMessage("$prefix 게임월드 리셋을 시작합니다.")
         movePlayersToLobby("game")
         Bukkit.broadcastMessage("${ChatColor.GOLD}** 게임맵을 리셋하는 도중에는 잠시 서버가 렉이 걸릴수있습니다. ** \n** 움직임을 최소화 해주시길 바랍니다. **")

@@ -5,6 +5,7 @@ import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Teleport
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.potion.PotionEffectType
 import org.popcraft.chunky.api.ChunkyAPI
 import org.popcraft.chunky.api.event.task.GenerationCompleteEvent
 
@@ -20,6 +21,9 @@ object ChunkyManager {
                 it.onGenerationComplete { _: GenerationCompleteEvent ->
                     Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                         Teleport.initializeSafeLocations()
+                        for(player in Bukkit.getOnlinePlayers()){
+                            player.removePotionEffect(PotionEffectType.BLINDNESS)
+                        }
                         Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")
                     }, 100L)
                 }
