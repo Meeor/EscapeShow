@@ -44,7 +44,11 @@ class ItemUseEvent : Listener {
             if (item.type == Material.CLOCK) {
                 val meta = item.itemMeta
                 if (meta != null && hasCustomTag(meta, "mainmenu")) {
-                    openMainGUI(player)
+                    if (player.hasPermission("EscapeShow.Game.GUI")) {
+                        openMainGUI(player)
+                    } else {
+                        player.sendMessage("$prefix ${ChatColor.RED}권한이 없습니다.")
+                    }
                 }
             }
 

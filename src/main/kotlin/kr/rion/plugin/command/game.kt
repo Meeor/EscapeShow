@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
 object game {
     fun handlegame(sender: CommandSender) {
         if (sender is Player) {
-            if (sender.isOp) {
+            if (sender.hasPermission("EscapeShow.Game.GUI")) {
                 openMainGUI(sender)
             } else {
                 sender.sendMessage("$prefix ${ChatColor.RED}권한이 없습니다.")
