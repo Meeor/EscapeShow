@@ -123,11 +123,7 @@ class InventoryClickListener : Listener {
                 hasCustomTag(meta, "game-event") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    if (isStarting) {
                     eventGUI(player)
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
                 }
 
                 hasCustomTag(meta, "game-randomtp") -> {
@@ -277,49 +273,81 @@ class InventoryClickListener : Listener {
                 hasCustomTag(meta, "event-sun") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.weatherClear()
+                    if (isStarting) {
+                        GameEvent.weatherClear()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "event-rain") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.weatherRain()
+                    if (isStarting) {
+                        GameEvent.weatherRain()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "event-gravity") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.gravity()
+                    if (isStarting) {
+                        GameEvent.gravity()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "event-earthQuake") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.earthQuake(player)
+                    if (isStarting) {
+                        GameEvent.earthQuake(player)
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "event-donation") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.donation()
+                    if (isStarting) {
+                        GameEvent.donation()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "event-deathCoin") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.deathCoin()
+                    if (isStarting) {
+                        GameEvent.deathCoin()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "event-betting") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.betting()
+                    if (isStarting) {
+                        GameEvent.betting()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "event-random") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    GameEvent.randomEvent(player)
+                    if (isStarting) {
+                        GameEvent.randomEvent(player)
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "nothing") -> {
