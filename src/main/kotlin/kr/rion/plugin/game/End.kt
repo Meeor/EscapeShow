@@ -76,7 +76,7 @@ object End {
                 player.isFlying = false
                 removeDirectionBossBar(player)
                 player.removeScoreboardTag("EscapeComplete")
-                player.removeScoreboardTag("EscapeComplete")
+                player.removeScoreboardTag("death")
                 player.inventory.clear()
                 for (effect in player.activePotionEffects) {
                     player.removePotionEffect(effect.type)
@@ -105,7 +105,7 @@ object End {
                 playersAtParticle.clear()
                 handleGameReset()
                 resetplayerAttribute()
-            }, 20L * 30)
+            }, 20L * 13)
         }, 20L * 12)
     }
 }

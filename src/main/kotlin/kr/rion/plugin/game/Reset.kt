@@ -19,7 +19,7 @@ object Reset {
     fun handleGameReset(): Boolean {
         var removedCount = 0
         setInitializedSafeLocations(false)
-        for(player in Bukkit.getOnlinePlayers()){
+        for (player in Bukkit.getOnlinePlayers()) {
             player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300 * 20, 1, false, false))
         }
         Bukkit.broadcastMessage("$prefix 게임월드 리셋을 시작합니다.")
@@ -35,7 +35,6 @@ object Reset {
         if (!worldManager.copyWorld("backupgame", "game")) {
             return false
         }
-
 
 
         //모든월드의 엔티티제거(플레이어제외)
@@ -61,6 +60,7 @@ object Reset {
         ChunkyManager.loadchunky()
         return true
     }
+
     fun handleLobbyReset(player: Player): Boolean {
         player.sendMessage("$prefix 로비월드 리셋을 시작합니다.")
         movePlayersToLobby("lobby")
@@ -93,6 +93,7 @@ object Reset {
             player.sendMessage("$prefix ${ChatColor.YELLOW}맵 리셋작업이 시작되어 대기실로 이동되었습니다.")
         }
     }
+
     fun resetplayerAttribute() {
         for (player in Bukkit.getOnlinePlayers()) {
 

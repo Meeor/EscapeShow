@@ -94,7 +94,7 @@ object MainMenu {
 
         val doorName = "${ChatColor.GREEN}대기실 문"
         val doorLore = listOf("대기실 문을 열거나 닫습니다.")
-        val dooritem = createCustomItem(doorName,doorLore,Material.OAK_FENCE, persistentDataKey = "game-door")
+        val dooritem = createCustomItem(doorName, doorLore, Material.OAK_FENCE, persistentDataKey = "game-door")
 
 
 
