@@ -123,7 +123,11 @@ class InventoryClickListener : Listener {
                 hasCustomTag(meta, "game-event") -> {
                     event.isCancelled = true
                     player.closeInventory()
+                    if (isStarting) {
                     eventGUI(player)
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
                 }
 
                 hasCustomTag(meta, "game-randomtp") -> {
