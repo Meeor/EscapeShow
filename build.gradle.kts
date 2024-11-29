@@ -24,7 +24,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
     implementation("net.kyori:adventure-api:4.17.0")
-    implementation(files("libs/item-nbt-api-plugin-2.13.1.jar"))
+    implementation(files("libs/item-nbt-api-plugin-2.13.2.jar"))
     compileOnly("com.onarandombox.multiversecore:multiverse-core:4.3.12")
     compileOnly(group = "org.popcraft", name = "chunky-common", version = "1.4.10")
 
