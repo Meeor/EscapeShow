@@ -8,6 +8,8 @@ import kr.rion.plugin.event.VoiceChatEvent
 import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.manager.CommandManager
 import kr.rion.plugin.util.Global
+import kr.rion.plugin.util.Global.EscapePlayerMaxCount
+import kr.rion.plugin.util.Global.endingPlayerMaxCount
 import kr.rion.plugin.util.Teleport
 import org.bukkit.ChatColor
 import org.bukkit.plugin.java.JavaPlugin
@@ -56,6 +58,13 @@ class Loader : JavaPlugin() {
             logger.severe("Multiverse-Core 플러그인이 필요합니다!")
         }
 
+        // config.yml 생성
+        saveDefaultConfig()
+
+        // 콘피그 값 로드
+        EscapePlayerMaxCount = config.getInt("EscapePlayerMaxCount", 3)
+        endingPlayerMaxCount = config.getInt("endingPlayerMaxCount", 6)
+
         object : BukkitRunnable() {
             override fun run() {
                 console.sendMessage("${ChatColor.GOLD}$line")
@@ -79,6 +88,7 @@ class Loader : JavaPlugin() {
 
     override fun onDisable() {
         Global.playerCheckTask?.cancel()
+        saveConfig()
     }
 
     /*
