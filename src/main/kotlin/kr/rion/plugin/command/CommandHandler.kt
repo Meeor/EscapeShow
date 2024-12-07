@@ -21,7 +21,7 @@ class CommandHandler : CommandExecutor {
             location = player.location // 플레이어의 위치 가져오기
         }
         when (command.name.lowercase()) {
-            "탈출인원" -> HandleSetting(sender, args)
+            "인원설정" -> HandleSetting(sender, args)
             "이벤트" -> handleEvent(sender, args)
             "게임" -> handlegame(sender)
 

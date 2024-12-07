@@ -15,7 +15,7 @@ class TabComplete : TabCompleter {
         args: Array<String>
     ): List<String>? {
         return when (command.name.lowercase()) {
-            "탈출인원" -> EscapeSettingTab(args)
+            "인원설정" -> EscapeSettingTab(args)
             "이벤트" -> GameEvent(args)
             else -> null
         }
@@ -24,7 +24,7 @@ class TabComplete : TabCompleter {
 
     private fun EscapeSettingTab(args: Array<out String>): List<String> {
         return if (args.size == 1) {
-            listOf("설정", "확인").filter { it.startsWith(args[0], ignoreCase = true) }
+            listOf("생존", "탈출").filter { it.startsWith(args[0], ignoreCase = true) }
         } else {
             emptyList()
         }

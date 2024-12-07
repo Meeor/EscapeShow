@@ -2,8 +2,7 @@ package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End
-import kr.rion.plugin.game.End.EscapePlayerCount
-import kr.rion.plugin.game.End.EscapePlayerMaxCount
+import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
@@ -20,6 +19,9 @@ import org.bukkit.scheduler.BukkitTask
 
 object Global {
     val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
+    var EscapePlayerCount: Int = 0
+    var EscapePlayerMaxCount: Int = 3
+    var endingPlayerMaxCount: Int = 6
 
     var playerCheckTask: BukkitTask? = null
 
@@ -56,16 +58,18 @@ object Global {
         val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
 
         if (remainingPlayers > 0) {
-            Bukkit.broadcastMessage("${ChatColor.YELLOW}$remainingPlayers ${ChatColor.LIGHT_PURPLE}명이 탈출 가능합니다.")
-        }
-        player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
-        Bossbar.removeDirectionBossBar(player)
-        if (EscapePlayerCount == EscapePlayerMaxCount || SurvivalPlayers() == 0) {
-            if (!isEnding) {
-                End.EndAction()
-            }
+            Bukkit.broadcastMessage("${ChatColor.YELLOW}$remainingPlayers${ChatColor.LIGHT_PURPLE} 명이 탈출 가능합니다.")
+        } else {
+            Bukkit.broadcastMessage("${ChatColor.LIGHT_PURPLE}탈출 허용 인원이 가득 차 헬기가 떠납니다.")
+            Helicopter.remove() // 내부적으로 null 체크를 처리함
         }
 
+
+        player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
+        Bossbar.removeDirectionBossBar(player)
+        if (ifEnding) {
+            endingPlayer()
+        }
     }
 
 
@@ -116,4 +120,15 @@ object Global {
             }
         return survivalPlayers.size  // 필터링된 생존 플레이어의 수 반환
     }
+
+    fun endingPlayer() {
+        val endingPlayerCount: Int = SurvivalPlayers() + EscapePlayerCount
+
+        if (endingPlayerCount == endingPlayerMaxCount) {
+            if (!isEnding) return
+            End.EndAction()
+        }
+
+    }
+
 }

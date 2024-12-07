@@ -22,7 +22,7 @@ class EventListener : Listener {
             InventoryClickListener(),
             InventoryCloseEvent(),
             PlayerMoveListener(),
-            PlayerAttackEvent()
+            EscapePlayerEvent()
         )
 
         // 한 번에 모든 이벤트 등록

@@ -1,6 +1,9 @@
 package kr.rion.plugin.gui
 
+import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.util.Global.EscapePlayerMaxCount
+import kr.rion.plugin.util.Global.endingPlayerMaxCount
 import kr.rion.plugin.util.Item.createCustomItem
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -13,22 +16,13 @@ object MainMenu {
         val gui = Bukkit.createInventory(null, 27, "${ChatColor.DARK_BLUE}메뉴")
 
         val game: ItemStack
-        //게임시작및 종료
-        if (!isStarting) {
-            val gameitemName = "${ChatColor.GREEN}게임 시작"
-            val gameitemLore = listOf(
-                "게임을 시작시킵니다."
-            )
-            game = createCustomItem(gameitemName, gameitemLore, Material.SHROOMLIGHT, persistentDataKey = "game-start")
-        } else {
-            val gameitemName = "${ChatColor.GREEN}게임 종료"
-            val gameitemLore = listOf(
-                "게임을 강제종료합니다.",
-                "",
-                "확인기능없이 클릭시 바로 종료되니 조심히 사용해주시길 바랍니다."
-            )
-            game = createCustomItem(gameitemName, gameitemLore, Material.REDSTONE_LAMP, persistentDataKey = "game-stop")
+        val gameStatus = when {
+            !isStarting -> gameStatus.START
+            !isStart -> gameStatus.STOP
+            else -> gameStatus.WORKING
         }
+
+        game = createGameItem(gameStatus)
         //게임설정메뉴
         val flamegunName = "${ChatColor.RED}플레어건 소환"
         val flamegunLore = listOf(
@@ -96,6 +90,14 @@ object MainMenu {
         val doorLore = listOf("대기실 문을 열거나 닫습니다.")
         val dooritem = createCustomItem(doorName, doorLore, Material.OAK_FENCE, persistentDataKey = "game-door")
 
+        val MaxplayerName = "${ChatColor.AQUA}설정된 인원수"
+        val MaxplayerLore = listOf(
+            "",
+            "${ChatColor.GREEN}설정된 탈출 가능 인원수 : ${ChatColor.YELLOW}$EscapePlayerMaxCount${ChatColor.GREEN}명",
+            "${ChatColor.GREEN}게임종료에 필요한 인원수 : ${ChatColor.YELLOW}$endingPlayerMaxCount${ChatColor.GREEN}명"
+        )
+        val Maxplayer =
+            createCustomItem(MaxplayerName, MaxplayerLore, Material.BEACON, persistentDataKey = "game-player")
 
 
         gui.setItem(1, game)
@@ -106,6 +108,43 @@ object MainMenu {
         gui.setItem(13, randomtp)
         gui.setItem(15, resetGUI)
         gui.setItem(22, dooritem)
+        gui.setItem(26, Maxplayer)
         player.openInventory(gui) // 인벤토리열기
     }
+
+    // 상태별 아이템 생성 함수
+    private fun createGameItem(status: gameStatus): ItemStack {
+        return when (status) {
+            gameStatus.START -> createCustomItem(
+                "${ChatColor.GREEN}게임 시작",
+                listOf("게임을 시작시킵니다."),
+                Material.SHROOMLIGHT,
+                persistentDataKey = "game-start"
+            )
+
+            gameStatus.STOP -> createCustomItem(
+                "${ChatColor.RED}게임 종료",
+                listOf(
+                    "게임을 강제종료합니다.",
+                    "",
+                    "확인기능없이 클릭시 바로 종료되니 조심히 사용해주시길 바랍니다."
+                ),
+                Material.REDSTONE_LAMP,
+                persistentDataKey = "game-stop"
+            )
+
+            gameStatus.WORKING -> createCustomItem(
+                "${ChatColor.YELLOW}게임 작업 중입니다.",
+                listOf(
+                    "",
+                    "게임 시작에 필요한 작업 중에 있습니다.",
+                    ""
+                ),
+                Material.OBSIDIAN,
+                persistentDataKey = "game-starting"
+            )
+        }
+    }
 }
+
+

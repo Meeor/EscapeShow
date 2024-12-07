@@ -39,6 +39,7 @@ import org.bukkit.persistence.PersistentDataType
 class InventoryClickListener : Listener {
     private var door = true
     private val worldWait = Bukkit.getWorld("vip")
+
     @EventHandler
     fun escapePlayerTeleport(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
@@ -79,7 +80,7 @@ class InventoryClickListener : Listener {
                     player.closeInventory()
                     if (!isStarting && !isStart) {
                         startAction()
-                    }else{
+                    } else {
                         player.sendMessage("$prefix 이미 시작중입니다.")
                     }
                 }
@@ -89,10 +90,15 @@ class InventoryClickListener : Listener {
                     player.closeInventory()
                     if (isStarting && !isStart) {
                         EndAction()
-                    }else{
+                    } else {
                         player.sendMessage("$prefix 게임이 시작되지 않았습니다.")
                     }
                 }
+
+                hasCustomTag(meta, "game-starting") -> {
+                    event.isCancelled = true
+                }
+
 
                 hasCustomTag(meta, "game-flamegun") -> {
                     event.isCancelled = true
@@ -137,19 +143,32 @@ class InventoryClickListener : Listener {
                     player.closeInventory()
                     ResetGUI(player)
                 }
-                hasCustomTag(meta,"game-door") ->{
+
+                hasCustomTag(meta, "game-door") -> {
                     event.isCancelled = true
-                    if(door){
-                        fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.AIR)
-                        setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.AIR)
+                    if (door) {
+                        fillBlocks(
+                            Location(worldWait, 23.0, 60.0, -46.0),
+                            Location(worldWait, 23.0, 57.0, -44.0),
+                            Material.AIR
+                        )
+                        setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.AIR)
                         door = !door
                         player.sendMessage("$prefix ${ChatColor.YELLOW}문을 열었습니다.")
-                    }else{
-                        fillBlocks(Location(worldWait,23.0,60.0,-46.0),Location(worldWait,23.0,57.0,-44.0),Material.OAK_FENCE)
-                        setBlockWithAttributes(Location(worldWait,23.0,61.0,-45.0),Material.OAK_FENCE)
+                    } else {
+                        fillBlocks(
+                            Location(worldWait, 23.0, 60.0, -46.0),
+                            Location(worldWait, 23.0, 57.0, -44.0),
+                            Material.OAK_FENCE
+                        )
+                        setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.OAK_FENCE)
                         door = !door
                         player.sendMessage("$prefix ${ChatColor.YELLOW}문을 닫았습니다.")
                     }
+                }
+
+                hasCustomTag(meta, "game-player") -> {
+                    event.isCancelled = true
                 }
             }
         }

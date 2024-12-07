@@ -5,11 +5,11 @@ import kr.rion.plugin.game.Reset.handleGameReset
 import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startportal
-import kr.rion.plugin.item.FlameGunActions.flaregunstart
+import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
-import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global
+import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Helicopter.fillBlocks
@@ -18,10 +18,10 @@ import org.bukkit.*
 
 object End {
     var isEnding: Boolean = true
+    var ifEnding: Boolean = false
 
-    var EscapePlayerCount: Int = 0
-    var EscapePlayerMaxCount: Int = 6
     var EscapePlayers: MutableList<String> = mutableListOf()
+    var SurvivalPlayers: MutableList<String> = mutableListOf()
     private val soundName = "custom.bye"
     fun EndAction() {
         val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기
@@ -42,12 +42,11 @@ object End {
         Helicopter.remove()
         HelicopterisSpawn = false
         //플레어건 탈출파티클 끝내기
-        startEscape = false
-        flaregunstart?.cancel()
-        flaregunstart = null
+        ifEnding = false
         startportal = false
         isStarting = false
         isEnding = true
+        chestEnable = false
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
         //여기까지.종료직후리셋.
@@ -56,7 +55,7 @@ object End {
             player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
 
-        //사망자,탈출자,운영자를제외한 남은플레이어 죽이기!
+        //사망자,탈출자,운영자를제외한 남은플레이어는 생존한플레이어로 !
         world?.players?.forEach { player ->
             // 플레이어가 서바이벌 모드인 경우
             if (!player.scoreboardTags.contains("death") && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains(
@@ -64,7 +63,8 @@ object End {
                 )
             ) {
                 Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                    player.health = 0.0 // 플레이어의 체력을 0으로 설정하여 죽이기
+                    player.sendTitle("${ChatColor.GREEN}생존하였습니다!", "")
+                    SurvivalPlayers.add(player.name)
                 }, 20L * 10)
             }
         }
@@ -89,9 +89,20 @@ object End {
                 }
             }
             val line = "=".repeat(40)
-            val gongback = " ".repeat(22)
-            val message =
-                "$gongback${ChatColor.GREEN}탈출한 플레이어 \n$gongback${ChatColor.YELLOW}${EscapePlayers.joinToString(" \n$gongback${ChatColor.YELLOW}")}"
+            val escapePlayersMessage = if (EscapePlayers.isNotEmpty()) {
+                EscapePlayers.joinToString(", ") { "${ChatColor.GOLD}${ChatColor.BOLD}${ChatColor.UNDERLINE}$it${ChatColor.RESET}" }
+            } else {
+                "없음"
+            }
+
+            val survivalPlayersMessage = if (SurvivalPlayers.isNotEmpty()) {
+                SurvivalPlayers.joinToString(", ") { "${ChatColor.GOLD}${ChatColor.BOLD}${ChatColor.UNDERLINE}$it${ChatColor.RESET}" }
+            } else {
+                "없음"
+            }
+
+            val message = "${ChatColor.GREEN}탈출한 플레이어 : $escapePlayersMessage\n" +
+                    "${ChatColor.GREEN}생존한 플레이어 : $survivalPlayersMessage"
 
             // 메시지를 모든 플레이어에게 브로드캐스트
             Bukkit.broadcastMessage("${ChatColor.GOLD}$line")

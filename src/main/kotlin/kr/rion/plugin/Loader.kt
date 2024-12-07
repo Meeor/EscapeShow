@@ -5,6 +5,7 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager
 import de.maxhenkel.voicechat.api.BukkitVoicechatService
 import kr.rion.plugin.event.EventListener
 import kr.rion.plugin.event.VoiceChatEvent
+import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.manager.CommandManager
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Teleport
@@ -20,6 +21,7 @@ class Loader : JavaPlugin() {
         lateinit var instance: Loader
             private set
     }
+
 
     private val console = server.consoleSender
     override fun onEnable() {
@@ -77,5 +79,13 @@ class Loader : JavaPlugin() {
 
     override fun onDisable() {
         Global.playerCheckTask?.cancel()
+    }
+
+    /*
+    하이네님 플러그인에서 게임종료를 활성화 시키도록 해주는 함수
+     */
+    @Suppress("unused")
+    fun gameEndingEnable() {
+        ifEnding = true
     }
 }

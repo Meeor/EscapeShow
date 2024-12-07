@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitTask
 object FlameGunSpawn {
     var chestLocation: Location? = null // 플레어건 상자의 위치 저장
     var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
+    var chestEnable: Boolean = false
 
     // 플레어건 상자 생성 함수 (GUI 클릭 이벤트에서 호출할 수 있도록 수정)
     fun spawnFlareGunChest(player: Player, location: Location) {
@@ -20,10 +21,15 @@ object FlameGunSpawn {
             player.sendMessage("$prefix 이미 플레어건이 소환되어있는것 같습니다.")
             return
         }
+        if (chestEnable) {
+            player.sendMessage("$prefix 플레어건을 이미 1회 소환하였습니다.")
+            return
+        }
 
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             location.block.type = Material.CHEST
             chestLocation = location.block.location // 상자 위치 저장
+            chestEnable = true
             val chest = location.block.state as Chest
             // 플레어건을 상자의 14번 칸(정중앙)에 배치
             val item = createFlareGunItem()

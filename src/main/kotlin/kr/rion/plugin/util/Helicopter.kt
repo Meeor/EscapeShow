@@ -1,6 +1,8 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.item.FlameGunActions.flaregunstart
+import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.util.Bossbar.createDirectionBossBarForAll
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -529,6 +531,9 @@ object Helicopter {
                 setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.AIR)
             }
         }, 20L * 30) // 30초 후
+        startEscape = false
+        flaregunstart?.cancel()
+        flaregunstart = null
     }
 
     fun setloc(base: Location, x: Double, y: Double, z: Double): Location {
