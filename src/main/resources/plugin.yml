@@ -10,9 +10,9 @@ libraries:
   - org.jetbrains.kotlin:kotlin-reflect:1.9.25
 
 commands:
-  탈출인원:
-    description: 자동게임종료가 몇명이되어야 탈출하는지 설정하거나 확인합니다.
-    usage: /<command> <확인/설정>
+  인원설정:
+    description: 게임의 탈출인원수랑 총탈출인원수를 설정합니다.
+    usage: /<command> <게임종료/탈출> <숫자>
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
   이벤트:

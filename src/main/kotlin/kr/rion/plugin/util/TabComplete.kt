@@ -24,7 +24,7 @@ class TabComplete : TabCompleter {
 
     private fun EscapeSettingTab(args: Array<out String>): List<String> {
         return if (args.size == 1) {
-            listOf("생존", "탈출").filter { it.startsWith(args[0], ignoreCase = true) }
+            listOf("게임종료", "탈출").filter { it.startsWith(args[0], ignoreCase = true) }
         } else {
             emptyList()
         }

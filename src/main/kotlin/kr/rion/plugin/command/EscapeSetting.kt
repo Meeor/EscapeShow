@@ -14,12 +14,12 @@ object EscapeSetting {
     fun HandleSetting(sender: CommandSender, args: Array<out String>) {
         // 인수가 비었는지 확인
         if (args.isEmpty() || args.size < 2) {
-            sender.sendMessage("$prefix 사용법: /인원설정 <생존/탈출> <숫자>")
+            sender.sendMessage("$prefix 사용법: /인원설정 <게임종료/탈출> <숫자>")
             return
         }
 
         when (args[0].lowercase(Locale.getDefault())) {
-            "생존" -> {
+            "게임종료" -> {
                 val playerCount = parsePlayerCount(sender, args[1]) ?: return
                 config.set("endingPlayerMaxCount", playerCount)
                 endingPlayerMaxCount = playerCount
