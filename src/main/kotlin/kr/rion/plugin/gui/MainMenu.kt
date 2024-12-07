@@ -1,5 +1,6 @@
 package kr.rion.plugin.gui
 
+import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
@@ -15,14 +16,13 @@ object MainMenu {
     fun openMainGUI(player: Player) {
         val gui = Bukkit.createInventory(null, 27, "${ChatColor.DARK_BLUE}메뉴")
 
-        val game: ItemStack
         val gameStatus = when {
             !isStarting -> gameStatus.START
             !isStart -> gameStatus.STOP
             else -> gameStatus.WORKING
         }
 
-        game = createGameItem(gameStatus)
+        val game = createGameItem(gameStatus)
         //게임설정메뉴
         val flamegunName = "${ChatColor.RED}플레어건 소환"
         val flamegunLore = listOf(
@@ -98,6 +98,19 @@ object MainMenu {
         )
         val Maxplayer =
             createCustomItem(MaxplayerName, MaxplayerLore, Material.BEACON, persistentDataKey = "game-player")
+        val Ending: ItemStack
+
+        if(ifEnding){
+            val EndingName = "${ChatColor.GREEN}게임 자동 종료 상태"
+            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Enable(활성화)","","클릭시 수동으로 변경가능합니다.")
+            Ending = createCustomItem(EndingName,EndingLore,Material.LIME_WOOL, persistentDataKey = "game-ending")
+        } else {
+            val EndingName = "${ChatColor.GREEN}게임 자동 종료 상태"
+            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Disable(비활성화)","","클릭시 수동으로 변경가능합니다.")
+
+            Ending = createCustomItem(EndingName,EndingLore,Material.RED_WOOL, persistentDataKey = "game-ending")
+        }
+
 
 
         gui.setItem(1, game)
@@ -107,6 +120,7 @@ object MainMenu {
         gui.setItem(11, eventGUI)
         gui.setItem(13, randomtp)
         gui.setItem(15, resetGUI)
+        gui.setItem(18, Ending)
         gui.setItem(22, dooritem)
         gui.setItem(26, Maxplayer)
         player.openInventory(gui) // 인벤토리열기
