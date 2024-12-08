@@ -15,17 +15,6 @@ class InventoryCloseEvent : Listener {
     fun onInventoryClose(event: InventoryCloseEvent) {
         val inventory = event.inventory
 
-        // 메인 메뉴일 경우 신호기 제거
-        if (event.view.title == "${ChatColor.DARK_BLUE}메뉴") {
-            inventory.contents.forEach { item ->
-                if (item?.type == Material.BEACON) {
-                    inventory.remove(item) // 신호기 아이템 제거
-                }
-            }
-            inventory.clear()
-            return
-        }
-
         // 닫힌 상자가 플레어건 상자와 일치하지 않으면 리턴
         if (chestLocation == null || chestLocation!!.block != event.player.location.block) {
             return
