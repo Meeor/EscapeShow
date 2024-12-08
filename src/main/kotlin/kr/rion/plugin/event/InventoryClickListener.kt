@@ -175,9 +175,9 @@ class InventoryClickListener : Listener {
 
                 hasCustomTag(meta,"game-ending") ->{
                     event.isCancelled = true
+                    ifEnding = !ifEnding
                     player.closeInventory()
                     openMainGUI(player)
-                    ifEnding = !ifEnding
                     if(ifEnding){
                         player.sendMessage("$prefix 게임자동종료 기능을 강제로 활성화 했습니다.")
                     }else{
