@@ -14,14 +14,18 @@ class InventoryCloseEvent : Listener {
     fun onInventoryClose(event: InventoryCloseEvent) {
         val inventory = event.inventory
 
-        // 플레어건 상자 위치와 닫힌 상자 위치가 일치하는지 확인
-        if (chestLocation != null) {
-            if (inventory.isEmpty) {
-                chestLocation!!.block.type = Material.AIR // 상자 부수기
-                particleTask?.cancel() // 파티클 반복 종료
-                chestLocation = null // 상자 위치 초기화
-                Bukkit.broadcastMessage("$prefix 누군가가 플레어건을 획득했습니다!")
-            }
+        // 닫힌 상자가 플레어건 상자와 일치하지 않으면 리턴
+        if (chestLocation == null || chestLocation!!.block != event.player.location.block) {
+            return
+        }
+
+        // 인벤토리가 비었는지 확인
+        if (inventory.isEmpty) {
+            chestLocation!!.block.type = Material.AIR // 상자 제거
+            particleTask?.cancel() // 파티클 반복 종료
+            chestLocation = null // 위치 초기화
+            Bukkit.broadcastMessage("$prefix 누군가가 플레어건을 획득했습니다!")
         }
     }
+
 }
