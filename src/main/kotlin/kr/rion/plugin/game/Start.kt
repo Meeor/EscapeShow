@@ -91,27 +91,46 @@ object Start {
         }
     }
 
-    // 좌표 범위 내의 모든 블록을 공기로 변경하고 파괴 효과를 적용하는 함수
     private fun fillBlocksInRange(world: World, x1: Int, y1: Int, z1: Int, x2: Int, y2: Int, z2: Int) {
-        // 범위 내의 모든 블록을 공기로 변경
+        val blocks = mutableListOf<Location>()
+
+        // 범위 내의 모든 블록을 리스트에 추가
         for (x in x1.coerceAtMost(x2)..x1.coerceAtLeast(x2)) {
             for (y in y1.coerceAtMost(y2)..y1.coerceAtLeast(y2)) {
                 for (z in z1.coerceAtMost(z2)..z1.coerceAtLeast(z2)) {
-                    val block = world.getBlockAt(x, y, z)
-                    block.type = Material.AIR // 블록을 공기로 변경
-
-                    // 소리와 파티클 효과 추가
-                    for (player in Bukkit.getOnlinePlayers()) {
-                        player.playSound(block.location, Sound.BLOCK_STONE_BREAK, 1.0f, 1.0f)
-                        player.world.spawnParticle(
-                            Particle.BLOCK_CRACK,
-                            block.location.add(0.5, 0.5, 0.5),
-                            30,
-                            block.blockData
-                        )
-                    }
+                    blocks.add(world.getBlockAt(x, y, z).location)
                 }
             }
         }
+
+        // 일정 간격으로 블록을 처리
+        object : BukkitRunnable() {
+            var index = 0
+            override fun run() {
+                val batchSize = 50 // 한 번에 처리할 블록 수
+
+                for (i in 0 until batchSize) {
+                    if (index >= blocks.size) {
+                        // 모든 블록 처리 완료 시, 소리와 파티클 한 번 실행
+                        for (player in Bukkit.getOnlinePlayers()) {
+                            player.playSound(blocks.first().add(0.5, 0.5, 0.5), Sound.BLOCK_STONE_BREAK, 1.0f, 1.0f)
+                            player.world.spawnParticle(
+                                Particle.BLOCK_CRACK,
+                                blocks.first().add(0.5, 0.5, 0.5),
+                                50, // 총 파티클 수
+                                blocks.first().block.blockData
+                            )
+                        }
+                        cancel() // 모든 블록 처리 후 반복 종료
+                        return
+                    }
+                    val location = blocks[index]
+                    val block = world.getBlockAt(location)
+                    block.type = Material.AIR // 블록을 공기로 변경
+                    index++
+                }
+            }
+        }.runTaskTimer(Loader.instance, 0L, 1L) // 1틱 간격으로 실행
     }
+
 }

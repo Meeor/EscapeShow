@@ -16,6 +16,7 @@ import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
 import kr.rion.plugin.gui.Giveitem.ItemGUI
+import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.randomTP.RandomTpGUI
 import kr.rion.plugin.util.Global.prefix
@@ -174,6 +175,8 @@ class InventoryClickListener : Listener {
 
                 hasCustomTag(meta,"game-ending") ->{
                     event.isCancelled = true
+                    player.closeInventory()
+                    openMainGUI(player)
                     ifEnding = !ifEnding
                     if(ifEnding){
                         player.sendMessage("$prefix 게임자동종료 기능을 강제로 활성화 했습니다.")
