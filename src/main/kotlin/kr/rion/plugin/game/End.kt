@@ -10,6 +10,7 @@ import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.EscapePlayerCount
+import kr.rion.plugin.util.Global.door
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Helicopter.fillBlocks
@@ -47,6 +48,7 @@ object End {
         isStarting = false
         isEnding = true
         chestEnable = false
+        door = true
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
         //여기까지.종료직후리셋.
