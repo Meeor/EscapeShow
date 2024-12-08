@@ -19,6 +19,7 @@ import kr.rion.plugin.gui.Giveitem.ItemGUI
 import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.randomTP.RandomTpGUI
+import kr.rion.plugin.util.Global.door
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
@@ -39,7 +40,6 @@ import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
 
 class InventoryClickListener : Listener {
-    private var door = true
     private val worldWait = Bukkit.getWorld("vip")
 
     @EventHandler

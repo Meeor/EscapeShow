@@ -22,6 +22,7 @@ object Global {
     var EscapePlayerCount: Int = 0
     var EscapePlayerMaxCount: Int = 3
     var endingPlayerMaxCount: Int = 6
+    var door = true
 
     var playerCheckTask: BukkitTask? = null
 
