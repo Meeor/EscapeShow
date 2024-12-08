@@ -97,7 +97,7 @@ object MainMenu {
             "${ChatColor.GREEN}게임종료에 필요한 인원수 : ${ChatColor.YELLOW}$endingPlayerMaxCount${ChatColor.GREEN}명"
         )
         val Maxplayer =
-            createCustomItem(MaxplayerName, MaxplayerLore, Material.BEACON, persistentDataKey = "game-player")
+            createCustomItem(MaxplayerName, MaxplayerLore, Material.NETHER_STAR, persistentDataKey = "game-player")
         val Ending: ItemStack
 
         if(ifEnding){
