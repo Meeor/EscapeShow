@@ -70,7 +70,7 @@ object credit {
                     }
                 }
 
-                if (creditIndex == credits.size -2) {
+                if (creditIndex == credits.size -1) {
                     if (roleIndex >= rawRole.length && nameIndex >= rawName.length) {
                         // 크레딧 요약 메시지 출력
                         val creditSummary = """
