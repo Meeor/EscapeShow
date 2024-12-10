@@ -70,8 +70,8 @@ object credit {
                     }
                 }
 
-                if (creditIndex == credits.size -1) {
-                    if (roleIndex == rawRole.length && nameIndex == rawName.length) {
+                if (creditIndex == credits.size -2) {
+                    if (roleIndex >= rawRole.length && nameIndex >= rawName.length) {
                         // 크레딧 요약 메시지 출력
                         val creditSummary = """
 ${ChatColor.of("#FF0000")}=============== 팀장 =================
@@ -104,7 +104,13 @@ ${ChatColor.of("#c5d7e8")}============= 테스터 ================
 빗고리, 오즈, 오개, 미밐, 반요화,
 솔롱고스, 이류, 호라용이, 울먹임, !!,
 갱후니
-${ChatColor.of("#cc99ff")}========== ${ChatColor.of("#FF0000")}S${ChatColor.of("#FF4000")}p${ChatColor.of("#FF7F00")}e${
+                    """.trimIndent()
+                        val creditSummary2 = """
+                            ${ChatColor.of("#cc99ff")}========== ${ChatColor.of("#FF0000")}S${ChatColor.of("#FF4000")}p${
+                            ChatColor.of(
+                                "#FF7F00"
+                            )
+                        }e${
                             ChatColor.of(
                                 "#FFBF00"
                             )
@@ -117,7 +123,11 @@ ${ChatColor.of("#cc99ff")}========== ${ChatColor.of("#FF0000")}S${ChatColor.of("
                                 "#7000AB"
                             )
                         }k${ChatColor.of("#9400D3")}s${ChatColor.of("#cc99ff")} ==========
-                ${ChatColor.of("#00FFE0")}C${ChatColor.of("#18E6E3")}h${ChatColor.of("#2FCCE6")}a${ChatColor.of("#47B3E9")}t ${
+                                            ${ChatColor.of("#00FFE0")}C${ChatColor.of("#18E6E3")}h${ChatColor.of("#2FCCE6")}a${
+                            ChatColor.of(
+                                "#47B3E9"
+                            )
+                        }t ${
                             ChatColor.of(
                                 "#7680F0"
                             )
@@ -126,8 +136,9 @@ ${ChatColor.of("#cc99ff")}========== ${ChatColor.of("#FF0000")}S${ChatColor.of("
                                 "#EB00FF"
                             )
                         }o
-                    """.trimIndent()
+                        """.trimIndent()
                         Bukkit.broadcastMessage(creditSummary)
+                        Bukkit.broadcastMessage(creditSummary2)
                         for (player in Bukkit.getOnlinePlayers()) {
                             player.playSound(player.location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f)
                         }
