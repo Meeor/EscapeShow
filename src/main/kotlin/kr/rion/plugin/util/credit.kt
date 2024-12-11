@@ -18,7 +18,7 @@ object credit {
             override fun run() {
                 if (!reverse && index >= maxLen) {
                     // 대기 후 글자 지우기로 전환
-                    Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable { reverse = true }, 14)
+                    Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable { reverse = true }, 10)
                     return
                 }
 
@@ -38,7 +38,7 @@ object credit {
                 // 순서 제어
                 if (reverse) index-- else index++
             }
-        }.runTaskTimer(Loader.instance, 0, 2) // 2틱 간격 실행
+        }.runTaskTimer(Loader.instance, 0, 1) // 1틱 간격 실행
     }
 
     private fun displayCredits(player: Player, credits: List<Pair<String, String>>) {
@@ -63,7 +63,7 @@ object credit {
                     player.sendTitle(roleToDisplay, nameToDisplay, 0, 100,10)
                 }
               // 사운드 재생: 글자 길이의 1/3 기준
-            val maxSoundPlays = (rawRole.length.coerceAtLeast(rawName.length) / 3).coerceAtLeast(1) // 최소 1번은 재생
+            val maxSoundPlays = (rawRole.length.coerceAtLeast(rawName.length) / 3).coerceAtLeast(3) // 최소 3번은 재생
             if (!reverse && soundPlayed < maxSoundPlays) {
                 if (roleIndex % (rawRole.length / maxSoundPlays).coerceAtLeast(1) == 0 || 
                     nameIndex % (rawName.length / maxSoundPlays).coerceAtLeast(1) == 0) {
@@ -157,10 +157,10 @@ ${ChatColor.of("#c5d7e8")}============= 테스터 ================
 
                     // 글자 모두 출력된 경우
                     if (roleIndex == role.length && nameIndex == name.length) {
-                        // 모두 출력되면 14틱 대기 후 지우기 시작
+                        // 모두 출력되면 10틱 대기 후 지우기 시작
                         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                             reverse = true
-                        }, 14)
+                        }, 10)
                     }
                 } else {
                     if (roleIndex > 0) roleIndex--
@@ -174,7 +174,7 @@ ${ChatColor.of("#c5d7e8")}============= 테스터 ================
                     }
                 }
             }
-        }.runTaskTimer(Loader.instance, 0, 2) // 2틱 간격 실행
+        }.runTaskTimer(Loader.instance, 0, 1) // 1틱 간격 실행
     }
 
 
