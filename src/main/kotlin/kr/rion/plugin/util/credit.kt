@@ -1,3 +1,4 @@
+/*
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
@@ -178,9 +179,11 @@ ${ChatColor.of("#c5d7e8")}============= 테스터 ================
     }
 
 
-    /**
+    */
+/**
      * 색상 코드와 함께 글자를 한 글자씩 출력하도록 처리하는 함수
-     */
+     *//*
+
     fun parseColoredText(text: String, visibleLength: Int): String {
         val builder = StringBuilder()
         var currentColor = ""
@@ -216,4 +219,4 @@ ${ChatColor.of("#c5d7e8")}============= 테스터 ================
         return builder.toString()
     }
 
-}
+}*/

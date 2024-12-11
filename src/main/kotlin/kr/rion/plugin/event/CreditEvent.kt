@@ -1,3 +1,4 @@
+/*
 package kr.rion.plugin.event
 
 import kr.rion.plugin.util.credit.displayEscapeShow
@@ -68,4 +69,4 @@ class CreditEvent: Listener {
             }
         }
     }
-}
+}*/
