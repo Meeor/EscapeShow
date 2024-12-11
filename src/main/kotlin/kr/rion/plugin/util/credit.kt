@@ -39,7 +39,7 @@ object credit {
                 // 순서 제어
                 if (reverse) index-- else index++
             }
-        }.runTaskTimer(Loader.instance, 0, 1) // 1틱 간격 실행
+        }.runTaskTimer(Loader.instance, 0, 2) // 2틱 간격 실행
     }
 
     private fun displayCredits(player: Player, credits: List<Pair<String, String>>) {
@@ -61,19 +61,20 @@ object credit {
                 val rawName = name.replace(Regex("§[0-9a-fk-orx]"), "")
 
                 if (roleIndex - 2 < rawRole.length || nameIndex - 2 < rawName.length) {
-                    player.sendTitle(roleToDisplay, nameToDisplay, 0, 100,10)
+                    player.sendTitle(roleToDisplay, nameToDisplay, 0, 100, 10)
                 }
-              // 사운드 재생: 글자 길이의 1/3 기준
-            val maxSoundPlays = (rawRole.length.coerceAtLeast(rawName.length) / 3).coerceAtLeast(3) // 최소 3번은 재생
-            if (!reverse && soundPlayed < maxSoundPlays) {
-                if (roleIndex % (rawRole.length / maxSoundPlays).coerceAtLeast(1) == 0 || 
-                    nameIndex % (rawName.length / maxSoundPlays).coerceAtLeast(1) == 0) {
-                    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
-                    soundPlayed++
+                // 사운드 재생: 글자 길이의 1/3 기준
+                val maxSoundPlays = (rawRole.length.coerceAtLeast(rawName.length) / 2).coerceAtLeast(3) // 최소 3번은 재생
+                if (!reverse && soundPlayed < maxSoundPlays) {
+                    if (roleIndex % (rawRole.length / maxSoundPlays).coerceAtLeast(1) == 0 ||
+                        nameIndex % (rawName.length / maxSoundPlays).coerceAtLeast(1) == 0
+                    ) {
+                        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
+                        soundPlayed++
+                    }
                 }
-            }
 
-                if (creditIndex == credits.size -1) {
+                if (creditIndex == credits.size - 1) {
                     if (roleIndex >= rawRole.length && nameIndex >= rawName.length) {
                         // 크레딧 요약 메시지 출력
                         val creditSummary = """
@@ -175,14 +176,11 @@ ${ChatColor.of("#c5d7e8")}============= 테스터 ================
                     }
                 }
             }
-        }.runTaskTimer(Loader.instance, 0, 1) // 1틱 간격 실행
+        }.runTaskTimer(Loader.instance, 4, 2) // 4틱 대시후 2틱 간격 실행
     }
 
+/////////// 색상 코드와 함께 글자를 한 글자씩 출력하도록 처리하는 함수
 
-    */
-/**
-     * 색상 코드와 함께 글자를 한 글자씩 출력하도록 처리하는 함수
-     *//*
 
     fun parseColoredText(text: String, visibleLength: Int): String {
         val builder = StringBuilder()
@@ -219,4 +217,5 @@ ${ChatColor.of("#c5d7e8")}============= 테스터 ================
         return builder.toString()
     }
 
-}*/
+}
+*/
