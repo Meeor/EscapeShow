@@ -14,6 +14,9 @@ object Start {
     fun startAction() {
         isStart = true
         startportal = true
+        for (player in Bukkit.getOnlinePlayers()) {
+            player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
+        }
         executeBlockFillingAndEffect()
         isEnding = false
     }
@@ -111,15 +114,9 @@ object Start {
 
                 for (i in 0 until batchSize) {
                     if (index >= blocks.size) {
-                        // 모든 블록 처리 완료 시, 소리와 파티클 한 번 실행
+                        // 모든 블록 처리 완료 시, 소리 한 번 실행
                         for (player in Bukkit.getOnlinePlayers()) {
                             player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
-                            player.world.spawnParticle(
-                                Particle.BLOCK_CRACK,
-                                blocks.first().add(0.5, 0.5, 0.5),
-                                50, // 총 파티클 수
-                                blocks.first().block.blockData
-                            )
                         }
                         cancel() // 모든 블록 처리 후 반복 종료
                         return
