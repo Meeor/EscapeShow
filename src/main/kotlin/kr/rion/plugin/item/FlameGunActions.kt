@@ -2,6 +2,8 @@ package kr.rion.plugin.item
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.Global.EscapePlayerCount
+import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
@@ -120,12 +122,17 @@ object FlameGunActions {
             return  // 탈출이 이미 진행 중이면 함수 종료
         }
 
+
         flaregunstart = object : BukkitRunnable() {
             var tickCount = 0L
             val playerTickCount = mutableMapOf<Player, Long>() // 플레이어가 움직이지 않은 시간 기록
             val failedPlayers = mutableSetOf<Player>() // 탈출 실패 메시지를 한 번만 보낸 플레이어 목록'
 
             override fun run() {
+                if(EscapePlayerCount >= EscapePlayerMaxCount) {
+                    this.cancel()
+                    return
+                }
                 // 모든 플레이어가 탈출 인식 대상
                 Bukkit.getOnlinePlayers()
                     .filter {
