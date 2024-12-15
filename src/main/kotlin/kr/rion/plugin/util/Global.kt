@@ -47,8 +47,12 @@ object Global {
         // 투명화 버프 부여 (무한지속시간)
         val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
         val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
+        val hangerEffect = PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 1, false, false)
+        val healthEffect = PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 5, false, false)
         player.addPotionEffect(invisibilityEffect)
         player.addPotionEffect(blindEffect)
+        player.addPotionEffect(hangerEffect)
+        player.addPotionEffect(healthEffect)
         player.inventory.clear()
         player.inventory.setItem(8, teleportCompass())
         EscapePlayerCount++
