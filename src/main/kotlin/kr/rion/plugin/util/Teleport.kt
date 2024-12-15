@@ -24,7 +24,7 @@ object Teleport {
     val console = Bukkit.getServer().consoleSender
     val immunePlayers = mutableMapOf<Player, Long>() // 플레이어와 면역 시간 맵
 
-    var hasInitializedSafeLocations = false
+    private var hasInitializedSafeLocations = false
 
     fun initialize(plugin: JavaPlugin) {
         this.plugin = plugin
@@ -142,7 +142,7 @@ object Teleport {
     }
 
 
-    fun isLocationSafe(loc: Location): Boolean {
+    private fun isLocationSafe(loc: Location): Boolean {
         val block = loc.block
         val blockAbove = loc.clone().add(0.0, 1.0, 0.0).block
         val blockAboveTwo = loc.clone().add(0.0, 2.0, 0.0).block
@@ -164,7 +164,7 @@ object Teleport {
                 ).contains(blockBelow.type)
     }
 
-    fun setImmune(player: Player, duration: Long) {
+    private fun setImmune(player: Player, duration: Long) {
         val currentTime = System.currentTimeMillis()
         immunePlayers[player] = currentTime + duration
         Bukkit.getScheduler().runTaskLater(plugin, Runnable {

@@ -22,12 +22,6 @@ class Loader : JavaPlugin() {
     companion object {
         lateinit var instance: Loader
             private set
-
-        @JvmStatic
-        fun getInstance(): Loader {
-            return instance
-        }
-
     }
 
 

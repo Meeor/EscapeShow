@@ -536,7 +536,7 @@ object Helicopter {
         flaregunstart = null
     }
 
-    fun setloc(base: Location, x: Double, y: Double, z: Double): Location {
+    private fun setloc(base: Location, x: Double, y: Double, z: Double): Location {
         return base.clone().add(x, y, z)
     }
 

@@ -22,7 +22,7 @@ object End {
     var ifEnding: Boolean = false
 
     var EscapePlayers: MutableList<String> = mutableListOf()
-    var SurvivalPlayers: MutableList<String> = mutableListOf()
+    private var SurvivalPlayers: MutableList<String> = mutableListOf()
     private val soundName = "custom.bye"
     fun EndAction() {
         val world = Bukkit.getWorld("game")  // Multiverse 대신 Bukkit API로 월드 가져오기

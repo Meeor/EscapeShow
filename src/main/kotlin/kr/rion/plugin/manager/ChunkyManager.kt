@@ -11,7 +11,7 @@ import org.popcraft.chunky.api.event.task.GenerationCompleteEvent
 
 
 object ChunkyManager {
-    var chunky: ChunkyAPI? = Bukkit.getServer().servicesManager.load(ChunkyAPI::class.java)
+    private var chunky: ChunkyAPI? = Bukkit.getServer().servicesManager.load(ChunkyAPI::class.java)
 
     fun loadchunky() {
         // ChunkyAPI가 로드되지 않았을 때 예외 처리

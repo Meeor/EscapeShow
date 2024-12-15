@@ -2,7 +2,6 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import net.md_5.bungee.api.ChatColor
-import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
