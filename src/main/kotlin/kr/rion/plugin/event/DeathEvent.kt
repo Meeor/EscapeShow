@@ -20,10 +20,12 @@ class DeathEvent : Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onDeath(event: PlayerDeathEvent) {
         val player: Player = event.player
+        val console = Bukkit.getConsoleSender()
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 2 * 20, 1, false, false))
         player.gameMode = GameMode.SPECTATOR
         player.addScoreboardTag("death")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${Global.SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
+        console.sendMessage("${ChatColor.YELLOW}${event.player.name}${ChatColor.RESET}님이${ChatColor.RED}사망${ChatColor.RESET}하였습니다.")
         Bossbar.removeDirectionBossBar(player)
         if (ifEnding) {
             endingPlayer()
