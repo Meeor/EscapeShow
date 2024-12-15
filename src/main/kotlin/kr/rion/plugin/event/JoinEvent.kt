@@ -2,6 +2,8 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import net.md_5.bungee.api.ChatColor
+import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -31,5 +33,13 @@ class JoinEvent : Listener {
                 event.player.sendMessage("${ChatColor.GOLD}$line")
             }
         }.runTask(Loader.instance)
+        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+            if (event.player.scoreboardTags.contains("EscapeComplete") ||
+                event.player.scoreboardTags.contains("death") ||
+                event.player.scoreboardTags.contains("manager")
+            ) {
+                event.player.gameMode = GameMode.SPECTATOR
+            }
+        },30L)
     }
 }
