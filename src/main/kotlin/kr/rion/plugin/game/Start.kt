@@ -1,7 +1,14 @@
 package kr.rion.plugin.game
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.End.EscapePlayers
 import kr.rion.plugin.game.End.isEnding
+import kr.rion.plugin.game.Reset.resetplayerAttribute
+import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
+import kr.rion.plugin.item.FlameGunActions.playersAtParticle
+import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
+import kr.rion.plugin.util.Global.EscapePlayerCount
+import kr.rion.plugin.util.Global.door
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
@@ -19,6 +26,20 @@ object Start {
         }
         executeBlockFillingAndEffect()
         isEnding = false
+        chestEnable = false
+        EscapePlayerCount = 0
+        door = true
+        for(player in Bukkit.getOnlinePlayers()) {
+            player.allowFlight = false
+            player.isFlying = false
+            removeDirectionBossBar(player)
+            player.removeScoreboardTag("EscapeComplete")
+            player.removeScoreboardTag("death")
+            player.inventory.clear()
+        }
+        resetplayerAttribute()
+        playersAtParticle.clear()
+        EscapePlayers.clear()
     }
 
 
