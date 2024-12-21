@@ -6,6 +6,7 @@ import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
+import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Global.door
@@ -27,6 +28,7 @@ object Start {
         executeBlockFillingAndEffect()
         isEnding = false
         chestEnable = false
+        bossbarEnable = false
         EscapePlayerCount = 0
         door = true
         for(player in Bukkit.getOnlinePlayers()) {
