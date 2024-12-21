@@ -28,9 +28,15 @@ object MapAction {
             .minByOrNull { nearbyPlayer -> player.location.distance(nearbyPlayer.location) } // 가장 가까운 플레이어 찾기
 
         // 가장 가까운 플레이어가 존재하면 발광 효과 부여
-        nearestPlayer?.let {
-            it.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 14 * 20, 1, false, false))
+        // 가장 가까운 플레이어 처리
+        if (nearestPlayer != null) {
+            // 가장 가까운 플레이어에게 발광 효과 부여
+            nearestPlayer.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 14 * 20, 1, false, false))
+        } else {
+            // 가까운 플레이어가 없을 경우 메시지 출력
+            player.sendMessage("주변에 발광 효과를 부여할 플레이어가 없습니다.")
         }
+
 
         // 플레이어의 인벤토리에서 아이템 제거
         inventory.removeItemFromInventory(player, Material.MOJANG_BANNER_PATTERN, 1)
