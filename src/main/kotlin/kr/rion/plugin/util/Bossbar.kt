@@ -13,17 +13,20 @@ import kotlin.math.min
 object Bossbar {
     private val bossBars: MutableMap<Player, BossBar> = mutableMapOf()
 
-    // 모든 온라인 플레이어에게 보스바를 생성하고 방향을 표시
-    fun createDirectionBossBarForAll(targetLocation: Location) {
+    // 모든 온라인 플레이어에게 보스바를 생성하고 방향을 표시 (타이틀 변경 가능)
+    fun createDirectionBossBarForAll(targetLocation: Location, title: String) {
         // 모든 온라인 플레이어를 대상으로 반복
         for (player in Bukkit.getOnlinePlayers()) {
-            if(!player.scoreboardTags.contains("manager") || !player.scoreboardTags.contains("EscapeComplete") || !player.scoreboardTags.contains("death")) {
+            if (!player.scoreboardTags.contains("manager") &&
+                !player.scoreboardTags.contains("EscapeComplete") &&
+                !player.scoreboardTags.contains("death")
+            ) {
                 // 이미 보스바가 있다면 제거
                 bossBars[player]?.removeAll()
                 bossBars.remove(player)
 
                 // 새로운 보스바 생성
-                val bossBar = Bukkit.createBossBar("헬기 방향", BarColor.GREEN, BarStyle.SOLID)
+                val bossBar = Bukkit.createBossBar(title, BarColor.GREEN, BarStyle.SOLID)
                 bossBar.addPlayer(player)
                 bossBars[player] = bossBar
 

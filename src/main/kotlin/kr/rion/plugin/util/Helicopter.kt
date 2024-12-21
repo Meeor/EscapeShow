@@ -399,7 +399,7 @@ object Helicopter {
         for (allplayer in Bukkit.getOnlinePlayers()) {
             allplayer.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
-        createDirectionBossBarForAll(playerloc!!)
+        createDirectionBossBarForAll(playerloc!!, "헬기 방향")
         HelicopterisSpawn = true
     }
 
