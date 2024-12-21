@@ -3,6 +3,7 @@ package kr.rion.plugin.util
 import kr.rion.plugin.Loader
 import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.startEscape
+import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.createDirectionBossBarForAll
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import org.bukkit.Bukkit
@@ -535,6 +536,7 @@ object Helicopter {
         startEscape = false
         flaregunstart?.cancel()
         flaregunstart = null
+        bossbarEnable = false
         for(player in Bukkit.getOnlinePlayers()){
             removeDirectionBossBar(player)
         }

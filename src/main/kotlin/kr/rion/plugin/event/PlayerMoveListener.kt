@@ -2,8 +2,8 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.Start.startportal
-import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.util.Bossbar
+import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Helicopter.playerloc
 import kr.rion.plugin.util.Teleport
 import org.bukkit.Bukkit
@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent
 class PlayerMoveListener : Listener {
     @EventHandler
     fun playerMoveEvent(event: PlayerMoveEvent) {
-        if (startEscape) {
+        if (bossbarEnable) {
             val player = event.player
             Bossbar.updateDirectionBossBar(player, playerloc!!)
         } else {

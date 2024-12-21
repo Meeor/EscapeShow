@@ -2,6 +2,7 @@ package kr.rion.plugin.gameEvent
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.createDirectionBossBarForAll
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.playerloc
@@ -32,6 +33,7 @@ object FlameGunSpawn {
             location.block.type = Material.CHEST
             chestLocation = location.block.location // 상자 위치 저장
             chestEnable = true
+            bossbarEnable = true
             val chest = location.block.state as Chest
             // 플레어건을 상자의 14번 칸(정중앙)에 배치
             val item = createFlareGunItem()

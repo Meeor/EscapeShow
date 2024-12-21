@@ -7,6 +7,7 @@ import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startportal
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
+import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.EscapePlayerCount
@@ -49,6 +50,7 @@ object End {
         isEnding = true
         chestEnable = false
         door = true
+        bossbarEnable = false
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
         //여기까지.종료직후리셋.
