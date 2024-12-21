@@ -101,11 +101,11 @@ object FlameGunActions {
                         if(!startEscapecheck) {
                             startEscapecheck = true
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                                Helicopter.spawn(initialLoc.clone().add(0.0, 50.0, 0.0), playerloc)
+                                Helicopter.spawn(initialLoc.clone().add((Math.random() * 60) - 30 , 50.0, (Math.random() * 60) - 30 ), playerloc)
                                 startEscape(player)
                                 startEscape = true
                                 startEscapecheck = false
-                            }, 4 * 20L)
+                            }, 30 * 20L)
                         }
                         cancel()
                     }
