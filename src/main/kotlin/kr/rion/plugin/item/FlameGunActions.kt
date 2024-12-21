@@ -100,6 +100,7 @@ object FlameGunActions {
                         )
                         if(!startEscapecheck) {
                             startEscapecheck = true
+                            Bukkit.broadcastMessage("${ChatColor.BOLD}${ChatColor.YELLOW}헬기가 오고있습니다..")
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                                 Helicopter.spawn(initialLoc.clone().add((Math.random() * 60) - 30 , 50.0, (Math.random() * 60) - 30 ), playerloc)
                                 startEscape(player)
