@@ -1,7 +1,9 @@
 package kr.rion.plugin.item
 
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.inventory
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -34,7 +36,7 @@ object MapAction {
             nearestPlayer.addPotionEffect(PotionEffect(PotionEffectType.GLOWING, 14 * 20, 1, false, false))
         } else {
             // 가까운 플레이어가 없을 경우 메시지 출력
-            player.sendMessage("주변에 발광 효과를 부여할 플레이어가 없습니다.")
+            player.sendMessage("$prefix ${ChatColor.GOLD}주변에 발광 효과를 부여할 플레이어가 없습니다.")
         }
 
 
