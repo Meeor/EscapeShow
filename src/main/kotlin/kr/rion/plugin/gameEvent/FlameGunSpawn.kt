@@ -2,7 +2,9 @@ package kr.rion.plugin.gameEvent
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
+import kr.rion.plugin.util.Bossbar.createDirectionBossBarForAll
 import kr.rion.plugin.util.Global.prefix
+import kr.rion.plugin.util.Helicopter.playerloc
 import org.bukkit.*
 import org.bukkit.block.Chest
 import org.bukkit.entity.Player
@@ -34,6 +36,7 @@ object FlameGunSpawn {
             // 플레어건을 상자의 14번 칸(정중앙)에 배치
             val item = createFlareGunItem()
             chest.inventory.setItem(13, item) // 인덱스는 0부터 시작하므로 13번이 14번째 칸
+            createDirectionBossBarForAll(chestLocation!!, "플레어건 방향")
         })
 
         // 파티클을 상자 위아래로 y 좌표 50칸씩 늘려서 반복적으로 소환
