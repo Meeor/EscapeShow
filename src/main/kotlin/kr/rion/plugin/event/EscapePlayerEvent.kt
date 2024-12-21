@@ -21,7 +21,7 @@ import org.bukkit.persistence.PersistentDataType
 
 class EscapePlayerEvent : Listener {
     //탈출한 플레이어가 생존자 때리는것을 방지
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     fun onAttack(event: EntityDamageByEntityEvent) {
         if (event.entity is Player) {
             val player = event.entity as Player
@@ -32,7 +32,7 @@ class EscapePlayerEvent : Listener {
     }
 
     //탈출한 플레이어가 받는 모든데미지 무시
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     fun onDamage(event: EntityDamageEvent) {
         if (event.entity is Player) {
             val player = event.entity as Player
