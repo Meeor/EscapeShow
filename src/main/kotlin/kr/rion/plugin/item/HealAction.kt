@@ -19,7 +19,6 @@ object HealAction {
             playerall.playSound(player.location, Sound.BLOCK_WOOL_FALL, 0.3f, 0.0f)
         }
 
-        val loc = player.location.clone().add(0.0, 1.0, 0.0)
         val count = 4 // 반복 횟수
 
         object : BukkitRunnable() {
@@ -40,7 +39,7 @@ object HealAction {
                     // 파티클을 플레이어의 위치에 생성
                     onlinePlayer.world.spawnParticle(
                         Particle.HEART,
-                        loc,
+                        player.location.clone().add(0.0,1.0,0.0),
                         2,
                         0.3,
                         0.3,
