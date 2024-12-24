@@ -32,7 +32,7 @@ class RespawnEvent : Listener {
                 player.addScoreboardTag("DeathAndAlive")
             } else {
                 player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경
-                player.sendMessage("§e사망 하셨습니다.")
+                player.sendMessage("§c사망 하셨습니다.")
                 player.addScoreboardTag("death")
             }
         } else {
