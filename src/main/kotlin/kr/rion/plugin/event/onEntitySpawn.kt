@@ -62,6 +62,8 @@ class onEntitySpawn: Listener {
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
                     respawnTask.remove(playerName)?.cancel()
+                    removeTextDisplay(corpseEntity)
+                    corpseEntity.remove()
                     // 인벤토리 초기화 및 관전 모드로 변경
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                     player.inventory.clear()
@@ -90,7 +92,7 @@ class onEntitySpawn: Listener {
                 val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 1.0, 1.0, 1.0)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
-                    if (nearbyPlayer.name == playerName && nearbyPlayer.isSneaking) {
+                    if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
 
@@ -137,7 +139,7 @@ class onEntitySpawn: Listener {
                                     else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
                                 }
                             }
-
+                            respawnTask.remove(playerName)?.cancel()
                             corpseEntity.remove() // 시체 엔티티 제거
                             break
                         }
@@ -159,7 +161,7 @@ class onEntitySpawn: Listener {
         removeTextDisplay(corpseEntity)
 
         // 텍스트 디스플레이 생성
-        val location: Location = corpseEntity.location.add(0.0, 1.5, 0.0) // corpseEntity 위에 표시
+        val location: Location = corpseEntity.location.add(0.0, 1.0, 0.0) // corpseEntity 위에 표시
         val textDisplay: TextDisplay = corpseEntity.world.spawnEntity(location, EntityType.TEXT_DISPLAY) as TextDisplay
 
         // 텍스트 설정
