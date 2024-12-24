@@ -25,7 +25,7 @@ class RespawnEvent : Listener {
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1)) // 40틱(2초) 동안 실명 효과
                 player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1, false, false))
-            }, 1L) // 1틱 후에 실행
+            }, 5L) // 5틱 후에 실행
             if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) {
                 player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
 
