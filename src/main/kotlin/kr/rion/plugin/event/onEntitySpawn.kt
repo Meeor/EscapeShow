@@ -9,10 +9,7 @@ import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Item.createCustomItem
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
-import org.bukkit.entity.Display
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Player
-import org.bukkit.entity.TextDisplay
+import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntitySpawnEvent
@@ -33,6 +30,9 @@ class onEntitySpawn: Listener {
         if (entity.toString().contains("CORPSE_CORPSE")) {
             val corpseEntity = entity as com.mohistmc.bukkit.entity.MohistModsEntity
 
+
+
+
             //NBTAPI를 사용하여 데이터 가져오기
             val nbtEntity = NBTEntity(corpseEntity)
             val deathData = nbtEntity.getCompound("Death") // Death NBT 태그 접근
@@ -40,6 +40,7 @@ class onEntitySpawn: Listener {
                 Bukkit.getLogger().warning("PlayerName not found in Death NBT data!")
                 return
             }
+            if(!processedPlayers.contains(playerName)) createTextDisplay(corpseEntity,"§a부활")
             // 플레이어별 부활 플래그 초기화
             if (!reviveFlags.containsKey(playerName)) {
                 reviveFlags[playerName] = true
@@ -75,6 +76,7 @@ class onEntitySpawn: Listener {
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
                     respawnTask.remove(playerName)?.cancel()
+                    removeTextDisplay(corpseEntity)
                     // 인벤토리 초기화 및 관전 모드로 변경
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                     player.inventory.clear()
@@ -102,7 +104,7 @@ class onEntitySpawn: Listener {
                             player.gameMode = GameMode.SURVIVAL
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
                             player.sendMessage("§a당신은 부활했습니다!")
-                            createTemporaryTextDisplay(player,"§a부활",10)
+                            removeTextDisplay(corpseEntity)
                             processedPlayers.add(playerName)
                             for (slot in 9..35) {
                                 val item = player.inventory.getItem(slot)
@@ -150,25 +152,34 @@ class onEntitySpawn: Listener {
             respawnTask[playerName] = task
         }
     }
+    private val corpseTextDisplays: MutableMap<Entity, TextDisplay> = mutableMapOf()
 
-    // 텍스트 디스플레이 생성 및 제거
-    fun createTemporaryTextDisplay(player: Player, text: String?, durationInSeconds: Int) {
-        // 플레이어 앞에 텍스트 디스플레이 생성
-        val location = player.location.add(player.location.direction.multiply(2)) // 플레이어 앞 2칸
-        val textDisplay: TextDisplay = player.world.spawnEntity(location, EntityType.TEXT_DISPLAY) as TextDisplay
+    // 텍스트 디스플레이 생성
+    fun createTextDisplay(corpseEntity: Entity, text: String?) {
+        // 기존 텍스트 디스플레이 제거 (중복 방지)
+        removeTextDisplay(corpseEntity)
+
+        // 텍스트 디스플레이 생성
+        val location: Location = corpseEntity.location.add(0.0, 1.5, 0.0) // corpseEntity 위에 표시
+        val textDisplay: TextDisplay = corpseEntity.world.spawnEntity(location, EntityType.TEXT_DISPLAY) as TextDisplay
 
         // 텍스트 설정
-        textDisplay.setCustomName(text) // 텍스트 내용
-        textDisplay.setCustomNameVisible(true) // 항상 표시
-        textDisplay.setBillboard(Display.Billboard.CENTER) // 카메라 중심
-        textDisplay.setShadowed(true) // 그림자 효과
+        textDisplay.customName = text // 텍스트 내용
+        textDisplay.isCustomNameVisible = true // 항상 표시
+        textDisplay.billboard = org.bukkit.entity.Display.Billboard.CENTER // 카메라 중심
+        textDisplay.isShadowed = true // 그림자 효과
 
-        // 일정 시간이 지난 후 제거
-        object : BukkitRunnable() {
-            override fun run() {
-                textDisplay.remove()
-            }
-        }.runTaskLater(Loader.instance, durationInSeconds * 20L) // 20L = 1초
+        // corpseEntity와 텍스트 디스플레이 매핑 저장
+        corpseTextDisplays[corpseEntity] = textDisplay
     }
 
+    // 텍스트 디스플레이 제거
+    fun removeTextDisplay(corpseEntity: Entity) {
+        // corpseEntity에 해당하는 텍스트 디스플레이 제거
+        val textDisplay = corpseTextDisplays[corpseEntity]
+        if (textDisplay != null && !textDisplay.isDead) {
+            textDisplay.remove()
+        }
+        corpseTextDisplays.remove(corpseEntity)
+    }
 }
