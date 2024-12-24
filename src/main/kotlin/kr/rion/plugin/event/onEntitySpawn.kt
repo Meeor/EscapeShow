@@ -6,7 +6,10 @@ import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.util.Item.createCustomItem
+import kr.rion.plugin.util.inventory
 import org.bukkit.Bukkit
+import org.bukkit.*
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -51,6 +54,22 @@ class onEntitySpawn: Listener {
                     respawnTask.remove(playerName)?.cancel() // 이미 처리된 플레이어라면 타이머 종료
                     return@Runnable
                 }
+
+                // MainInventory 데이터 확인 및 시체 엔티티 제거 조건
+                val mainInventory = deathData?.getCompoundList("MainInventory")
+                if(mainInventory == null || mainInventory.isEmpty()){
+                    sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
+                    processedPlayers.add(playerName) // 처리된 플레이어로 추가
+                    respawnTask.remove(playerName)?.cancel()
+                    // 인벤토리 초기화 및 관전 모드로 변경
+                    val player = Bukkit.getPlayer(playerName) ?: return@Runnable
+                    player.inventory.clear()
+                    player.gameMode = GameMode.SPECTATOR
+                    player.sendMessage("§c누군가가 당신의 아이템을 가져갔습니다.\n§c부활이 금지되며 관전 모드로 변경됩니다.")
+                    player.removeScoreboardTag("DeathAndAlive")
+                    player.addScoreboardTag("death")
+                    return@Runnable
+                }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
@@ -83,6 +102,38 @@ class onEntitySpawn: Listener {
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
                             player.sendMessage("§a당신은 부활했습니다!")
                             processedPlayers.add(playerName)
+                            for (slot in 9..35) {
+                                val item = player.inventory.getItem(slot)
+                                if (item != null && item.type != Material.AIR) {
+                                    // 아이템을 플레이어 위치에 드롭
+                                    player.world.dropItemNaturally(player.location, item)
+                                    player.inventory.setItem(slot, null) // 슬롯 비우기
+                                }
+                            }
+                            val craftingItem = createCustomItem(
+                                "${ChatColor.GREEN}조합아이템",
+                                listOf("${ChatColor.YELLOW}손에들고 우클릭시 조합창을 오픈합니다."),
+                                Material.SLIME_BALL
+                            )
+                            val bookAndQuill = createCustomItem(
+                                "${ChatColor.GREEN}미션",
+                                listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다."),
+                                Material.WRITABLE_BOOK
+                            )
+                            val map = createCustomItem(
+                                "${ChatColor.GREEN}지도",
+                                listOf("${ChatColor.YELLOW}클릭시 맵 전체 지도를 확인할수있습니다."),
+                                Material.MOJANG_BANNER_PATTERN
+                            )
+                            val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
+                            for (i in 8..35) {
+                                when (i) {
+                                    20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
+                                    24 -> player.inventory.setItem(i, map) // 24번 슬롯에 지도
+                                    8 -> player.inventory.setItem(i, craftingItem) // 8번 슬롯에 제작 아이템
+                                    else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+                                }
+                            }
 
                             corpseEntity.remove() // 시체 엔티티 제거
                             break
