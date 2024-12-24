@@ -5,7 +5,7 @@ import kr.rion.plugin.game.Start.startportal
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestLocation
 import kr.rion.plugin.util.Bossbar
 import kr.rion.plugin.util.Bossbar.bossbarEnable
-import kr.rion.plugin.util.Global.adjustToHighestValidLocation
+import kr.rion.plugin.util.Global.adjustToAboveSpecificBlock
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
 import kr.rion.plugin.util.Teleport
 import kr.rion.plugin.util.Teleport.stopPlayer
@@ -31,15 +31,9 @@ class PlayerMoveListener : Listener {
                     return@let null
                 }
 
-                adjustToHighestValidLocation(world, baseLocation, setOf(
-                    Material.AZALEA_LEAVES,
-                    Material.FERN,
-                    Material.LARGE_FERN,
-                    Material.GRASS,
-                    Material.CRIMSON_BUTTON,
-                    Material.WATER,
-                    Material.LAVA
-                ))
+                adjustToAboveSpecificBlock(
+                    world, baseLocation, Material.CAVE_AIR
+                )
             }
 
             if (adjustedLocation != null) {

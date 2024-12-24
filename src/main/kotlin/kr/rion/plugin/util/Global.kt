@@ -128,7 +128,11 @@ object Global {
         processedPlayers.clear()
     }
 
-    fun adjustToHighestValidLocation(world: World, baseLocation: Location, excludedBlocks: Set<Material>): Location? {
+    fun adjustToAboveSpecificBlock(
+        world: World,
+        baseLocation: Location,
+        targetBlock: Material // 특정 블록 하나
+    ): Location? {
         val xInt = baseLocation.blockX
         val zInt = baseLocation.blockZ
         val yStart = (baseLocation.y - 50).toInt() // 시작 Y 좌표
@@ -136,14 +140,15 @@ object Global {
 
         for (y in yStart downTo minY) {
             val block = world.getBlockAt(xInt, y, zInt)
-            if (block.type.isSolid && block.type !in excludedBlocks) {
-                // 유효한 블록을 찾았을 때 해당 위치 반환
+            if (block.type == targetBlock) {
+                // 특정 블록을 찾았을 때 해당 블록 위 좌표 반환
                 return Location(world, xInt.toDouble(), y.toDouble(), zInt.toDouble())
             }
         }
 
-        // 유효한 블록이 없으면 null 반환
+        // 특정 블록이 없으면 null 반환
         return null
     }
+
 
 }
