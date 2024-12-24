@@ -20,7 +20,7 @@ object FlameGunActions {
     var startEscape = false
     var startEscapecheck = false
     var flaregunstart: BukkitTask? = null
-
+    lateinit var EscapeLocation: Location
     val playersAtParticle = mutableSetOf<Player>()
 
     fun launchFlare(player: Player) {
@@ -101,8 +101,10 @@ object FlameGunActions {
                             startEscapecheck = true
                             Bukkit.broadcastMessage("${ChatColor.BOLD}${ChatColor.YELLOW}헬기가 오고있습니다..")
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                                EscapeLocation = initialLoc.world?.let { adjustToAboveSpecificBlock(it, initialLoc.clone()
+                                    .subtract(0.0,1.0,0.0), Material.CAVE_AIR) }!!
                                 Helicopter.spawn(
-                                    initialLoc.clone().add((Math.random() * 60) - 30, 50.0, (Math.random() * 60) - 30)
+                                    EscapeLocation.clone().add(0.0, 51.0, 0.0)
                                 )
                                 startEscape(player)
                                 startEscape = true
@@ -145,20 +147,7 @@ object FlameGunActions {
                     .forEach { currentPlayer ->
 
                         // HelicopterLoc 변수가 null인 경우 처리 (헬기 아래 파티클 위치)
-                        val startLocation = HelicopterLoc?.clone()?.apply {
-                            y -= 50 // Y 좌표를 50 줄임
-                        }?.let { baseLocation ->
-                            HelicopterLoc!!.world?.let {
-                                adjustToAboveSpecificBlock(
-                                    it, baseLocation, Material.CAVE_AIR
-                                )
-
-                            }
-                        } ?: run {
-                            Bukkit.getLogger()
-                                .warning("HelicopterLoc이 null이거나 유효한 위치를 찾을 수 없습니다. 탈출 성공 여부를 확인할 수 없습니다.")
-                            return@forEach
-                        }
+                        val startLocation = EscapeLocation
                         // 플레이어의 현재 위치와 HelicopterLoc 비교
                         val currentLocation = currentPlayer.location
 

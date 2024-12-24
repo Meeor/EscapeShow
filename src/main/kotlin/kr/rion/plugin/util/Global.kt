@@ -132,22 +132,29 @@ object Global {
         world: World,
         baseLocation: Location,
         targetBlock: Material // 특정 블록 하나
-    ): Location? {
-        val xInt = baseLocation.blockX
-        val zInt = baseLocation.blockZ
-        val yStart = (baseLocation.y - 50).toInt() // 시작 Y 좌표
-        val minY = world.minHeight // 월드 최소 높이
+    ): Location {
+        val randomRange = -30..30 // X, Z 좌표 랜덤 범위
 
-        for (y in yStart downTo minY) {
-            val block = world.getBlockAt(xInt, y, zInt)
-            if (block.type == targetBlock) {
-                // 특정 블록을 찾았을 때 해당 블록 위 좌표 반환
-                return Location(world, xInt.toDouble(), y.toDouble(), zInt.toDouble())
+        while (true) {
+            // baseLocation 기준으로 랜덤 XZ 좌표 생성
+            val randomLocation = baseLocation.clone().apply {
+                x += randomRange.random()
+                z += randomRange.random()
+            }
+
+            val randomXInt = randomLocation.blockX
+            val randomZInt = randomLocation.blockZ
+            val yStart = randomLocation.y.toInt() // 시작 Y 좌표
+            val minY = world.minHeight // 월드 최소 높이
+
+            for (y in yStart downTo minY) {
+                val block = world.getBlockAt(randomXInt, y, randomZInt)
+                if (block.type == targetBlock) {
+                    // 특정 블록을 찾았을 때 해당 블록 위 좌표 반환
+                    return Location(world, randomXInt.toDouble(), y.toDouble(), randomZInt.toDouble())
+                }
             }
         }
-
-        // 특정 블록이 없으면 null 반환
-        return null
     }
 
 

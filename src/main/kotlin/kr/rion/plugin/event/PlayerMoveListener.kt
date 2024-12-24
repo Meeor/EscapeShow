@@ -3,14 +3,12 @@ package kr.rion.plugin.event
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.Start.startportal
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestLocation
+import kr.rion.plugin.item.FlameGunActions.EscapeLocation
 import kr.rion.plugin.util.Bossbar
 import kr.rion.plugin.util.Bossbar.bossbarEnable
-import kr.rion.plugin.util.Global.adjustToAboveSpecificBlock
-import kr.rion.plugin.util.Helicopter.HelicopterLoc
 import kr.rion.plugin.util.Teleport
 import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
@@ -23,24 +21,7 @@ class PlayerMoveListener : Listener {
             Bossbar.updateDirectionBossBar(player, chestLocation!!)
         } else if (bossbarEnable == 2) { // 헬기 위치로 보스바 조절
             val player = event.player
-            val adjustedLocation = HelicopterLoc?.clone()?.apply {
-                y -= 50 // Y 좌표를 50 줄임
-            }?.let { baseLocation ->
-                val world = baseLocation.world ?: run {
-                    Bukkit.getLogger().warning("HelicopterLoc의 월드를 찾을 수 없습니다.")
-                    return@let null
-                }
-
-                adjustToAboveSpecificBlock(
-                    world, baseLocation, Material.CAVE_AIR
-                )
-            }
-
-            if (adjustedLocation != null) {
-                Bossbar.updateDirectionBossBar(player, adjustedLocation)
-            } else {
-                Bukkit.getLogger().warning("Bossbar를 업데이트할 유효한 위치를 찾을 수 없습니다.")
-            }
+            Bossbar.updateDirectionBossBar(player, EscapeLocation)
         } else {
             return
         }
