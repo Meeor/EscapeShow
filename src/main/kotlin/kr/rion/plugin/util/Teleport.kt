@@ -79,7 +79,7 @@ object Teleport {
             val y = rand.nextInt(maxY - minY + 1) + minY  // Y 좌표는 범위 내에서 랜덤 선택
 
             val location = Location(world, x, y.toDouble(), z)
-            if (isLocationSafe(location) && !safeLocations.contains(location)) {
+            if (isLocationCaveAir(location) && !safeLocations.contains(location)) {
                 safeLocations.add(location)
             }
             attempts++
@@ -146,26 +146,11 @@ object Teleport {
     }
 
 
-    private fun isLocationSafe(loc: Location): Boolean {
+    private fun isLocationCaveAir(loc: Location): Boolean {
         val block = loc.block
-        val blockAbove = loc.clone().add(0.0, 1.0, 0.0).block
-        val blockAboveTwo = loc.clone().add(0.0, 2.0, 0.0).block
-        val blockBelow = loc.clone().subtract(0.0, 1.0, 0.0).block
 
-        // 바닥 블록이 공기가 아니고 안전하지 않은 경우
-        return block.type == Material.AIR &&
-                blockAbove.type == Material.AIR &&
-                blockAboveTwo.type == Material.AIR &&
-                blockBelow.type.isSolid &&
-                !setOf(
-                    Material.AZALEA_LEAVES, // 진달래잎
-                    Material.FERN, // 고사리
-                    Material.LARGE_FERN, // 큰고사리
-                    Material.GRASS, // 잔디
-                    Material.CRIMSON_BUTTON, //진홍빛버튼
-                    Material.WATER, //물
-                    Material.LAVA //용암
-                ).contains(blockBelow.type)
+        // 해당 위치의 블록이 CAVE_AIR인지 확인
+        return block.type == Material.CAVE_AIR
     }
 
     private fun setImmune(player: Player, duration: Long) {
