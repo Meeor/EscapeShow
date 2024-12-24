@@ -18,6 +18,7 @@ import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
+import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.*
 
 object End {
@@ -53,6 +54,7 @@ object End {
         chestEnable = false
         door = true
         bossbarEnable = 0
+        stopPlayer.clear()
         Bukkit.broadcastMessage("")
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 

@@ -28,6 +28,7 @@ object Start {
     private val worldWait = Bukkit.getWorld("vip")
 
     fun startAction() {
+        stopPlayer.clear()
         isStart = true
         startportal = true
         for (player in Bukkit.getOnlinePlayers()) {
@@ -115,6 +116,7 @@ object Start {
                     object : BukkitRunnable() {
                         override fun run() {
                             startportal = false
+                            stopPlayer.clear()
                         }
                     }.runTaskLater(Loader.instance, 20L * 180) // 3분 (180초) 후 실행
                     cancel() // 반복 종료
