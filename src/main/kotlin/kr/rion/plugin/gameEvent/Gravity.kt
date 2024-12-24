@@ -2,6 +2,7 @@ package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.Global.prefix
+import kr.rion.plugin.util.actionbar.sendActionBar
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -86,7 +87,7 @@ object Gravity {
         )
 
         // Action bar 메시지
-        player.sendActionBar("$prefix ${ChatColor.BOLD}${ChatColor.RED}중력이 강화됩니다")
+        sendActionBar(player, "\"$prefix ${ChatColor.BOLD}${ChatColor.RED}중력이 강화됩니다\"")
     }
 
     // 중력 약화 (중력 이상 상태일 때 적용)
@@ -114,7 +115,7 @@ object Gravity {
         )
 
         // Action bar 메시지
-        player.sendActionBar(message)
+        sendActionBar(player, message)
     }
 
     // 플레이어의 위치에 따라 중력 강화/약화 효과를 적용
@@ -128,15 +129,27 @@ object Gravity {
         }
         // 중력 약화 조건
         else if (x < 118 && x >= -882 && z < -341 && z >= -1341) {
-            applyGravityWeakness(player, Color.fromRGB(153, 178, 76), "$prefix ${ChatColor.BOLD}${ChatColor.YELLOW}중력이 약화됩니다")
+            applyGravityWeakness(
+                player,
+                Color.fromRGB(153, 178, 76),
+                "$prefix ${ChatColor.BOLD}${ChatColor.YELLOW}중력이 약화됩니다"
+            )
         }
         // 중력 약화 추가 조건 (연두색)
         else if (x < 118 && x >= -882 && z > -341 && z <= 659) {
-            applyGravityWeakness(player, Color.fromRGB(25, 255, 25), "$prefix ${ChatColor.BOLD}${ChatColor.GREEN}중력이 약화됩니다")
+            applyGravityWeakness(
+                player,
+                Color.fromRGB(25, 255, 25),
+                "$prefix ${ChatColor.BOLD}${ChatColor.GREEN}중력이 약화됩니다"
+            )
         }
         // 중력 약화 추가 조건 (파란색)
         else if (x > 118 && x <= 1118 && z < -341 && z >= -1341) {
-            applyGravityWeakness(player, Color.fromRGB(0, 77, 255), "$prefix ${ChatColor.BOLD}${ChatColor.BLUE}중력이 약화됩니다")
+            applyGravityWeakness(
+                player,
+                Color.fromRGB(0, 77, 255),
+                "$prefix ${ChatColor.BOLD}${ChatColor.BLUE}중력이 약화됩니다"
+            )
         }
     }
 

@@ -88,7 +88,6 @@ object Teleport {
     }
 
 
-
     fun isInDesignatedArea(loc: Location): Boolean {
         designatedWorld = worldManager?.getMultiverseWorld(designatedWorldName)
         val world = loc.world ?: return false
@@ -131,10 +130,10 @@ object Teleport {
 
                 val endTime = System.currentTimeMillis()
                 console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
-                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable{
-                    player.playSound(player,"custom.start",SoundCategory.MASTER,1.0f,1.0f)
-                    player.sendTitle("${ChatColor.GREEN}게임을 시작합니다.","${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요.")
-                },30)
+                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                    player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
+                    player.sendTitle("${ChatColor.GREEN}게임을 시작합니다.", "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요.")
+                }, 30)
             } catch (e: Exception) {
                 console.sendMessage("$prefix 텔레포트 중 오류가 발생했습니다: ${e.message}")
             }

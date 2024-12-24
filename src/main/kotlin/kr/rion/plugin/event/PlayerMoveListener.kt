@@ -8,12 +8,8 @@ import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
 import kr.rion.plugin.util.Teleport
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.GameMode
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerMoveEvent
 
 class PlayerMoveListener : Listener {
@@ -22,9 +18,9 @@ class PlayerMoveListener : Listener {
         if (bossbarEnable == 1) { //플레어건 위치로 보스바 조절
             val player = event.player
             Bossbar.updateDirectionBossBar(player, chestLocation!!)
-        } else if(bossbarEnable == 2) { // 헬기 위치로 보스바 조절
+        } else if (bossbarEnable == 2) { // 헬기 위치로 보스바 조절
             val player = event.player
-            Bossbar.updateDirectionBossBar(player, HelicopterLoc!!.clone().add(0.0,-50.0,0.0))
+            Bossbar.updateDirectionBossBar(player, HelicopterLoc!!.clone().add(0.0, -50.0, 0.0))
         } else {
             return
         }

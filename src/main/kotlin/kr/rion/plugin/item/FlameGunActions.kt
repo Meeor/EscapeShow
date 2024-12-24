@@ -204,7 +204,7 @@ object FlameGunActions {
                             }
                         }
                     }
-                for(particlePlayer in Bukkit.getOnlinePlayers()){
+                for (particlePlayer in Bukkit.getOnlinePlayers()) {
                     // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)
                     if (HelicopterLoc != null) {
                         try {

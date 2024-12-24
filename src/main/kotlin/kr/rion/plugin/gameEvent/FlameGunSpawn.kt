@@ -48,7 +48,7 @@ object FlameGunSpawn {
                     // 상자 기준으로 y 좌표 -50칸에서 +50칸까지 파티클 소환
                     for (yOffset in -50..50) {
                         val particleLocation = location.clone().add(0.0, yOffset.toDouble(), 0.0)
-                        world.spawnParticle(
+                        world?.spawnParticle(
                             Particle.END_ROD,
                             particleLocation,
                             1,

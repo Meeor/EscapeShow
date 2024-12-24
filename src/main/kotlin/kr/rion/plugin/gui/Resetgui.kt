@@ -7,8 +7,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 
 object Resetgui {
-    fun ResetGUI(player: Player){
-        val gui = Bukkit.createInventory(null,27,"${ChatColor.DARK_BLUE}리셋")
+    fun ResetGUI(player: Player) {
+        val gui = Bukkit.createInventory(null, 27, "${ChatColor.DARK_BLUE}리셋")
 
         val gameName = "게임맵 리셋"
         val lobbyName = "로비맵 리셋"
@@ -16,12 +16,12 @@ object Resetgui {
         val gameLore = listOf("클릭시 게임맵 리셋작업을 시작합니다.")
         val lobbyLore = listOf("클릭시 로비맵 리셋작업을 시작합니다.")
 
-        val game = createCustomItem(gameName,gameLore,Material.GRASS_BLOCK, persistentDataKey = "reset-game")
-        val lobby = createCustomItem(lobbyName,lobbyLore,Material.CHERRY_STAIRS, persistentDataKey = "reset-lobby")
+        val game = createCustomItem(gameName, gameLore, Material.GRASS_BLOCK, persistentDataKey = "reset-game")
+        val lobby = createCustomItem(lobbyName, lobbyLore, Material.CHERRY_STAIRS, persistentDataKey = "reset-lobby")
 
 
-        gui.setItem(11,game)
-        gui.setItem(15,lobby)
+        gui.setItem(11, game)
+        gui.setItem(15, lobby)
 
         player.openInventory(gui)
     }

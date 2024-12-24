@@ -21,7 +21,7 @@ object ChunkyManager {
                 it.onGenerationComplete { _: GenerationCompleteEvent ->
                     Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                         Teleport.initializeSafeLocations()
-                        for(player in Bukkit.getOnlinePlayers()){
+                        for (player in Bukkit.getOnlinePlayers()) {
                             player.removePotionEffect(PotionEffectType.BLINDNESS)
                         }
                         Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")

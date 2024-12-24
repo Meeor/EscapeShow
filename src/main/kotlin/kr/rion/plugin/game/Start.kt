@@ -160,6 +160,7 @@ object Start {
 
     private fun fillBlocksInRange(world: World, x1: Int, y1: Int, z1: Int, x2: Int, y2: Int, z2: Int) {
         val blocks = mutableListOf<Location>()
+        val soundloc = Location(world, x1.toDouble(), y1.toDouble(), z1.toDouble())
 
         // 범위 내의 모든 블록을 리스트에 추가
         for (x in x1.coerceAtMost(x2)..x1.coerceAtLeast(x2)) {
@@ -180,7 +181,7 @@ object Start {
                     if (index >= blocks.size) {
                         // 모든 블록 처리 완료 시, 소리 한 번 실행
                         for (player in Bukkit.getOnlinePlayers()) {
-                            player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
+                            player.playSound(soundloc, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
                         }
                         cancel() // 모든 블록 처리 후 반복 종료
                         return

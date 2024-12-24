@@ -9,7 +9,6 @@ import kr.rion.plugin.util.Global.reviveFlags
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -27,15 +26,18 @@ class onEntitySpawn: Listener {
         val entity = event.entity
         Bukkit.getLogger().info(entity.toString())
 
-        // Corpse 엔티티 감지
+        // MohistModsEntity 감지
         if (entity.toString().contains("CORPSE_CORPSE")) {
-            val corpseEntity = entity as LivingEntity
+            val corpseEntity = entity as com.mohistmc.bukkit.entity.MohistModsEntity
             Bukkit.getLogger().info(corpseEntity.toString())
 
-            // NBTAPI를 사용하여 PlayerName 데이터 확인
+            //NBTAPI를 사용하여 데이터 가져오기
             val nbtEntity = NBTEntity(corpseEntity)
-            val playerName = nbtEntity.getString("PlayerName") ?: return
-
+            val deathData = nbtEntity.getCompound("Death") // Death NBT 태그 접근
+            val playerName = deathData?.getString("PlayerName") ?: run {
+                Bukkit.getLogger().warning("PlayerName not found in Death NBT data!")
+                return
+            }
             // 플레이어별 부활 플래그 초기화
             if (!reviveFlags.containsKey(playerName)) {
                 reviveFlags[playerName] = true
@@ -71,6 +73,7 @@ class onEntitySpawn: Listener {
                 val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                 player.sendMessage("${corpseEntity.location}")
                 for (nearbyPlayer in nearbyPlayers) {
+                    Bukkit.getLogger().info("Player ${nearbyPlayer.name} sneaking: ${nearbyPlayer.isSneaking}  playername : ${playerName}")
                     if (nearbyPlayer.name == playerName && nearbyPlayer.isSneaking) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
@@ -86,6 +89,7 @@ class onEntitySpawn: Listener {
                             player.gameMode = GameMode.SURVIVAL
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
                             player.sendMessage("§a당신은 부활했습니다!")
+                            processedPlayers.add(playerName)
 
                             corpseEntity.remove() // 시체 엔티티 제거
                             break

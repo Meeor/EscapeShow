@@ -13,6 +13,7 @@ object WeatherClear {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives add weather_GravityAbnormality dummy")
 
         // Action bar 초기화
-        Bukkit.getOnlinePlayers().forEach { player -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("")) }
+        Bukkit.getOnlinePlayers()
+            .forEach { player -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("")) }
     }
 }

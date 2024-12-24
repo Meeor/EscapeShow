@@ -2,7 +2,6 @@ package kr.rion.plugin.game
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.Reset.handleGameReset
-import kr.rion.plugin.game.Reset.handleLobbyReset
 import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startportal

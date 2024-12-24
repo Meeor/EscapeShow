@@ -32,7 +32,8 @@ object Event {
         val sun = createCustomItem(sunName,sunLore,Material.MAGMA_CREAM, persistentDataKey = "event-sun")
         val rain = createCustomItem(rainName,rainLore,Material.LIGHTNING_ROD, persistentDataKey = "event-rain")
         val gravity = createCustomItem(gravityName,gravityLore,Material.FEATHER, persistentDataKey = "event-gravity")
-        val earthQuake = createCustomItem(earthQuakeName,earthQuakeLore,Material.COARSE_DIRT, persistentDataKey = "event-earthQuake")
+        val earthQuake =
+            createCustomItem(earthQuakeName,earthQuakeLore,Material.COARSE_DIRT, persistentDataKey = "event-earthQuake")
         val donation = createCustomItem(donationName,donationLore,Material.GOLDEN_CARROT, persistentDataKey = "event-donation")
         val deathCoin = createCustomItem(deathCoinName,deathCoinLore,Material.BONE, persistentDataKey = "event-deathCoin")
         val betting = createCustomItem(bettingName,bettingLore,Material.GOLD_NUGGET, persistentDataKey = "event-betting")

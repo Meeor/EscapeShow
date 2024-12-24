@@ -22,6 +22,7 @@ object RandomTp {
         }
         return true
     }
+
     fun handleRandomListClear(player: Player) {
         if (safeLocations.isNotEmpty()) {
             safeLocations.clear()  // 리스트의 모든 요소를 제거
@@ -30,7 +31,8 @@ object RandomTp {
             player.sendMessage("$prefix 저장된 좌표가 없습니다.")
         }
     }
-    fun handleRandomReset(player: Player){
+
+    fun handleRandomReset(player: Player) {
         setInitializedSafeLocations(false)
         Bukkit.broadcastMessage("$prefix 랜덤이동좌표를 새롭게 정하고있습니다.\n$prefix${ChatColor.GOLD} 잠시 렉이 걸릴수 있습니다.")
         initializeSafeLocations()

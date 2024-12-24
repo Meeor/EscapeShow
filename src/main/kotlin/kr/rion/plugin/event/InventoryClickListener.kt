@@ -24,11 +24,8 @@ import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Item.berries
-import kr.rion.plugin.util.Item.contract
 import kr.rion.plugin.util.Item.flamegun
-import kr.rion.plugin.util.Item.heal
 import kr.rion.plugin.util.Item.mainMenu
-import kr.rion.plugin.util.Item.map
 import kr.rion.plugin.util.Item.teleportCompass
 import org.bukkit.*
 import org.bukkit.entity.Player
@@ -173,14 +170,14 @@ class InventoryClickListener : Listener {
                     event.isCancelled = true
                 }
 
-                hasCustomTag(meta,"game-ending") ->{
+                hasCustomTag(meta, "game-ending") -> {
                     event.isCancelled = true
                     ifEnding = !ifEnding
                     player.closeInventory()
                     openMainGUI(player)
-                    if(ifEnding){
+                    if (ifEnding) {
                         player.sendMessage("$prefix 게임자동종료 기능을 강제로 활성화 했습니다.")
-                    }else{
+                    } else {
                         player.sendMessage("$prefix 게임자동종료 기능을 강제로 비활성화 했습니다.")
                     }
                 }
@@ -373,6 +370,7 @@ class InventoryClickListener : Listener {
             }
         }
     }
+
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         val slot = event.slot // 클릭된 슬롯 번호
@@ -387,11 +385,13 @@ class InventoryClickListener : Listener {
                         player.sendMessage("§6책과 깃펜 GUI를 엽니다.") // 책과 깃펜 GUI 열기 로직 추가
                         // 여기서 책 GUI를 여는 동작 구현
                     }
+
                     24 -> {
                         event.isCancelled = true // 기본 동작 취소
                         player.sendMessage("§a지도를 표시합니다.") // 지도 GUI 로직 추가
                         // 여기서 지도 표시 동작 구현
                     }
+
                     else -> {
                         event.isCancelled = true // 나머지 슬롯 클릭 취소
                         player.sendMessage("§c이 슬롯은 사용할 수 없습니다.") // 사용자에게 알림 메시지 출력

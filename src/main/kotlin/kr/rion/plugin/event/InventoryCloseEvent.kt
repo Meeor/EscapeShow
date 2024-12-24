@@ -29,7 +29,7 @@ class InventoryCloseEvent : Listener {
             particleTask?.cancel() // 파티클 반복 종료
             chestLocation = null // 위치 초기화
             Bukkit.broadcastMessage("$prefix 누군가가 플레어건을 획득했습니다!")
-            for(player in Bukkit.getOnlinePlayers()){
+            for (player in Bukkit.getOnlinePlayers()) {
                 removeDirectionBossBar(player)
             }
         }

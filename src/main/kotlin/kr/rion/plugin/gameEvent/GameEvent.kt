@@ -7,7 +7,9 @@ import org.bukkit.command.CommandSender
 
 object GameEvent {
     private val survivalPlayers = Bukkit.getOnlinePlayers().filter { player ->
-        !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains("death")
+        !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains(
+            "death"
+        )
     }
 
 

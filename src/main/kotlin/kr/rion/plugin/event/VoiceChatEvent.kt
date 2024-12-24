@@ -29,7 +29,6 @@ class VoiceChatEvent : VoicechatPlugin {
         val sender = senderUUID?.let { Bukkit.getPlayer(it) }  // 송신자 Player 객체
 
 
-
         // 송신자 태그 확인
         if (sender != null && (sender.scoreboardTags.contains("EscapeComplete") ||
                     sender.scoreboardTags.contains("death"))
@@ -57,8 +56,7 @@ class VoiceChatEvent : VoicechatPlugin {
                     // 태그가 일치하는 수신자에게 위치 기반 사운드 패킷 전송 (거리 기반 효과 포함)
                     val locationalSoundPacket = event.packet.toLocationalSoundPacket(senderPosition)
                     api.sendLocationalSoundPacketTo(connection, locationalSoundPacket)
-                }
-                else {
+                } else {
                     // 태그가 없는 플레이어는 소리 전송 안 함
                     continue
                 }

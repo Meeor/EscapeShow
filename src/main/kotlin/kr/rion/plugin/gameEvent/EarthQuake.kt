@@ -32,7 +32,9 @@ object EarthQuake {
                 }
                 // manager 또는 EscapeComplete 태그가 없는 플레이어들에 대해서만 지진 효과 적용
                 Bukkit.getOnlinePlayers().filter { player ->
-                    !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains("death")
+                    !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains(
+                        "death"
+                    )
                 }.forEach { player ->
                     val currentStage = playerStages.getOrDefault(player, 0)
                     applyEarthquakeEffects(player, currentStage)

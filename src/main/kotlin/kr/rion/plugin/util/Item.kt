@@ -108,10 +108,11 @@ object Item {
         )
         return item
     }
-    fun mainMenu():ItemStack{
+
+    fun mainMenu(): ItemStack {
         val itemName = "${ChatColor.AQUA}메뉴창 열기"
-        val itemlore = listOf("${ChatColor.GREEN}메뉴창을 열수있는 아이템입니다.","","우클릭으로 사용가능합니다.")
-        val item = createCustomItem(itemName,itemlore,Material.CLOCK, persistentDataKey = "mainmenu")
+        val itemlore = listOf("${ChatColor.GREEN}메뉴창을 열수있는 아이템입니다.", "", "우클릭으로 사용가능합니다.")
+        val item = createCustomItem(itemName, itemlore, Material.CLOCK, persistentDataKey = "mainmenu")
         return item
     }
 }

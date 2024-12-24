@@ -100,15 +100,15 @@ object MainMenu {
             createCustomItem(MaxplayerName, MaxplayerLore, Material.NETHER_STAR, persistentDataKey = "game-player")
         val Ending: ItemStack
 
-        if(ifEnding){
+        if (ifEnding) {
             val EndingName = "${ChatColor.GREEN}게임 자동 종료 상태"
-            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Enable(활성화)","","클릭시 수동으로 변경가능합니다.")
-            Ending = createCustomItem(EndingName,EndingLore,Material.LIME_WOOL, persistentDataKey = "game-ending")
+            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Enable(활성화)", "", "클릭시 수동으로 변경가능합니다.")
+            Ending = createCustomItem(EndingName, EndingLore, Material.LIME_WOOL, persistentDataKey = "game-ending")
         } else {
             val EndingName = "${ChatColor.GREEN}게임 자동 종료 상태"
-            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Disable(비활성화)","","클릭시 수동으로 변경가능합니다.")
+            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Disable(비활성화)", "", "클릭시 수동으로 변경가능합니다.")
 
-            Ending = createCustomItem(EndingName,EndingLore,Material.RED_WOOL, persistentDataKey = "game-ending")
+            Ending = createCustomItem(EndingName, EndingLore, Material.RED_WOOL, persistentDataKey = "game-ending")
         }
 
 

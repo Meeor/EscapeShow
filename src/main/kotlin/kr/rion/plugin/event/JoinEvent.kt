@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class JoinEvent : Listener {
     val line = "=".repeat(40)
+
     //접속 메세지
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     fun onjoin(event: PlayerJoinEvent) {
@@ -40,6 +41,6 @@ class JoinEvent : Listener {
             ) {
                 event.player.gameMode = GameMode.SPECTATOR
             }
-        },30L)
+        }, 30L)
     }
 }

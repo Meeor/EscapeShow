@@ -398,7 +398,7 @@ object Helicopter {
         for (allplayer in Bukkit.getOnlinePlayers()) {
             allplayer.playSound(allplayer, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
-        createDirectionBossBarForAll(HelicopterLoc!!.clone().add(0.0,-50.0,0.0), "헬기 방향")
+        createDirectionBossBarForAll(HelicopterLoc!!.clone().add(0.0, -50.0, 0.0), "헬기 방향")
         bossbarEnable = 2 //헬기위치로 변경
         HelicopterisSpawn = true
     }
@@ -536,7 +536,7 @@ object Helicopter {
         flaregunstart?.cancel()
         flaregunstart = null
         bossbarEnable = 0 //보스바 업데이트 종료
-        for(player in Bukkit.getOnlinePlayers()){
+        for (player in Bukkit.getOnlinePlayers()) {
             removeDirectionBossBar(player)
         }
     }
