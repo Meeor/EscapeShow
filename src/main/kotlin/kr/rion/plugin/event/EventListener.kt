@@ -22,7 +22,8 @@ class EventListener : Listener {
             InventoryClickListener(),
             InventoryCloseEvent(),
             PlayerMoveListener(),
-            EscapePlayerEvent()
+            EscapePlayerEvent(),
+            onEntitySpawn()
             //CreditEvent()
         )
 

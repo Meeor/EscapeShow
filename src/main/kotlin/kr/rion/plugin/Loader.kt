@@ -80,7 +80,6 @@ class Loader : JavaPlugin() {
                 Global.setGameRulesForAllWorlds()
                 console.sendMessage("")
                 Teleport.initializeSafeLocations()
-                Global.startPlayerCheckTask(this@Loader)
             }
         }.runTaskLater(this, 40L)
 

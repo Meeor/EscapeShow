@@ -5,7 +5,6 @@ import kr.rion.plugin.Loader
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.createDirectionBossBarForAll
 import kr.rion.plugin.util.Global.prefix
-import kr.rion.plugin.util.Helicopter.playerloc
 import org.bukkit.*
 import org.bukkit.block.Chest
 import org.bukkit.entity.Player
@@ -33,7 +32,7 @@ object FlameGunSpawn {
             location.block.type = Material.CHEST
             chestLocation = location.block.location // 상자 위치 저장
             chestEnable = true
-            bossbarEnable = true
+            bossbarEnable = 1 // 플레어건 상자위치로 변경
             val chest = location.block.state as Chest
             // 플레어건을 상자의 14번 칸(정중앙)에 배치
             val item = createFlareGunItem()

@@ -7,7 +7,6 @@ import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
-import kr.rion.plugin.util.Helicopter.playerloc
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
@@ -50,7 +49,6 @@ object FlameGunActions {
             object : BukkitRunnable() {
                 private var t = 0.0
                 private val loc = initialLoc.clone()
-                private val playerloc = player.location.clone()
 
                 override fun run() {
                     t += 1
@@ -98,11 +96,13 @@ object FlameGunActions {
                             particleData2,
                             true
                         )
-                        if(!startEscapecheck) {
+                        if (!startEscapecheck) {
                             startEscapecheck = true
                             Bukkit.broadcastMessage("${ChatColor.BOLD}${ChatColor.YELLOW}헬기가 오고있습니다..")
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                                Helicopter.spawn(initialLoc.clone().add((Math.random() * 60) - 30 , 50.0, (Math.random() * 60) - 30 ), playerloc)
+                                Helicopter.spawn(
+                                    initialLoc.clone().add((Math.random() * 60) - 30, 50.0, (Math.random() * 60) - 30)
+                                )
                                 startEscape(player)
                                 startEscape = true
                                 startEscapecheck = false
@@ -130,7 +130,7 @@ object FlameGunActions {
             val failedPlayers = mutableSetOf<Player>() // 탈출 실패 메시지를 한 번만 보낸 플레이어 목록'
 
             override fun run() {
-                if(EscapePlayerCount >= EscapePlayerMaxCount) {
+                if (EscapePlayerCount >= EscapePlayerMaxCount) {
                     this.cancel()
                     return
                 }
@@ -143,13 +143,12 @@ object FlameGunActions {
                     }
                     .forEach { currentPlayer ->
 
-                        // playerloc 변수가 null인 경우 처리 (헬기 아래 파티클 위치)
-                        val startLocation = playerloc ?: run {
-                            Bukkit.getLogger().warning("playerloc이 null입니다. 탈출 성공 여부를 확인할 수 없습니다.")
+                        // HelicopterLoc 변수가 null인 경우 처리 (헬기 아래 파티클 위치)
+                        val startLocation = HelicopterLoc?.clone()?.apply { y -= 50 } ?: run {
+                            Bukkit.getLogger().warning("HelicopterLoc이 null입니다. 탈출 성공 여부를 확인할 수 없습니다.")
                             return@forEach
                         }
-
-                        // 플레이어의 현재 위치와 playerloc 비교
+                        // 플레이어의 현재 위치와 HelicopterLoc 비교
                         val currentLocation = currentPlayer.location
 
                         // 플레이어가 처음 파티클 위치에 도달한 경우, playersAtParticle에 추가
@@ -204,29 +203,30 @@ object FlameGunActions {
                                 }
                             }
                         }
-
-                        // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)
-                        if (HelicopterLoc != null) {
-                            try {
-                                for (i in 0..50) {
-                                    val particleLocation = HelicopterLoc!!.clone().subtract(0.0, i.toDouble(), 0.0)
-                                    HelicopterLoc!!.world?.spawnParticle(
-                                        Particle.END_ROD,
-                                        particleLocation,
-                                        1,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    )
-                                }
-                            } catch (e: Exception) {
-                                Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
-                            }
-                        } else {
-                            Bukkit.getLogger().warning("HelicopterLoc의 저장된 좌표가 없습니다. 파티클을 생성할 수 없습니다.")
-                        }
                     }
+                for(particlePlayer in Bukkit.getOnlinePlayers()){
+                    // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)
+                    if (HelicopterLoc != null) {
+                        try {
+                            for (i in 0..50) {
+                                val particleLocation = HelicopterLoc!!.clone().subtract(0.0, i.toDouble(), 0.0)
+                                HelicopterLoc!!.world?.spawnParticle(
+                                    Particle.END_ROD,
+                                    particleLocation,
+                                    1,
+                                    0.0,
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                )
+                            }
+                        } catch (e: Exception) {
+                            Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
+                        }
+                    } else {
+                        Bukkit.getLogger().warning("HelicopterLoc의 저장된 좌표가 없습니다. 파티클을 생성할 수 없습니다.")
+                    }
+                }
                 tickCount += 1
             }
         }.runTaskTimer(Loader.instance, 0L, 20L)  // 매 1초마다 실행

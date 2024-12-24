@@ -10,14 +10,20 @@ import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Global.door
+import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.util.Helicopter.fillBlocks
+import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
+import kr.rion.plugin.util.Item.createCustomItem
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
+
 
 object Start {
     var isStart = false //시작작업상태 플래그
     var isStarting = false //게임 상태 플래그
     var startportal = false //텔레포트 플래그
+    private val worldWait = Bukkit.getWorld("vip")
 
     fun startAction() {
         isStart = true
@@ -28,20 +34,55 @@ object Start {
         executeBlockFillingAndEffect()
         isEnding = false
         chestEnable = false
-        bossbarEnable = false
+        bossbarEnable = 0 // 보스바 업데이트 종료
         EscapePlayerCount = 0
+        fillBlocks(
+            Location(worldWait, 23.0, 60.0, -46.0),
+            Location(worldWait, 23.0, 57.0, -44.0),
+            Material.AIR
+        )
+        setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.AIR)
         door = true
-        for(player in Bukkit.getOnlinePlayers()) {
-            player.allowFlight = false
-            player.isFlying = false
+
+        val craftingItem = createCustomItem(
+            "${ChatColor.GREEN}조합아이템",
+            listOf("${ChatColor.YELLOW}손에들고 우클릭시 조합창을 오픈합니다."),
+            Material.SLIME_BALL
+        )
+        val bookAndQuill = createCustomItem(
+            "${ChatColor.GREEN}미션",
+            listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다."),
+            Material.WRITABLE_BOOK
+        )
+        val map = createCustomItem(
+            "${ChatColor.GREEN}지도",
+            listOf("${ChatColor.YELLOW}클릭시 맵 전체 지도를 확인할수있습니다."),
+            Material.MOJANG_BANNER_PATTERN
+        )
+        val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
+        for (player in Bukkit.getOnlinePlayers()) {
             removeDirectionBossBar(player)
-            player.removeScoreboardTag("EscapeComplete")
-            player.removeScoreboardTag("death")
-            player.inventory.clear()
+            if (!player.scoreboardTags.contains("manager")) {
+                player.allowFlight = false
+                player.isFlying = false
+                player.removeScoreboardTag("EscapeComplete")
+                player.removeScoreboardTag("death")
+                player.inventory.clear()
+                for (i in 8..35) {
+                    when (i) {
+                        20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
+                        24 -> player.inventory.setItem(i, map) // 24번 슬롯에 지도
+                        8 -> player.inventory.setItem(i, craftingItem) // 8번 슬롯에 제작 아이템
+                        else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+                    }
+                }
+
+            }
         }
         resetplayerAttribute()
         playersAtParticle.clear()
         EscapePlayers.clear()
+        reviveFlags.clear()
     }
 
 

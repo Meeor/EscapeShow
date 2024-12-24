@@ -6,6 +6,7 @@ import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.block.BlockState
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryCloseEvent
@@ -14,9 +15,11 @@ class InventoryCloseEvent : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val inventory = event.inventory
+        val holder = inventory.holder
 
         // 닫힌 상자가 플레어건 상자와 일치하지 않으면 리턴
-        if (chestLocation == null || chestLocation!!.block != event.player.location.block) {
+
+        if (chestLocation == null || holder !is BlockState || holder.block.location != chestLocation) {
             return
         }
 

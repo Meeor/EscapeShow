@@ -18,13 +18,11 @@ import org.bukkit.block.data.type.Slab
 import org.bukkit.block.data.type.Stairs
 
 object Helicopter {
-    var playerloc: Location? = null
     var HelicopterLoc: Location? = null
     var HelicopterisSpawn = false
     private val soundName = "custom.hellicop"
-    fun spawn(getloc: Location, player: Location) {
+    fun spawn(getloc: Location) {
         if (HelicopterisSpawn) return
-        playerloc = player
         HelicopterLoc = getloc
         setBlockWithAttributes(
             setloc(getloc, 1.0, 0.0, 2.0), Material.ANDESITE_STAIRS, stairsHalf = Half.TOP, blockFace = BlockFace.WEST
@@ -398,9 +396,10 @@ object Helicopter {
         )
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
         for (allplayer in Bukkit.getOnlinePlayers()) {
-            allplayer.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+            allplayer.playSound(allplayer, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
-        createDirectionBossBarForAll(playerloc!!, "헬기 방향")
+        createDirectionBossBarForAll(HelicopterLoc!!.clone().add(0.0,-50.0,0.0), "헬기 방향")
+        bossbarEnable = 2 //헬기위치로 변경
         HelicopterisSpawn = true
     }
 
@@ -536,7 +535,7 @@ object Helicopter {
         startEscape = false
         flaregunstart?.cancel()
         flaregunstart = null
-        bossbarEnable = false
+        bossbarEnable = 0 //보스바 업데이트 종료
         for(player in Bukkit.getOnlinePlayers()){
             removeDirectionBossBar(player)
         }

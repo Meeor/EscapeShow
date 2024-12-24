@@ -13,7 +13,7 @@ import kotlin.math.min
 object Bossbar {
     private val bossBars: MutableMap<Player, BossBar> = mutableMapOf()
 
-    var bossbarEnable = false
+    var bossbarEnable = 0
 
     // 모든 온라인 플레이어에게 보스바를 생성하고 방향을 표시 (타이틀 변경 가능)
     fun createDirectionBossBarForAll(targetLocation: Location, title: String) {

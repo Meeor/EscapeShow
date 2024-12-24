@@ -12,53 +12,29 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
 class EscapePlayerEvent : Listener {
-    //탈출한 플레이어가 생존자 때리는것을 방지
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     fun onAttack(event: EntityDamageByEntityEvent) {
-        if (event.entity is Player) {
-            val player = event.entity as Player
-            if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
-                event.isCancelled = true
-            }
+        val damager = event.damager
+
+        // 공격자가 플레이어인지 확인
+        if (damager is Player && damager.gameMode == GameMode.ADVENTURE && listOf("EscapeComplete", "DeathAndAlive").any { damager.scoreboardTags.contains(it) }) {
+            event.isCancelled = true
         }
     }
+
 
     //탈출한 플레이어가 받는 모든데미지 무시
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     fun onDamage(event: EntityDamageEvent) {
         if (event.entity is Player) {
             val player = event.entity as Player
-            if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
-                event.isCancelled = true
-            }
-        }
-    }
-
-    //탈출한 플레이어가 상자아이템 훔치는것을 방지.
-    @EventHandler
-    fun onInventoryClick(event: InventoryClickEvent) {
-        val player = event.whoClicked as? Player ?: return
-        // 나침반 GUI와는 상관없도록 예외 처리
-        if (event.view.title == "${ChatColor.DARK_GREEN}텔레포트할 플레이어 선택") {
-            return // 텔레포트 GUI는 그대로 작동
-        }
-        // 조건 확인: 어드벤처 모드이고 EscapeComplete 태그가 있는 경우
-        if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
-            // 상자 아이템 가져가기를 방지
-            if (event.clickedInventory?.type in listOf(
-                    InventoryType.CHEST,
-                    InventoryType.BARREL,
-                    InventoryType.SHULKER_BOX
-                )
-            ) {
+            if (player.gameMode == GameMode.ADVENTURE && listOf("EscapeComplete", "DeathAndAlive").any { player.scoreboardTags.contains(it) }) {
                 event.isCancelled = true
             }
         }
@@ -69,7 +45,7 @@ class EscapePlayerEvent : Listener {
     fun onPlayerDropItem(event: PlayerDropItemEvent) {
         val player = event.player
 
-        if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
+        if (player.gameMode == GameMode.ADVENTURE && listOf("EscapeComplete", "DeathAndAlive").any { player.scoreboardTags.contains(it) }) {
             event.isCancelled = true
         }
     }
@@ -79,7 +55,7 @@ class EscapePlayerEvent : Listener {
     fun onPlayerPickupItem(event: EntityPickupItemEvent) {
         val player = event.entity as? Player ?: return
 
-        if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
+        if (player.gameMode == GameMode.ADVENTURE && listOf("EscapeComplete", "DeathAndAlive").any { player.scoreboardTags.contains(it) }) {
             event.isCancelled = true
         }
     }
@@ -90,14 +66,16 @@ class EscapePlayerEvent : Listener {
         val player = event.player
 
         // 탈출 플레이어인지 확인
-        if (player.gameMode == GameMode.ADVENTURE && player.scoreboardTags.contains("EscapeComplete")) {
+        if (player.gameMode == GameMode.ADVENTURE && listOf("EscapeComplete", "DeathAndAlive").any { player.scoreboardTags.contains(it) }) {
             val item = player.inventory.itemInMainHand
 
             // 텔레포트 나침반인지 확인
             if (item.type == Material.RECOVERY_COMPASS) {
                 val meta = item.itemMeta
                 if (meta != null && hasCustomTag(meta, "teleport")) {
-                    return // 텔레포트 나침반은 상호작용 허용
+                    event.isCancelled = true // 나침반을 들고 있어도 블록 상호작용 차단
+                    player.sendMessage("${ChatColor.RED}나침반을 들고 블록을 클릭할 수 없습니다.")
+                    return
                 }
             }
             // 나침반이 아니면 모든 상호작용 차단

@@ -5,10 +5,7 @@ import kr.rion.plugin.Loader
 import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.PlayerTeleport.openTeleportGUI
 import kr.rion.plugin.item.ItemAction.handleBerries
-import kr.rion.plugin.item.ItemAction.handleContract
 import kr.rion.plugin.item.ItemAction.handleFlameGun
-import kr.rion.plugin.item.ItemAction.handleHeal
-import kr.rion.plugin.item.ItemAction.handleMap
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -25,7 +22,7 @@ import org.bukkit.persistence.PersistentDataType
 
 
 class ItemUseEvent : Listener {
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     fun onPlayerUse(event: PlayerInteractEvent) {
         val item = event.item ?: return
         val itemMeta = item.itemMeta ?: return
@@ -55,10 +52,7 @@ class ItemUseEvent : Listener {
             val nbtItem = NBTItem(item)
             val tag = when (item.type) {
                 Material.FLINT -> "flamegun"
-                Material.PAPER -> "heal"
                 Material.GLOW_BERRIES -> "berries"
-                Material.SKULL_BANNER_PATTERN -> "contract"
-                Material.MOJANG_BANNER_PATTERN -> "map"
                 else -> return
             }
 
@@ -77,20 +71,14 @@ class ItemUseEvent : Listener {
     private fun handleAction(player: Player, tag: String) {
         when (tag) {
             "flamegun" -> handleFlameGun(player)
-            "heal" -> handleHeal(player)
             "berries" -> handleBerries(player)
-            "contract" -> handleContract(player)
-            "map" -> handleMap(player)
         }
     }
 
     private fun getExpectedNameForItem(tag: String): String {
         return when (tag) {
             "flamegun" -> "플레어건"
-            "heal" -> "붕대"
             "berries" -> "농축된 열매"
-            "contract" -> "계약서"
-            "map" -> "지도"
             else -> ""
         }
     }

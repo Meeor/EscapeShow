@@ -2,6 +2,7 @@ package kr.rion.plugin.game
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.Reset.handleGameReset
+import kr.rion.plugin.game.Reset.handleLobbyReset
 import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startportal
@@ -11,7 +12,9 @@ import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.EscapePlayerCount
+import kr.rion.plugin.util.Global.cancelAllTasks
 import kr.rion.plugin.util.Global.door
+import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Helicopter.fillBlocks
@@ -50,7 +53,8 @@ object End {
         isEnding = true
         chestEnable = false
         door = true
-        bossbarEnable = false
+        bossbarEnable = 0
+        Bukkit.broadcastMessage("")
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
         //여기까지.종료직후리셋.
@@ -115,11 +119,13 @@ object End {
 
             // EscapePlayers 리스트를 초기화 (비우기)
             EscapePlayers.clear()
+            reviveFlags.clear()
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 //게임종료 마지막부분에 리셋되어야할것들
                 playersAtParticle.clear()
                 handleGameReset()
                 resetplayerAttribute()
+                cancelAllTasks()
             }, 20L * 13)
         }, 20L * 12)
     }

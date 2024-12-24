@@ -23,6 +23,11 @@ object Global {
     var EscapePlayerMaxCount: Int = 3
     var endingPlayerMaxCount: Int = 6
     var door = true
+    //부활 관련 변수
+    val reviveFlags = mutableMapOf<String, Boolean>() // 플레이어별 부활 상태 저장
+    var respawnTask = mutableMapOf<String, BukkitTask>()
+    val processedPlayers = mutableSetOf<String>() // 이미 처리된 플레이어 저장
+
 
     var playerCheckTask: BukkitTask? = null
 
@@ -77,23 +82,6 @@ object Global {
         }
     }
 
-
-    fun startPlayerCheckTask(plugin: JavaPlugin) {
-        playerCheckTask?.cancel()
-        playerCheckTask = object : BukkitRunnable() {
-            override fun run() {
-                Bukkit.getOnlinePlayers().forEach { player ->
-                    val loc = player.location
-                    if (Teleport.isInDesignatedArea(loc)) {
-                        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
-                            Teleport.teleportToRandomLocation(player)
-                        })
-                    }
-                }
-            }
-        }.runTaskTimer(plugin, 0L, 20L) // 20L은 주기, 1초마다 실행
-    }
-
     fun setGameRulesForAllWorlds() {
         // 서버의 모든 월드에 대해 게임룰을 설정합니다
         for (world in Bukkit.getWorlds()) {
@@ -111,6 +99,8 @@ object Global {
             world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false)
             //도전과제 알림 비활성화
             world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
+            //인벤세이브 강제 비활성화
+            world.setGameRule(GameRule.KEEP_INVENTORY, false)
 
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
@@ -134,6 +124,14 @@ object Global {
             End.EndAction()
         }
 
+    }
+    ///부활체크작업 종료
+    fun cancelAllTasks() {
+        for ((_, task) in respawnTask) {
+            task.cancel() // 모든 작업 종료
+        }
+        respawnTask.clear() // 맵 초기화
+        processedPlayers.clear()
     }
 
 }
