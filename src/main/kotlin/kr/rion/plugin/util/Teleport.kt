@@ -7,6 +7,8 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import java.util.*
 
 
@@ -23,6 +25,7 @@ object Teleport {
     private var destinationWorld: World? = null
     val console = Bukkit.getServer().consoleSender
     val immunePlayers = mutableMapOf<Player, Long>() // 플레이어와 면역 시간 맵
+    val stopPlayer: MutableMap<Player, Boolean> = mutableMapOf()
 
     private var hasInitializedSafeLocations = false
 
@@ -130,6 +133,8 @@ object Teleport {
 
                 val endTime = System.currentTimeMillis()
                 console.sendMessage("$prefix 플레이어 텔레포트 지연시간: ${endTime - startTime}ms")
+                stopPlayer[player] = true
+                player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 999999, 1, false, false))
                 Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                     player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
                     player.sendTitle("${ChatColor.GREEN}게임을 시작합니다.", "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요.")

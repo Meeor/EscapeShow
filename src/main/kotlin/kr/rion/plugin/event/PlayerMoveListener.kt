@@ -7,6 +7,7 @@ import kr.rion.plugin.util.Bossbar
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
 import kr.rion.plugin.util.Teleport
+import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -38,5 +39,9 @@ class PlayerMoveListener : Listener {
                 Teleport.teleportToRandomLocation(player)
             })
         }
+    }
+    @EventHandler
+    fun stopPlayerMove(event: PlayerMoveEvent) {
+        if(stopPlayer[event.player] == true) event.isCancelled
     }
 }

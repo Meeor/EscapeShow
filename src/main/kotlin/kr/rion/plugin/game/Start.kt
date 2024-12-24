@@ -14,8 +14,10 @@ import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Item.createCustomItem
+import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.*
 import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 
 
@@ -101,6 +103,14 @@ object Start {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
                         }
                     }
+                    object : BukkitRunnable() {
+                        override fun run() {
+                            for(player in Bukkit.getOnlinePlayers()){
+                                stopPlayer[player] = false
+                                player.removePotionEffect(PotionEffectType.BLINDNESS)
+                            }
+                        }
+                    }.runTaskLater(Loader.instance, 20L * 7)
                     // 3분 후 isStart를 false로 설정하는 작업 추가
                     object : BukkitRunnable() {
                         override fun run() {
