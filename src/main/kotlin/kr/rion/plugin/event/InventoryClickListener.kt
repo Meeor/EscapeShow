@@ -379,21 +379,19 @@ class InventoryClickListener : Listener {
         // 상자가 아닌 플레이어 인벤토리에서만 처리
         if (event.clickedInventory == player.inventory) {
             if (slot in 9..35) {
+                event.isCancelled = true
                 when (slot) {
                     20 -> {
-                        event.isCancelled = true // 기본 동작 취소
                         player.sendMessage("§6책과 깃펜 GUI를 엽니다.") // 책과 깃펜 GUI 열기 로직 추가
                         // 여기서 책 GUI를 여는 동작 구현
                     }
 
                     24 -> {
-                        event.isCancelled = true // 기본 동작 취소
                         player.sendMessage("§a지도를 표시합니다.") // 지도 GUI 로직 추가
                         // 여기서 지도 표시 동작 구현
                     }
 
                     else -> {
-                        event.isCancelled = true // 나머지 슬롯 클릭 취소
                         player.sendMessage("§c이 슬롯은 사용할 수 없습니다.") // 사용자에게 알림 메시지 출력
                     }
                 }
