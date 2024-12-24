@@ -7,15 +7,16 @@ import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Item.createCustomItem
-import kr.rion.plugin.util.inventory
-import org.bukkit.Bukkit
 import org.bukkit.*
-import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
+import org.bukkit.entity.Display
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
+import org.bukkit.entity.TextDisplay
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntitySpawnEvent
+import org.bukkit.scheduler.BukkitRunnable
 
 
 class onEntitySpawn: Listener {
@@ -101,6 +102,7 @@ class onEntitySpawn: Listener {
                             player.gameMode = GameMode.SURVIVAL
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
                             player.sendMessage("§a당신은 부활했습니다!")
+                            createTemporaryTextDisplay(player,"§a부활",10)
                             processedPlayers.add(playerName)
                             for (slot in 9..35) {
                                 val item = player.inventory.getItem(slot)
@@ -147,6 +149,26 @@ class onEntitySpawn: Listener {
             }, 20L, 20L) // 매초마다 체크
             respawnTask[playerName] = task
         }
+    }
+
+    // 텍스트 디스플레이 생성 및 제거
+    fun createTemporaryTextDisplay(player: Player, text: String?, durationInSeconds: Int) {
+        // 플레이어 앞에 텍스트 디스플레이 생성
+        val location = player.location.add(player.location.direction.multiply(2)) // 플레이어 앞 2칸
+        val textDisplay: TextDisplay = player.world.spawnEntity(location, EntityType.TEXT_DISPLAY) as TextDisplay
+
+        // 텍스트 설정
+        textDisplay.setCustomName(text) // 텍스트 내용
+        textDisplay.setCustomNameVisible(true) // 항상 표시
+        textDisplay.setBillboard(Display.Billboard.CENTER) // 카메라 중심
+        textDisplay.setShadowed(true) // 그림자 효과
+
+        // 일정 시간이 지난 후 제거
+        object : BukkitRunnable() {
+            override fun run() {
+                textDisplay.remove()
+            }
+        }.runTaskLater(Loader.instance, durationInSeconds * 20L) // 20L = 1초
     }
 
 }
