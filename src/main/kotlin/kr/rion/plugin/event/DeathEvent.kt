@@ -21,6 +21,11 @@ class DeathEvent : Listener {
     fun onDeath(event: PlayerDeathEvent) {
         val player: Player = event.player
         val console = Bukkit.getConsoleSender()
+        // 9번~35번 슬롯의 아이템 제거
+        val inventory = player.inventory
+        for (slot in 9..35) {
+            inventory.setItem(slot, null) // 해당 슬롯의 아이템 제거
+        }
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 2 * 20, 1, false, false))
         Bukkit.broadcastMessage("${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${Global.SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         console.sendMessage("${ChatColor.YELLOW}${event.player.name}${ChatColor.RESET}님이${ChatColor.RED}사망${ChatColor.RESET}하였습니다.")
@@ -29,6 +34,6 @@ class DeathEvent : Listener {
         if (ifEnding) {
             endingPlayer()
         }
-
     }
+
 }
