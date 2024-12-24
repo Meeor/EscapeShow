@@ -13,6 +13,7 @@ import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntitySpawnEvent
+import org.bukkit.potion.PotionEffectType
 
 
 class onEntitySpawn: Listener {
@@ -102,6 +103,7 @@ class onEntitySpawn: Listener {
                             player.gameMode = GameMode.SURVIVAL
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
                             player.sendMessage("§a당신은 부활했습니다!")
+                            player.removePotionEffect(PotionEffectType.INVISIBILITY)
                             removeTextDisplay(corpseEntity)
                             processedPlayers.add(playerName)
                             for (slot in 9..35) {
