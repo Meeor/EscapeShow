@@ -24,10 +24,11 @@ class RespawnEvent : Listener {
             event.respawnLocation = player.location // 플레이어의 사망 위치로 리스폰 설정
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1)) // 40틱(2초) 동안 실명 효과
+                player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1, false, false))
             }, 1L) // 1틱 후에 실행
             if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) {
                 player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
-                player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1, false, false))
+
                 player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 웅크리고 3초간 있을경우 부활할수있습니다.")
                 player.addScoreboardTag("DeathAndAlive")
             } else {

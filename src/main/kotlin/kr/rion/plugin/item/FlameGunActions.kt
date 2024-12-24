@@ -4,6 +4,7 @@ import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
+import kr.rion.plugin.util.Global.adjustToHighestValidLocation
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
@@ -144,8 +145,23 @@ object FlameGunActions {
                     .forEach { currentPlayer ->
 
                         // HelicopterLoc 변수가 null인 경우 처리 (헬기 아래 파티클 위치)
-                        val startLocation = HelicopterLoc?.clone()?.apply { y -= 50 } ?: run {
-                            Bukkit.getLogger().warning("HelicopterLoc이 null입니다. 탈출 성공 여부를 확인할 수 없습니다.")
+                        val startLocation = HelicopterLoc?.clone()?.apply {
+                            y -= 50 // Y 좌표를 50 줄임
+                        }?.let { baseLocation ->
+                            HelicopterLoc!!.world?.let {
+                                adjustToHighestValidLocation(
+                                    it, baseLocation, setOf(
+                                        Material.AZALEA_LEAVES, // 진달래잎
+                                        Material.FERN, // 고사리
+                                        Material.LARGE_FERN, // 큰고사리
+                                        Material.GRASS, // 잔디
+                                        Material.CRIMSON_BUTTON, // 진홍빛버튼
+                                        Material.WATER, // 물
+                                        Material.LAVA // 용암
+                                    ))
+                            }
+                        } ?: run {
+                            Bukkit.getLogger().warning("HelicopterLoc이 null이거나 유효한 위치를 찾을 수 없습니다. 탈출 성공 여부를 확인할 수 없습니다.")
                             return@forEach
                         }
                         // 플레이어의 현재 위치와 HelicopterLoc 비교

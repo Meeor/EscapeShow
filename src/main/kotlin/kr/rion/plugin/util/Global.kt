@@ -5,10 +5,7 @@ import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.GameMode
-import org.bukkit.GameRule
+import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -129,6 +126,24 @@ object Global {
         }
         respawnTask.clear() // 맵 초기화
         processedPlayers.clear()
+    }
+
+    fun adjustToHighestValidLocation(world: World, baseLocation: Location, excludedBlocks: Set<Material>): Location? {
+        val xInt = baseLocation.blockX
+        val zInt = baseLocation.blockZ
+        val yStart = (baseLocation.y - 50).toInt() // 시작 Y 좌표
+        val minY = world.minHeight // 월드 최소 높이
+
+        for (y in yStart downTo minY) {
+            val block = world.getBlockAt(xInt, y, zInt)
+            if (block.type.isSolid && block.type !in excludedBlocks) {
+                // 유효한 블록을 찾았을 때 해당 위치 반환
+                return Location(world, xInt.toDouble(), y.toDouble(), zInt.toDouble())
+            }
+        }
+
+        // 유효한 블록이 없으면 null 반환
+        return null
     }
 
 }

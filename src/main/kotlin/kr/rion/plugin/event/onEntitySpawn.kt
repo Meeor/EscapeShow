@@ -29,9 +29,6 @@ class onEntitySpawn: Listener {
         if (entity.toString().contains("CORPSE_CORPSE")) {
             val corpseEntity = entity as com.mohistmc.bukkit.entity.MohistModsEntity
 
-
-
-
             //NBTAPI를 사용하여 데이터 가져오기
             val nbtEntity = NBTEntity(corpseEntity)
             val deathData = nbtEntity.getCompound("Death") // Death NBT 태그 접근
@@ -96,7 +93,7 @@ class onEntitySpawn: Listener {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
 
-                        if (currentTime >= 3) { // 3초간 웅크림 확인
+                        if (currentTime >= 5) { // 5초간 웅크림 확인
                             // 부활 조건 충족
                             reviveFlags[playerName] = false // 부활 불가능 상태로 변경
                             sneakingTimers.remove(playerName)
