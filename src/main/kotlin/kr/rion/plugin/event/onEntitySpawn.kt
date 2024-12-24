@@ -13,7 +13,6 @@ import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntitySpawnEvent
-import org.bukkit.scheduler.BukkitRunnable
 
 
 class onEntitySpawn: Listener {
@@ -58,7 +57,7 @@ class onEntitySpawn: Listener {
                 }
 
                 // MainInventory 데이터 확인 및 시체 엔티티 제거 조건
-                val mainInventory = deathData?.getCompoundList("MainInventory")
+                val mainInventory = deathData.getCompoundList("MainInventory")
                 if(mainInventory == null || mainInventory.isEmpty()){
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
