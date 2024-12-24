@@ -45,7 +45,7 @@ class PlayerMoveListener : Listener {
     }
 
     //////플라이 풀림 원인 디버깅
-    @EventHandler
+    /*@EventHandler
     fun onGameModeChange(event: PlayerGameModeChangeEvent) {
         val player = event.player
         if (event.newGameMode != GameMode.CREATIVE && event.newGameMode != GameMode.SPECTATOR) {
@@ -73,6 +73,6 @@ class PlayerMoveListener : Listener {
                 notifiedPlayers.remove(player)
             }
         }
-    }
+    }*/
     /////플라이 풀림 원인 디버깅
 }

@@ -31,7 +31,7 @@ class DeathEvent : Listener {
         }
         if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) {
             player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
-            player.isInvisible = true // 투명화
+            player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false))
             player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 웅크리고 3초간 있을경우 부활할수있습니다.")
             player.addScoreboardTag("DeathAndAlive")
         } else {

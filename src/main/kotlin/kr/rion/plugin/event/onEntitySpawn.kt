@@ -9,7 +9,6 @@ import kr.rion.plugin.util.Global.reviveFlags
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
-import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -26,10 +25,12 @@ class onEntitySpawn: Listener {
     fun onEntitySpawn(event: EntitySpawnEvent) {
         if(!isStarting) return
         val entity = event.entity
+        Bukkit.getLogger().info(entity.toString())
 
         // Corpse 엔티티 감지
-        if (entity.type == EntityType.fromName("corpse:corpse")) {
+        if (entity.toString().contains("CORPSE_CORPSE")) {
             val corpseEntity = entity as LivingEntity
+            Bukkit.getLogger().info(corpseEntity.toString())
 
             // NBTAPI를 사용하여 PlayerName 데이터 확인
             val nbtEntity = NBTEntity(corpseEntity)
@@ -67,11 +68,14 @@ class onEntitySpawn: Listener {
                 // 플레이어가 웅크리고 반경 1칸 이내에 있는지 확인
                 val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 1.0, 1.0, 1.0)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
-
+                val player = Bukkit.getPlayer(playerName) ?: return@Runnable
+                player.sendMessage("${corpseEntity.location}")
                 for (nearbyPlayer in nearbyPlayers) {
                     if (nearbyPlayer.name == playerName && nearbyPlayer.isSneaking) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
+                        val player = Bukkit.getPlayer(playerName) ?: return@Runnable
+                        player.sendMessage("$currentTime 초지남.")
 
                         if (currentTime >= 3) { // 3초간 웅크림 확인
                             // 부활 조건 충족
@@ -87,6 +91,8 @@ class onEntitySpawn: Listener {
                             break
                         }
                     } else {
+                        val player = Bukkit.getPlayer(playerName) ?: return@Runnable
+                        player.sendMessage("웅크리기가 풀려 시간이 초기화 되었습니다.")
                         sneakingTimers.remove(playerName) // 웅크리지 않으면 시간 초기화
                     }
                 }
