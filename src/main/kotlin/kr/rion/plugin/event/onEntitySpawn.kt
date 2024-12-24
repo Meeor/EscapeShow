@@ -24,12 +24,10 @@ class onEntitySpawn: Listener {
     fun onEntitySpawn(event: EntitySpawnEvent) {
         if(!isStarting) return
         val entity = event.entity
-        Bukkit.getLogger().info(entity.toString())
 
         // MohistModsEntity 감지
         if (entity.toString().contains("CORPSE_CORPSE")) {
             val corpseEntity = entity as com.mohistmc.bukkit.entity.MohistModsEntity
-            Bukkit.getLogger().info(corpseEntity.toString())
 
             //NBTAPI를 사용하여 데이터 가져오기
             val nbtEntity = NBTEntity(corpseEntity)
@@ -70,15 +68,10 @@ class onEntitySpawn: Listener {
                 // 플레이어가 웅크리고 반경 1칸 이내에 있는지 확인
                 val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 1.0, 1.0, 1.0)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
-                val player = Bukkit.getPlayer(playerName) ?: return@Runnable
-                player.sendMessage("${corpseEntity.location}")
                 for (nearbyPlayer in nearbyPlayers) {
-                    Bukkit.getLogger().info("Player ${nearbyPlayer.name} sneaking: ${nearbyPlayer.isSneaking}  playername : ${playerName}")
                     if (nearbyPlayer.name == playerName && nearbyPlayer.isSneaking) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
-                        val player = Bukkit.getPlayer(playerName) ?: return@Runnable
-                        player.sendMessage("$currentTime 초지남.")
 
                         if (currentTime >= 3) { // 3초간 웅크림 확인
                             // 부활 조건 충족
