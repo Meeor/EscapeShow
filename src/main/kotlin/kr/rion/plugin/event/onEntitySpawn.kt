@@ -2,6 +2,7 @@ package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
@@ -23,6 +24,7 @@ class onEntitySpawn: Listener {
 
     @EventHandler
     fun onEntitySpawn(event: EntitySpawnEvent) {
+        if(!isStarting) return
         val entity = event.entity
 
         // Corpse 엔티티 감지
