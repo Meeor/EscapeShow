@@ -65,11 +65,10 @@ object FlameGunSpawn {
         }.runTaskTimer(Loader.instance, 0, 20) // 1초마다 반복
 
         // 모든 플레이어에게 플레어건 소환 메시지와 타이틀 표시
-        Bukkit.broadcastMessage("$prefix 플레어건이 나타났습니다 (${location.blockX}, ${location.blockY}, ${location.blockZ})")
         Bukkit.getOnlinePlayers().forEach { onlinePlayer ->
             onlinePlayer.sendTitle(
                 "${ChatColor.RED}플레어건${ChatColor.YELLOW}이 등장하였습니다!",
-                "${ChatColor.GOLD}좌표 : ${ChatColor.AQUA}X :${location.blockX}, Y : ${location.blockY}, Z : ${location.blockZ}",
+                "",
                 10, 20 * 3, 10
             )
         }
