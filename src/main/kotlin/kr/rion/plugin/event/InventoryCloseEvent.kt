@@ -2,6 +2,7 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestLocation
 import kr.rion.plugin.gameEvent.FlameGunSpawn.particleTask
+import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
@@ -29,6 +30,7 @@ class InventoryCloseEvent : Listener {
             particleTask?.cancel() // 파티클 반복 종료
             chestLocation = null // 위치 초기화
             Bukkit.broadcastMessage("$prefix 누군가가 플레어건을 획득했습니다!")
+            bossbarEnable = 0
             for (player in Bukkit.getOnlinePlayers()) {
                 removeDirectionBossBar(player)
             }
