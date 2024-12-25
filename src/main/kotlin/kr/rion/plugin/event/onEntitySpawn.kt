@@ -2,6 +2,7 @@ package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
@@ -23,7 +24,7 @@ class onEntitySpawn: Listener {
 
     @EventHandler
     fun onEntitySpawn(event: EntitySpawnEvent) {
-        if(!isStarting) return
+        if(!isStarting || isEnding) return
         val entity = event.entity
 
         // MohistModsEntity 감지

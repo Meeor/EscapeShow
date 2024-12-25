@@ -64,17 +64,23 @@ object End {
             player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
 
-        //사망자,탈출자,운영자를제외한 남은플레이어는 생존한플레이어로 !
+        // 사망자, 탈출자, 운영자를 제외한 남은 플레이어 처리
         world?.players?.forEach { player ->
-            // 플레이어가 서바이벌 모드인 경우
-            if (!player.scoreboardTags.contains("death") && !player.scoreboardTags.contains("manager") && !player.scoreboardTags.contains(
-                    "EscapeComplete"
-                )
-            ) {
-                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                    player.sendTitle("${ChatColor.GREEN}생존하였습니다!", "")
-                    SurvivalPlayers.add(player.name)
-                }, 20L * 10)
+            if (!player.scoreboardTags.contains("manager")) { // 운영자는 제외
+                if (!player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains("death")) {
+                    if (player.scoreboardTags.contains("MissionSuccess")) {
+                        // MissionSuccess 태그가 있는 경우 생존 처리
+                        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                            player.sendTitle("${ChatColor.GREEN}생존하였습니다!", "")
+                            SurvivalPlayers.add(player.name)
+                        }, 20L * 10)
+                    } else {
+                        // MissionSuccess 태그가 없는 경우 데미지를 줘서 죽임
+                        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                            player.damage(20.0) // 치명적인 데미지를 줘서 죽임
+                        }, 20L * 10)
+                    }
+                }
             }
         }
 
@@ -86,6 +92,7 @@ object End {
                 removeDirectionBossBar(player)
                 player.removeScoreboardTag("EscapeComplete")
                 player.removeScoreboardTag("death")
+                player.removeScoreboardTag("MissionSuccess")
                 player.inventory.clear()
                 for (effect in player.activePotionEffects) {
                     player.removePotionEffect(effect.type)

@@ -66,9 +66,8 @@ object Global {
         } else {
             Bukkit.broadcastMessage("${ChatColor.LIGHT_PURPLE}탈출 허용 인원이 가득 차 헬기가 떠납니다.")
             Helicopter.remove() // 내부적으로 null 체크를 처리함
+            ifEnding = true
         }
-
-
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
         Bossbar.removeDirectionBossBar(player)
         if (ifEnding) {
@@ -102,12 +101,13 @@ object Global {
 
     fun SurvivalPlayers(): Int {
         val survivalPlayers = Bukkit.getOnlinePlayers()
-            .filter {
-                !it.scoreboardTags.contains("manager")
-                        && !it.scoreboardTags.contains("EscapeComplete")
-                        && !it.scoreboardTags.contains("death")
+            .filter { player ->
+                !player.scoreboardTags.contains("manager") && // 매니저가 아님
+                        !player.scoreboardTags.contains("EscapeComplete") && // EscapeComplete 태그가 없음
+                        !player.scoreboardTags.contains("death") && // death 태그가 없음
+                        player.scoreboardTags.contains("MissionSuccess") // MissionSuccess 태그가 있음
             }
-        return survivalPlayers.size  // 필터링된 생존 플레이어의 수 반환
+        return survivalPlayers.size // 필터링된 생존 플레이어의 수 반환
     }
 
     fun endingPlayer() {

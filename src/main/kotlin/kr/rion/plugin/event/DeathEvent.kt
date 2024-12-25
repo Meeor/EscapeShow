@@ -1,6 +1,8 @@
 package kr.rion.plugin.event
 
 import kr.rion.plugin.game.End.ifEnding
+import kr.rion.plugin.game.End.isEnding
+import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Bossbar
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.endingPlayer
@@ -19,6 +21,7 @@ class DeathEvent : Listener {
     //사망시 관전모드
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     fun onDeath(event: PlayerDeathEvent) {
+        if(isEnding || !isStarting) return
         val player: Player = event.player
         val console = Bukkit.getConsoleSender()
         // 9번~35번 슬롯의 아이템 제거

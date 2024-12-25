@@ -70,6 +70,7 @@ object Start {
                 player.isFlying = false
                 player.removeScoreboardTag("EscapeComplete")
                 player.removeScoreboardTag("death")
+                player.removeScoreboardTag("MissionSuccess")
                 player.inventory.clear()
                 for (i in 8..35) {
                     when (i) {
