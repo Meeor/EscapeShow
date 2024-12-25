@@ -77,7 +77,7 @@ object End {
                     } else {
                         // MissionSuccess 태그가 없는 경우 데미지를 줘서 죽임
                         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                            player.damage(20.0) // 치명적인 데미지를 줘서 죽임
+                            player.health = 0.0 // 치명적인 데미지를 줘서 죽임
                         }, 20L * 10)
                     }
                 }
@@ -87,12 +87,14 @@ object End {
         //모든플레이어들.. 게임모드나 플라이등의 설정변경.
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
             for (player in Bukkit.getOnlinePlayers()) {
-                player.allowFlight = false
-                player.isFlying = false
+
                 removeDirectionBossBar(player)
-                player.removeScoreboardTag("EscapeComplete")
-                player.removeScoreboardTag("death")
-                player.removeScoreboardTag("MissionSuccess")
+                if (!player.scoreboardTags.contains("manager")) {
+                    // manager 태그가 없는 플레이어작업
+                    player.scoreboardTags.clear()
+                    player.allowFlight = false
+                    player.isFlying = false
+                }
                 player.inventory.clear()
                 for (effect in player.activePotionEffects) {
                     player.removePotionEffect(effect.type)

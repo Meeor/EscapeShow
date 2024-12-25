@@ -1,6 +1,7 @@
 package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.reviveFlags
 import org.bukkit.Bukkit
@@ -22,13 +23,13 @@ class RespawnEvent : Listener {
         // 예를 들어, 원래 리스폰 위치를 설정하지 않도록 하고 싶다면 이 코드를 추가합니다:
         if (isStarting) {
             event.respawnLocation = player.location // 플레이어의 사망 위치로 리스폰 설정
+            if(isEnding) return
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1)) // 40틱(2초) 동안 실명 효과
                 player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1, false, false))
             }, 5L) // 5틱 후에 실행
             if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) {
                 player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
-
                 player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 웅크리고 3초간 있을경우 부활할수있습니다.")
                 player.addScoreboardTag("DeathAndAlive")
             } else {

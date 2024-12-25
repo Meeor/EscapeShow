@@ -68,9 +68,8 @@ object Start {
             if (!player.scoreboardTags.contains("manager")) {
                 player.allowFlight = false
                 player.isFlying = false
-                player.removeScoreboardTag("EscapeComplete")
-                player.removeScoreboardTag("death")
-                player.removeScoreboardTag("MissionSuccess")
+                // manager 태그가 없는 플레이어의 태그 모두 제거
+                player.scoreboardTags.clear()
                 player.inventory.clear()
                 for (i in 8..35) {
                     when (i) {
@@ -80,7 +79,6 @@ object Start {
                         else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
                     }
                 }
-
             }
         }
         resetplayerAttribute()
