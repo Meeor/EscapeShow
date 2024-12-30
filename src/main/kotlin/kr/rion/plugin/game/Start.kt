@@ -6,6 +6,7 @@ import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
+import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global.EscapePlayerCount
@@ -29,6 +30,7 @@ object Start {
 
     fun startAction() {
         stopPlayer.clear()
+        MissionManager.resetMissions()
         isStart = true
         startportal = true
         for (player in Bukkit.getOnlinePlayers()) {
@@ -69,6 +71,7 @@ object Start {
                 player.allowFlight = false
                 player.isFlying = false
                 // manager 태그가 없는 플레이어의 태그 모두 제거
+                MissionManager.assignMission(player) //플레이어에게 미션 부여
                 player.scoreboardTags.clear()
                 player.inventory.clear()
                 for (i in 8..35) {

@@ -7,6 +7,8 @@ import kr.rion.plugin.event.EventListener
 import kr.rion.plugin.event.VoiceChatEvent
 import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.manager.CommandManager
+import kr.rion.plugin.manager.MissionManager
+import kr.rion.plugin.mission.MissionList
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.endingPlayerMaxCount
@@ -32,8 +34,9 @@ class Loader : JavaPlugin() {
         Teleport.initialize(this)
         val line = "=".repeat(42)
 
-        server.pluginManager.registerEvents(EventListener(), this)
-        CommandManager(this).registerCommands()
+        server.pluginManager.registerEvents(EventListener(), this) //이벤트 등록
+        MissionList.registerAll() //미션 등록
+        CommandManager(this).registerCommands() //명령어 등록
 
         ///voicechat를위한 추가이벤트리스너
         // VoiceChat API 서비스 불러오기
@@ -88,6 +91,7 @@ class Loader : JavaPlugin() {
     override fun onDisable() {
         Global.playerCheckTask?.cancel()
         saveConfig()
+        MissionManager.resetMissions() //미션 내부정보들 전부 초기화
     }
 
     /*

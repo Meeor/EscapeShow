@@ -7,6 +7,7 @@ import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startportal
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
+import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global
@@ -55,6 +56,7 @@ object End {
         door = true
         bossbarEnable = 0
         stopPlayer.clear()
+        MissionManager.resetMissions()
         Bukkit.broadcastMessage("")
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
