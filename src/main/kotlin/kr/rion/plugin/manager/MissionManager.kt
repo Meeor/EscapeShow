@@ -9,7 +9,7 @@ object MissionManager {
 
     fun assignMission(player: Player) {
         // 1~50 사이의 랜덤 번호 생성
-        val randomMissionId = (1..11).random()
+        val randomMissionId = (1..14).random()
 
         // 태그 추가
         player.addScoreboardTag("MissionNo$randomMissionId")
