@@ -3,6 +3,7 @@ package kr.rion.plugin.command
 
 import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.GameEventCommand.handleEvent
+import kr.rion.plugin.command.Mission.HandleMission
 import kr.rion.plugin.command.game.handlegame
 import org.bukkit.Location
 import org.bukkit.command.Command
@@ -24,6 +25,7 @@ class CommandHandler : CommandExecutor {
             "인원설정" -> HandleSetting(sender, args)
             "이벤트" -> handleEvent(sender, args)
             "게임" -> handlegame(sender)
+            "미션" -> HandleMission(sender, args)
 
             else -> return false
         }

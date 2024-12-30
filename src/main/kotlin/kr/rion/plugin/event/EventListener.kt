@@ -23,7 +23,8 @@ class EventListener : Listener {
             InventoryCloseEvent(),
             PlayerMoveListener(),
             EscapePlayerEvent(),
-            onEntitySpawn()
+            onEntitySpawn(),
+            MissionEvent()
             //CreditEvent()
         )
 

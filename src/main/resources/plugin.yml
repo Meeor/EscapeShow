@@ -25,6 +25,11 @@ commands:
     usage: /<command>
     permission: EscapeShow.Game.GUI
     permission-message: 이 명령어를 사용할 권한이 없습니다.
+  미션:
+    description: 테스트를 위한 미션수동 명령어입니다.
+    usage: /<command> <부여/제거> [player] [missionid]
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
 
 permissions:
   EscapeShow.Game.GUI:

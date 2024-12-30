@@ -13,8 +13,10 @@ class CommandManager(private val plugin: JavaPlugin) {
         plugin.getCommand("인원설정")?.setExecutor(commandHandler)
         plugin.getCommand("이벤트")?.setExecutor(commandHandler)
         plugin.getCommand("게임")?.setExecutor(commandHandler)
+        plugin.getCommand("미션")?.setExecutor(commandHandler)
         // TabCompleter
         plugin.getCommand("인원설정")?.tabCompleter = TabComplete()
         plugin.getCommand("이벤트")?.tabCompleter = TabComplete()
+        plugin.getCommand("미션")?.tabCompleter = TabComplete()
     }
 }
