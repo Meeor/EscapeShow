@@ -186,7 +186,7 @@ class InventoryClickListener : Listener {
     }
 
     @EventHandler
-    fun GiveItemClickEvent(event: InventoryClickEvent) {
+    fun giveItemClickEvent(event: InventoryClickEvent) {
         if (event.view.title != "${ChatColor.DARK_BLUE}아이템지급") return
         val player = event.whoClicked as? Player ?: return
         val item = event.currentItem
@@ -222,7 +222,7 @@ class InventoryClickListener : Listener {
     }
 
     @EventHandler
-    fun ResetClickEvent(event: InventoryClickEvent) {
+    fun resetClickEvent(event: InventoryClickEvent) {
         if (event.view.title != "${ChatColor.DARK_BLUE}리셋") return
         val player = event.whoClicked as? Player ?: return
         val item = event.currentItem
@@ -246,7 +246,7 @@ class InventoryClickListener : Listener {
     }
 
     @EventHandler
-    fun RandomTpClickEvent(event: InventoryClickEvent) {
+    fun randomTpClickEvent(event: InventoryClickEvent) {
         if (event.view.title != "${ChatColor.DARK_BLUE}랜덤티피") return
         val player = event.whoClicked as? Player ?: return
         val item = event.currentItem
