@@ -24,8 +24,9 @@ object MissionManager {
             player.sendMessage("해당 미션을 찾을 수 없습니다: $randomMissionId")
         }
     }
+
     //테스트용 미션 수동부여 함수
-    fun assignSpecificMission(sender: CommandSender,player: Player, missionId: Int) {
+    fun assignSpecificMission(sender: CommandSender, player: Player, missionId: Int) {
         // 유효한 미션 ID 범위 확인
         if (missionId !in 1..14) {
             sender.sendMessage("잘못된 미션 ID입니다. 유효한 범위는 1~14입니다.")
@@ -47,8 +48,9 @@ object MissionManager {
             sender.sendMessage("해당 미션을 찾을 수 없습니다: ID $missionId")
         }
     }
+
     //테스트용 미션 수동 제거
-    fun removeMission(sender: CommandSender,player: Player) {
+    fun removeMission(sender: CommandSender, player: Player) {
         // 플레이어에게 활성화된 미션이 있는지 확인
         val missionId = activeMissions[player]
         player.removeScoreboardTag("MissionNo$missionId")
@@ -74,6 +76,7 @@ object MissionManager {
             activeMissions.remove(player)
         }
     }
+
     fun resetMissions() {
         activeMissions.clear()
         // 모든 등록된 미션의 데이터를 초기화
@@ -81,6 +84,7 @@ object MissionManager {
             mission.reset()
         }
     }
+
     fun listMission(): MutableMap<Player, Int> {
         return activeMissions
     }

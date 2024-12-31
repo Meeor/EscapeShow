@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
@@ -46,5 +47,13 @@ class MissionEvent :Listener {
     fun killer(event: PlayerDeathEvent){
         val killer = event.entity.killer ?: return // 킬러가 없는 경우 종료
         MissionManager.handleEvent(killer, event)
+    }
+    @EventHandler(ignoreCancelled = false)
+    fun damager(event: EntityDamageByEntityEvent){
+        val damager = event.damager
+        if (damager is Player) {
+            // 미션 시스템에 이벤트 전달
+            MissionManager.handleEvent(damager, event)
+        }
     }
 }

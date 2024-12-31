@@ -21,5 +21,6 @@ object MissionList {
         MissionRegistry.registerMission(12, PlayerKillMission(10)) //PlayerDeathEvent
         MissionRegistry.registerMission(13, KillWithSpecificItemMission(Material.AIR)) //PlayerDeathEvent
         MissionRegistry.registerMission(14, KillWithSpecificItemMission(Material.COBBLESTONE)) //PlayerDeathEvent
+        MissionRegistry.registerMission(15, CumulativeDamageMission(20.0)) //EntityDamageByEntityEvent
     }
 }

@@ -36,11 +36,11 @@ object Mission {
                     return
                 }
 
-                MissionManager.assignSpecificMission(sender,player, missionId)
+                MissionManager.assignSpecificMission(sender, player, missionId)
             }
 
             "제거" -> {
-                MissionManager.removeMission(sender,player)
+                MissionManager.removeMission(sender, player)
             }
 
             else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. 사용법: /미션 <부여/제거> [플레이어] [숫자]")

@@ -61,53 +61,57 @@ object End {
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
         //여기까지.종료직후리셋.
-        //모든플레이어에게 게임종료사운드보내기.
-        for (player in Bukkit.getOnlinePlayers()) {
-            player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
-        }
+        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+            //모든플레이어에게 게임종료사운드보내기.
+            for (player in Bukkit.getOnlinePlayers()) {
+                player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+            }
 
-        // 사망자, 탈출자, 운영자를 제외한 남은 플레이어 처리
-        world?.players?.forEach { player ->
-            if (!player.scoreboardTags.contains("manager")) { // 운영자는 제외
-                if (!player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains("death")) {
-                    if (player.scoreboardTags.contains("MissionSuccess")) {
-                        // MissionSuccess 태그가 있는 경우 생존 처리
-                        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                            player.sendTitle("${ChatColor.GREEN}생존하였습니다!", "")
-                            SurvivalPlayers.add(player.name)
-                        }, 20L * 10)
-                    } else {
-                        // MissionSuccess 태그가 없는 경우 데미지를 줘서 죽임
-                        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                            player.health = 0.0 // 치명적인 데미지를 줘서 죽임
-                        }, 20L * 10)
+            // 사망자, 탈출자, 운영자를 제외한 남은 플레이어 처리
+            world?.players?.forEach { player ->
+                if (!player.scoreboardTags.contains("manager")) { // 운영자는 제외
+                    if (!player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains("death")) {
+                        if (player.scoreboardTags.contains("MissionSuccess")) {
+                            // MissionSuccess 태그가 있는 경우 생존 처리
+                            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                                player.sendTitle("${ChatColor.GREEN}생존하였습니다!", "")
+                                SurvivalPlayers.add(player.name)
+                            }, 20L * 10)
+                        } else {
+                            // MissionSuccess 태그가 없는 경우 데미지를 줘서 죽임
+                            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                                player.health = 0.0 // 치명적인 데미지를 줘서 죽임
+                            }, 20L * 10)
+                        }
                     }
                 }
             }
-        }
+        })
 
         //모든플레이어들.. 게임모드나 플라이등의 설정변경.
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-            for (player in Bukkit.getOnlinePlayers()) {
+            Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+                for (player in Bukkit.getOnlinePlayers()) {
 
-                removeDirectionBossBar(player)
-                if (!player.scoreboardTags.contains("manager")) {
-                    // manager 태그가 없는 플레이어작업
-                    player.scoreboardTags.clear()
-                    player.allowFlight = false
-                    player.isFlying = false
-                }
-                player.inventory.clear()
-                for (effect in player.activePotionEffects) {
-                    player.removePotionEffect(effect.type)
-                }
+                    removeDirectionBossBar(player)
+                    if (!player.scoreboardTags.contains("manager")) {
+                        // manager 태그가 없는 플레이어작업
+                        player.scoreboardTags.clear()
+                        player.allowFlight = false
+                        player.isFlying = false
+                    }
+                    player.inventory.clear()
+                    for (effect in player.activePotionEffects) {
+                        player.removePotionEffect(effect.type)
+                    }
 
-                if (worldWait != null) {
-                    player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
-                } else {
-                    player.sendMessage("${Global.prefix}${ChatColor.RED}플러그인에 버그가 발생하였습니다. 운영자에게 이동을 요청하시길 바랍니다.")
+                    if (worldWait != null) {
+                        player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
+                    } else {
+                        player.sendMessage("${Global.prefix}${ChatColor.RED}플러그인에 버그가 발생하였습니다. 운영자에게 이동을 요청하시길 바랍니다.")
+                    }
                 }
-            }
+            })
             val line = "=".repeat(40)
             val escapePlayersMessage = if (EscapePlayers.isNotEmpty()) {
                 EscapePlayers.joinToString(", ") { "${ChatColor.GOLD}${ChatColor.BOLD}${ChatColor.UNDERLINE}$it${ChatColor.RESET}" }

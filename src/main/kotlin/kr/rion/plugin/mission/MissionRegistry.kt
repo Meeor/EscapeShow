@@ -1,12 +1,12 @@
 package kr.rion.plugin.mission
 
-object MissionRegistry{
+object MissionRegistry {
     private val missions = mutableMapOf<Int, Mission>()
 
     // 미션 등록
-    fun registerMission(id: Int,mission: Mission) {
+    fun registerMission(id: Int, mission: Mission) {
         if (missions.containsKey(id)) {
-            throw IllegalArgumentException("이미 존재하는 미션 ID입니다: ${id}")
+            throw IllegalArgumentException("이미 존재하는 미션 ID입니다: $id")
         }
         missions[id] = mission
     }
