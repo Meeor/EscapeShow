@@ -1,5 +1,6 @@
 package kr.rion.plugin.manager
 
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -21,7 +22,7 @@ object MissionManager {
             activeMissions[player] = randomMissionId
             mission.missionStart(player)
         } else {
-            player.sendMessage("해당 미션을 찾을 수 없습니다: $randomMissionId")
+            player.sendMessage("${MISSIONPREFIX}등록되지 않은 미션이 확인되어 미션 지급이 취소되었습니다.")
         }
     }
 
@@ -29,7 +30,7 @@ object MissionManager {
     fun assignSpecificMission(sender: CommandSender, player: Player, missionId: Int) {
         // 유효한 미션 ID 범위 확인
         if (missionId !in 1..14) {
-            sender.sendMessage("잘못된 미션 ID입니다. 유효한 범위는 1~14입니다.")
+            sender.sendMessage("${MISSIONPREFIX}잘못된 미션 ID입니다. 유효한 범위는 1~14입니다.")
             return
         }
 
@@ -41,11 +42,11 @@ object MissionManager {
         if (mission != null) {
             activeMissions[player] = missionId
             mission.missionStart(player)
-            player.sendMessage("미션이 성공적으로 부여되었습니다: ID $missionId")
-            sender.sendMessage("미션이 성공적으로 부여되었습니다: ID $missionId")
+            player.sendMessage("${MISSIONPREFIX}미션이 성공적으로 부여되었습니다: ID $missionId")
+            sender.sendMessage("${MISSIONPREFIX}미션이 성공적으로 부여되었습니다: ID $missionId")
         } else {
-            player.sendMessage("해당 미션을 찾을 수 없습니다: ID $missionId")
-            sender.sendMessage("해당 미션을 찾을 수 없습니다: ID $missionId")
+            player.sendMessage("${MISSIONPREFIX}해당 미션을 찾을 수 없습니다: ID $missionId")
+            sender.sendMessage("${MISSIONPREFIX}해당 미션을 찾을 수 없습니다: ID $missionId")
         }
     }
 
@@ -58,11 +59,11 @@ object MissionManager {
         if (missionId != null) {
             activeMissions.remove(player)
 
-            player.sendMessage("미션이 성공적으로 제거되었습니다: ID $missionId")
-            sender.sendMessage("미션이 성공적으로 제거되었습니다: ID $missionId")
+            player.sendMessage("${MISSIONPREFIX}미션이 성공적으로 제거되었습니다: ID $missionId")
+            sender.sendMessage("${MISSIONPREFIX}미션이 성공적으로 제거되었습니다: ID $missionId")
         } else {
-            player.sendMessage("현재 할당된 미션이 없습니다.")
-            sender.sendMessage("현재 할당된 미션이 없습니다.")
+            player.sendMessage("${MISSIONPREFIX}현재 할당된 미션이 없습니다.")
+            sender.sendMessage("${MISSIONPREFIX}현재 할당된 미션이 없습니다.")
         }
     }
 
