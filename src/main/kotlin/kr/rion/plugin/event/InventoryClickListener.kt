@@ -371,7 +371,7 @@ class InventoryClickListener : Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = false)
     fun onInventoryClick(event: InventoryClickEvent) {
         val slot = event.slot // 클릭된 슬롯 번호
         val player = event.whoClicked as Player

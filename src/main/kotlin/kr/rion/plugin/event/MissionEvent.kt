@@ -7,6 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 
 class MissionEvent :Listener {
@@ -21,7 +22,7 @@ class MissionEvent :Listener {
     }
 
     @EventHandler(ignoreCancelled = false)
-    fun itemCheck(event: InventoryOpenEvent){
+    fun itemCheck(event: InventoryCloseEvent){
         val player = event.player
         // Player로 캐스팅 가능한지 확인
         if (player is Player) {

@@ -7,6 +7,7 @@ import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.manager.MissionManager
+import kr.rion.plugin.manager.MissionManager.listMission
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global.EscapePlayerCount
@@ -65,29 +66,32 @@ object Start {
             Material.MOJANG_BANNER_PATTERN
         )
         val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
-        for (player in Bukkit.getOnlinePlayers()) {
-            removeDirectionBossBar(player)
-            if (!player.scoreboardTags.contains("manager")) {
-                player.allowFlight = false
-                player.isFlying = false
-                // manager 태그가 없는 플레이어의 태그 모두 제거
-                MissionManager.assignMission(player) //플레이어에게 미션 부여
-                player.scoreboardTags.clear()
-                player.inventory.clear()
-                for (i in 8..35) {
-                    when (i) {
-                        20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
-                        24 -> player.inventory.setItem(i, map) // 24번 슬롯에 지도
-                        8 -> player.inventory.setItem(i, craftingItem) // 8번 슬롯에 제작 아이템
-                        else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+        Bukkit.getScheduler().runTask(Loader.instance, Runnable{
+            for (player in Bukkit.getOnlinePlayers()) {
+                removeDirectionBossBar(player)
+                if (!player.scoreboardTags.contains("manager")) {
+                    player.allowFlight = false
+                    player.isFlying = false
+                    // manager 태그가 없는 플레이어의 태그 모두 제거
+                    MissionManager.assignMission(player) //플레이어에게 미션 부여
+                    player.scoreboardTags.clear()
+                    player.inventory.clear()
+                    for (i in 8..35) {
+                        when (i) {
+                            20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
+                            24 -> player.inventory.setItem(i, map) // 24번 슬롯에 지도
+                            8 -> player.inventory.setItem(i, craftingItem) // 8번 슬롯에 제작 아이템
+                            else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+                        }
                     }
                 }
             }
-        }
+        })
         resetplayerAttribute()
         playersAtParticle.clear()
         EscapePlayers.clear()
         reviveFlags.clear()
+        Bukkit.getLogger().warning("${listMission()}")
     }
 
 

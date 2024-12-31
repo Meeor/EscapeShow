@@ -70,6 +70,7 @@ object MissionManager {
 
         if (mission.checkEventSuccess(player, event)) {
             mission.onSuccess(player)
+            player.removeScoreboardTag("MissionNo$missionId")
             activeMissions.remove(player)
         }
     }
@@ -79,5 +80,8 @@ object MissionManager {
         MissionRegistry.getAllMissions().values.forEach { mission ->
             mission.reset()
         }
+    }
+    fun listMission(): MutableMap<Player, Int> {
+        return activeMissions
     }
 }
