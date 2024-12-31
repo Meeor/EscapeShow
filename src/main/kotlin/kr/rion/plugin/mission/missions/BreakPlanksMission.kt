@@ -1,6 +1,9 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -32,7 +35,12 @@ class BreakPlanksMission(private val requiredCount: Int) : Mission {
             if (event.block.type in plankMaterials) {
                 val currentCount = playerPlankCounts.getOrDefault(player, 0) + 1
                 playerPlankCounts[player] = currentCount
-                player.sendMessage("§b나무 판자를 캤습니다! (§e$currentCount§b/§d$requiredCount§b)")
+//                player.sendMessage("§b나무 판자를 캤습니다! (§e$currentCount§b/§d$requiredCount§b)")
+                player.spigot()
+                    .sendMessage(
+                        ChatMessageType.ACTION_BAR,
+                        TextComponent("§b나무 판자를 캤습니다! (§e$currentCount§b/§d$requiredCount§b)")
+                    )
 
                 if (currentCount >= requiredCount) {
                     return true // 성공 조건 충족
@@ -43,7 +51,7 @@ class BreakPlanksMission(private val requiredCount: Int) : Mission {
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("§a축하합니다! 나무 판자 §e${requiredCount}§a개를 캐서 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! 나무 판자 §e${requiredCount}§a개를 캐서 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         playerPlankCounts.remove(player) // 데이터 정리
     }

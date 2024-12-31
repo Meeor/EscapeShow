@@ -1,6 +1,7 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -36,7 +37,7 @@ class KillWithSpecificItemMission(private val requiredItem: Material) : Mission 
     override fun onSuccess(player: Player) {
         // 사용자 정의 이름을 가져오고, 없으면 기본 Material 이름 사용
         val itemName = itemNameMap[requiredItem] ?: requiredItem.name
-        player.sendMessage("§a축하합니다! §e$itemName§a으로 플레이어를 처치하여 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! §e$itemName§a으로 플레이어를 처치하여 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
     }
 

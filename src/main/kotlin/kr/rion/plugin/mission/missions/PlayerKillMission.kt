@@ -1,6 +1,9 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -19,7 +22,12 @@ class PlayerKillMission(private val requiredKills: Int) : Mission {
             if (killer == player) {
                 val currentKills = playerKillCounts.getOrDefault(player, 0) + 1
                 playerKillCounts[player] = currentKills
-                player.sendMessage("§b플레이어를 처치했습니다! (§e$currentKills§b/§d$requiredKills§b)")
+//                player.sendMessage("§b플레이어를 처치했습니다! (§e$currentKills§b/§d$requiredKills§b)")
+                player.spigot()
+                    .sendMessage(
+                        ChatMessageType.ACTION_BAR,
+                        TextComponent("§b플레이어를 처치했습니다! (§e$currentKills§b/§d$requiredKills§b)")
+                    )
 
                 if (currentKills >= requiredKills) {
                     return true // 성공 조건 충족
@@ -30,7 +38,7 @@ class PlayerKillMission(private val requiredKills: Int) : Mission {
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("§a축하합니다! 플레이어 §e${requiredKills}§a명을 처치하여 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! 플레이어 §e${requiredKills}§a명을 처치하여 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         playerKillCounts.remove(player) // 데이터 정리
     }

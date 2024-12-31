@@ -1,6 +1,9 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.inventory.InventoryOpenEvent
@@ -17,7 +20,12 @@ class OpenChestMission(private val requiredOpens: Int) : Mission {
         if (event is InventoryOpenEvent && event.inventory.type == InventoryType.BARREL) {
             val currentCount = playerOpens.getOrDefault(player, 0) + 1
             playerOpens[player] = currentCount
-            player.sendMessage("§b통을 열었습니다! (§e$currentCount§b/§d$requiredOpens§b)")
+//            player.sendMessage("§b통을 열었습니다! (§e$currentCount§b/§d$requiredOpens§b)")
+            player.spigot()
+                .sendMessage(
+                    ChatMessageType.ACTION_BAR,
+                    TextComponent("§b통을 열었습니다! (§e$currentCount§b/§d$requiredOpens§b)")
+                )
 
             if (currentCount >= requiredOpens) {
                 return true // 성공 조건 충족
@@ -27,11 +35,12 @@ class OpenChestMission(private val requiredOpens: Int) : Mission {
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("§a축하합니다! 상자를 §e${requiredOpens}§a번 열어 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! 통을 §e${requiredOpens}§a번 열어 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         playerOpens.remove(player) // 데이터 정리
     }
-    override fun reset(){
+
+    override fun reset() {
         playerOpens.clear()
     }
 }

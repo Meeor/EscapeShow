@@ -1,6 +1,7 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -51,7 +52,7 @@ class WeaponAllCollect : Mission {
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("§a축하합니다! 모든 무기를 수집하여 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! 모든 무기를 수집하여 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         collectedItemsMap.remove(player) // 완료 후 데이터 정리
     }
@@ -68,6 +69,6 @@ class WeaponAllCollect : Mission {
                 "§c$displayName" // 수집되지 않은 아이템: 빨간색
             }
         }
-        player.sendMessage("§b현재 무기 수집 상태 : $statusMessage")
+        player.sendMessage("$MISSIONPREFIX§b현재 무기 수집 상태 : $statusMessage")
     }
 }

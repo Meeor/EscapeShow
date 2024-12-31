@@ -1,6 +1,9 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -35,7 +38,12 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
                 // 아이템 이름 가져오기 및 메시지 변경
                 val baseName = itemNameMap[targetItem] ?: targetItem.name
                 val actionVerb = if (targetItem == Material.IRON_INGOT) "구운" else "수집한"
-                player.sendMessage("§b현재 $actionVerb §e$baseName§b: §e$newItemCount §b/ §d$requiredCount")
+//                player.sendMessage("§b현재 $actionVerb §e$baseName§b: §e$newItemCount §b/ §d$requiredCount")
+                player.spigot()
+                    .sendMessage(
+                        ChatMessageType.ACTION_BAR,
+                        TextComponent("§b현재 $actionVerb §e$baseName§b: §e$newItemCount §b/ §d$requiredCount")
+                    )
             }
 
             return newItemCount >= requiredCount // 요구 개수 충족 여부 확인
@@ -47,7 +55,7 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
         val baseName = itemNameMap[targetItem] ?: targetItem.name
         val actionVerb = if (targetItem == Material.IRON_INGOT) "구웠습니다" else "수집했습니다"
 
-        player.sendMessage("§a축하합니다! §e$baseName§a을(를) §e${requiredCount}§a개 $actionVerb! 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! §e$baseName§a을(를) §e${requiredCount}§a개 $actionVerb! 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         collectedItemCounts.remove(player) // 완료 후 데이터 정리
     }

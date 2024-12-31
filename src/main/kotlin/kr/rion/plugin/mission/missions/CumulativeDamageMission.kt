@@ -1,6 +1,9 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -21,7 +24,12 @@ class CumulativeDamageMission(private val requiredDamage: Double) : Mission {
                     val currentDamage = playerDamageMap.getOrDefault(player, 0.0) + event.damage
                     playerDamageMap[player] = currentDamage
 
-                    player.sendMessage("§b누적 데미지: §e$currentDamage§b / §d$requiredDamage")
+//                    player.sendMessage("§b누적 데미지: §e$currentDamage§b / §d$requiredDamage")
+                    player.spigot()
+                        .sendMessage(
+                            ChatMessageType.ACTION_BAR,
+                            TextComponent("§b누적 데미지: §e$currentDamage§b / §d$requiredDamage")
+                        )
 
                     if (currentDamage >= requiredDamage) {
                         return true // 성공 조건 충족
@@ -35,7 +43,7 @@ class CumulativeDamageMission(private val requiredDamage: Double) : Mission {
 
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("§a축하합니다! 총 누적 데미지로 §e$requiredDamage§a 이상을 넣어 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! 총 누적 데미지로 §e$requiredDamage§a 이상을 넣어 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         playerDamageMap.remove(player) // 데이터 정리
     }

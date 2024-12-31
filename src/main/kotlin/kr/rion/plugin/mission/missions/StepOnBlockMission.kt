@@ -1,6 +1,7 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -17,9 +18,7 @@ class StepOnBlockMission(
     )
 
     override fun missionStart(player: Player) {
-        val blockName = blockNameMap[targetBlock] ?: targetBlock.name
-        val sneakMessage = if (requireSneaking) "웅크린 상태로 " else ""
-        player.sendMessage("§a미션 시작! §e$sneakMessage$blockName§a을(를) 밟으세요!")
+        //별도 시작작업 없음.
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -41,7 +40,7 @@ class StepOnBlockMission(
     override fun onSuccess(player: Player) {
         val blockName = blockNameMap[targetBlock] ?: targetBlock.name
         val sneakMessage = if (requireSneaking) "웅크린 상태로 " else ""
-        player.sendMessage("§a축하합니다! §e$sneakMessage$blockName §a블럭을 밟아 미션을 완료했습니다!")
+        player.sendMessage("$MISSIONPREFIX§a축하합니다! §e$sneakMessage$blockName §a블럭을 밟아 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
     }
 
