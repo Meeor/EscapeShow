@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
+import org.bukkit.event.player.PlayerMoveEvent
 
 class MissionEvent :Listener {
     @EventHandler(ignoreCancelled = false)
@@ -55,5 +56,10 @@ class MissionEvent :Listener {
             // 미션 시스템에 이벤트 전달
             MissionManager.handleEvent(damager, event)
         }
+    }
+    @EventHandler(ignoreCancelled = false)
+    fun blockstep(event: PlayerMoveEvent){
+        val player = event.player
+        MissionManager.handleEvent(player, event)
     }
 }

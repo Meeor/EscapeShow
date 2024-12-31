@@ -22,5 +22,6 @@ object MissionList {
         MissionRegistry.registerMission(13, KillWithSpecificItemMission(Material.AIR)) //PlayerDeathEvent
         MissionRegistry.registerMission(14, KillWithSpecificItemMission(Material.COBBLESTONE)) //PlayerDeathEvent
         MissionRegistry.registerMission(15, CumulativeDamageMission(20.0)) //EntityDamageByEntityEvent
+        MissionRegistry.registerMission(16, StepOnBlockMission(Material.MAGMA_BLOCK,true)) //PlayerMoveEvent
     }
 }
