@@ -17,7 +17,7 @@ import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.potion.PotionEffectType
 
 
-class onEntitySpawn: Listener {
+class OnEntitySpawn: Listener {
 
     private val sneakingTimers = mutableMapOf<String, Int>() // 웅크리는 시간 추적
 
@@ -57,7 +57,7 @@ class onEntitySpawn: Listener {
 
                 // MainInventory 데이터 확인 및 시체 엔티티 제거 조건
                 val mainInventory = deathData.getCompoundList("MainInventory")
-                if(mainInventory == null || mainInventory.isEmpty()){
+                if(mainInventory == null || mainInventory.isEmpty){
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
                     respawnTask.remove(playerName)?.cancel()
