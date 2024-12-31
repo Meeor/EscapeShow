@@ -15,34 +15,50 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
         Material.IRON_INGOT to "철"
     )
 
+    // 플레이어별 누적 아이템 수 관리
+    private val collectedItemCounts = mutableMapOf<Player, Int>()
+
     override fun missionStart(player: Player) {
-        // 별도 작업 필요 없음
+        collectedItemCounts[player] = 0 // 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
         if (event is InventoryCloseEvent) {
-            return hasRequiredItems(player) // 아이템 수집 조건 확인
+            val newItemCount = getCurrentItemCount(player)
+            val currentCount = collectedItemCounts.getOrDefault(player, 0)
+
+            // 새롭게 추가된 아이템 개수만 계산
+            val newlyCollected = newItemCount - currentCount
+            if (newlyCollected > 0) {
+                collectedItemCounts[player] = newItemCount // 누적 갱신
+
+                // 아이템 이름 가져오기 및 메시지 변경
+                val baseName = itemNameMap[targetItem] ?: targetItem.name
+                val actionVerb = if (targetItem == Material.IRON_INGOT) "구운" else "수집한"
+                player.sendMessage("§b현재 $actionVerb §e$baseName§b: §e$newItemCount §b/ §d$requiredCount")
+            }
+
+            return newItemCount >= requiredCount // 요구 개수 충족 여부 확인
         }
         return false
     }
 
     override fun onSuccess(player: Player) {
-        // 사용자 정의 이름을 가져오고 없으면 기본 Material 이름 사용
         val baseName = itemNameMap[targetItem] ?: targetItem.name
         val actionVerb = if (targetItem == Material.IRON_INGOT) "구웠습니다" else "수집했습니다"
 
         player.sendMessage("§a축하합니다! §e$baseName§a을(를) §e${requiredCount}§a개 $actionVerb! 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
+        collectedItemCounts.remove(player) // 완료 후 데이터 정리
     }
 
     override fun reset() {
-        // 별도 초기화 필요 없음
+        collectedItemCounts.clear() // 모든 플레이어 데이터 초기화
     }
 
-    private fun hasRequiredItems(player: Player): Boolean {
+    private fun getCurrentItemCount(player: Player): Int {
         val inventory = player.inventory
-        val itemCount = inventory.contents.filterNotNull() // null 제거
-            .count { it.type == targetItem } // 대상 아이템 개수 세기
-        return itemCount >= requiredCount // 요구 갯수 이상인지 확인
+        return inventory.contents.filterNotNull()
+            .count { it.type == targetItem } // 현재 인벤토리에서 해당 아이템 개수 계산
     }
 }
