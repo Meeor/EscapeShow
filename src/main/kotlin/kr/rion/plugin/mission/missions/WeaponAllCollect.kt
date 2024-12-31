@@ -9,13 +9,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 class WeaponAllCollect : Mission {
     // 필요한 아이템과 사용자 정의 이름 설정
     private val requiredItems = mapOf(
-        Material.WOODEN_AXE to "돌도끼",
-        Material.DIAMOND_PICKAXE to "도끼",
+        Material.WOODEN_AXE to "사냥도끼",
+        Material.DIAMOND_PICKAXE to "대형망치",
         Material.QUARTZ to "칼날",
         Material.FEATHER to "검날",
         Material.LIGHT_GRAY_DYE to "날",
         Material.STONE_HOE to "단검",
-        Material.STONE_SWORD to "메체테"
+        Material.STONE_SWORD to "마체테"
     )
 
     private val collectedItemsMap = mutableMapOf<Player, MutableSet<Material>>()
