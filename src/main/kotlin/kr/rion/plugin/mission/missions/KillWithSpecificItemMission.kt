@@ -28,7 +28,8 @@ class KillWithSpecificItemMission(private val requiredItem: Material) : Mission 
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("§a축하합니다! §e${requiredItem.name}§a으로 플레이어를 처치하여 미션을 완료했습니다!")
+        val itemName = if (requiredItem == Material.AIR) "맨손" else requiredItem.name
+        player.sendMessage("§a축하합니다! §e$itemName§a으로 플레이어를 처치하여 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
     }
 
