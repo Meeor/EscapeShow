@@ -54,6 +54,7 @@ object MissionManager {
         if (missionId != null) {
             // 태그 제거
             player.removeScoreboardTag("MissionNo$missionId")
+            player.removeScoreboardTag("MissionSuccess")
             activeMissions.remove(player)
 
             player.sendMessage("미션이 성공적으로 제거되었습니다: ID $missionId")
