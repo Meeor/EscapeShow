@@ -378,7 +378,8 @@ class InventoryClickListener : Listener {
 
         // 상자가 아닌 플레이어 인벤토리에서만 처리
         if (event.clickedInventory == player.inventory) {
-            if (slot in 9..35) {
+            if(slot in 9..35) {
+                event.isCancelled = true
             }
         }
     }
