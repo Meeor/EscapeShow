@@ -8,8 +8,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 
 class ItemCollectMission(private val targetItem: Material, private val requiredCount: Int) : Mission {
 
+    // 사용자 정의 아이템 이름 매핑
+    private val itemNameMap = mapOf(
+        Material.STONE_HOE to "단검",
+        Material.SWEET_BERRIES to "달콤한 열매",
+        Material.IRON_INGOT to "철"
+    )
+
     override fun missionStart(player: Player) {
-        //아무것도안해도됨.
+        // 별도 작업 필요 없음
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -20,7 +27,11 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("§a축하합니다! §e${targetItem.name}§a을(를) §e${requiredCount}§a개 수집하여 미션을 완료했습니다!")
+        // 사용자 정의 이름을 가져오고 없으면 기본 Material 이름 사용
+        val baseName = itemNameMap[targetItem] ?: targetItem.name
+        val actionVerb = if (targetItem == Material.IRON_INGOT) "구웠습니다" else "수집했습니다"
+
+        player.sendMessage("§a축하합니다! §e$baseName§a을(를) §e${requiredCount}§a개 $actionVerb! 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
     }
 

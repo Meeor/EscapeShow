@@ -11,7 +11,15 @@ class StepOnBlockMission(
     private val requireSneaking: Boolean // 웅크리기 여부
 ) : Mission {
 
+    // 사용자 정의 블럭 이름 매핑
+    private val blockNameMap = mapOf(
+        Material.MAGMA_BLOCK to "마그마 블럭"
+    )
+
     override fun missionStart(player: Player) {
+        val blockName = blockNameMap[targetBlock] ?: targetBlock.name
+        val sneakMessage = if (requireSneaking) "웅크린 상태로 " else ""
+        player.sendMessage("§a미션 시작! §e$sneakMessage$blockName§a을(를) 밟으세요!")
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -31,8 +39,9 @@ class StepOnBlockMission(
     }
 
     override fun onSuccess(player: Player) {
+        val blockName = blockNameMap[targetBlock] ?: targetBlock.name
         val sneakMessage = if (requireSneaking) "웅크린 상태로 " else ""
-        player.sendMessage("§a축하합니다! §e$sneakMessage${targetBlock.name} §a블럭을 밟아 미션을 완료했습니다!")
+        player.sendMessage("§a축하합니다! §e$sneakMessage$blockName §a블럭을 밟아 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
     }
 

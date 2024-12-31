@@ -7,7 +7,15 @@ import org.bukkit.event.Event
 import org.bukkit.event.entity.PlayerDeathEvent
 
 class KillWithSpecificItemMission(private val requiredItem: Material) : Mission {
+
+    // 사용자 정의 아이템 이름 매핑
+    private val itemNameMap = mapOf(
+        Material.COBBLESTONE to "조약돌",
+        Material.AIR to "맨손"
+    )
+
     override fun missionStart(player: Player) {
+        // 별도 작업 필요 없음
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -19,8 +27,6 @@ class KillWithSpecificItemMission(private val requiredItem: Material) : Mission 
                 val mainHandItem = killer.inventory.itemInMainHand.type
                 if (mainHandItem == requiredItem) {
                     return true // 성공 조건 충족
-                } else {
-                    return false //다른아이템을 들고있었기때문에 성공조건 미충족
                 }
             }
         }
@@ -28,7 +34,8 @@ class KillWithSpecificItemMission(private val requiredItem: Material) : Mission 
     }
 
     override fun onSuccess(player: Player) {
-        val itemName = if (requiredItem == Material.AIR) "맨손" else requiredItem.name
+        // 사용자 정의 이름을 가져오고, 없으면 기본 Material 이름 사용
+        val itemName = itemNameMap[requiredItem] ?: requiredItem.name
         player.sendMessage("§a축하합니다! §e$itemName§a으로 플레이어를 처치하여 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
     }
