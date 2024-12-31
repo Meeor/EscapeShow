@@ -10,6 +10,6 @@ interface Mission {
     fun onSuccess(player: Player) // 성공 처리
     fun reset() // 데이터 초기화
     companion object {
-        const val MISSIONPREFIX = "§l§o§6[Mission] "
+        const val MISSIONPREFIX = "§l§o§6[Mission] §a"
     }
 }

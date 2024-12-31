@@ -51,7 +51,7 @@ class BreakPlanksMission(private val requiredCount: Int) : Mission {
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("$MISSIONPREFIX§a축하합니다! 나무 판자 §e${requiredCount}§a개를 캐서 미션을 완료했습니다!")
+        player.sendMessage("${MISSIONPREFIX}축하합니다! 나무 판자 §e${requiredCount}§a개를 캐서 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         playerPlankCounts.remove(player) // 데이터 정리
     }

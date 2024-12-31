@@ -40,7 +40,7 @@ class StepOnBlockMission(
     override fun onSuccess(player: Player) {
         val blockName = blockNameMap[targetBlock] ?: targetBlock.name
         val sneakMessage = if (requireSneaking) "웅크린 상태로 " else ""
-        player.sendMessage("$MISSIONPREFIX§a축하합니다! §e$sneakMessage$blockName §a블럭을 밟아 미션을 완료했습니다!")
+        player.sendMessage("${MISSIONPREFIX}축하합니다! §e$sneakMessage$blockName §a블럭을 밟아 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
     }
 
