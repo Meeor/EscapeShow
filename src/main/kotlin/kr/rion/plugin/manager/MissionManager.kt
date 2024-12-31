@@ -51,10 +51,9 @@ object MissionManager {
     fun removeMission(sender: CommandSender,player: Player) {
         // 플레이어에게 활성화된 미션이 있는지 확인
         val missionId = activeMissions[player]
+        player.removeScoreboardTag("MissionNo$missionId")
+        player.removeScoreboardTag("MissionSuccess")
         if (missionId != null) {
-            // 태그 제거
-            player.removeScoreboardTag("MissionNo$missionId")
-            player.removeScoreboardTag("MissionSuccess")
             activeMissions.remove(player)
 
             player.sendMessage("미션이 성공적으로 제거되었습니다: ID $missionId")
