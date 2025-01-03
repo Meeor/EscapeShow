@@ -29,7 +29,7 @@ object MissionManager {
     //테스트용 미션 수동부여 함수
     fun assignSpecificMission(sender: CommandSender, player: Player, missionId: Int) {
         // 유효한 미션 ID 범위 확인
-        if (missionId !in 1..14) {
+        if (missionId !in 1..16) {
             sender.sendMessage("${MISSIONPREFIX}잘못된 미션 ID입니다. 유효한 범위는 1~14입니다.")
             return
         }
