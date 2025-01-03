@@ -10,6 +10,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
+import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.event.player.PlayerMoveEvent
 
 class MissionEvent :Listener {
@@ -22,7 +24,6 @@ class MissionEvent :Listener {
             MissionManager.handleEvent(player, event)
         }
     }
-
     @EventHandler(ignoreCancelled = false)
     fun itemCheck(event: InventoryCloseEvent){
         val player = event.player
@@ -32,13 +33,11 @@ class MissionEvent :Listener {
             MissionManager.handleEvent(player, event)
         }
     }
-
     @EventHandler(ignoreCancelled = false)
     fun blockBreak(event: BlockBreakEvent){
         val player = event.player
         MissionManager.handleEvent(player,event)
     }
-
     @EventHandler(ignoreCancelled = false)
     fun blockPlace(event: BlockPlaceEvent){
         val player = event.player
@@ -58,7 +57,17 @@ class MissionEvent :Listener {
         }
     }
     @EventHandler(ignoreCancelled = false)
-    fun blockstep(event: PlayerMoveEvent){
+    fun blockStep(event: PlayerMoveEvent){
+        val player = event.player
+        MissionManager.handleEvent(player, event)
+    }
+    @EventHandler(ignoreCancelled = false)
+    fun itemDrop(event: PlayerDropItemEvent){
+        val player = event.player
+        MissionManager.handleEvent(player, event)
+    }
+    @EventHandler(ignoreCancelled = false)
+    fun itemEat(event: PlayerItemConsumeEvent){
         val player = event.player
         MissionManager.handleEvent(player, event)
     }
