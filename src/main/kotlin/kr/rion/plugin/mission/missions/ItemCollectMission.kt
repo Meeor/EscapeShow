@@ -70,6 +70,7 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
         currentInventoryCounts[player] = currentInventoryCount
     }
 
+
     private fun handleItemDrop(player: Player, event: PlayerDropItemEvent) {
         val item = event.itemDrop.itemStack
 
@@ -80,10 +81,6 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
 
             // 현재 인벤토리 상태에서 차감
             currentInventoryCounts[player] = kotlin.math.max(0, currentInventoryCount - droppedAmount)
-
-            // 누적 수집량에서도 차감
-            val currentTotal = totalCollectedCounts.getOrDefault(player, 0)
-            totalCollectedCounts[player] = kotlin.math.max(0, currentTotal - droppedAmount)
         }
     }
 
@@ -92,12 +89,13 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
 
         // 섭취한 아이템이 타겟 아이템인지 확인
         if (item.type == targetItem) {
-            val currentTotal = totalCollectedCounts.getOrDefault(player, 0)
+            val currentInventoryCount = currentInventoryCounts.getOrDefault(player, 0)
 
-            // 섭취한 아이템 개수를 누적 수집량에서 차감
-            totalCollectedCounts[player] = kotlin.math.max(0, currentTotal - item.amount)
+            // 섭취한 아이템 개수를 현재 상태에서 차감
+            currentInventoryCounts[player] = kotlin.math.max(0, currentInventoryCount - item.amount)
         }
     }
+
 
     private fun getCurrentItemCount(player: Player): Int {
         val inventory = player.inventory
