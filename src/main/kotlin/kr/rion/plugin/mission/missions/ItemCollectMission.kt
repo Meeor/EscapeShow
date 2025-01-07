@@ -5,6 +5,7 @@ import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
+import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
@@ -32,6 +33,7 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
             is InventoryCloseEvent -> handleInventoryClose(player)
             is PlayerDropItemEvent -> handleItemDrop(player, event)
             is PlayerItemConsumeEvent -> handleItemConsume(player, event)
+            is EntityPickupItemEvent -> handleItemPickup(player, event)
         }
 
         // 누적된 수집량이 조건을 충족했는지 확인
@@ -93,6 +95,22 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
 
             // 섭취한 아이템 개수를 현재 상태에서 차감
             currentInventoryCounts[player] = kotlin.math.max(0, currentInventoryCount - item.amount)
+        }
+    }
+
+    private fun handleItemPickup(player: Player, event: EntityPickupItemEvent) {
+        // 아이템을 주운 엔티티가 플레이어인지 확인
+        if (event.entity is Player && event.entity == player) {
+            val item = event.item.itemStack
+
+            // 주운 아이템이 타겟 아이템인지 확인
+            if (item.type == targetItem) {
+                val pickedAmount = item.amount
+                val currentInventoryCount = currentInventoryCounts.getOrDefault(player, 0)
+
+                // 현재 인벤토리 상태 업데이트
+                currentInventoryCounts[player] = currentInventoryCount + pickedAmount
+            }
         }
     }
 

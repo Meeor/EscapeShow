@@ -7,6 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
@@ -70,5 +71,13 @@ class MissionEvent :Listener {
     fun itemEat(event: PlayerItemConsumeEvent){
         val player = event.player
         MissionManager.handleEvent(player, event)
+    }
+    @EventHandler(ignoreCancelled = false)
+    fun itemPickup(event:EntityPickupItemEvent){
+        val pickupPlayer = event.entity
+        if (pickupPlayer is Player) {
+            // 미션 시스템에 이벤트 전달
+            MissionManager.handleEvent(pickupPlayer, event)
+        }
     }
 }
