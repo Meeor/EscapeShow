@@ -66,6 +66,7 @@ class VoiceChatEvent : VoicechatPlugin {
             )
             // 서버에 있는 모든 플레이어에게 패킷 전송
             Bukkit.getServer().onlinePlayers.forEach { onlinePlayer ->
+                if (onlinePlayer.uniqueId == sender.uniqueId) return@forEach // 송신자 본인은 제외
                 val connection = api.getConnectionOf(onlinePlayer.uniqueId) ?: return@forEach
                 val staticPacket = event.packet.toStaticSoundPacket()
                 api.sendStaticSoundPacketTo(connection, staticPacket)
