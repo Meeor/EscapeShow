@@ -1,6 +1,7 @@
 package kr.rion.plugin.command
 
 
+import kr.rion.plugin.command.Broadcast.handleBroadcast
 import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.GameEventCommand.handleEvent
 import kr.rion.plugin.command.Mission.HandleMission
@@ -26,6 +27,7 @@ class CommandHandler : CommandExecutor {
             "이벤트" -> handleEvent(sender, args)
             "게임" -> handlegame(sender)
             "미션" -> HandleMission(sender, args)
+            "방송" -> handleBroadcast(sender,args)
 
             else -> return false
         }

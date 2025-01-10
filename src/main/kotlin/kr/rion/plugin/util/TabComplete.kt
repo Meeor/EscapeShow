@@ -19,6 +19,7 @@ class TabComplete : TabCompleter {
             "인원설정" -> EscapeSettingTab(args)
             "이벤트" -> GameEvent(args)
             "미션" -> HandleMissionTab(args)
+            "방송" -> HandleBroadcastTab(args)
             else -> null
         }
     }
@@ -48,6 +49,13 @@ class TabComplete : TabCompleter {
         return when (args.size) {
             1 -> listOf("부여", "제거").filter { it.startsWith(args[0], ignoreCase = true) }
             2 -> Bukkit.getOnlinePlayers().map { it.name }.filter { it.startsWith(args[1], ignoreCase = true) }
+            else -> emptyList()
+        }
+    }
+    private fun HandleBroadcastTab(args: Array<out String>): List<String> {
+        return when (args.size) {
+            1 -> Bukkit.getOnlinePlayers().map { it.name }.filter { it.startsWith(args[0], ignoreCase = true) }
+            2 -> listOf("true", "false").filter { it.startsWith(args[1], ignoreCase = true) }
             else -> emptyList()
         }
     }

@@ -30,6 +30,11 @@ commands:
     usage: /<command> <부여/제거> [player] [missionid]
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
+  방송:
+    description: 거리기반인 음성채팅에서 모든 플레이어에게 들리도록 합니다.
+    usage: /<command> [player] [true/false]
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
 
 permissions:
   EscapeShow.Game.GUI:
