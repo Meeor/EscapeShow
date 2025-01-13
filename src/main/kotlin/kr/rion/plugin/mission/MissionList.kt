@@ -22,6 +22,9 @@ object MissionList {
         MissionRegistry.registerMission(13, KillWithSpecificItemMission(Material.AIR)) //PlayerDeathEvent
         MissionRegistry.registerMission(14, KillWithSpecificItemMission(Material.COBBLESTONE)) //PlayerDeathEvent
         MissionRegistry.registerMission(15, CumulativeDamageMission(20.0)) //EntityDamageByEntityEvent
-        MissionRegistry.registerMission(16, StepOnBlockMission(Material.MAGMA_BLOCK,true)) //PlayerMoveEvent
+        /*
+        val test = CraftingMission(listOf(Material.NETHERITE_SCRAP to 5, Material.LEATHER_CHESTPLATE to 1))
+        MissionRegistry.registerMission(16, test) //inventoryClickEvent
+        */
     }
 }
