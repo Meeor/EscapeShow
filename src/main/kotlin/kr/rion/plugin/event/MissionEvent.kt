@@ -9,6 +9,7 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerDropItemEvent
@@ -78,6 +79,13 @@ class MissionEvent :Listener {
         if (pickupPlayer is Player) {
             // 미션 시스템에 이벤트 전달
             MissionManager.handleEvent(pickupPlayer, event)
+        }
+    }
+    @EventHandler(ignoreCancelled = false)
+    fun craft(event: InventoryClickEvent){
+        val player = event.whoClicked
+        if (player is Player) {
+            MissionManager.handleEvent(player, event)
         }
     }
 }
