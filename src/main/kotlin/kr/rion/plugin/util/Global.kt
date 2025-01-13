@@ -156,6 +156,20 @@ object Global {
             }
         }
     }
+    //글자 중앙정렬 함수(색코드 제거하여 중앙정렬)(줄바꿈도 인정됨)
+    fun centerText(text: String, lineWidth: Int = 22): String {
+        val strippedText = stripColorCodes(text) // 색 코드 제거
+        val totalPadding = lineWidth - strippedText.length
+        val leftPadding = totalPadding / 2
+        val rightPadding = totalPadding - leftPadding // 나머지를 오른쪽에 추가
+        return " ".repeat(leftPadding) + text + " ".repeat(rightPadding)
+    }
+
+
+    private fun stripColorCodes(text: String): String {
+        return text.replace(Regex("§[0-9a-fk-or]"), "")
+    }
+
 
 
 }
