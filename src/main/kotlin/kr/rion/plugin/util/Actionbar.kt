@@ -5,7 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.wrappers.WrappedChatComponent
 import org.bukkit.entity.Player
 
-object actionbar {
+object Actionbar {
     fun sendActionBar(player: Player, message: String) {
         val packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.CHAT)
         packet.chatComponents.write(0, WrappedChatComponent.fromText(message))
