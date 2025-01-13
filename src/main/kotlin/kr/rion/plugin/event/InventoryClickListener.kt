@@ -371,20 +371,6 @@ class InventoryClickListener : Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = false)
-    fun onInventoryClick(event: InventoryClickEvent) {
-        val slot = event.slot // 클릭된 슬롯 번호
-        val player = event.whoClicked as Player
-
-        // 상자가 아닌 플레이어 인벤토리에서만 처리
-        if (event.clickedInventory == player.inventory) {
-            if (slot in 9..35) {
-                event.isCancelled = true
-            }
-        }
-    }
-
-
     // 태그가 있는지 확인하는 함수
     private fun hasCustomTag(meta: ItemMeta, tag: String): Boolean {
         val key = NamespacedKey(Loader.instance, tag)
