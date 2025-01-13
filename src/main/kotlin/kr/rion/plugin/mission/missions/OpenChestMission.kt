@@ -35,7 +35,6 @@ class OpenChestMission(private val requiredOpens: Int) : Mission {
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("${MISSIONPREFIX}축하합니다! 통을 §e${requiredOpens}§a번 열어 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         playerOpens.remove(player) // 데이터 정리
     }

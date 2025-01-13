@@ -41,10 +41,6 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
     }
 
     override fun onSuccess(player: Player) {
-        val baseName = itemNameMap[targetItem] ?: targetItem.name
-        val actionVerb = if (targetItem == Material.IRON_INGOT) "구웠습니다" else "수집했습니다"
-
-        player.sendMessage("${MISSIONPREFIX}축하합니다! §e$baseName§a을(를) §e${requiredCount}§a개 $actionVerb! 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         currentInventoryCounts.remove(player) // 완료 후 데이터 정리
         totalCollectedCounts.remove(player) // 완료 후 데이터 정리

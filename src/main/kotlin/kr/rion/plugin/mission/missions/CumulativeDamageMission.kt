@@ -43,7 +43,6 @@ class CumulativeDamageMission(private val requiredDamage: Double) : Mission {
 
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("${MISSIONPREFIX}축하합니다! 총 누적 데미지로 §e$requiredDamage§a 이상을 넣어 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         playerDamageMap.remove(player) // 데이터 정리
     }

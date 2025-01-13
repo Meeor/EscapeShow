@@ -52,7 +52,6 @@ class WeaponAllCollect : Mission {
     }
 
     override fun onSuccess(player: Player) {
-        player.sendMessage("${MISSIONPREFIX}축하합니다! 모든 무기를 수집하여 미션을 완료했습니다!")
         player.addScoreboardTag("MissionSuccess")
         collectedItemsMap.remove(player) // 완료 후 데이터 정리
     }
