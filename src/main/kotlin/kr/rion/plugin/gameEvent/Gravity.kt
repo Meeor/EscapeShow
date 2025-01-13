@@ -2,7 +2,7 @@ package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.Global.prefix
-import kr.rion.plugin.util.actionbar.sendActionBar
+import kr.rion.plugin.util.Actionbar.sendActionBar
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
