@@ -55,11 +55,6 @@ object Start {
             listOf("${ChatColor.YELLOW}손에들고 우클릭시 조합창을 오픈합니다."),
             Material.SLIME_BALL
         )
-        val bookAndQuill = createCustomItem(
-            "${ChatColor.GREEN}미션",
-            listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다."),
-            Material.WRITABLE_BOOK
-        )
         val map = createCustomItem(
             "${ChatColor.GREEN}지도",
             listOf("${ChatColor.YELLOW}클릭시 맵 전체 지도를 확인할수있습니다."),
@@ -79,7 +74,6 @@ object Start {
                     player.inventory.clear()
                     for (i in 8..35) {
                         when (i) {
-                            20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
                             24 -> player.inventory.setItem(i, map) // 24번 슬롯에 지도
                             8 -> player.inventory.setItem(i, craftingItem) // 8번 슬롯에 제작 아이템
                             else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽

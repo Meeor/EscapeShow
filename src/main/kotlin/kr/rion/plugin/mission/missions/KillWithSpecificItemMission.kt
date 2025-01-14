@@ -9,11 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 
 class KillWithSpecificItemMission(private val requiredItem: Material) : Mission {
 
-    // 사용자 정의 아이템 이름 매핑
-    private val itemNameMap = mapOf(
-        Material.COBBLESTONE to "조약돌",
-        Material.AIR to "맨손"
-    )
+
 
     override fun missionStart(player: Player) {
         // 별도 작업 필요 없음

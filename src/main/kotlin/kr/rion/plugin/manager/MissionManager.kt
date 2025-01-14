@@ -16,6 +16,7 @@ object MissionManager {
         // 태그 추가
         player.addScoreboardTag("MissionNo$randomMissionId")
         activeMissions[player] = randomMissionId
+        player.sendMessage("${MISSIONPREFIX}미션이 성공적으로 부여되었습니다: ID $randomMissionId  (테스트용로그)")
 
         val mission = MissionRegistry.getMission(randomMissionId)
         if (mission != null) {
