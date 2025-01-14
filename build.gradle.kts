@@ -19,7 +19,6 @@ repositories {
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://maven.maxhenkel.de/repository/public") // VoiceChat API와 같은 외부 라이브러리
     maven("https://maven.mohistmc.com/")
-    maven("https://repo.dmulloy2.net/nexus/repository/public/")
 }
 
 dependencies {
@@ -30,7 +29,6 @@ dependencies {
     implementation("com.mohistmc:mohistdev:1.20.1")
     compileOnly("com.onarandombox.multiversecore:multiverse-core:4.3.12")
     compileOnly(group = "org.popcraft", name = "chunky-common", version = "1.4.10")
-    compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
 
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
     implementation("de.maxhenkel.voicechat:voicechat-api:2.3.3")

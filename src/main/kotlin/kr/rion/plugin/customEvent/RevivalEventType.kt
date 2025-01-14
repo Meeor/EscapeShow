@@ -16,6 +16,7 @@ class RevivalEvent(
 ) : Event() {
     companion object {
         private val handlers = HandlerList()
+
         @JvmStatic
         fun getHandlerList() = handlers
     }

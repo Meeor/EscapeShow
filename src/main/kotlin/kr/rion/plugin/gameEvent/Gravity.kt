@@ -2,7 +2,8 @@ package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.Global.prefix
-import kr.rion.plugin.util.Actionbar.sendActionBar
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -87,7 +88,10 @@ object Gravity {
         )
 
         // Action bar 메시지
-        sendActionBar(player, "\"$prefix ${ChatColor.BOLD}${ChatColor.RED}중력이 강화됩니다\"")
+        player.spigot().sendMessage(
+            ChatMessageType.ACTION_BAR,
+            TextComponent("\"$prefix ${ChatColor.BOLD}${ChatColor.RED}중력이 강화됩니다\"")
+        )
     }
 
     // 중력 약화 (중력 이상 상태일 때 적용)
@@ -115,7 +119,10 @@ object Gravity {
         )
 
         // Action bar 메시지
-        sendActionBar(player, message)
+        player.spigot().sendMessage(
+            ChatMessageType.ACTION_BAR,
+            TextComponent(message)
+        )
     }
 
     // 플레이어의 위치에 따라 중력 강화/약화 효과를 적용

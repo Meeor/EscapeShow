@@ -1,8 +1,6 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event

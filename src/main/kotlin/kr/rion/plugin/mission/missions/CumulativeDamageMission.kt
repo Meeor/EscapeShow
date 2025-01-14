@@ -23,8 +23,6 @@ class CumulativeDamageMission(private val requiredDamage: Double) : Mission {
                 if (event.entity is Player) { // 데미지를 받은 대상이 플레이어인지 확인
                     val currentDamage = playerDamageMap.getOrDefault(player, 0.0) + event.damage
                     playerDamageMap[player] = currentDamage
-
-//                    player.sendMessage("§b누적 데미지: §e$currentDamage§b / §d$requiredDamage")
                     player.spigot()
                         .sendMessage(
                             ChatMessageType.ACTION_BAR,

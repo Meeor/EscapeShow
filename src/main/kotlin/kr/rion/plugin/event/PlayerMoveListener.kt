@@ -40,8 +40,9 @@ class PlayerMoveListener : Listener {
             })
         }
     }
+
     @EventHandler
     fun stopPlayerMove(event: PlayerMoveEvent) {
-        if(stopPlayer[event.player] == true) event.isCancelled = true
+        if (stopPlayer[event.player] == true) event.isCancelled = true
     }
 }

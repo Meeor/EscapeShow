@@ -1,14 +1,12 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
-import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.PlayerDeathEvent
 
 class KillWithSpecificItemMission(private val requiredItem: Material) : Mission {
-
 
 
     override fun missionStart(player: Player) {

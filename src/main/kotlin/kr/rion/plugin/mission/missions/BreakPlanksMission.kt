@@ -35,7 +35,6 @@ class BreakPlanksMission(private val requiredCount: Int) : Mission {
             if (event.block.type in plankMaterials) {
                 val currentCount = playerPlankCounts.getOrDefault(player, 0) + 1
                 playerPlankCounts[player] = currentCount
-//                player.sendMessage("§b나무 판자를 캤습니다! (§e$currentCount§b/§d$requiredCount§b)")
                 player.spigot()
                     .sendMessage(
                         ChatMessageType.ACTION_BAR,

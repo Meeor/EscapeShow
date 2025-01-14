@@ -1,7 +1,6 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
-import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -30,7 +29,6 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
         }
 
         // 누적된 수집량이 조건을 충족했는지 확인
-        player.sendMessage("디버그 메세지 : 미션 상태 : ${(totalCollectedCounts[player] ?: 0) >= requiredCount} \n 현재 누적 상태 : ${totalCollectedCounts[player] ?: 0}")
         return (totalCollectedCounts[player] ?: 0) >= requiredCount
     }
 
@@ -46,7 +44,13 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
     }
 
     private fun handleInventoryClose(player: Player) {
-        val currentInventoryCount = getCurrentItemCount(player) // 현재 인벤토리 상태
+        // 0~8번 슬롯에서 목표 아이템 개수 계산
+        val currentInventoryCount = (0..8)
+            .mapNotNull { player.inventory.getItem(it) } // 해당 슬롯에서 아이템 가져오기 (null은 제외)
+            .filter { it.type == targetItem } // 목표 아이템 타입 필터링
+            .sumOf { it.amount } // 목표 아이템의 총 개수 계산
+
+
         val previousInventoryCount = currentInventoryCounts.getOrDefault(player, 0)
 
         if (currentInventoryCount > previousInventoryCount) {
@@ -56,12 +60,10 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
             // 누적 수집량 업데이트
             val previousTotal = totalCollectedCounts.getOrDefault(player, 0)
             totalCollectedCounts[player] = previousTotal + newlyCollected
-            player.sendMessage("디버그 메세지 : 새로 추가된 아이템 : ${newlyCollected}, 누적수집상태 : ${totalCollectedCounts[player]}")
         }
 
         // 현재 상태 업데이트 (증가/감소 모두 반영)
         currentInventoryCounts[player] = currentInventoryCount
-        player.sendMessage("디버그 메세지 : 현재 상태 업데이트 : ${currentInventoryCounts[player]}")
     }
 
 
@@ -75,7 +77,6 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
 
             // 현재 인벤토리 상태에서 차감
             currentInventoryCounts[player] = kotlin.math.max(0, currentInventoryCount - droppedAmount)
-            player.sendMessage("디버그 메세지 : 현재 상태 업데이트 : ${currentInventoryCounts[player]}")
         }
     }
 
@@ -88,7 +89,6 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
 
             // 섭취한 아이템 개수를 현재 상태에서 차감
             currentInventoryCounts[player] = kotlin.math.max(0, currentInventoryCount - item.amount)
-            player.sendMessage("디버그 메세지 : 현재 상태 업데이트 : ${currentInventoryCounts[player]}")
         }
     }
 
@@ -104,15 +104,7 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
 
                 // 현재 인벤토리 상태 업데이트
                 currentInventoryCounts[player] = currentInventoryCount + pickedAmount
-                player.sendMessage("디버그 메세지 : 현재 상태 업데이트 : ${currentInventoryCounts[player]}")
             }
         }
-    }
-
-
-    private fun getCurrentItemCount(player: Player): Int {
-        val inventory = player.inventory
-        return inventory.contents.toList()
-            .count { it.type == targetItem } // 현재 인벤토리에서 해당 아이템 개수 계산
     }
 }

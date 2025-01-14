@@ -17,6 +17,7 @@ object Global {
     var EscapePlayerMaxCount: Int = 3
     var endingPlayerMaxCount: Int = 6
     var door = true
+
     //부활 관련 변수
     val reviveFlags = mutableMapOf<String, Boolean>() // 플레이어별 부활 상태 저장
     var respawnTask = mutableMapOf<String, BukkitTask>()
@@ -119,6 +120,7 @@ object Global {
         }
 
     }
+
     ///부활체크작업 종료
     fun cancelAllTasks() {
         for ((_, task) in respawnTask) {
@@ -156,6 +158,7 @@ object Global {
             }
         }
     }
+
     //글자 중앙정렬 함수(색코드 제거하여 중앙정렬)(줄바꿈도 인정됨)
     fun centerText(text: String, lineWidth: Int = 22): String {
         val strippedText = stripColorCodes(text) // 색 코드 제거
@@ -169,7 +172,6 @@ object Global {
     private fun stripColorCodes(text: String): String {
         return text.replace(Regex("§[0-9a-fk-or]"), "")
     }
-
 
 
 }

@@ -127,7 +127,7 @@ class OnEntitySpawn: Listener {
                             )
                             val bookAndQuill = createCustomItem(
                                 "${ChatColor.GREEN}미션",
-                                listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다."),
+                                listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.","","${ChatColor.RED}진행상황은 표시되지 않습니다!"),
                                 Material.WRITABLE_BOOK
                             )
                             val map = createCustomItem(

@@ -1,7 +1,6 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
-import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
@@ -31,7 +30,6 @@ class PlacePlanksMission(private val requiredCount: Int) : Mission {
             ) {
                 val currentCount = playerPlankPlacements.getOrDefault(player, 0) + 1
                 playerPlankPlacements[player] = currentCount
-//                player.sendMessage("§b나무 판자를 설치했습니다! (§e$currentCount§b/§d$requiredCount§b)")
                 player.spigot()
                     .sendMessage(
                         ChatMessageType.ACTION_BAR,

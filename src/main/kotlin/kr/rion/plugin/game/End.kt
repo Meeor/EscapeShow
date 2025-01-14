@@ -50,7 +50,6 @@ object End {
         //플레어건 탈출파티클 끝내기
         ifEnding = false
         startportal = false
-        isStarting = false
         isEnding = true
         chestEnable = false
         door = true
@@ -142,7 +141,8 @@ object End {
                 handleGameReset()
                 resetplayerAttribute()
                 cancelAllTasks()
-            }, 20L * 13)
-        }, 20L * 12)
+                isStarting = false
+            }, 20L * 10)
+        }, 20L * 15)
     }
 }
