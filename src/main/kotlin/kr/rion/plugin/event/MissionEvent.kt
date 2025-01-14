@@ -1,5 +1,6 @@
 package kr.rion.plugin.event
 
+import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.manager.MissionManager
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -86,6 +87,17 @@ class MissionEvent :Listener {
         val player = event.whoClicked
         if (player is Player) {
             MissionManager.handleEvent(player, event)
+        }
+    }
+    @EventHandler
+    fun onRevivalEvent(event: RevivalEvent) {
+        val player = event.relatedPlayer
+        val targetPlayer = event.player
+
+        // 두 플레이어가 모두 유효한 경우에만 처리
+        if (player != null) {
+            MissionManager.handleEvent(player, event) // 관련 플레이어에 대해 미션 처리
+            MissionManager.handleEvent(targetPlayer, event) // 대상 플레이어에 대해 미션 처리
         }
     }
 }

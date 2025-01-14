@@ -2,6 +2,8 @@ package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
+import kr.rion.plugin.customEvent.RevivalEvent
+import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.processedPlayers
@@ -65,11 +67,14 @@ class OnEntitySpawn: Listener {
                     corpseEntity.remove()
                     // 인벤토리 초기화 및 관전 모드로 변경
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
+                    val closestPlayer = getClosestPlayer(corpseEntity, 20.0) // 시체 근처 가장 가까운 사람 추적
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
                     player.sendMessage("§c누군가가 당신의 아이템을 가져갔습니다.\n§c부활이 금지되며 관전 모드로 변경됩니다.")
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
+                    // 부활 실패 이벤트 호출
+                    Bukkit.getPluginManager().callEvent(RevivalEvent(player, closestPlayer, RevivalEventType.FAILED))
                     return@Runnable
                 }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
@@ -141,6 +146,7 @@ class OnEntitySpawn: Listener {
                             }
                             respawnTask.remove(playerName)?.cancel()
                             corpseEntity.remove() // 시체 엔티티 제거
+                            Bukkit.getPluginManager().callEvent(RevivalEvent(player, nearbyPlayer, RevivalEventType.SUCCESS))
                             break
                         }
                     } else {
@@ -183,4 +189,15 @@ class OnEntitySpawn: Listener {
         }
         corpseTextDisplays.remove(corpseEntity)
     }
+    // 부활 실패 시, 아이템 가져간 사람 추적
+    fun getClosestPlayer(corpseEntity: Entity, range: Double): Player? {
+        val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, range, range, range)
+        val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
+
+        if (nearbyPlayers.isEmpty()) return null
+
+        // 시체와 가장 가까운 플레이어 계산
+        return nearbyPlayers.minByOrNull { corpseEntity.location.distance(it.location) }
+    }
+
 }
