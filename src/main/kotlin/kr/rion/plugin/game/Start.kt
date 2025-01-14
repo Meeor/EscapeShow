@@ -72,6 +72,7 @@ object Start {
                 if (!player.scoreboardTags.contains("manager")) {
                     player.allowFlight = false
                     player.isFlying = false
+                    player.gameMode = GameMode.SURVIVAL
                     // manager 태그가 없는 플레이어의 태그 모두 제거
                     MissionManager.assignMission(player) //플레이어에게 미션 부여
                     player.scoreboardTags.clear()
