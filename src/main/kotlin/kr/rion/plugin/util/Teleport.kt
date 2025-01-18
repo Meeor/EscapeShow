@@ -67,7 +67,7 @@ object Teleport {
         val maxY = 97  // 최대 Y 좌표
 
         val requiredSafeLocations = 60 // 목표: 60개
-        val maxAttempts = 20000 // 시도 횟수 제한 (필요에 따라 조정 가능)
+        val maxAttempts = 100000 // 시도 횟수 제한 (필요에 따라 조정 가능)
         var attempts = 0
 
         while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
@@ -148,7 +148,6 @@ object Teleport {
 
     private fun isLocationCaveAir(loc: Location): Boolean {
         val block = loc.block
-
         // 해당 위치의 블록이 CAVE_AIR인지 확인
         return block.type == Material.CAVE_AIR
     }
