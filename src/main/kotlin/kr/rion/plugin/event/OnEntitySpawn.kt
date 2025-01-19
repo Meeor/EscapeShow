@@ -14,8 +14,10 @@ import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntitySpawnEvent
+import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.potion.PotionEffectType
 
 
@@ -196,6 +198,22 @@ class OnEntitySpawn: Listener {
 
         // 시체와 가장 가까운 플레이어 계산
         return nearbyPlayers.minByOrNull { corpseEntity.location.distance(it.location) }
+    }
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
+        val player = event.player
+        val entity = event.rightClicked
+
+        // 사망자 상태 확인
+        if (player.scoreboardTags.contains("DeathAndAlive")) {
+            // 모드 엔티티인지 확인
+            if (entity is com.mohistmc.bukkit.entity.MohistModsEntity) {
+                // 상호작용 취소
+                event.isCancelled = true
+            }
+        } else return
     }
 
 }
