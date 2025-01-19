@@ -98,6 +98,7 @@ object Global {
 
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
+        Bukkit.clearRecipes()
     }
 
     fun survivalPlayers(): Int {
