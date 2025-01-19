@@ -142,7 +142,8 @@ object FlameGunActions {
                     .filter {
                         !it.scoreboardTags.contains("manager") &&
                                 !it.scoreboardTags.contains("EscapeComplete") &&
-                                !it.scoreboardTags.contains("death")
+                                !it.scoreboardTags.contains("death") &&
+                                !it.scoreboardTags.contains("DeathAndAlive")
                     }
                     .forEach { currentPlayer ->
 

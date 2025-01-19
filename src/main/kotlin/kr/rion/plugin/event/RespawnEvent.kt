@@ -30,7 +30,7 @@ class RespawnEvent : Listener {
             }, 10L) // 5틱 후에 실행
             if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) {
                 player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
-                player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 웅크리고 3초간 있을경우 부활할수있습니다.")
+                player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 타인이 웅크리고 3초간 있을경우 부활할수있습니다.")
                 player.addScoreboardTag("DeathAndAlive")
             } else {
                 player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경

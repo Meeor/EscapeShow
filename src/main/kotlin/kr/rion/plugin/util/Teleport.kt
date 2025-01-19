@@ -70,6 +70,8 @@ object Teleport {
         val maxAttempts = 100000 // 시도 횟수 제한 (필요에 따라 조정 가능)
         var attempts = 0
 
+        val minDistance = 100.0 // 최소 거리 설정 (100 블록)
+
         while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
             // 원형 범위 안에서 무작위 좌표 생성
             val angle = rand.nextDouble() * 2 * Math.PI  // 0에서 2π 사이의 랜덤 각도
@@ -79,7 +81,9 @@ object Teleport {
             val y = rand.nextInt(maxY - minY + 1) + minY  // Y 좌표는 범위 내에서 랜덤 선택
 
             val location = Location(world, x, y.toDouble(), z)
-            if (isLocationCaveAir(location) && !safeLocations.contains(location)) {
+
+            // 최소 거리 조건 확인
+            if (isLocationCaveAir(location) && safeLocations.none { it.distance(location) < minDistance }) {
                 safeLocations.add(location)
             }
             attempts++
@@ -89,6 +93,7 @@ object Teleport {
         console.sendMessage("$prefix 안전한 좌표 ${ChatColor.YELLOW}${safeLocations.size} ${ChatColor.GREEN}개를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
         hasInitializedSafeLocations = true
     }
+
 
 
     fun isInDesignatedArea(loc: Location): Boolean {
