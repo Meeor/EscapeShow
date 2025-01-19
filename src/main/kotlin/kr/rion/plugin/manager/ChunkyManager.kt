@@ -26,7 +26,7 @@ object ChunkyManager {
                 if (worldName == "game") {
                     // game 월드: 기존 코드 유지
                     api.startTask(
-                        "game", "square", 0.0, 0.0, 2000.0, 2000.0, "concentric"
+                        "game", "square", 0.0, 0.0, 800.0, 800.0, "concentric"
                     )
                     api.onGenerationComplete { event: GenerationCompleteEvent ->
                         val eventWorld = Bukkit.getWorld(event.world) // 이벤트의 월드를 Bukkit에서 가져옴
