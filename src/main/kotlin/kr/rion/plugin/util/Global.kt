@@ -110,21 +110,10 @@ object Global {
         return survivalPlayers.size // 필터링된 생존 플레이어의 수 반환
     }
 
-    fun isSurvivalPlayers(): Int {
-        val survivalPlayers = Bukkit.getOnlinePlayers()
-            .filter { player ->
-                !player.scoreboardTags.contains("manager") && // 매니저가 아님
-                        !player.scoreboardTags.contains("EscapeComplete") && // EscapeComplete 태그가 없음
-                        !player.scoreboardTags.contains("death") && // death 태그가 없음
-                        player.scoreboardTags.contains("MissionSuccess") // MissionSuccess 태그가 있음
-            }
-        return survivalPlayers.size // 필터링된 생존 플레이어의 수 반환
-    }
-
     fun endingPlayer() {
-        val endingPlayerCount: Int = isSurvivalPlayers() + EscapePlayerCount
+        val endingPlayerCount: Int = survivalPlayers() + EscapePlayerCount
 
-        if (endingPlayerCount == endingPlayerMaxCount) {
+        if (endingPlayerCount <= endingPlayerMaxCount) {
             if (!isEnding) return
             End.EndAction()
         }
