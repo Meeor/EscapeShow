@@ -57,7 +57,7 @@ object Reset {
         Bukkit.dispatchCommand(console, "mv unload game")
         Bukkit.dispatchCommand(console, "mv load game")
         Bukkit.dispatchCommand(console, "plugman reload Multiverse-Portals")
-        ChunkyManager.loadchunky()
+        ChunkyManager.loadChunkyForWorld("game")
         return true
     }
 

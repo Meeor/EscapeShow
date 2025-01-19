@@ -7,6 +7,7 @@ import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startportal
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.item.FlameGunActions.playersAtParticle
+import kr.rion.plugin.manager.ChunkyManager.loadChunkyForWorld
 import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
@@ -42,7 +43,7 @@ object End {
         }
         fillBlocks(Location(worldWait, 23.0, 60.0, -46.0), Location(worldWait, 23.0, 57.0, -44.0), Material.OAK_FENCE)
         setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.OAK_FENCE)
-
+        loadChunkyForWorld("vip")
         //게임종료후 각종변수및 정보들 리셋작업.
         EscapePlayerCount = 0
         Helicopter.remove()
