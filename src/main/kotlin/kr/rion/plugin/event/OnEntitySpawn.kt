@@ -2,8 +2,6 @@ package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
-import kr.rion.plugin.customEvent.RevivalEvent
-import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.processedPlayers
@@ -12,7 +10,10 @@ import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Item.createCustomItem
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
-import org.bukkit.entity.*
+import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Player
+import org.bukkit.entity.TextDisplay
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -21,14 +22,14 @@ import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.potion.PotionEffectType
 
 
-class OnEntitySpawn: Listener {
+class OnEntitySpawn : Listener {
 
     private val sneakingTimers = mutableMapOf<String, Int>() // 웅크리는 시간 추적
 
 
     @EventHandler
     fun onEntitySpawn(event: EntitySpawnEvent) {
-        if(!isStarting || isEnding) return
+        if (!isStarting || isEnding) return
         val entity = event.entity
 
         // MohistModsEntity 감지
@@ -42,7 +43,7 @@ class OnEntitySpawn: Listener {
                 Bukkit.getLogger().warning("PlayerName not found in Death NBT data!")
                 return
             }
-            if(!processedPlayers.contains(playerName)) createTextDisplay(corpseEntity,"§a부활")
+            if (!processedPlayers.contains(playerName)) createTextDisplay(corpseEntity, "§a부활")
             // 플레이어별 부활 플래그 초기화
             if (!reviveFlags.containsKey(playerName)) {
                 reviveFlags[playerName] = true
@@ -61,7 +62,7 @@ class OnEntitySpawn: Listener {
 
                 // MainInventory 데이터 확인 및 시체 엔티티 제거 조건
                 val mainInventory = deathData.getCompoundList("MainInventory")
-                if(mainInventory == null || mainInventory.isEmpty){
+                if (mainInventory == null || mainInventory.isEmpty) {
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
                     respawnTask.remove(playerName)?.cancel()
@@ -69,14 +70,11 @@ class OnEntitySpawn: Listener {
                     corpseEntity.remove()
                     // 인벤토리 초기화 및 관전 모드로 변경
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
-                    val closestPlayer = getClosestPlayer(corpseEntity, 20.0) // 시체 근처 가장 가까운 사람 추적
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
                     player.sendMessage("§c누군가가 당신의 아이템을 가져갔습니다.\n§c부활이 금지되며 관전 모드로 변경됩니다.")
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
-                    // 부활 실패 이벤트 호출
-                    Bukkit.getPluginManager().callEvent(RevivalEvent(player, closestPlayer, RevivalEventType.FAILED))
                     return@Runnable
                 }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
@@ -95,7 +93,8 @@ class OnEntitySpawn: Listener {
                 }
 
                 // 플레이어가 웅크리고 반경 1칸 이내에 있는지 확인
-                val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 2.5, 2.5, 2.5)
+                val nearbyEntities =
+                    corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 2.5, 2.5, 2.5)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
                     if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking) {
@@ -129,7 +128,11 @@ class OnEntitySpawn: Listener {
                             )
                             val bookAndQuill = createCustomItem(
                                 "${ChatColor.GREEN}미션",
-                                listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.","","${ChatColor.RED}진행상황은 표시되지 않습니다!"),
+                                listOf(
+                                    "${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.",
+                                    "",
+                                    "${ChatColor.RED}진행상황은 표시되지 않습니다!"
+                                ),
                                 Material.WRITABLE_BOOK
                             )
                             val map = createCustomItem(
@@ -148,7 +151,6 @@ class OnEntitySpawn: Listener {
                             }
                             respawnTask.remove(playerName)?.cancel()
                             corpseEntity.remove() // 시체 엔티티 제거
-                            Bukkit.getPluginManager().callEvent(RevivalEvent(player, nearbyPlayer, RevivalEventType.SUCCESS))
                             break
                         }
                     } else {
@@ -159,6 +161,7 @@ class OnEntitySpawn: Listener {
             respawnTask[playerName] = task
         }
     }
+
     private val corpseTextDisplays: MutableMap<Entity, TextDisplay> = mutableMapOf()
 
     // 텍스트 디스플레이 생성
@@ -189,6 +192,7 @@ class OnEntitySpawn: Listener {
         }
         corpseTextDisplays.remove(corpseEntity)
     }
+
     // 부활 실패 시, 아이템 가져간 사람 추적
     fun getClosestPlayer(corpseEntity: Entity, range: Double): Player? {
         val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, range, range, range)

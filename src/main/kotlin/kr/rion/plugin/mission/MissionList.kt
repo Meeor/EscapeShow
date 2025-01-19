@@ -25,9 +25,6 @@ object MissionList {
         /*
         val test = CraftingMission(listOf(Material.NETHERITE_SCRAP to 5, Material.LEATHER_CHESTPLATE to 1))
         MissionRegistry.registerMission(16, test) //inventoryClickEvent
-        MissionRegistry.registerMission(17,ReviveOnceMission()) //RevivalEvent (커스텀 이벤트) (부활하기미션)
-        MissionRegistry.registerMission(18,ReviveOthersOnceMission()) //RevivalEvent (커스텀 이벤트) (부활시키기미션)
-        MissionRegistry.registerMission(19,StealItemsMission()) //RevivalEvent (커스텀 이벤트)  (부활 못하게 아이템 스틸하기 미션)
         */
     }
 }
