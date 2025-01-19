@@ -93,7 +93,7 @@ class OnEntitySpawn: Listener {
                 }
 
                 // 플레이어가 웅크리고 반경 1칸 이내에 있는지 확인
-                val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 1.0, 1.0, 1.0)
+                val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 2.5, 2.5, 2.5)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
                     if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking) {
@@ -150,8 +150,6 @@ class OnEntitySpawn: Listener {
                             break
                         }
                     } else {
-                        val player = Bukkit.getPlayer(playerName) ?: return@Runnable
-                        player.sendMessage("웅크리기가 풀려 시간이 초기화 되었습니다.")
                         sneakingTimers.remove(playerName) // 웅크리지 않으면 시간 초기화
                     }
                 }

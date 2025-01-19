@@ -59,7 +59,7 @@ object Global {
         End.EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
 
         if (remainingPlayers > 0) {
@@ -100,7 +100,17 @@ object Global {
         }
     }
 
-    fun SurvivalPlayers(): Int {
+    fun survivalPlayers(): Int {
+        val survivalPlayers = Bukkit.getOnlinePlayers()
+            .filter { player ->
+                !player.scoreboardTags.contains("manager") && // 매니저가 아님
+                        !player.scoreboardTags.contains("EscapeComplete") && // EscapeComplete 태그가 없음
+                        !player.scoreboardTags.contains("death")  // death 태그가 없음
+            }
+        return survivalPlayers.size // 필터링된 생존 플레이어의 수 반환
+    }
+
+    fun isSurvivalPlayers(): Int {
         val survivalPlayers = Bukkit.getOnlinePlayers()
             .filter { player ->
                 !player.scoreboardTags.contains("manager") && // 매니저가 아님
@@ -112,7 +122,7 @@ object Global {
     }
 
     fun endingPlayer() {
-        val endingPlayerCount: Int = SurvivalPlayers() + EscapePlayerCount
+        val endingPlayerCount: Int = isSurvivalPlayers() + EscapePlayerCount
 
         if (endingPlayerCount == endingPlayerMaxCount) {
             if (!isEnding) return

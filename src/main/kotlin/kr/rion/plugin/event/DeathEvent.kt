@@ -30,7 +30,7 @@ class DeathEvent : Listener {
             inventory.setItem(slot, null) // 해당 슬롯의 아이템 제거
         }
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 2 * 20, 1, false, false))
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${Global.SurvivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${Global.survivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
         console.sendMessage("${ChatColor.YELLOW}${event.player.name}${ChatColor.RESET}님이${ChatColor.RED}사망${ChatColor.RESET}하였습니다.")
         Bossbar.removeDirectionBossBar(player)
         processedPlayers.remove(player.name)
