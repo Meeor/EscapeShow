@@ -26,6 +26,7 @@ object Teleport {
     val console = Bukkit.getServer().consoleSender
     val immunePlayers = mutableMapOf<Player, Long>() // 플레이어와 면역 시간 맵
     val stopPlayer: MutableMap<Player, Boolean> = mutableMapOf()
+    val tpstopPlayer: MutableMap<Player, Boolean> = mutableMapOf()
 
     private var hasInitializedSafeLocations = false
 
@@ -128,6 +129,14 @@ object Teleport {
             return
         }
 
+        // 텔레포트 상태 확인
+        val isTeleporting = tpstopPlayer.getOrDefault(player, false)
+        if (isTeleporting) {
+            player.sendMessage("$prefix 이미 텔레포트 작업이 진행 중입니다.")
+            return
+        }
+        tpstopPlayer[player] = true // 텔레포트 상태 설정
+
         // 메인 스레드에서 텔레포트 작업 수행
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             try {
@@ -146,6 +155,8 @@ object Teleport {
                 }, 30)
             } catch (e: Exception) {
                 console.sendMessage("$prefix 텔레포트 중 오류가 발생했습니다: ${e.message}")
+            } finally {
+                tpstopPlayer[player] = false // 텔레포트 상태 해제
             }
         })
     }

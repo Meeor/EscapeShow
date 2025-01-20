@@ -26,7 +26,7 @@ object ChunkyManager {
                 if (worldName == "game") {
                     // game 월드: 기존 코드 유지
                     api.startTask(
-                        "game", "square", 0.0, 0.0, 800.0, 800.0, "concentric"
+                        "game", "square", 80.0, -377.0, 600.0, 600.0, "concentric"
                     )
                     api.onGenerationComplete { event: GenerationCompleteEvent ->
                         val eventWorld = Bukkit.getWorld(event.world) // 이벤트의 월드를 Bukkit에서 가져옴
@@ -43,7 +43,7 @@ object ChunkyManager {
                 } else if (worldName == "vip") {
                     // vip 월드: 작업 반경 10 청크
                     api.startTask(
-                        "vip", "square", 0.0, 0.0, 50.0, 50.0, "concentric" // 10 청크 ≈ 160 블록 반경
+                        "vip", "square", 15.5, -44.5, 50.0, 50.0, "concentric" // 10 청크 ≈ 160 블록 반경
                     )
                     api.onGenerationComplete { event: GenerationCompleteEvent ->
                         val eventWorld = Bukkit.getWorld(event.world) // 이벤트의 월드를 Bukkit에서 가져옴

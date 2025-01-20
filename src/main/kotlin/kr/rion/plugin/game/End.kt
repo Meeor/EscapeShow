@@ -21,6 +21,7 @@ import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Teleport.stopPlayer
+import kr.rion.plugin.util.Teleport.tpstopPlayer
 import org.bukkit.*
 
 object End {
@@ -56,6 +57,7 @@ object End {
         door = true
         bossbarEnable = 0
         stopPlayer.clear()
+        tpstopPlayer.clear()
         MissionManager.resetMissions()
         Bukkit.broadcastMessage("")
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
