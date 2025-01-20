@@ -103,8 +103,4 @@ class Loader : JavaPlugin() {
     fun gameEndingEnable() {
         ifEnding = true
     }
-    @Suppress("unused")
-    fun playerMissionIdGet(player: Player): Int? {
-        return activeMissions[player]
-    }
 }

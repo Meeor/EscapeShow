@@ -19,19 +19,30 @@ class OpenChestMission(private val requiredOpens: Int) : Mission {
         if (event is InventoryOpenEvent && event.inventory.type == InventoryType.BARREL) {
             val currentCount = playerOpens.getOrDefault(player, 0) + 1
             playerOpens[player] = currentCount
-//            player.sendMessage("§b통을 열었습니다! (§e$currentCount§b/§d$requiredOpens§b)")
             player.spigot()
                 .sendMessage(
                     ChatMessageType.ACTION_BAR,
                     TextComponent("§b통을 열었습니다! (§e$currentCount§b/§d$requiredOpens§b)")
                 )
 
+            // 10단위로 사운드 재생
+            if (currentCount % 10 == 0) {
+                player.playSound(
+                    player.location, // 플레이어 위치
+                    "minecraft:block.note_block.bell ", // 사운드 이름
+                    1.0f, // 볼륨
+                    1.4f // 피치
+                )
+            }
+
+            // 성공 조건 충족 확인
             if (currentCount >= requiredOpens) {
-                return true // 성공 조건 충족
+                return true
             }
         }
-        return false // 성공 조건 미충족
+        return false
     }
+
 
     override fun onSuccess(player: Player) {
         player.addScoreboardTag("MissionSuccess")
