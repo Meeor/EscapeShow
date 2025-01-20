@@ -38,9 +38,13 @@ object Bossbar {
         }
     }
 
-    // 보스바의 방향 게이지를 업데이트
+    // 보스바의 방향 게이지를 업데이트 (XZ 좌표 기준으로 수정)
     fun updateDirectionBossBar(player: Player, targetLocation: Location) {
-        val directionToTarget = targetLocation.toVector().subtract(player.location.toVector()).normalize()
+        // Y 좌표를 동일하게 설정
+        val targetXZ = targetLocation.clone().apply { y = player.location.y }
+        val playerXZ = player.location.clone().apply { y = player.location.y }
+
+        val directionToTarget = targetXZ.toVector().subtract(playerXZ.toVector()).normalize()
         val playerDirection = player.location.direction.normalize()
 
         // 두 벡터 간의 각도 계산 (0도에 가까울수록 같은 방향을 봄)
