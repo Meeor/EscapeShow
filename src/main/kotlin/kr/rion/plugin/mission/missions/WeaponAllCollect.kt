@@ -12,12 +12,12 @@ import net.md_5.bungee.api.chat.TextComponent
 class WeaponAllCollect : Mission {
     // 필요한 아이템 목록
     private val requiredItems = setOf(
-        Material.WOODEN_AXE, // 사냥도끼
-        Material.DIAMOND_PICKAXE, // 대형망치
+        Material.IRON_SWORD, // 사냥도끼
+        Material.WOODEN_AXE, // 대형망치
         Material.QUARTZ, // 칼날
         Material.FEATHER, // 검날
         Material.LIGHT_GRAY_DYE, // 날
-        Material.STONE_HOE, // 단검
+        Material.WOODEN_SWORD, // 단검
         Material.STONE_SWORD // 마체테
     )
 

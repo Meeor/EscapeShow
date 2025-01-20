@@ -9,7 +9,7 @@ object MissionList {
     fun registerAll() {
         MissionRegistry.registerMission(1, OpenChestMission(50)) //inventoryOpenEvent
         MissionRegistry.registerMission(2, OpenChestMission(100)) //inventoryOpenEvent
-        MissionRegistry.registerMission(3, ItemCollectMission(Material.STONE_HOE, 2)) //inventoryCloseEvent
+        MissionRegistry.registerMission(3, ItemCollectMission(Material.WOODEN_SWORD, 2)) //inventoryCloseEvent
         MissionRegistry.registerMission(4, ItemCollectMission(Material.IRON_INGOT, 10)) //inventoryCloseEvent
         MissionRegistry.registerMission(5, ItemCollectMission(Material.SWEET_BERRIES, 10)) //inventoryCloseEvent
         MissionRegistry.registerMission(6, WeaponAllCollect()) //inventoryCloseEvent
