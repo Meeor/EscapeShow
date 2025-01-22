@@ -51,19 +51,14 @@ object Start {
         door = true
 
         val craftingItem = createCustomItem(
-            "${ChatColor.GREEN}조합아이템",
-            listOf("${ChatColor.YELLOW}손에들고 우클릭시 조합창을 오픈합니다."),
+            "${ChatColor.GREEN}아이템 조합",
+            listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
             Material.SLIME_BALL
         )
         val bookAndQuill = createCustomItem(
             "${ChatColor.GREEN}미션",
             listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
             Material.WRITABLE_BOOK
-        )
-        val map = createCustomItem(
-            "${ChatColor.GREEN}지도",
-            listOf("${ChatColor.YELLOW}클릭시 맵 전체 지도를 확인할수있습니다."),
-            Material.MOJANG_BANNER_PATTERN
         )
         val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
@@ -77,11 +72,10 @@ object Start {
                     player.scoreboardTags.clear()
                     MissionManager.assignMission(player) //플레이어에게 미션 부여
                     player.inventory.clear()
-                    for (i in 8..35) {
+                    for (i in 9..35) {
                         when (i) {
                             20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
-                            24 -> player.inventory.setItem(i, map) // 24번 슬롯에 지도
-                            8 -> player.inventory.setItem(i, craftingItem) // 8번 슬롯에 제작 아이템
+                            24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
                             else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
                         }
                     }

@@ -2,6 +2,8 @@ package kr.rion.plugin.event
 
 import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
+import kr.rion.plugin.customEvent.RevivalEvent
+import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.processedPlayers
@@ -70,11 +72,14 @@ class OnEntitySpawn : Listener {
                     corpseEntity.remove()
                     // 인벤토리 초기화 및 관전 모드로 변경
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
+                    val closestPlayer = getClosestPlayer(corpseEntity, 20.0) // 시체 근처 가장 가까운 사람 추적
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
                     player.sendMessage("§c누군가가 당신의 아이템을 가져갔습니다.\n§c부활이 금지되며 관전 모드로 변경됩니다.")
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
+                    // 부활 실패 이벤트 호출
+                    Bukkit.getPluginManager().callEvent(RevivalEvent(player, closestPlayer, RevivalEventType.FAILED))
                     return@Runnable
                 }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
@@ -123,7 +128,7 @@ class OnEntitySpawn : Listener {
                             }
                             val craftingItem = createCustomItem(
                                 "${ChatColor.GREEN}조합아이템",
-                                listOf("${ChatColor.YELLOW}손에들고 우클릭시 조합창을 오픈합니다."),
+                                listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
                                 Material.SLIME_BALL
                             )
                             val bookAndQuill = createCustomItem(
@@ -135,22 +140,17 @@ class OnEntitySpawn : Listener {
                                 ),
                                 Material.WRITABLE_BOOK
                             )
-                            val map = createCustomItem(
-                                "${ChatColor.GREEN}지도",
-                                listOf("${ChatColor.YELLOW}클릭시 맵 전체 지도를 확인할수있습니다."),
-                                Material.MOJANG_BANNER_PATTERN
-                            )
                             val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
                             for (i in 8..35) {
                                 when (i) {
                                     20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
-                                    24 -> player.inventory.setItem(i, map) // 24번 슬롯에 지도
-                                    8 -> player.inventory.setItem(i, craftingItem) // 8번 슬롯에 제작 아이템
+                                    24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 지도
                                     else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
                                 }
                             }
                             respawnTask.remove(playerName)?.cancel()
                             corpseEntity.remove() // 시체 엔티티 제거
+                            Bukkit.getPluginManager().callEvent(RevivalEvent(player, nearbyPlayer, RevivalEventType.SUCCESS))
                             break
                         }
                     } else {
