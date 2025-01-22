@@ -58,6 +58,7 @@ object End {
         bossbarEnable = 0
         stopPlayer.clear()
         tpstopPlayer.clear()
+        MissionManager.endGame()
         MissionManager.resetMissions()
         Bukkit.broadcastMessage("")
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
