@@ -68,10 +68,10 @@ object Teleport {
         val maxY = 97  // 최대 Y 좌표
 
         val requiredSafeLocations = 60 // 목표: 60개
-        val maxAttempts = 100000 // 시도 횟수 제한 (필요에 따라 조정 가능)
+        val maxAttempts = 1000000 // 시도 횟수 제한 (필요에 따라 조정 가능)
         var attempts = 0
 
-        val minDistance = 100.0 // 최소 거리 설정 (100 블록)
+        val minDistance =15.0 // 최소 거리 설정 (30 블록)
 
         while (safeLocations.size < requiredSafeLocations && attempts < maxAttempts) {
             // 원형 범위 안에서 무작위 좌표 생성
