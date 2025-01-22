@@ -398,7 +398,7 @@ object Helicopter {
         for (allplayer in Bukkit.getOnlinePlayers()) {
             allplayer.playSound(allplayer, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
         }
-        createDirectionBossBarForAll(HelicopterLoc!!.clone().add(0.0, -50.0, 0.0), "헬기 방향")
+        createDirectionBossBarForAll(HelicopterLoc!!, "헬기 방향")
         bossbarEnable = 2 //헬기위치로 변경
         HelicopterisSpawn = true
     }

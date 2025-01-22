@@ -136,14 +136,23 @@ object Global {
         world: World,
         baseLocation: Location,
         targetBlock: Material // 특정 블록 하나
-    ): Location {
+    ): Location? {
+        val worldBorder = world.worldBorder // 월드보더 가져오기
+        val borderCenter = worldBorder.center // 월드보더 중심
+        val borderRadius = worldBorder.size / 2 // 월드보더 반경 (size는 직경이므로 2로 나눔)
         val randomRange = -30..30 // X, Z 좌표 랜덤 범위
+        val maxAttempts = 100 // 최대 시도 횟수
 
-        while (true) {
+        for (attempt in 1..maxAttempts) {
             // baseLocation 기준으로 랜덤 XZ 좌표 생성
             val randomLocation = baseLocation.clone().apply {
                 x += randomRange.random()
                 z += randomRange.random()
+            }
+
+            // 월드보더 안에 있는지 확인
+            if (randomLocation.distance(borderCenter) > borderRadius) {
+                continue // 월드보더 밖이면 다시 시도
             }
 
             val randomXInt = randomLocation.blockX
@@ -151,15 +160,21 @@ object Global {
             val yStart = randomLocation.y.toInt() // 시작 Y 좌표
             val minY = world.minHeight // 월드 최소 높이
 
+            // Y 좌표 아래로 탐색
             for (y in yStart downTo minY) {
                 val block = world.getBlockAt(randomXInt, y, randomZInt)
                 if (block.type == targetBlock) {
                     // 특정 블록을 찾았을 때 해당 블록 위 좌표 반환
-                    return Location(world, randomXInt.toDouble(), y.toDouble(), randomZInt.toDouble())
+                    return Location(world, randomXInt.toDouble(), y + 1.0, randomZInt.toDouble())
                 }
             }
         }
+
+        // 실패 시 null 반환
+        Bukkit.getLogger().warning("헬기 소환위치 탐색중. 월드보더 내에서 블록($targetBlock)을 찾지 못했습니다.")
+        return null
     }
+
 
     //글자 중앙정렬 함수(색코드 제거하여 중앙정렬)(줄바꿈도 인정됨)
     fun centerText(text: String, lineWidth: Int = 22): String {

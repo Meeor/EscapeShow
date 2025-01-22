@@ -2,6 +2,7 @@ package kr.rion.plugin.item
 
 import de.tr7zw.nbtapi.NBTItem
 import kr.rion.plugin.Loader
+import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
 import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.adjustToAboveSpecificBlock
@@ -101,8 +102,20 @@ object FlameGunActions {
                             startEscapecheck = true
                             Bukkit.broadcastMessage("${ChatColor.BOLD}${ChatColor.YELLOW}헬기가 오고있습니다..")
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                                EscapeLocation = initialLoc.world?.let { adjustToAboveSpecificBlock(it, initialLoc.clone()
-                                    .subtract(0.0,1.0,0.0), Material.CAVE_AIR) }!!
+                                EscapeLocation = (initialLoc.world?.let {
+                                    adjustToAboveSpecificBlock(it, initialLoc.clone().subtract(0.0, 1.0, 0.0), Material.CAVE_AIR)
+                                } ?: run {
+                                    // 실패 시 작업 수행
+                                    Bukkit.broadcastMessage("$prefix §c헬기 도착 위치를 설정하지 못했습니다. 헬기 호출이 중단됩니다.")
+                                    chestEnable = false // 플레어건 상자 소환 초기화
+                                    Bukkit.getOnlinePlayers().filter { it.scoreboardTags.contains("manager") }.forEach { managerPlayer ->
+                                        managerPlayer.sendMessage("§l§b헬기 랜덤 좌표 생성을 실패하였습니다.")
+                                        managerPlayer.sendMessage("§l§b플레어건 상자 소환이 초기화되었습니다. 재소환하실 수 있습니다.")
+                                    }
+                                    cancel()
+                                    null // EscapeLocation을 null로 설정
+                                })!!
+
                                 Helicopter.spawn(
                                     EscapeLocation.clone().add(0.0, 51.0, 0.0)
                                 )
@@ -122,7 +135,7 @@ object FlameGunActions {
         val escapeDuration = 3L // 1초간 대기
 
         if (startEscape) {
-            player.sendMessage("$prefix ${ChatColor.RED}이미 헬기가 소환되어있습니다! ${ChatColor.YELLOW}(헬기 위치 >> x: ${HelicopterLoc?.x}, y: ${HelicopterLoc?.y}, z: ${HelicopterLoc?.z})")
+            player.sendMessage("$prefix ${ChatColor.RED}이미 헬기가 소환되어있습니다!")
             return  // 탈출이 이미 진행 중이면 함수 종료
         }
 
