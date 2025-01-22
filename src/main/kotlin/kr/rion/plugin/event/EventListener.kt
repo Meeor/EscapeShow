@@ -25,7 +25,8 @@ class EventListener : Listener {
             EscapePlayerEvent(),
             OnEntitySpawn(),
             MissionEvent(),
-            PlayerSlotLimiter()
+            PlayerSlotLimiter(),
+            GamemodeTest()
             //CreditEvent()
         )
 
