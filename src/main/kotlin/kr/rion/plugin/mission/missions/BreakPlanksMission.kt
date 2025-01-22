@@ -1,7 +1,6 @@
 package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
-import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material

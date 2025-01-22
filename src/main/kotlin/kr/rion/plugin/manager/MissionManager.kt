@@ -97,7 +97,7 @@ object MissionManager {
         30 to "축하합니다! §e10분§b동안 데미지 안받기 미션을 완료 하셨습니다!",
         31 to "\n"
 
-        )
+    )
 
     fun handleEvent(player: Player, event: Event) {
         // 플레이어의 활성화된 미션 ID 확인
@@ -134,6 +134,7 @@ object MissionManager {
     fun listMission(): MutableMap<String, Int> {
         return activeMissions
     }
+
     fun endGame() {
         // 모든 활성 미션 플레이어 확인
         activeMissions.forEach { (playerName, missionId) ->

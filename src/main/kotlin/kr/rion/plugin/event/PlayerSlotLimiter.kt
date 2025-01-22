@@ -38,11 +38,11 @@ class PlayerSlotLimiter : Listener {
             }
         }
     }
+
     @EventHandler
     fun onPrepareItemCraft(event: PrepareItemCraftEvent) {
         event.inventory.result = null // 조합 결과 비활성화
     }
-
 
 
 }

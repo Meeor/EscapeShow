@@ -4,12 +4,11 @@ import kr.rion.plugin.mission.Mission
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.scheduler.BukkitRunnable
 
 class DamageFreeMission(
     private val durationSeconds: Int, // 미션 지속 시간 (초 단위)

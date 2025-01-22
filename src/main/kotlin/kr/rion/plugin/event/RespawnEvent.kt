@@ -23,7 +23,7 @@ class RespawnEvent : Listener {
         // 예를 들어, 원래 리스폰 위치를 설정하지 않도록 하고 싶다면 이 코드를 추가합니다:
         if (isStarting) {
             event.respawnLocation = player.location // 플레이어의 사망 위치로 리스폰 설정
-            if(isEnding) return
+            if (isEnding) return
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1)) // 40틱(2초) 동안 실명 효과
                 player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 999999, 1, false, false))

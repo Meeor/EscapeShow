@@ -21,7 +21,7 @@ class DeathEvent : Listener {
     //사망시 관전모드
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     fun onDeath(event: PlayerDeathEvent) {
-        if(isEnding || !isStarting) return
+        if (isEnding || !isStarting) return
         val player: Player = event.player
         val console = Bukkit.getConsoleSender()
         // 9번~35번 슬롯의 아이템 제거

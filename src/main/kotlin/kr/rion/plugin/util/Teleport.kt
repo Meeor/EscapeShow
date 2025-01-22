@@ -96,7 +96,6 @@ object Teleport {
     }
 
 
-
     fun isInDesignatedArea(loc: Location): Boolean {
         designatedWorld = worldManager?.getMultiverseWorld(designatedWorldName)
         val world = loc.world ?: return false

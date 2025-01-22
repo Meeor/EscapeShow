@@ -2,12 +2,12 @@ package kr.rion.plugin.mission.missions
 
 import kr.rion.plugin.mission.Mission
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.inventory.InventoryCloseEvent
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.TextComponent
 
 class WeaponAllCollect : Mission {
     // 필요한 아이템 목록
@@ -66,6 +66,7 @@ class WeaponAllCollect : Mission {
     }
 
     private fun sendCollectionStatus(player: Player, totalCollected: Int) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("$MISSIONPREFIX§b무기 수집량 : §e$totalCollected 개"))
+        player.spigot()
+            .sendMessage(ChatMessageType.ACTION_BAR, TextComponent("$MISSIONPREFIX§b무기 수집량 : §e$totalCollected 개"))
     }
 }

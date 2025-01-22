@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerGameModeChangeEvent
 
-class GamemodeTest: Listener {
+class GamemodeTest : Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     fun onGameModeChange(event: PlayerGameModeChangeEvent) {
         val player = event.player

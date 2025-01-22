@@ -150,7 +150,8 @@ class OnEntitySpawn : Listener {
                             }
                             respawnTask.remove(playerName)?.cancel()
                             corpseEntity.remove() // 시체 엔티티 제거
-                            Bukkit.getPluginManager().callEvent(RevivalEvent(player, nearbyPlayer, RevivalEventType.SUCCESS))
+                            Bukkit.getPluginManager()
+                                .callEvent(RevivalEvent(player, nearbyPlayer, RevivalEventType.SUCCESS))
                             break
                         }
                     } else {

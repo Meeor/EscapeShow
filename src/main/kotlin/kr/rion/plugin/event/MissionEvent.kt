@@ -17,9 +17,9 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.event.player.PlayerMoveEvent
 
-class MissionEvent :Listener {
+class MissionEvent : Listener {
     @EventHandler(ignoreCancelled = false)
-    fun berralOpen(event: InventoryOpenEvent){
+    fun berralOpen(event: InventoryOpenEvent) {
         val player = event.player
         // Player로 캐스팅 가능한지 확인
         if (player is Player) {
@@ -27,8 +27,9 @@ class MissionEvent :Listener {
             MissionManager.handleEvent(player, event)
         }
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun itemCheck(event: InventoryCloseEvent){
+    fun itemCheck(event: InventoryCloseEvent) {
         val player = event.player
         // Player로 캐스팅 가능한지 확인
         if (player is Player) {
@@ -36,59 +37,69 @@ class MissionEvent :Listener {
             MissionManager.handleEvent(player, event)
         }
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun blockBreak(event: BlockBreakEvent){
+    fun blockBreak(event: BlockBreakEvent) {
         val player = event.player
-        MissionManager.handleEvent(player,event)
+        MissionManager.handleEvent(player, event)
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun blockPlace(event: BlockPlaceEvent){
+    fun blockPlace(event: BlockPlaceEvent) {
         val player = event.player
-        MissionManager.handleEvent(player,event)
+        MissionManager.handleEvent(player, event)
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun killer(event: PlayerDeathEvent){
+    fun killer(event: PlayerDeathEvent) {
         val killer = event.entity.killer ?: return // 킬러가 없는 경우 종료
         MissionManager.handleEvent(killer, event)
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun damager(event: EntityDamageByEntityEvent){
+    fun damager(event: EntityDamageByEntityEvent) {
         val damager = event.damager
         if (damager is Player) {
             // 미션 시스템에 이벤트 전달
             MissionManager.handleEvent(damager, event)
         }
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun blockStep(event: PlayerMoveEvent){
+    fun blockStep(event: PlayerMoveEvent) {
         val player = event.player
         MissionManager.handleEvent(player, event)
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun itemDrop(event: PlayerDropItemEvent){
+    fun itemDrop(event: PlayerDropItemEvent) {
         val player = event.player
         MissionManager.handleEvent(player, event)
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun itemEat(event: PlayerItemConsumeEvent){
+    fun itemEat(event: PlayerItemConsumeEvent) {
         val player = event.player
         MissionManager.handleEvent(player, event)
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun itemPickup(event:EntityPickupItemEvent){
+    fun itemPickup(event: EntityPickupItemEvent) {
         val pickupPlayer = event.entity
         if (pickupPlayer is Player) {
             // 미션 시스템에 이벤트 전달
             MissionManager.handleEvent(pickupPlayer, event)
         }
     }
+
     @EventHandler(ignoreCancelled = false)
-    fun craft(event: InventoryClickEvent){
+    fun craft(event: InventoryClickEvent) {
         val player = event.whoClicked
         if (player is Player) {
             MissionManager.handleEvent(player, event)
         }
     }
+
     @EventHandler
     fun onRevivalEvent(event: RevivalEvent) {
         val player = event.relatedPlayer
