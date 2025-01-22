@@ -34,9 +34,6 @@ object Start {
         MissionManager.resetMissions()
         isStart = true
         startportal = true
-        for (player in Bukkit.getOnlinePlayers()) {
-            player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
-        }
         executeBlockFillingAndEffect()
         isEnding = false
         chestEnable = false
@@ -95,6 +92,11 @@ object Start {
             var step = 20
 
             override fun run() {
+                // 월드를 '로비'로 고정
+                val lobbyWorld: World = Bukkit.getWorld("lobby") ?: run {
+                    Bukkit.getLogger().severe("로비 월드를 찾을 수 없습니다!")
+                    return
+                }
                 if (step > 155) {
                     // 작업 완료 시 추가 작업 실행
                     isStarting = true
@@ -124,88 +126,92 @@ object Start {
                     return
                 }
 
-                fillBlocksWithDestroyEffect(step)
+                fillBlocksWithDestroyEffect(step, lobbyWorld)
                 step += 5 // 5단계씩 증가
             }
         }.runTaskTimer(Loader.instance, 0L, 1L) // 0틱 이후 실행, 1틱 간격으로 실행
     }
 
-    // 특정 단계에서 블록을 공기로 설정하고 파괴 효과 적용
-    private fun fillBlocksWithDestroyEffect(step: Int) {
-        // 월드를 '로비'로 고정
-        val lobbyWorld: World = Bukkit.getWorld("lobby") ?: run {
-            Bukkit.getLogger().severe("로비 월드를 찾을 수 없습니다!")
-            return
-        }
+    private fun fillBlocksWithDestroyEffect(step: Int, world: World) {
+        // 단계별 블록 범위 매핑
+        // 단계별 블록 범위 매핑
+        val blockRanges = mapOf(
+            20 to Triple(-23 to -44, 129 to 134, 0 to 0),
+            25 to Triple(-44 to -23, 134 to 129, 1 to -1),
+            30 to Triple(-23 to -44, 129 to 134, -2 to 2),
+            35 to Triple(-44 to -23, 134 to 129, 3 to -3),
+            40 to Triple(-44 to -23, 134 to 129, 4 to -4),
+            45 to Triple(-23 to -44, 129 to 134, -5 to 5),
+            50 to Triple(-44 to -23, 134 to 129, 6 to -6),
+            55 to Triple(-22 to -44, 129 to 134, -7 to 7),
+            60 to Triple(-22 to -44, 129 to 134, -8 to 8),
+            65 to Triple(-44 to -22, 134 to 129, 9 to -9),
+            70 to Triple(-22 to -44, 129 to 134, -10 to 10),
+            75 to Triple(-43 to -21, 134 to 129, 11 to -11),
+            80 to Triple(-21 to -43, 129 to 134, -12 to 12),
+            85 to Triple(-43 to -21, 134 to 129, 13 to -13),
+            90 to Triple(-43 to -20, 134 to 129, 14 to -14),
+            95 to Triple(-20 to -42, 129 to 134, -15 to 15),
+            100 to Triple(-42 to -19, 134 to 129, -16 to 16),
+            105 to Triple(-20 to -42, 129 to 134, -17 to 17),
+            110 to Triple(-41 to -22, 134 to 129, 18 to -18),
+            115 to Triple(-24 to -41, 129 to 134, -19 to 19),
+            120 to Triple(-41 to -26, 134 to 129, 20 to -20),
+            125 to Triple(-28 to -40, 129 to 134, -21 to 21),
+            130 to Triple(-39 to -30, 134 to 129, 22 to -22),
+            135 to Triple(-32 to -37, 129 to 134, -23 to 23),
+            140 to Triple(-41 to -22, 133 to 129, 18 to -18),
+            145 to Triple(-41 to -24, 133 to 129, 19 to -19),
+            150 to Triple(-26 to -41, 129 to 133, -20 to 20),
+            155 to Triple(-40 to -28, 133 to 129, 21 to -21)
+        )
 
-        // 각 단계별 블록 좌표 처리
-        when (step) {
-            20 -> fillBlocksInRange(lobbyWorld, -23, 129, 0, -44, 134, 0)
-            25 -> fillBlocksInRange(lobbyWorld, -44, 134, 1, -23, 129, -1)
-            30 -> fillBlocksInRange(lobbyWorld, -23, 129, -2, -44, 134, 2)
-            35 -> fillBlocksInRange(lobbyWorld, -44, 134, 3, -23, 129, -3)
-            40 -> fillBlocksInRange(lobbyWorld, -44, 134, 4, -23, 129, -4)
-            45 -> fillBlocksInRange(lobbyWorld, -23, 129, -5, -44, 134, 5)
-            50 -> fillBlocksInRange(lobbyWorld, -44, 134, 6, -23, 129, -6)
-            55 -> fillBlocksInRange(lobbyWorld, -22, 129, -7, -44, 134, 7)
-            60 -> fillBlocksInRange(lobbyWorld, -22, 129, -8, -44, 134, 8)
-            65 -> fillBlocksInRange(lobbyWorld, -44, 134, 9, -22, 129, -9)
-            70 -> fillBlocksInRange(lobbyWorld, -22, 129, -10, -44, 134, 10)
-            75 -> fillBlocksInRange(lobbyWorld, -43, 134, 11, -21, 129, -11)
-            80 -> fillBlocksInRange(lobbyWorld, -21, 129, -12, -43, 134, 12)
-            85 -> fillBlocksInRange(lobbyWorld, -43, 134, 13, -21, 129, -13)
-            90 -> fillBlocksInRange(lobbyWorld, -43, 134, 14, -20, 129, -14)
-            95 -> fillBlocksInRange(lobbyWorld, -20, 129, -15, -42, 134, 15)
-            100 -> fillBlocksInRange(lobbyWorld, -42, 134, 16, -19, 129, -16)
-            105 -> fillBlocksInRange(lobbyWorld, -20, 129, -17, -42, 134, 17)
-            110 -> fillBlocksInRange(lobbyWorld, -41, 134, 18, -22, 129, -18)
-            115 -> fillBlocksInRange(lobbyWorld, -24, 129, -19, -41, 134, 19)
-            120 -> fillBlocksInRange(lobbyWorld, -41, 134, 20, -26, 129, -20)
-            125 -> fillBlocksInRange(lobbyWorld, -28, 129, -21, -40, 134, 21)
-            130 -> fillBlocksInRange(lobbyWorld, -39, 134, 22, -30, 129, -22)
-            135 -> fillBlocksInRange(lobbyWorld, -32, 129, -23, -37, 134, 23)
-            140 -> fillBlocksInRange(lobbyWorld, -41, 133, 18, -22, 129, -18)
-            145 -> fillBlocksInRange(lobbyWorld, -41, 133, 19, -24, 129, -19)
-            150 -> fillBlocksInRange(lobbyWorld, -26, 129, -20, -41, 133, 20)
-            155 -> fillBlocksInRange(lobbyWorld, -40, 133, 21, -28, 129, -21)
-        }
-    }
 
-    private fun fillBlocksInRange(world: World, x1: Int, y1: Int, z1: Int, x2: Int, y2: Int, z2: Int) {
-        val blocks = mutableListOf<Location>()
-        val soundloc = Location(world, x1.toDouble(), y1.toDouble(), z1.toDouble())
+        // 현재 단계에 해당하는 범위를 가져옴
+        val ranges = blockRanges[step] ?: return
+        val (xRange, yRange, zRange) = ranges
 
         // 범위 내의 모든 블록을 리스트에 추가
-        for (x in x1.coerceAtMost(x2)..x1.coerceAtLeast(x2)) {
-            for (y in y1.coerceAtMost(y2)..y1.coerceAtLeast(y2)) {
-                for (z in z1.coerceAtMost(z2)..z1.coerceAtLeast(z2)) {
+        val blocks = mutableListOf<Location>()
+        for (x in xRange.first..xRange.second) {
+            for (y in yRange.first..yRange.second) {
+                for (z in zRange.first..zRange.second) {
                     blocks.add(world.getBlockAt(x, y, z).location)
                 }
             }
         }
 
-        // 일정 간격으로 블록을 처리
+        // 블록 파괴와 소리 출력 (범위당 소리 1회 출력)
         object : BukkitRunnable() {
             var index = 0
+            var soundPlayed = false // 소리 출력 여부
             override fun run() {
                 val batchSize = 50 // 한 번에 처리할 블록 수
-
                 for (i in 0 until batchSize) {
                     if (index >= blocks.size) {
-                        // 모든 블록 처리 완료 시, 소리 한 번 실행
-                        for (player in Bukkit.getOnlinePlayers()) {
-                            player.playSound(soundloc, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
-                        }
-                        cancel() // 모든 블록 처리 후 반복 종료
+                        cancel() // 모든 블록 처리가 완료되면 반복 종료
                         return
                     }
+
                     val location = blocks[index]
-                    val block = world.getBlockAt(location)
-                    block.type = Material.AIR // 블록을 공기로 변경
+                    location.block.type = Material.AIR // 블록 파괴
+
+                    // 첫 번째 블록 처리 시 소리 출력
+                    if (!soundPlayed) {
+                        playSoundToAllPlayers(location, Sound.BLOCK_WOOD_BREAK)
+                        soundPlayed = true // 소리 출력 완료로 설정
+                    }
+
                     index++
                 }
             }
         }.runTaskTimer(Loader.instance, 0L, 1L) // 1틱 간격으로 실행
     }
+    private fun playSoundToAllPlayers(location: Location, sound: Sound) {
+        Bukkit.getOnlinePlayers().forEach { player ->
+            player.playSound(location, sound, 1.0f, 1.0f)
+        }
+    }
+
 
 }
