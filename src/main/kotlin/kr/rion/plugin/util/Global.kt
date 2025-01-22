@@ -95,6 +95,8 @@ object Global {
             world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
             //인벤세이브 강제 비활성화
             world.setGameRule(GameRule.KEEP_INVENTORY, false)
+            //자연회복 비활성화
+            world.setGameRule(GameRule.NATURAL_REGENERATION, false)
 
             console.sendMessage("${world.name} 월드의 게임룰설정이 변경되었습니다.")
         }
