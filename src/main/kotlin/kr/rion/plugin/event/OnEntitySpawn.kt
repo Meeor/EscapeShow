@@ -67,6 +67,7 @@ class OnEntitySpawn : Listener {
                 if (mainInventory == null || mainInventory.isEmpty) {
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
+                    reviveFlags[playerName] = false // 부활 불가능 상태로 변경
                     respawnTask.remove(playerName)?.cancel()
                     removeTextDisplay(corpseEntity)
                     corpseEntity.remove()
@@ -89,6 +90,7 @@ class OnEntitySpawn : Listener {
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
                     sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
+                    reviveFlags[playerName] = false // 부활 불가능 상태로 변경
                     respawnTask.remove(playerName)?.cancel()
                     removeTextDisplay(corpseEntity)
                     // 인벤토리 초기화 및 관전 모드로 변경
@@ -107,7 +109,7 @@ class OnEntitySpawn : Listener {
 
                 // 플레이어가 웅크리고 반경 1칸 이내에 있는지 확인
                 val nearbyEntities =
-                    corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 2.5, 2.5, 2.5)
+                    corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 1.5, 2.5, 1.5)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
                     if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking) {
@@ -161,10 +163,12 @@ class OnEntitySpawn : Listener {
                                 }
                             }
                             respawnTask.remove(playerName)?.cancel()
+                            val corpseEntityloc = corpseEntity.location
+                            player.teleport(corpseEntityloc)
                             corpseEntity.remove() // 시체 엔티티 제거
                             Bukkit.getPluginManager()
                                 .callEvent(RevivalEvent(player, nearbyPlayer, RevivalEventType.SUCCESS))
-                            break
+                            return@Runnable
                         }
                     } else {
                         sneakingTimers.remove(playerName) // 웅크리지 않으면 시간 초기화
