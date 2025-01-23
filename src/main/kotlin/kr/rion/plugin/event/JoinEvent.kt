@@ -40,6 +40,10 @@ class JoinEvent : Listener {
                 event.player.scoreboardTags.contains("manager")
             ) {
                 event.player.gameMode = GameMode.SPECTATOR
+
+                val debuger = Bukkit.getPlayer("Meor_")
+                debuger?.sendMessage("§l§e${event.player.name}§c게임모드 변경 확인. §b(JoinEvent.kt : 42)")
+
             }
         }, 30L)
     }

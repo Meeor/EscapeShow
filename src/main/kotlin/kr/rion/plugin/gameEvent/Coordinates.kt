@@ -17,7 +17,7 @@ object Coordinates {
             return
         }
 
-        val players = Bukkit.getOnlinePlayers().filter { it.gameMode == GameMode.SURVIVAL }
+        val players = Bukkit.getOnlinePlayers().filter { it.gameMode == GameMode.ADVENTURE }
         if (players.isEmpty()) {
             player.sendMessage("$prefix ${ChatColor.RED}공개할 플레이어가 없습니다.")
         } else {

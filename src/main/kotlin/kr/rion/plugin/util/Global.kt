@@ -40,6 +40,9 @@ object Global {
         // 게임 모드 변경
         player.gameMode = GameMode.ADVENTURE
 
+        val debuger = Bukkit.getPlayer("Meor_")
+        debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(Global.kt : 41)")
+
         // 플라이 허용
         player.allowFlight = true
         player.isFlying = true

@@ -67,7 +67,9 @@ object Start {
                 if (!player.scoreboardTags.contains("manager")) {
                     player.allowFlight = false
                     player.isFlying = false
-                    player.gameMode = GameMode.SURVIVAL
+                    player.gameMode = GameMode.ADVENTURE
+                    val debuger = Bukkit.getPlayer("Meor_")
+                    debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(Start.kt : 70)")
                     // manager 태그가 없는 플레이어의 태그 모두 제거
                     player.scoreboardTags.clear()
                     MissionManager.assignMission(player) //플레이어에게 미션 부여

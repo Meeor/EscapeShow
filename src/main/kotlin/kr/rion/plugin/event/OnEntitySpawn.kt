@@ -75,6 +75,10 @@ class OnEntitySpawn : Listener {
                     val closestPlayer = getClosestPlayer(corpseEntity, 20.0) // 시체 근처 가장 가까운 사람 추적
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
+
+                    val debuger = Bukkit.getPlayer("Meor_")
+                    debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 77)")
+
                     player.sendMessage("§c누군가가 당신의 아이템을 가져갔습니다.\n§c부활이 금지되며 관전 모드로 변경됩니다.")
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
@@ -91,6 +95,10 @@ class OnEntitySpawn : Listener {
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
+
+                    val debuger = Bukkit.getPlayer("Meor_")
+                    debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 93)")
+
                     player.sendMessage("§c부활 시간이 초과되었습니다. 관전 모드로 변경됩니다.")
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
@@ -112,7 +120,11 @@ class OnEntitySpawn : Listener {
                             sneakingTimers.remove(playerName)
 
                             val player = Bukkit.getPlayer(playerName) ?: return@Runnable
-                            player.gameMode = GameMode.SURVIVAL
+                            player.gameMode = GameMode.ADVENTURE
+
+                            val debuger = Bukkit.getPlayer("Meor_")
+                            debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 115)")
+
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
                             player.sendMessage("§a당신은 부활했습니다!")
                             player.removePotionEffect(PotionEffectType.INVISIBILITY)
