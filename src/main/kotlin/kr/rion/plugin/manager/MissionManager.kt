@@ -103,9 +103,31 @@ object MissionManager {
         // 플레이어의 활성화된 미션 ID 확인
         val missionId = activeMissions[player.name] ?: return
         val mission = MissionRegistry.getMission(missionId) ?: return
+        if(missionId == 31) return
 
         // 미션 성공 여부 확인
         if (mission.checkEventSuccess(player, event)) {
+            mission.onSuccess(player)
+
+            // ID에 따른 메시지 출력
+            val successMessage = missionMessages[missionId]
+                ?: "축하합니다! 미션을 완료했습니다!" // 기본 메시지
+            player.sendMessage("$MISSIONPREFIX$successMessage")
+            player.playSound(
+                player.location, // 플레이어 위치
+                "minecraft:ui.toast.challenge_complete", // 사운드 이름
+                1.0f, // 볼륨
+                1.0f // 피치
+            )
+
+            activeMissions.remove(player.name) // 미션 완료 후 제거
+        }
+    }
+    fun endGame() {
+        for (player in Bukkit.getOnlinePlayers()) {
+            val missionId = activeMissions[player.name] ?: return
+            val mission = MissionRegistry.getMission(missionId) ?: return
+            if(missionId != 31) return
             mission.onSuccess(player)
 
             // ID에 따른 메시지 출력
@@ -133,26 +155,6 @@ object MissionManager {
 
     fun listMission(): MutableMap<String, Int> {
         return activeMissions
-    }
-
-    fun endGame() {
-        // 모든 활성 미션 플레이어 확인
-        activeMissions.forEach { (playerName, missionId) ->
-            val player = Bukkit.getPlayer(playerName) ?: return@forEach // 플레이어 객체 가져오기
-            val mission = MissionRegistry.getMission(missionId) ?: return@forEach // 미션 객체 가져오기
-
-            if (mission is LastSurvivorMission) {
-                // LastSurvivorMission의 게임 종료 처리
-                mission.onGameEnd()
-                player.sendMessage("$MISSIONPREFIX 마지막까지 생존하여 미션을 완료했습니다!")
-                player.playSound(
-                    player.location, // 플레이어 위치
-                    "minecraft:ui.toast.challenge_complete", // 사운드 이름
-                    1.0f, // 볼륨
-                    1.0f // 피치
-                )
-            }
-        }
     }
 
 }
