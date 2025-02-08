@@ -9,6 +9,8 @@ import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.util.Global.sneakingTimers
+import kr.rion.plugin.util.Global.timerReset
 import kr.rion.plugin.util.Item.createCustomItem
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
@@ -25,9 +27,6 @@ import org.bukkit.potion.PotionEffectType
 
 
 class OnEntitySpawn : Listener {
-
-    private val sneakingTimers = mutableMapOf<String, Int>() // 웅크리는 시간 추적
-
 
     @EventHandler
     fun onEntitySpawn(event: EntitySpawnEvent) {
@@ -65,7 +64,7 @@ class OnEntitySpawn : Listener {
                 // MainInventory 데이터 확인 및 시체 엔티티 제거 조건
                 val mainInventory = deathData.getCompoundList("MainInventory")
                 if (mainInventory == null || mainInventory.isEmpty) {
-                    sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
+                    timerReset(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
                     reviveFlags[playerName] = false // 부활 불가능 상태로 변경
                     respawnTask.remove(playerName)?.cancel()
@@ -88,7 +87,7 @@ class OnEntitySpawn : Listener {
                     return@Runnable
                 }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
-                    sneakingTimers.remove(playerName) // 플래그 상태 변경 시 타이머 초기화
+                    timerReset(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
                     reviveFlags[playerName] = false // 부활 불가능 상태로 변경
                     respawnTask.remove(playerName)?.cancel()
@@ -119,7 +118,7 @@ class OnEntitySpawn : Listener {
                         if (currentTime >= 5) { // 5초간 웅크림 확인
                             // 부활 조건 충족
                             reviveFlags[playerName] = false // 부활 불가능 상태로 변경
-                            sneakingTimers.remove(playerName)
+                            timerReset(playerName)
 
                             val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                             player.gameMode = GameMode.ADVENTURE
@@ -128,6 +127,7 @@ class OnEntitySpawn : Listener {
                             debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 115)")
 
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
+                            player.removeScoreboardTag("DeathAndAlive")
                             player.sendMessage("§a당신은 부활했습니다!")
                             player.removePotionEffect(PotionEffectType.INVISIBILITY)
                             removeTextDisplay(corpseEntity)
@@ -171,7 +171,7 @@ class OnEntitySpawn : Listener {
                             return@Runnable
                         }
                     } else {
-                        sneakingTimers.remove(playerName) // 웅크리지 않으면 시간 초기화
+                        timerReset(playerName) // 웅크리지 않으면 시간 초기화
                     }
                 }
             }, 20L, 20L) // 매초마다 체크
