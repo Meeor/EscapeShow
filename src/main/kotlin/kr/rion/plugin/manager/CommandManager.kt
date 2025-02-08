@@ -22,6 +22,5 @@ class CommandManager(private val plugin: JavaPlugin) {
         plugin.getCommand("이벤트")?.tabCompleter = TabComplete()
         plugin.getCommand("미션")?.tabCompleter = TabComplete()
         plugin.getCommand("방송")?.tabCompleter = TabComplete()
-        plugin.getCommand("부활불가")?.tabCompleter = TabComplete()
     }
 }
