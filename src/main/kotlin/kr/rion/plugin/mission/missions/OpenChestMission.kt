@@ -36,9 +36,7 @@ class OpenChestMission(private val requiredOpens: Int) : Mission {
             }
 
             // 성공 조건 충족 확인
-            if (currentCount >= requiredOpens) {
-                return true
-            }
+            return currentCount >= requiredOpens
         }
         return false
     }
