@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType
 object BerriesAction {
     fun lunchBerries(player: Player) {
         val loc = player.location.clone().add(0.0, 1.0, 0.0)
+        inventory.removeItemFromInventory(player, Material.GLOW_BERRIES, 1)
 
         for (playerall in Bukkit.getOnlinePlayers()) {
             playerall.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 0.2f, 0.0f)
@@ -20,7 +21,6 @@ object BerriesAction {
         player.addPotionEffect(regenerationeffect)
         val currentHunger = player.foodLevel
         player.foodLevel = (currentHunger + 6).coerceAtMost(20)
-        inventory.removeItemFromInventory(player, Material.GLOW_BERRIES, 1)
 
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             // 파티클을 플레이어의 위치에 생성
