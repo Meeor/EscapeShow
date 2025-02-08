@@ -16,6 +16,7 @@ import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Global.cancelAllTasks
 import kr.rion.plugin.util.Global.door
 import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.util.Global.survivalPlayers
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Helicopter.fillBlocks
@@ -44,7 +45,6 @@ object End {
         }
         fillBlocks(Location(worldWait, 23.0, 60.0, -46.0), Location(worldWait, 23.0, 57.0, -44.0), Material.OAK_FENCE)
         setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.OAK_FENCE)
-        loadChunkyForWorld("vip")
         //게임종료후 각종변수및 정보들 리셋작업.
         EscapePlayerCount = 0
         Helicopter.remove()
@@ -58,8 +58,8 @@ object End {
         bossbarEnable = 0
         stopPlayer.clear()
         tpstopPlayer.clear()
-        MissionManager.endGame()
         MissionManager.resetMissions()
+        cancelAllTasks()
         Bukkit.broadcastMessage("")
         Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
 
@@ -67,21 +67,37 @@ object End {
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             //모든플레이어에게 게임종료사운드보내기.
             for (player in Bukkit.getOnlinePlayers()) {
+                removeDirectionBossBar(player)
                 player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+                reviveFlags[player.name] = false
+                // ✅ DeathAndAlive 태그가 있으면 무조건 사망 처리
+                if (player.scoreboardTags.contains("DeathAndAlive")) {
+                    Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                        player.addScoreboardTag("death")
+                        player.health = 0.0 // 즉시 사망 처리
+                    }, 20L * 10)
+                }
             }
 
             // 사망자, 탈출자, 운영자를 제외한 남은 플레이어 처리
             world?.players?.forEach { player ->
                 if (!player.scoreboardTags.contains("manager")) { // 운영자는 제외
                     if (!player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains("death")) {
-                        if (player.scoreboardTags.contains("MissionSuccess")) {
-                            // MissionSuccess 태그가 있는 경우 생존 처리
+                        // lastsuriver태그가 있는경우 생존
+                        if(player.scoreboardTags.contains("lastsuriver")) {
+                            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                                player.sendTitle("${ChatColor.LIGHT_PURPLE}마지막까지 생존하였습니다!", "")
+                            }, 20L * 10)
+                        }
+                        // ✅ MissionSuccess 태그가 있는 경우 생존 처리
+                        else if (player.scoreboardTags.contains("MissionSuccess")) {
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                                 player.sendTitle("${ChatColor.GREEN}생존하였습니다!", "")
                                 SurvivalPlayers.add(player.name)
                             }, 20L * 10)
-                        } else {
-                            // MissionSuccess 태그가 없는 경우 데미지를 줘서 죽임
+                        }
+                        // ✅ 일반 사망 처리 (MissionSuccess도 없고 lastsuriver도 없는 경우)
+                        else {
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                                 player.health = 0.0 // 치명적인 데미지를 줘서 죽임
                             }, 20L * 10)
@@ -94,6 +110,7 @@ object End {
         //모든플레이어들.. 게임모드나 플라이등의 설정변경.
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
             Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+                loadChunkyForWorld("vip")
                 for (player in Bukkit.getOnlinePlayers()) {
 
                     removeDirectionBossBar(player)
@@ -127,9 +144,10 @@ object End {
             } else {
                 "없음"
             }
+            val lastsuriver = survivalPlayers().names.firstOrNull() ?: "없음"
 
             val message = "${ChatColor.GREEN}탈출한 플레이어 : $escapePlayersMessage\n" +
-                    "${ChatColor.GREEN}생존한 플레이어 : $survivalPlayersMessage"
+                    "${ChatColor.GREEN}생존한 플레이어 : $survivalPlayersMessage" + (if (survivalPlayers().count == 1) "\n${ChatColor.LIGHT_PURPLE}마지막 생존자 :${ChatColor.AQUA}${ChatColor.BOLD} $lastsuriver ${ChatColor.RESET}" else "")
 
             // 메시지를 모든 플레이어에게 브로드캐스트
             Bukkit.broadcastMessage("${ChatColor.GOLD}$line")
@@ -144,7 +162,6 @@ object End {
                 playersAtParticle.clear()
                 handleGameReset()
                 resetplayerAttribute()
-                cancelAllTasks()
                 isStarting = false
             }, 20L * 10)
         }, 20L * 15)
