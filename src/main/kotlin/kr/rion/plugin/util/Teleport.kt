@@ -139,7 +139,7 @@ object Teleport {
         // 메인 스레드에서 텔레포트 작업 수행
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             try {
-                setImmune(player, 5000) // 텔레포트 후 면역 처리
+                setImmune(player) // 텔레포트 후 면역 처리
                 player.teleport(safeLocation)
                 // 텔레포트 완료 후 작업 처리
                 safeLocations.remove(safeLocation) // 성공 시 좌표 제거
@@ -167,12 +167,12 @@ object Teleport {
         return block.type == Material.CAVE_AIR
     }
 
-    private fun setImmune(player: Player, duration: Long) {
+    private fun setImmune(player: Player) {
         val currentTime = System.currentTimeMillis()
-        immunePlayers[player] = currentTime + duration
+        immunePlayers[player] = currentTime + 5000
         Bukkit.getScheduler().runTaskLater(plugin, Runnable {
             immunePlayers.remove(player)
-        }, (duration / 50))
+        }, (5000 / 50))
     }
 
     fun setInitializedSafeLocations(status: Boolean) {
