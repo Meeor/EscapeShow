@@ -18,21 +18,37 @@ commands:
   이벤트:
     description: 이벤트를 발생시킵니다.
     usage: /<command> <이벤트이름>
+    aliases: [event]
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
   게임:
     description: 게임GUI를 여는 아이템을 받습니다.
     usage: /<command>
+    aliases: [game]
     permission: EscapeShow.Game.GUI
     permission-message: 이 명령어를 사용할 권한이 없습니다.
   미션:
     description: 테스트를 위한 미션수동 명령어입니다.
     usage: /<command> <부여/제거> [player] [missionid]
+    aliases: [mission]
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
   방송:
     description: 거리기반인 음성채팅에서 모든 플레이어에게 들리도록 합니다.
     usage: /<command> [player] [true/false]
+    aliases: [bc,broadcast]
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
+  데미지:
+    description: 모든플레이어에게 데미지를줍니다
+    usage: /<command> <damage>
+    aliases: [dmg,damage]
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
+  부활불가:
+    description: 특정 플레이어의 부활을 못하게 변경합니다.(현재 게임상태에서만 적용)
+    usage: /<command> <player>
+    aliases: [revivepass,rp]
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
 
