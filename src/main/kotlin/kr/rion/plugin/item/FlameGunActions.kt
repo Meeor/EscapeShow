@@ -104,17 +104,22 @@ object FlameGunActions {
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
 
                                 val newLocation: Location? = initialLoc.world?.let {
-                                    adjustToAboveSpecificBlock(it, initialLoc.clone().subtract(0.0, 1.0, 0.0), Material.CAVE_AIR)
+                                    adjustToAboveSpecificBlock(
+                                        it,
+                                        initialLoc.clone().subtract(0.0, 1.0, 0.0),
+                                        Material.CAVE_AIR
+                                    )
                                 }
 
                                 if (newLocation == null) {
                                     // 실패 시 작업 수행
                                     Bukkit.broadcastMessage("$prefix §c헬기 도착 위치를 설정하지 못했습니다. 헬기 호출이 중단됩니다.")
                                     chestEnable = false // 플레어건 상자 소환 초기화
-                                    Bukkit.getOnlinePlayers().filter { it.scoreboardTags.contains("manager") }.forEach { managerPlayer ->
-                                        managerPlayer.sendMessage("§l§b헬기 랜덤 좌표 생성을 실패하였습니다.")
-                                        managerPlayer.sendMessage("§l§b플레어건 상자 소환이 초기화되었습니다. 재소환하실 수 있습니다.")
-                                    }
+                                    Bukkit.getOnlinePlayers().filter { it.scoreboardTags.contains("manager") }
+                                        .forEach { managerPlayer ->
+                                            managerPlayer.sendMessage("§l§b헬기 랜덤 좌표 생성을 실패하였습니다.")
+                                            managerPlayer.sendMessage("§l§b플레어건 상자 소환이 초기화되었습니다. 재소환하실 수 있습니다.")
+                                        }
                                     cancel()
                                     return@Runnable // 조기 종료
                                 }
@@ -167,7 +172,7 @@ object FlameGunActions {
                     .forEach { currentPlayer ->
 
                         // HelicopterLoc 변수가 null인 경우 처리 (헬기 아래 파티클 위치)
-                        val startLocation = EscapeLocation.clone().subtract(0.0,1.0,0.0)
+                        val startLocation = EscapeLocation.clone().subtract(0.0, 1.0, 0.0)
                         // 플레이어의 현재 위치와 HelicopterLoc 비교
                         val currentLocation = currentPlayer.location
 

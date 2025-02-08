@@ -2,7 +2,6 @@ package kr.rion.plugin.manager
 
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
-import kr.rion.plugin.mission.missions.LastSurvivorMission
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -103,7 +102,7 @@ object MissionManager {
         // 플레이어의 활성화된 미션 ID 확인
         val missionId = activeMissions[player.name] ?: return
         val mission = MissionRegistry.getMission(missionId) ?: return
-        if(missionId == 31) return
+        if (missionId == 31) return
 
         // 미션 성공 여부 확인
         if (mission.checkEventSuccess(player, event)) {
@@ -123,11 +122,12 @@ object MissionManager {
             activeMissions.remove(player.name) // 미션 완료 후 제거
         }
     }
+
     fun endGame() {
         for (player in Bukkit.getOnlinePlayers()) {
             val missionId = activeMissions[player.name] ?: return
             val mission = MissionRegistry.getMission(missionId) ?: return
-            if(missionId != 31) return
+            if (missionId != 31) return
             mission.onSuccess(player)
 
             // ID에 따른 메시지 출력

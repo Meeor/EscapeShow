@@ -1,10 +1,8 @@
 package kr.rion.plugin.command
 
-import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.util.*
@@ -46,11 +44,13 @@ object Broadcast {
                         sender.sendMessage("$prefix 플레이어 $playerName 이 방송 모드에 추가되었습니다.")
                         player.sendMessage("$prefix 방송모드가 활성화 되었습니다.")
                     }
+
                     "false" -> {
                         broadcastPlayers.remove(playerName)
                         sender.sendMessage("$prefix 플레이어 $playerName 이 방송 모드에서 제거되었습니다.")
                         player.sendMessage("$prefix 방송모드가 비활성화 되었습니다.")
                     }
+
                     else -> {
                         sender.sendMessage("$prefix ${ChatColor.RED}올바르지 않은 값입니다. true 또는 false 를 입력하세요.")
                     }
@@ -68,6 +68,7 @@ object Broadcast {
             broadcastPlayers.add(playerName)
         }
     }
+
     fun isPlayerInBroadcast(playerName: String): Boolean {
         return playerName in broadcastPlayers
     }

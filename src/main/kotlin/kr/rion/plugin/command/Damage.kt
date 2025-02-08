@@ -5,7 +5,7 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 
 object Damage {
-    fun handleDamage(sender: CommandSender, args: Array<out String>){
+    fun handleDamage(sender: CommandSender, args: Array<out String>) {
         if (args.isEmpty()) {
             sender.sendMessage("$prefix 사용법: /데미지 <데미지량>")
             return

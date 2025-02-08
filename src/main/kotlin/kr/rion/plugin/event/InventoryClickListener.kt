@@ -170,6 +170,7 @@ class InventoryClickListener : Listener {
                         player.sendMessage("$prefix 게임자동종료 기능을 강제로 비활성화 했습니다.")
                     }
                 }
+
                 hasCustomTag(meta, "nothing") -> {
                     event.isCancelled = true
                 }
@@ -295,6 +296,7 @@ class InventoryClickListener : Listener {
                         player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
                     }
                 }
+
                 hasCustomTag(meta, "nothing") -> {
                     event.isCancelled = true
                 }

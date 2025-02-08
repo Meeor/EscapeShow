@@ -101,7 +101,7 @@ object MainMenu {
         }
 
 
-        val notitem = createCustomItem("", listOf(""),Material.BARRIER, persistentDataKey = "nothing")
+        val notitem = createCustomItem("", listOf(""), Material.BARRIER, persistentDataKey = "nothing")
 
 
         gui.setItem(1, game)

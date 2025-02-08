@@ -6,8 +6,8 @@ import kr.rion.plugin.command.Damage.handleDamage
 import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.GameEventCommand.handleEvent
 import kr.rion.plugin.command.Mission.HandleMission
-import kr.rion.plugin.command.game.handlegame
 import kr.rion.plugin.command.Revive.handleRevive
+import kr.rion.plugin.command.game.handlegame
 import org.bukkit.Location
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -29,7 +29,7 @@ class CommandHandler : CommandExecutor {
             "이벤트" -> handleEvent(sender, args)
             "게임" -> handlegame(sender)
             "미션" -> HandleMission(sender, args)
-            "방송" -> handleBroadcast(sender,args)
+            "방송" -> handleBroadcast(sender, args)
             "데미지" -> handleDamage(sender, args)
             "부활불가" -> handleRevive(sender)
 
