@@ -31,7 +31,7 @@ class CommandHandler : CommandExecutor {
             "미션" -> HandleMission(sender, args)
             "방송" -> handleBroadcast(sender,args)
             "데미지" -> handleDamage(sender, args)
-            "부활불가" -> handleRevive(sender, args)
+            "부활불가" -> handleRevive(sender)
 
             else -> return false
         }
