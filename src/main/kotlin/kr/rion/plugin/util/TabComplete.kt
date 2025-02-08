@@ -20,6 +20,7 @@ class TabComplete : TabCompleter {
             "이벤트" -> GameEvent(args)
             "미션" -> HandleMissionTab(args)
             "방송" -> HandleBroadcastTab(args)
+            "부활불가" -> HandleReviveTab(args)
             else -> null
         }
     }
@@ -35,7 +36,7 @@ class TabComplete : TabCompleter {
 
     private fun GameEvent(args: Array<out String>): List<String> {
         return if (args.size == 1) {
-            listOf("맑음", "폭우", "중력이상", "지진", "후원", "데스코인", "베팅", "랜덤").filter {
+            listOf("맑음", "폭우").filter {
                 it.startsWith(
                     args[0],
                     ignoreCase = true
@@ -61,4 +62,15 @@ class TabComplete : TabCompleter {
             else -> emptyList()
         }
     }
+    private fun HandleReviveTab(args: Array<out String>): List<String> {
+        // 명령어 입력 중 첫 번째 인수라면 플레이어 이름을 자동완성으로 반환
+        if (args.size == 1) {
+            val input = args[0].lowercase() // 사용자가 입력한 값을 소문자로 변환
+            return Bukkit.getOnlinePlayers()
+                .map { it.name } // 모든 온라인 플레이어의 이름을 가져옴
+                .filter { it.lowercase().startsWith(input) } // 입력값과 일치하는 이름만 필터링
+        }
+        return emptyList() // 그 외에는 자동완성 결과 없음
+    }
+
 }
