@@ -72,10 +72,12 @@ object End {
                 reviveFlags[player.name] = false
                 // ✅ DeathAndAlive 태그가 있으면 무조건 사망 처리
                 if (player.scoreboardTags.contains("DeathAndAlive")) {
-                    Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                        player.addScoreboardTag("death")
-                        player.health = 0.0 // 즉시 사망 처리
-                    }, 20L * 10)
+                    if (player.scoreboardTags.contains("DeathAndAlive")) {
+                        player.inventory.clear() // 인벤토리 비우기
+                        player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경
+                        player.removeScoreboardTag("DeathAndAlive")
+                        player.addScoreboardTag("death") // Death 태그 추가
+                    }
                 }
             }
 
@@ -84,7 +86,7 @@ object End {
                 if (!player.scoreboardTags.contains("manager")) { // 운영자는 제외
                     if (!player.scoreboardTags.contains("EscapeComplete") && !player.scoreboardTags.contains("death")) {
                         // lastsuriver태그가 있는경우 생존
-                        if(player.scoreboardTags.contains("lastsuriver")) {
+                        if (player.scoreboardTags.contains("lastsuriver")) {
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                                 player.sendTitle("${ChatColor.LIGHT_PURPLE}마지막까지 생존하였습니다!", "")
                             }, 20L * 10)
