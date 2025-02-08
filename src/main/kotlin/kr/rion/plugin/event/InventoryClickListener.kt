@@ -11,7 +11,6 @@ import kr.rion.plugin.game.Reset.handleLobbyReset
 import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.game.Start.startAction
-import kr.rion.plugin.gameEvent.Coordinates.revealCoordinates
 import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
@@ -109,16 +108,6 @@ class InventoryClickListener : Listener {
                     }
                 }
 
-                hasCustomTag(meta, "game-coord") -> {
-                    event.isCancelled = true
-                    player.closeInventory()
-                    if (isStarting) {
-                        revealCoordinates(player)
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
-                }
-
                 hasCustomTag(meta, "game-giveitem") -> {
                     event.isCancelled = true
                     player.closeInventory()
@@ -180,6 +169,9 @@ class InventoryClickListener : Listener {
                     } else {
                         player.sendMessage("$prefix 게임자동종료 기능을 강제로 비활성화 했습니다.")
                     }
+                }
+                hasCustomTag(meta, "nothing") -> {
+                    event.isCancelled = true
                 }
             }
         }
@@ -303,67 +295,6 @@ class InventoryClickListener : Listener {
                         player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
                     }
                 }
-
-                hasCustomTag(meta, "event-gravity") -> {
-                    event.isCancelled = true
-                    player.closeInventory()
-                    if (isStarting) {
-                        GameEvent.gravity()
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
-                }
-
-                hasCustomTag(meta, "event-earthQuake") -> {
-                    event.isCancelled = true
-                    player.closeInventory()
-                    if (isStarting) {
-                        GameEvent.earthQuake(player)
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
-                }
-
-                hasCustomTag(meta, "event-donation") -> {
-                    event.isCancelled = true
-                    player.closeInventory()
-                    if (isStarting) {
-                        GameEvent.donation()
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
-                }
-
-                hasCustomTag(meta, "event-deathCoin") -> {
-                    event.isCancelled = true
-                    player.closeInventory()
-                    if (isStarting) {
-                        GameEvent.deathCoin()
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
-                }
-
-                hasCustomTag(meta, "event-betting") -> {
-                    event.isCancelled = true
-                    player.closeInventory()
-                    if (isStarting) {
-                        GameEvent.betting()
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
-                }
-
-                hasCustomTag(meta, "event-random") -> {
-                    event.isCancelled = true
-                    player.closeInventory()
-                    if (isStarting) {
-                        GameEvent.randomEvent(player)
-                    } else {
-                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
-                    }
-                }
-
                 hasCustomTag(meta, "nothing") -> {
                     event.isCancelled = true
                 }
