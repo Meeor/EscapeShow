@@ -46,8 +46,8 @@ commands:
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
   부활불가:
-    description: 특정 플레이어의 부활을 못하게 변경합니다.(현재 게임상태에서만 적용)
-    usage: /<command> <player>
+    description: 모든 플레이어의 부활을 금지시킵니다.(현재 게임에서만 적용)
+    usage: /<command>
     aliases: [revivepass,rp]
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
