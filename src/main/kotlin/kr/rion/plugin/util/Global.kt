@@ -3,6 +3,7 @@ package kr.rion.plugin.util
 import kr.rion.plugin.game.End
 import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.End.isEnding
+import kr.rion.plugin.manager.MissionManager.endGame
 import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.*
@@ -16,12 +17,14 @@ object Global {
     var EscapePlayerCount: Int = 0
     var EscapePlayerMaxCount: Int = 3
     var endingPlayerMaxCount: Int = 6
+    var helicopterfindattempt: Int = 100
     var door = true
 
     //부활 관련 변수
     val reviveFlags = mutableMapOf<String, Boolean>() // 플레이어별 부활 상태 저장
     var respawnTask = mutableMapOf<String, BukkitTask>()
     val processedPlayers = mutableSetOf<String>() // 이미 처리된 플레이어 저장
+    val sneakingTimers = mutableMapOf<String, Int>() // 웅크리는 시간 추적
 
 
     var playerCheckTask: BukkitTask? = null
@@ -106,24 +109,37 @@ object Global {
         Bukkit.clearRecipes()
     }
 
-    fun survivalPlayers(): Int {
-        val survivalPlayers = Bukkit.getOnlinePlayers()
-            .filter { player ->
-                !player.scoreboardTags.contains("manager") && // 매니저가 아님
-                        !player.scoreboardTags.contains("EscapeComplete") && // EscapeComplete 태그가 없음
-                        !player.scoreboardTags.contains("death")  // death 태그가 없음
-            }
-        return survivalPlayers.size // 필터링된 생존 플레이어의 수 반환
+    data class SurvivalInfo(val count: Int, val names: List<String>)
+
+    fun survivalPlayers(): SurvivalInfo {
+        val survivalPlayers = Bukkit.getOnlinePlayers().filter { player ->
+            !player.scoreboardTags.contains("manager") &&
+                    !player.scoreboardTags.contains("EscapeComplete") &&
+                    !player.scoreboardTags.contains("death") &&
+                    !player.scoreboardTags.contains("DeathAndAlive")
+        }
+        return SurvivalInfo(survivalPlayers.size, survivalPlayers.map { it.name })
     }
 
-    fun endingPlayer() {
-        val endingPlayerCount: Int = survivalPlayers() + EscapePlayerCount
 
-        if (endingPlayerCount <= endingPlayerMaxCount) {
+    fun endingPlayer() {
+        val endingPlayerCount: Int = survivalPlayers().count + EscapePlayerCount
+
+        if (endingPlayerCount <= endingPlayerMaxCount || survivalPlayers().count == 1) {
             if (!isEnding) return
+            endGame()
+            if (survivalPlayers().count == 1) {
+                val lastsuriver = survivalPlayers().names.firstOrNull() ?: "없음"
+                Bukkit.getPlayer(lastsuriver)?.addScoreboardTag("lastsuriver")
+            }
             End.EndAction()
         }
 
+    }
+
+
+    fun timerReset(playerName: String) {
+        sneakingTimers.remove(playerName)
     }
 
     ///부활체크작업 종료
@@ -131,6 +147,7 @@ object Global {
         for ((_, task) in respawnTask) {
             task.cancel() // 모든 작업 종료
         }
+        sneakingTimers.clear()
         respawnTask.clear() // 맵 초기화
         processedPlayers.clear()
     }
@@ -144,23 +161,25 @@ object Global {
         val borderCenter = worldBorder.center // 월드보더 중심
         val borderRadius = worldBorder.size / 2 // 월드보더 반경 (size는 직경이므로 2로 나눔)
         val randomRange = -30..30 // X, Z 좌표 랜덤 범위
-        val maxAttempts = 100 // 최대 시도 횟수
 
-        for (attempt in 1..maxAttempts) {
-            // baseLocation 기준으로 랜덤 XZ 좌표 생성
-            val randomLocation = baseLocation.clone().apply {
-                x += randomRange.random()
-                z += randomRange.random()
-            }
+        for (attempt in 1..helicopterfindattempt) {
+            var randomX: Double
+            var randomZ: Double
 
-            // 월드보더 안에 있는지 확인
-            if (randomLocation.distance(borderCenter) > borderRadius) {
-                continue // 월드보더 밖이면 다시 시도
-            }
+            do {
+                randomX = baseLocation.x + randomRange.random()
+                randomZ = baseLocation.z + randomRange.random()
+            } while (
+                randomX !in (borderCenter.x - borderRadius)..(borderCenter.x + borderRadius) ||
+                randomZ !in (borderCenter.z - borderRadius)..(borderCenter.z + borderRadius)
+            )
+
+            val randomLocation = Location(world, randomX, baseLocation.y, randomZ)
+
 
             val randomXInt = randomLocation.blockX
             val randomZInt = randomLocation.blockZ
-            val yStart = randomLocation.y.toInt() // 시작 Y 좌표
+            val yStart = randomLocation.blockY
             val minY = world.minHeight // 월드 최소 높이
 
             // Y 좌표 아래로 탐색
@@ -168,13 +187,14 @@ object Global {
                 val block = world.getBlockAt(randomXInt, y, randomZInt)
                 if (block.type == targetBlock) {
                     // 특정 블록을 찾았을 때 해당 블록 위 좌표 반환
+                    Bukkit.getLogger().info("헬기위치 결정 완료!  시도횟수 : $attempt")
                     return Location(world, randomXInt.toDouble(), y + 1.0, randomZInt.toDouble())
                 }
             }
         }
 
         // 실패 시 null 반환
-        Bukkit.getLogger().warning("헬기 소환위치 탐색중. 월드보더 내에서 블록($targetBlock)을 찾지 못했습니다.")
+        Bukkit.getLogger().warning("탐색 최대횟수 $helicopterfindattempt 에 도달하였지만. 월드보더 내의 좌표를잡지 못하였습니다.")
         return null
     }
 
