@@ -3,3 +3,7 @@ EscapePlayerMaxCount: 3
 
 # 게임 종료에 필요한 플레이어 수
 endingPlayerMaxCount: 6
+
+# 헬기 도착지점 반경30칸 랜덤위치 결정 시도 횟수
+# 월드보더 안이고 동굴공기가 있어야 성공함. 100번 ,1000번 으로 했을때 실패확률이 높은것같음.
+helicopterfindattempt: 100
