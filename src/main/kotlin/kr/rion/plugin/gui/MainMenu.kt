@@ -33,17 +33,6 @@ object MainMenu {
         )
         val flamegun = createCustomItem(flamegunName, flamegunLore, Material.FLINT, persistentDataKey = "game-flamegun")
 
-        //수동조작메뉴
-        val coordName = "${ChatColor.YELLOW}플레이어 전체좌표 공개"
-        val coordLore = listOf(
-            "플레이중인 모든 플레이어의 각 좌표를 채팅에 공개합니다.",
-            "",
-            "클릭 당시의 좌표가 공개되며 사망자,탈출자,관리자의 좌표는 제외됩니다.",
-            "",
-            "게임진행 도중에만 사용가능합니다."
-        )
-        val coord = createCustomItem(coordName, coordLore, Material.COMPASS, persistentDataKey = "game-coord")
-
         //아이템지급창
         val giveitemName = "${ChatColor.GREEN}아이템 지급"
         val giveitemLore = listOf(
@@ -112,10 +101,12 @@ object MainMenu {
         }
 
 
+        val notitem = createCustomItem("", listOf(""),Material.BARRIER, persistentDataKey = "nothing")
+
 
         gui.setItem(1, game)
         gui.setItem(3, flamegun)
-        gui.setItem(5, coord)
+        gui.setItem(5, notitem)
         gui.setItem(7, giveitem)
         gui.setItem(11, eventGUI)
         gui.setItem(13, randomtp)
