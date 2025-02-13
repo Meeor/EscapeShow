@@ -6,6 +6,7 @@ import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
@@ -75,6 +76,7 @@ class OnEntitySpawn : Listener {
                     val closestPlayer = getClosestPlayer(corpseEntity, 20.0) // 시체 근처 가장 가까운 사람 추적
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
+                    playerItem.remove(playerName) // 데이터 삭제 (메모리 관리)
 
                     val debuger = Bukkit.getPlayer("Meor_")
                     debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 77)")
@@ -96,6 +98,7 @@ class OnEntitySpawn : Listener {
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
+                    playerItem.remove(playerName) // 데이터 삭제 (메모리 관리)
 
                     val debuger = Bukkit.getPlayer("Meor_")
                     debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 93)")
@@ -132,13 +135,16 @@ class OnEntitySpawn : Listener {
                             player.removePotionEffect(PotionEffectType.INVISIBILITY)
                             removeTextDisplay(corpseEntity)
                             processedPlayers.add(playerName)
-                            for (slot in 9..35) {
-                                val item = player.inventory.getItem(slot)
-                                if (item != null && item.type != Material.AIR) {
-                                    // 아이템을 플레이어 위치에 드롭
-                                    player.world.dropItemNaturally(player.location, item)
-                                    player.inventory.setItem(slot, null) // 슬롯 비우기
+                            // 저장된 아이템 복구
+                            val savedItems = playerItem[playerName]
+                            if (savedItems != null) {
+                                for (i in 0..8) {
+                                    player.inventory.setItem(i, savedItems[i]) // 핫바 복원
                                 }
+                                for (i in 36..39) {
+                                    player.inventory.setItem(i, savedItems[i - 27]) // 갑옷 슬롯 복원
+                                }
+                                playerItem.remove(playerName) // 데이터 삭제 (메모리 관리)
                             }
                             val craftingItem = createCustomItem(
                                 "${ChatColor.GREEN}조합아이템",
@@ -155,7 +161,7 @@ class OnEntitySpawn : Listener {
                                 Material.WRITABLE_BOOK
                             )
                             val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
-                            for (i in 8..35) {
+                            for (i in 9..35) {
                                 when (i) {
                                     20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
                                     24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 지도
