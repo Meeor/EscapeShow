@@ -15,6 +15,7 @@ import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Global.cancelAllTasks
 import kr.rion.plugin.util.Global.door
+import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Global.survivalPlayers
 import kr.rion.plugin.util.Helicopter
@@ -58,6 +59,7 @@ object End {
         bossbarEnable = 0
         stopPlayer.clear()
         tpstopPlayer.clear()
+        playerItem.clear() //플레이어 핫바및 갑옷슬룻 저장값 초기화
         MissionManager.resetMissions()
         cancelAllTasks()
         Bukkit.broadcastMessage("")
