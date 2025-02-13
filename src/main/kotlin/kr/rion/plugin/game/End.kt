@@ -72,12 +72,10 @@ object End {
                 reviveFlags[player.name] = false
                 // ✅ DeathAndAlive 태그가 있으면 무조건 사망 처리
                 if (player.scoreboardTags.contains("DeathAndAlive")) {
-                    if (player.scoreboardTags.contains("DeathAndAlive")) {
-                        player.inventory.clear() // 인벤토리 비우기
-                        player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경
-                        player.removeScoreboardTag("DeathAndAlive")
-                        player.addScoreboardTag("death") // Death 태그 추가
-                    }
+                    player.inventory.clear() // 인벤토리 비우기
+                    player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경
+                    player.removeScoreboardTag("DeathAndAlive")
+                    player.addScoreboardTag("death") // Death 태그 추가
                 }
             }
 
