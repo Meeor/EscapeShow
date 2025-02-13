@@ -8,6 +8,7 @@ import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
 import org.bukkit.*
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitTask
@@ -26,6 +27,9 @@ object Global {
     val processedPlayers = mutableSetOf<String>() // 이미 처리된 플레이어 저장
     val sneakingTimers = mutableMapOf<String, Int>() // 웅크리는 시간 추적
 
+
+    //부활시 아이템 복구를 위한 변수
+    val playerItem = mutableMapOf<String, MutableList<ItemStack?>>()
 
     var playerCheckTask: BukkitTask? = null
 
@@ -65,7 +69,7 @@ object Global {
         End.EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers()}${ChatColor.LIGHT_PURPLE}명)")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명)")
         val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
 
         if (remainingPlayers > 0) {
