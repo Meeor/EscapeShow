@@ -12,6 +12,7 @@ import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Global.EscapePlayerCount
 import kr.rion.plugin.util.Global.door
+import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
@@ -30,12 +31,14 @@ object Start {
     private val worldWait = Bukkit.getWorld("vip")
 
     fun startAction() {
+        playerItem.clear() //플레이어 핫바및 갑옷슬룻 저장값 초기화
         stopPlayer.clear()
         MissionManager.resetMissions()
         isStart = true
         startportal = true
         for (player in Bukkit.getOnlinePlayers()) {
             player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
+            player.sendTitle("","§e이동후 안내방송 끝나기 전까지 움직이지 마세요!")
         }
         executeBlockFillingAndEffect()
         isEnding = false
