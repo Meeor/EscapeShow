@@ -1,8 +1,10 @@
 package kr.rion.plugin.command
 
 import kr.rion.plugin.util.Global.cancelAllTasks
+import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.util.Global.survivalPlayers
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.command.CommandSender
@@ -31,7 +33,9 @@ object Revive {
                 player.sendMessage("부활금지모드가 작동하여 시도중이던 부활이 취소되었습니다.")
             }
         }
-
+        if (survivalPlayers().count == 1) {
+            endingPlayer()
+        }
         Bukkit.broadcastMessage("$prefix 지금부터 부활이 금지됩니다!")
         sender.sendMessage("§a전체 플레이어의 부활 불가 처리가 완료되었습니다!")
     }
