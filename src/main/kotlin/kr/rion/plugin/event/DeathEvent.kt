@@ -47,9 +47,6 @@ class DeathEvent : Listener {
         console.sendMessage("${ChatColor.YELLOW}${event.player.name}${ChatColor.RESET}님이${ChatColor.RED}사망${ChatColor.RESET}하였습니다.")
         Bossbar.removeDirectionBossBar(player)
         processedPlayers.remove(player.name)
-        if (ifEnding) {
-            endingPlayer()
-        }
     }
 
 }

@@ -1,8 +1,10 @@
 package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.reviveFlags
 import org.bukkit.Bukkit
@@ -46,6 +48,9 @@ class RespawnEvent : Listener {
                 player.sendMessage("§c사망 하셨습니다.")
                 player.addScoreboardTag("death")
                 playerItem.remove(player.name) // 데이터 삭제 (메모리 관리)
+            }
+            if (ifEnding) {
+                endingPlayer()
             }
         } else {
             event.respawnLocation = Location(Bukkit.getWorld("vip"), 15.5, 58.5, -44.5)
