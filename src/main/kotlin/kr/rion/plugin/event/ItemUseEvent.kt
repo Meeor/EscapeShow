@@ -69,11 +69,23 @@ class ItemUseEvent : Listener {
     }
 
     private fun handleAction(player: Player, tag: String) {
-        when (tag) {
-            "flamegun" -> handleFlameGun(player)
-            "berries" -> handleBerries(player)
+        try {
+            when (tag) {
+                "flamegun" -> {
+                    println("🔥 handleFlameGun 호출됨") // 로그 추가
+                    handleFlameGun(player)
+                }
+                "berries" -> {
+                    println("🍓 handleBerries 호출됨") // 로그 추가
+                    handleBerries(player)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            player.sendMessage("${ChatColor.RED}아이템 사용 중 오류가 발생했습니다.")
         }
     }
+
 
     private fun getExpectedNameForItem(tag: String): String {
         return when (tag) {
