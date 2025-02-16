@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitTask
 object FlameGunSpawn {
     var chestLocation: Location? = null // 플레어건 상자의 위치 저장
     var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
-    var chestEnable: Boolean = false
+    @Volatile var chestEnable: Boolean = false
 
     // 플레어건 상자 생성 함수 (GUI 클릭 이벤트에서 호출할 수 있도록 수정)
     fun spawnFlareGunChest(player: Player, location: Location) {
