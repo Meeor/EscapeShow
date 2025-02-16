@@ -80,6 +80,11 @@ object End {
                     player.addScoreboardTag("death") // Death 태그 추가
                 }
             }
+            val chunk = world?.getChunkAt(Location(worldWait, 15.5, 58.5, -44.5))
+
+            if (world != null) {
+                chunk?.let { world.loadChunk(it) }
+            } // 청크강제 로드
 
             // 사망자, 탈출자, 운영자를 제외한 남은 플레이어 처리
             world?.players?.forEach { player ->
