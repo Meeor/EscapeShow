@@ -4,8 +4,10 @@ import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
 import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.customEvent.RevivalEventType
+import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
@@ -77,15 +79,14 @@ class OnEntitySpawn : Listener {
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
                     playerItem.remove(playerName) // 데이터 삭제 (메모리 관리)
-
-                    val debuger = Bukkit.getPlayer("Meor_")
-                    debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 77)")
-
                     player.sendMessage("§c누군가가 당신의 아이템을 가져갔습니다.\n§c부활이 금지되며 관전 모드로 변경됩니다.")
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
                     // 부활 실패 이벤트 호출
                     Bukkit.getPluginManager().callEvent(RevivalEvent(player, closestPlayer, RevivalEventType.FAILED))
+                    if (ifEnding) {
+                        endingPlayer()
+                    }
                     return@Runnable
                 }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
@@ -99,13 +100,13 @@ class OnEntitySpawn : Listener {
                     player.inventory.clear()
                     player.gameMode = GameMode.SPECTATOR
                     playerItem.remove(playerName) // 데이터 삭제 (메모리 관리)
-
-                    val debuger = Bukkit.getPlayer("Meor_")
-                    debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 93)")
-
                     player.sendMessage("§c부활 시간이 초과되었습니다. 관전 모드로 변경됩니다.")
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
+
+                    if (ifEnding) {
+                        endingPlayer()
+                    }
                     return@Runnable
                 }
 
