@@ -9,6 +9,7 @@ import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.playerItem
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
@@ -118,6 +119,11 @@ class OnEntitySpawn : Listener {
                     if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
+                        val messagetime = 5 - currentTime
+                        if(messagetime > 0){
+                            nearbyPlayer.sendMessage("$prefix §l§b$playerName §a이가 §e$messagetime §a후 부활됩니다.")
+                            Bukkit.getPlayer(playerName)?.sendMessage("$prefix §l§e$messagetime §a후 부활합니다.")
+                        }
 
                         if (currentTime >= 5) { // 5초간 웅크림 확인
                             // 부활 조건 충족
