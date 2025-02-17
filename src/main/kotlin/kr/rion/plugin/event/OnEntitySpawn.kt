@@ -121,8 +121,13 @@ class OnEntitySpawn : Listener {
                         sneakingTimers[playerName] = currentTime
                         val messagetime = 5 - currentTime
                         if(messagetime > 0){
+                            //부활시도중인 메세지 출력
                             nearbyPlayer.sendMessage("$prefix §l§b$playerName §a이가 §e$messagetime §a후 부활됩니다.")
                             Bukkit.getPlayer(playerName)?.sendMessage("$prefix §l§e$messagetime §a후 부활합니다.")
+
+                            //부활시도중인 사운드를 재생
+                            nearbyPlayer.playSound(nearbyPlayer.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+                            Bukkit.getPlayer(playerName)?.playSound(nearbyPlayer.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
                         }
 
                         if (currentTime >= 5) { // 5초간 웅크림 확인
