@@ -25,7 +25,8 @@ class EscapePlayerEvent : Listener {
         // 공격자가 플레이어인지 확인
         if (damager is Player && damager.gameMode == GameMode.ADVENTURE && listOf(
                 "EscapeComplete",
-                "DeathAndAlive"
+                "DeathAndAlive",
+                "MissionSuccessEscape"
             ).any { damager.scoreboardTags.contains(it) }
         ) {
             event.isCancelled = true
@@ -40,7 +41,8 @@ class EscapePlayerEvent : Listener {
             val player = event.entity as Player
             if (player.gameMode == GameMode.ADVENTURE && listOf(
                     "EscapeComplete",
-                    "DeathAndAlive"
+                    "DeathAndAlive",
+                    "MissionSuccessEscape"
                 ).any { player.scoreboardTags.contains(it) }
             ) {
                 event.isCancelled = true
@@ -55,7 +57,8 @@ class EscapePlayerEvent : Listener {
 
         if (player.gameMode == GameMode.ADVENTURE && listOf(
                 "EscapeComplete",
-                "DeathAndAlive"
+                "DeathAndAlive",
+                "MissionSuccessEscape"
             ).any { player.scoreboardTags.contains(it) }
         ) {
             event.isCancelled = true
@@ -69,7 +72,8 @@ class EscapePlayerEvent : Listener {
 
         if (player.gameMode == GameMode.ADVENTURE && listOf(
                 "EscapeComplete",
-                "DeathAndAlive"
+                "DeathAndAlive",
+                "MissionSuccessEscape"
             ).any { player.scoreboardTags.contains(it) }
         ) {
             event.isCancelled = true
@@ -84,7 +88,8 @@ class EscapePlayerEvent : Listener {
         // 탈출 플레이어인지 확인
         if (player.gameMode == GameMode.ADVENTURE && listOf(
                 "EscapeComplete",
-                "DeathAndAlive"
+                "DeathAndAlive",
+                "MissionSuccessEscape"
             ).any { player.scoreboardTags.contains(it) }
         ) {
             val item = player.inventory.itemInMainHand
