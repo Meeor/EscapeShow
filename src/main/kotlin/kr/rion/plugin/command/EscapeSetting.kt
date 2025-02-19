@@ -2,7 +2,7 @@ package kr.rion.plugin.command
 
 import kr.rion.plugin.Loader.Companion.instance
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
-import kr.rion.plugin.util.Global.endingPlayerMaxCount
+import kr.rion.plugin.util.Global.MissionEscapeMaxCount
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
@@ -14,16 +14,16 @@ object EscapeSetting {
     fun HandleSetting(sender: CommandSender, args: Array<out String>) {
         // 인수가 비었는지 확인
         if (args.isEmpty() || args.size < 2) {
-            sender.sendMessage("$prefix 사용법: /인원설정 <게임종료/탈출> <숫자>")
+            sender.sendMessage("$prefix 사용법: /인원설정 <미션/탈출/팀> <숫자>")
             return
         }
 
         when (args[0].lowercase(Locale.getDefault())) {
-            "게임종료" -> {
+            "미션" -> {
                 val playerCount = parsePlayerCount(sender, args[1]) ?: return
-                config.set("endingPlayerMaxCount", playerCount)
-                endingPlayerMaxCount = playerCount
-                sender.sendMessage("$prefix ${ChatColor.GREEN}게임 종료에 필요한 인원 수가 ${ChatColor.LIGHT_PURPLE}${playerCount}${ChatColor.GREEN}명으로 설정되었습니다.")
+                config.set("MissionEscapeMaxCount", playerCount)
+                MissionEscapeMaxCount = playerCount
+                sender.sendMessage("$prefix ${ChatColor.GREEN}미션 탈출 가능 인원 수가 ${ChatColor.LIGHT_PURPLE}${playerCount}${ChatColor.GREEN}명으로 설정되었습니다.")
                 instance.saveConfig()
             }
 
@@ -35,7 +35,14 @@ object EscapeSetting {
                 instance.saveConfig()
             }
 
-            else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. 사용법: /인원설정 <생존/탈출> <숫자>")
+            "팀" -> {
+                val playerCount = parsePlayerCount(sender, args[1]) ?: return
+                config.set("teamsMaxPlayers", playerCount)
+                sender.sendMessage("$prefix ${ChatColor.GREEN}팀 최대 인원 수가 ${ChatColor.LIGHT_PURPLE}${playerCount}${ChatColor.GREEN}명으로 설정되었습니다.")
+                instance.saveConfig()
+            }
+
+            else -> sender.sendMessage("$prefix ${ChatColor.RED}알 수 없는 인수입니다. 사용법: /인원설정 <미션/탈출/팀> <숫자>")
         }
     }
 
