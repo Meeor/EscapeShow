@@ -7,6 +7,7 @@ import kr.rion.plugin.gui.PlayerTeleport.openTeleportGUI
 import kr.rion.plugin.item.ItemAction.handleBerries
 import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.util.Global.prefix
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -62,6 +63,8 @@ class ItemUseEvent : Listener {
                 if (itemName == expectedName) {
                     event.isCancelled = true
                     player.sendMessage("$prefix 아이템 ${itemMeta.displayName}${ChatColor.RESET}${ChatColor.GREEN} 을(를) 사용하셨습니다.")
+                    val item = player.inventory.itemInMainHand
+                    Bukkit.getLogger().info("[DEBUG] 현재 손에 든 아이템: $item")
                     handleAction(player, tag)
                 }
             }
@@ -75,6 +78,7 @@ class ItemUseEvent : Listener {
                     println("🔥 handleFlameGun 호출됨") // 로그 추가
                     handleFlameGun(player)
                 }
+
                 "berries" -> {
                     println("🍓 handleBerries 호출됨") // 로그 추가
                     handleBerries(player)
