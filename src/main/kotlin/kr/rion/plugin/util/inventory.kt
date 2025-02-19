@@ -15,7 +15,7 @@ object inventory {
         var remainingAmount = amount
 
         for (itemStack in inventory.contents) {
-            if (itemStack.type == item) {
+            if (itemStack?.type == item) { // 🔹 null 체크를 안전하게 유지
                 if (itemStack.amount <= remainingAmount) {
                     remainingAmount -= itemStack.amount
                     inventory.remove(itemStack) // 아이템 제거
