@@ -32,7 +32,6 @@ object ChunkyManager {
                         val eventWorld = Bukkit.getWorld(event.world) // 이벤트의 월드를 Bukkit에서 가져옴
                         if (eventWorld != null && eventWorld == world) {
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                                Teleport.initializeSafeLocations()
                                 for (player in eventWorld.players) {
                                     player.removePotionEffect(PotionEffectType.BLINDNESS)
                                 }
