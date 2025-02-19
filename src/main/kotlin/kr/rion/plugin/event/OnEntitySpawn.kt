@@ -4,7 +4,6 @@ import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
 import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.customEvent.RevivalEventType
-import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.endingPlayer
@@ -85,9 +84,7 @@ class OnEntitySpawn : Listener {
                     player.addScoreboardTag("death")
                     // 부활 실패 이벤트 호출
                     Bukkit.getPluginManager().callEvent(RevivalEvent(player, closestPlayer, RevivalEventType.FAILED))
-                    if (ifEnding) {
-                        endingPlayer()
-                    }
+                    endingPlayer()
                     return@Runnable
                 }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
@@ -105,9 +102,7 @@ class OnEntitySpawn : Listener {
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
 
-                    if (ifEnding) {
-                        endingPlayer()
-                    }
+                    endingPlayer()
                     return@Runnable
                 }
 
@@ -120,14 +115,15 @@ class OnEntitySpawn : Listener {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
                         val messagetime = 5 - currentTime
-                        if(messagetime > 0){
+                        if (messagetime > 0) {
                             //부활시도중인 메세지 출력
                             nearbyPlayer.sendMessage("$prefix §l§b$playerName §a이가 §e$messagetime §a후 부활됩니다.")
                             Bukkit.getPlayer(playerName)?.sendMessage("$prefix §l§e$messagetime §a후 부활합니다.")
 
                             //부활시도중인 사운드를 재생
                             nearbyPlayer.playSound(nearbyPlayer.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
-                            Bukkit.getPlayer(playerName)?.playSound(nearbyPlayer.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+                            Bukkit.getPlayer(playerName)
+                                ?.playSound(nearbyPlayer.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
                         }
 
                         if (currentTime >= 5) { // 5초간 웅크림 확인
@@ -137,10 +133,6 @@ class OnEntitySpawn : Listener {
 
                             val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                             player.gameMode = GameMode.ADVENTURE
-
-                            val debuger = Bukkit.getPlayer("Meor_")
-                            debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(OnEntitySpawn.kt : 115)")
-
                             player.health = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue ?: 20.0
                             player.removeScoreboardTag("DeathAndAlive")
                             player.sendMessage("§a당신은 부활했습니다!")
@@ -200,7 +192,7 @@ class OnEntitySpawn : Listener {
     private val corpseTextDisplays: MutableMap<Entity, TextDisplay> = mutableMapOf()
 
     // 텍스트 디스플레이 생성
-    fun createTextDisplay(corpseEntity: Entity, text: String?) {
+    private fun createTextDisplay(corpseEntity: Entity, text: String?) {
         // 기존 텍스트 디스플레이 제거 (중복 방지)
         removeTextDisplay(corpseEntity)
 
@@ -219,7 +211,7 @@ class OnEntitySpawn : Listener {
     }
 
     // 텍스트 디스플레이 제거
-    fun removeTextDisplay(corpseEntity: Entity) {
+    private fun removeTextDisplay(corpseEntity: Entity) {
         // corpseEntity에 해당하는 텍스트 디스플레이 제거
         val textDisplay = corpseTextDisplays[corpseEntity]
         if (textDisplay != null && !textDisplay.isDead) {
@@ -229,7 +221,7 @@ class OnEntitySpawn : Listener {
     }
 
     // 부활 실패 시, 아이템 가져간 사람 추적
-    fun getClosestPlayer(corpseEntity: Entity, range: Double): Player? {
+    private fun getClosestPlayer(corpseEntity: Entity, range: Double): Player? {
         val nearbyEntities = corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, range, range, range)
         val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
 
