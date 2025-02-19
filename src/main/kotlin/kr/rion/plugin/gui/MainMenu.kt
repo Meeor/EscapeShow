@@ -1,10 +1,10 @@
 package kr.rion.plugin.gui
 
-import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
-import kr.rion.plugin.util.Global.endingPlayerMaxCount
+import kr.rion.plugin.util.Global.MissionEscapeMaxCount
+import kr.rion.plugin.util.Global.teamsMaxPlayers
 import kr.rion.plugin.util.Item.createCustomItem
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -83,22 +83,11 @@ object MainMenu {
         val MaxplayerLore = listOf(
             "",
             "${ChatColor.GREEN}설정된 탈출 가능 인원수 : ${ChatColor.YELLOW}$EscapePlayerMaxCount${ChatColor.GREEN}명",
-            "${ChatColor.GREEN}게임종료에 필요한 인원수 : ${ChatColor.YELLOW}$endingPlayerMaxCount${ChatColor.GREEN}명"
+            "${ChatColor.GREEN}설정된 미션클리어 탈출 인원수 : ${ChatColor.YELLOW}$MissionEscapeMaxCount${ChatColor.GREEN}명",
+            "${ChatColor.GREEN}설정된 팀 최대 인원수 : ${ChatColor.YELLOW}$teamsMaxPlayers${ChatColor.GREEN}명"
         )
         val Maxplayer =
             createCustomItem(MaxplayerName, MaxplayerLore, Material.NETHER_STAR, persistentDataKey = "game-player")
-        val Ending: ItemStack
-
-        if (ifEnding) {
-            val EndingName = "${ChatColor.GREEN}게임 자동 종료 상태"
-            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Enable(활성화)", "", "클릭시 수동으로 변경가능합니다.")
-            Ending = createCustomItem(EndingName, EndingLore, Material.LIME_WOOL, persistentDataKey = "game-ending")
-        } else {
-            val EndingName = "${ChatColor.GREEN}게임 자동 종료 상태"
-            val EndingLore = listOf("${ChatColor.BOLD}${ChatColor.GREEN} Disable(비활성화)", "", "클릭시 수동으로 변경가능합니다.")
-
-            Ending = createCustomItem(EndingName, EndingLore, Material.RED_WOOL, persistentDataKey = "game-ending")
-        }
 
 
         val notitem = createCustomItem("", listOf(""), Material.BARRIER, persistentDataKey = "nothing")
@@ -111,7 +100,7 @@ object MainMenu {
         gui.setItem(11, eventGUI)
         gui.setItem(13, randomtp)
         gui.setItem(15, resetGUI)
-        gui.setItem(18, Ending)
+        gui.setItem(18, notitem)
         gui.setItem(22, dooritem)
         gui.setItem(26, Maxplayer)
         player.openInventory(gui) // 인벤토리열기
