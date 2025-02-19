@@ -1,7 +1,6 @@
 package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.endingPlayer
@@ -33,25 +32,15 @@ class RespawnEvent : Listener {
             }, 10L) // 5틱 후에 실행
             if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) {
                 player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
-
-                val debuger = Bukkit.getPlayer("Meor_")
-                debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(RespawnEvent.kt : 32)")
-
                 player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 타인이 웅크리고 3초간 있을경우 부활할수있습니다.")
                 player.addScoreboardTag("DeathAndAlive")
             } else {
                 player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경
-
-                val debuger = Bukkit.getPlayer("Meor_")
-                debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(RespawnEvent.kt : 40)")
-
                 player.sendMessage("§c사망 하셨습니다.")
                 player.addScoreboardTag("death")
                 playerItem.remove(player.name) // 데이터 삭제 (메모리 관리)
             }
-            if (ifEnding) {
-                endingPlayer()
-            }
+            endingPlayer()
         } else {
             event.respawnLocation = Location(Bukkit.getWorld("vip"), 15.5, 58.5, -44.5)
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
