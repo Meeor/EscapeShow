@@ -58,42 +58,12 @@ object Item {
         return item
     }
 
-    //붕대
-    fun heal(): ItemStack {
-        val healName = "${ChatColor.GREEN}붕대"
-        val heallore = listOf("", "")
-        val item = createCustomItem(healName, heallore, Material.PAPER, nbtKey = "heal", nbtValue = true)
-        return item
-    }
-
     //농축된 열매
     fun berries(): ItemStack {
         val berriesName = "${ChatColor.GREEN}농축된 열매"
         val berrieslore = listOf("", "")
         val item =
             createCustomItem(berriesName, berrieslore, Material.GLOW_BERRIES, nbtKey = "berries", nbtValue = true)
-        return item
-    }
-
-    //계약서
-    fun contract(): ItemStack {
-        val contractName = "${ChatColor.of("#FF4242")}계약서"
-        val contractlore = listOf("", "")
-        val item = createCustomItem(
-            contractName,
-            contractlore,
-            Material.SKULL_BANNER_PATTERN,
-            nbtKey = "contract",
-            nbtValue = true
-        )
-        return item
-    }
-
-    //지도
-    fun map(): ItemStack {
-        val mapName = "${ChatColor.GRAY}지도"
-        val maplore = listOf("", "")
-        val item = createCustomItem(mapName, maplore, Material.MOJANG_BANNER_PATTERN, nbtKey = "map", nbtValue = true)
         return item
     }
 
