@@ -1,11 +1,20 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.game.End
-import kr.rion.plugin.game.End.ifEnding
+import kr.rion.plugin.game.End.EscapePlayers
 import kr.rion.plugin.game.End.isEnding
+import kr.rion.plugin.game.Reset.resetplayerAttribute
+import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
+import kr.rion.plugin.item.FlameGunActions.playersAtParticle
+import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.manager.MissionManager.endGame
+import kr.rion.plugin.manager.TeamManager
+import kr.rion.plugin.util.Bossbar.bossbarEnable
+import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
+import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
+import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -17,8 +26,9 @@ object Global {
     val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
     var EscapePlayerCount: Int = 0
     var EscapePlayerMaxCount: Int = 3
-    var endingPlayerMaxCount: Int = 6
+    var MissionEscapeMaxCount: Int = 3
     var helicopterfindattempt: Int = 100
+    var teamsMaxPlayers: Int = 3
     var door = true
 
     //부활 관련 변수
@@ -46,10 +56,6 @@ object Global {
     private fun performAction(player: Player) {
         // 게임 모드 변경
         player.gameMode = GameMode.ADVENTURE
-
-        val debuger = Bukkit.getPlayer("Meor_")
-        debuger?.sendMessage("§l§e${player.name}§c게임모드 변경 확인. §b(Global.kt : 41)")
-
         // 플라이 허용
         player.allowFlight = true
         player.isFlying = true
@@ -66,10 +72,10 @@ object Global {
         player.inventory.clear()
         player.inventory.setItem(8, teleportCompass())
         EscapePlayerCount++
-        End.EscapePlayers.add(player.name)
+        EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. ${ChatColor.LIGHT_PURPLE}(남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명)")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getTeamCount()}${ChatColor.AQUA} 팀")
         val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
 
         if (remainingPlayers > 0) {
@@ -77,13 +83,10 @@ object Global {
         } else {
             Bukkit.broadcastMessage("${ChatColor.LIGHT_PURPLE}탈출 허용 인원이 가득 차 헬기가 떠납니다.")
             Helicopter.remove() // 내부적으로 null 체크를 처리함
-            ifEnding = true
         }
         player.sendMessage("${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN} 플라이,무적및 투명화가 활성화 되었습니다!")
-        Bossbar.removeDirectionBossBar(player)
-        if (ifEnding) {
-            endingPlayer()
-        }
+        removeDirectionBossBar(player)
+        endingPlayer()
     }
 
     fun setGameRulesForAllWorlds() {
@@ -120,25 +123,31 @@ object Global {
             !player.scoreboardTags.contains("manager") &&
                     !player.scoreboardTags.contains("EscapeComplete") &&
                     !player.scoreboardTags.contains("death") &&
-                    !player.scoreboardTags.contains("DeathAndAlive")
+                    !player.scoreboardTags.contains("DeathAndAlive") &&
+                    !player.scoreboardTags.contains("MissionSuccessEscape")
         }
         return SurvivalInfo(survivalPlayers.size, survivalPlayers.map { it.name })
     }
 
 
     fun endingPlayer() {
-        val endingPlayerCount: Int = survivalPlayers().count + EscapePlayerCount
+        val remainingTeams = TeamManager.getSurviverCount() // 생존한 팀 수 가져오기
+        val remainingPlayers = survivalPlayers().count // 생존한 플레이어 수
 
-        if (endingPlayerCount <= endingPlayerMaxCount || survivalPlayers().count == 1) {
+        // ✅ 생존한 팀이 1팀만 남거나, 생존자가 1명만 남은 경우 게임 종료
+        if (remainingTeams == 1 || remainingPlayers == 1) {
             if (!isEnding) return
             endGame()
-            if (survivalPlayers().count == 1) {
-                val lastsuriver = survivalPlayers().names.firstOrNull() ?: "없음"
-                Bukkit.getPlayer(lastsuriver)?.addScoreboardTag("lastsuriver")
+
+            // ✅ 생존자가 1명 남았다면 마지막 생존자로 처리
+            if (remainingPlayers == 1) {
+                val lastSurvivor = survivalPlayers().names.firstOrNull()
+                lastSurvivor?.let {
+                    Bukkit.getPlayer(it)?.addScoreboardTag("lastsuriver")
+                }
             }
             End.EndAction()
         }
-
     }
 
 
@@ -202,19 +211,45 @@ object Global {
         return null
     }
 
-
-    //글자 중앙정렬 함수(색코드 제거하여 중앙정렬)(줄바꿈도 인정됨)
-    fun centerText(text: String, lineWidth: Int = 22): String {
-        val strippedText = stripColorCodes(text) // 색 코드 제거
-        val totalPadding = lineWidth - strippedText.length
-        val leftPadding = totalPadding / 2
-        val rightPadding = totalPadding - leftPadding // 나머지를 오른쪽에 추가
-        return " ".repeat(leftPadding) + text + " ".repeat(rightPadding)
-    }
-
-
     private fun stripColorCodes(text: String): String {
         return text.replace(Regex("§[0-9a-fk-or]"), "")
+    }
+
+    fun GameAllReset() {
+        EscapePlayerCount = 0
+        chestEnable = false
+        bossbarEnable = 0 // 보스바 업데이트 종료
+        playerItem.clear() //플레이어 핫바및 갑옷슬룻 저장값 초기화
+        MissionManager.resetMissions()
+        cancelAllTasks()
+        door = true
+        HelicopterisSpawn = false
+        stopPlayer.clear()
+    }
+
+    fun GameAllReset2() {
+        resetplayerAttribute()
+        playersAtParticle.clear()
+        EscapePlayers.clear()
+        reviveFlags.clear()
+        TeamManager.resetTeam()
+    }
+
+    fun PlayerAllReset() {
+        for (player in Bukkit.getOnlinePlayers()) {
+            if (!player.scoreboardTags.contains("manager")) {
+                // manager 태그가 없는 플레이어작업
+                removeDirectionBossBar(player)
+                player.scoreboardTags.clear()
+                player.allowFlight = false
+                player.isFlying = false
+                player.gameMode = GameMode.ADVENTURE
+            }
+            player.inventory.clear()
+            for (effect in player.activePotionEffects) {
+                player.removePotionEffect(effect.type)
+            }
+        }
     }
 
 
