@@ -2,7 +2,6 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End.EndAction
-import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.game.RandomTp.handleRandomListClear
 import kr.rion.plugin.game.RandomTp.handleRandomReset
 import kr.rion.plugin.game.RandomTp.handleRandomTPList
@@ -15,7 +14,6 @@ import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
 import kr.rion.plugin.gui.Giveitem.ItemGUI
-import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.randomTP.RandomTpGUI
 import kr.rion.plugin.util.Global.door
@@ -157,18 +155,6 @@ class InventoryClickListener : Listener {
 
                 hasCustomTag(meta, "game-player") -> {
                     event.isCancelled = true
-                }
-
-                hasCustomTag(meta, "game-ending") -> {
-                    event.isCancelled = true
-                    ifEnding = !ifEnding
-                    player.closeInventory()
-                    openMainGUI(player)
-                    if (ifEnding) {
-                        player.sendMessage("$prefix 게임자동종료 기능을 강제로 활성화 했습니다.")
-                    } else {
-                        player.sendMessage("$prefix 게임자동종료 기능을 강제로 비활성화 했습니다.")
-                    }
                 }
 
                 hasCustomTag(meta, "nothing") -> {
