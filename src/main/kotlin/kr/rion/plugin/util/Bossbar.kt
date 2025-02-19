@@ -21,7 +21,9 @@ object Bossbar {
         for (player in Bukkit.getOnlinePlayers()) {
             if (!player.scoreboardTags.contains("manager") &&
                 !player.scoreboardTags.contains("EscapeComplete") &&
-                !player.scoreboardTags.contains("death")
+                !player.scoreboardTags.contains("death") &&
+                !player.scoreboardTags.contains("DeathAndAlive") &&
+                !player.scoreboardTags.contains("MissionSuccessEscape")
             ) {
                 // 이미 보스바가 있다면 제거
                 bossBars[player]?.removeAll()
