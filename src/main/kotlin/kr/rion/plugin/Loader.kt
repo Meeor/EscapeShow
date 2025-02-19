@@ -5,14 +5,14 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager
 import de.maxhenkel.voicechat.api.BukkitVoicechatService
 import kr.rion.plugin.event.EventListener
 import kr.rion.plugin.event.VoiceChatEvent
-import kr.rion.plugin.game.End.ifEnding
 import kr.rion.plugin.manager.CommandManager
 import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.mission.MissionList
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
-import kr.rion.plugin.util.Global.endingPlayerMaxCount
+import kr.rion.plugin.util.Global.MissionEscapeMaxCount
 import kr.rion.plugin.util.Global.helicopterfindattempt
+import kr.rion.plugin.util.Global.teamsMaxPlayers
 import kr.rion.plugin.util.Teleport
 import org.bukkit.ChatColor
 import org.bukkit.plugin.java.JavaPlugin
@@ -67,8 +67,10 @@ class Loader : JavaPlugin() {
 
         // 콘피그 값 로드
         EscapePlayerMaxCount = config.getInt("EscapePlayerMaxCount", 3)
-        endingPlayerMaxCount = config.getInt("endingPlayerMaxCount", 6)
+        MissionEscapeMaxCount = config.getInt("MissionEscapeMaxCount", 3)
         helicopterfindattempt = config.getInt("helicopterfindattempt", 100)
+        teamsMaxPlayers = config.getInt("teamsMaxPlayers", 3)
+
 
         object : BukkitRunnable() {
             override fun run() {
@@ -84,7 +86,6 @@ class Loader : JavaPlugin() {
                 console.sendMessage("")
                 Global.setGameRulesForAllWorlds()
                 console.sendMessage("")
-                Teleport.initializeSafeLocations()
             }
         }.runTaskLater(this, 40L)
 
@@ -94,13 +95,5 @@ class Loader : JavaPlugin() {
         Global.playerCheckTask?.cancel()
         saveConfig()
         MissionManager.resetMissions() //미션 내부정보들 전부 초기화
-    }
-
-    /*
-    하이네님 플러그인에서 게임종료를 활성화 시키도록 해주는 함수
-     */
-    @Suppress("unused")
-    fun gameEndingEnable() {
-        ifEnding = true
     }
 }
