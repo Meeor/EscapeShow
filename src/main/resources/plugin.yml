@@ -11,8 +11,8 @@ libraries:
 
 commands:
   인원설정:
-    description: 게임의 탈출인원수랑 총탈출인원수를 설정합니다.
-    usage: /<command> <게임종료/탈출> <숫자>
+    description: 게임의 탈출인원수랑 미션탈출인원수를 설정합니다.
+    usage: /<command> <미션/탈출/팀> <숫자>
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
   이벤트:
