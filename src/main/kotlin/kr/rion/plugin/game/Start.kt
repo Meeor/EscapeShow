@@ -1,25 +1,23 @@
 package kr.rion.plugin.game
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.game.End.EscapePlayers
 import kr.rion.plugin.game.End.isEnding
-import kr.rion.plugin.game.Reset.resetplayerAttribute
-import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
-import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.manager.MissionManager
-import kr.rion.plugin.manager.MissionManager.listMission
-import kr.rion.plugin.util.Bossbar.bossbarEnable
-import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
-import kr.rion.plugin.util.Global.EscapePlayerCount
-import kr.rion.plugin.util.Global.door
-import kr.rion.plugin.util.Global.playerItem
-import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.manager.TeamManager
+import kr.rion.plugin.util.Global.GameAllReset
+import kr.rion.plugin.util.Global.GameAllReset2
+import kr.rion.plugin.util.Global.PlayerAllReset
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Item.createCustomItem
+import kr.rion.plugin.util.TPSManager
+import kr.rion.plugin.util.Teleport.immunePlayers
+import kr.rion.plugin.util.Teleport.initializeSafeLocations
 import kr.rion.plugin.util.Teleport.stopPlayer
+import kr.rion.plugin.util.Teleport.teleportTeamToRandomLocation
 import org.bukkit.*
-import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -27,69 +25,83 @@ import org.bukkit.scheduler.BukkitRunnable
 object Start {
     var isStart = false //시작작업상태 플래그
     var isStarting = false //게임 상태 플래그
-    var startportal = false //텔레포트 플래그
     private val worldWait = Bukkit.getWorld("vip")
 
     fun startAction() {
-        playerItem.clear() //플레이어 핫바및 갑옷슬룻 저장값 초기화
-        stopPlayer.clear()
-        MissionManager.resetMissions()
-        isStart = true
-        startportal = true
-        for (player in Bukkit.getOnlinePlayers()) {
-            player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
-            player.sendTitle("","§e이동후 안내방송 끝나기 전까지 움직이지 마세요!")
-        }
-        executeBlockFillingAndEffect()
-        isEnding = false
-        chestEnable = false
-        bossbarEnable = 0 // 보스바 업데이트 종료
-        EscapePlayerCount = 0
-        fillBlocks(
-            Location(worldWait, 23.0, 60.0, -46.0),
-            Location(worldWait, 23.0, 57.0, -44.0),
-            Material.AIR
-        )
-        setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.AIR)
-        door = true
-
-        val craftingItem = createCustomItem(
-            "${ChatColor.GREEN}아이템 조합",
-            listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
-            Material.SLIME_BALL
-        )
-        val bookAndQuill = createCustomItem(
-            "${ChatColor.GREEN}미션",
-            listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
-            Material.WRITABLE_BOOK
-        )
-        val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
-        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
-            for (player in Bukkit.getOnlinePlayers()) {
-                removeDirectionBossBar(player)
-                if (!player.scoreboardTags.contains("manager")) {
-                    player.allowFlight = false
-                    player.isFlying = false
-                    player.gameMode = GameMode.ADVENTURE
-                    // manager 태그가 없는 플레이어의 태그 모두 제거
-                    player.scoreboardTags.clear()
-                    MissionManager.assignMission(player) //플레이어에게 미션 부여
-                    player.inventory.clear()
-                    for (i in 9..35) {
-                        when (i) {
-                            20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
-                            24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
-                            else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
-                        }
+        GameAllReset()
+        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+            Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 시작합니다.")
+            TeamManager.random()
+            Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 끝냈습니다. 게임맵에서 각팀이 이동될 좌표 선정을 시작합니다.")
+            initializeSafeLocations()//랜덤좌표 설정
+            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                isStart = true
+                for (player in Bukkit.getOnlinePlayers()) {
+                    player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
+                    if (!player.scoreboardTags.contains("manager")) {
+                        player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300, 1, false, false))
+                        stopPlayer[player] = true
+                        immunePlayers.add(player)
                     }
                 }
-            }
-        })
-        resetplayerAttribute()
-        playersAtParticle.clear()
-        EscapePlayers.clear()
-        reviveFlags.clear()
-        Bukkit.getLogger().warning("${listMission()}")
+                executeBlockFillingAndEffect()
+                isEnding = false
+
+
+                fillBlocks(
+                    Location(worldWait, 23.0, 60.0, -46.0),
+                    Location(worldWait, 23.0, 57.0, -44.0),
+                    Material.AIR
+                )
+                setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.AIR)
+                GameAllReset2()
+
+                val craftingItem = createCustomItem(
+                    "${ChatColor.GREEN}아이템 조합",
+                    listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
+                    Material.SLIME_BALL
+                )
+                val bookAndQuill = createCustomItem(
+                    "${ChatColor.GREEN}미션",
+                    listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
+                    Material.WRITABLE_BOOK
+                )
+                val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
+                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                    PlayerAllReset()
+                    Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+                        TeamManager.getTeamList().forEach { team ->
+                            val teamplayers = TeamManager.getPlayerList(team).mapNotNull { Bukkit.getPlayer(it) }
+                            teleportTeamToRandomLocation(teamplayers)
+                        }
+
+                        for (player in Bukkit.getOnlinePlayers()) {
+                            if (!player.scoreboardTags.contains("manager")) {
+                                MissionManager.assignMission(player) //플레이어에게 미션 부여
+                                for (i in 9..35) {
+                                    when (i) {
+                                        20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
+                                        24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
+                                        else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+                                    }
+                                }
+                                player.removePotionEffect(PotionEffectType.BLINDNESS)
+                                player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
+                                player.sendTitle(
+                                    "${ChatColor.GREEN}게임을 시작합니다.",
+                                    "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
+                                )
+                            } else {
+                                // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
+                            }
+                        }
+                        immunePlayers.clear()
+                        stopPlayer.clear()
+                    })
+                }, 30)//연출이 끝난후 플레이어 세팅및 이동시작.
+            }, 30)//랜덤이동좌표선정이후 연출 시작.
+        }, 20)//게임시작 요청 받은후 1초뒤 팀선정 및 랜덤이동좌표선정 시작
     }
 
 
@@ -98,31 +110,10 @@ object Start {
             var step = 20
 
             override fun run() {
-                if (step > 155) {
+                if (step > 290) {
                     // 작업 완료 시 추가 작업 실행
                     isStarting = true
                     isStart = false
-                    for (player: Player in Bukkit.getOnlinePlayers()) {
-                        if (player.scoreboardTags.contains("manager")) {
-                            // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
-                        }
-                    }
-                    object : BukkitRunnable() {
-                        override fun run() {
-                            for (player in Bukkit.getOnlinePlayers()) {
-                                stopPlayer[player] = false
-                                player.removePotionEffect(PotionEffectType.BLINDNESS)
-                            }
-                        }
-                    }.runTaskLater(Loader.instance, 20L * 7)
-                    // 3분 후 isStart를 false로 설정하는 작업 추가
-                    object : BukkitRunnable() {
-                        override fun run() {
-                            startportal = false
-                            stopPlayer.clear()
-                        }
-                    }.runTaskLater(Loader.instance, 20L * 180) // 3분 (180초) 후 실행
                     cancel() // 반복 종료
                     return
                 }
@@ -144,33 +135,33 @@ object Start {
         // 각 단계별 블록 좌표 처리
         when (step) {
             20 -> fillBlocksInRange(lobbyWorld, -23, 129, 0, -44, 134, 0)
-            25 -> fillBlocksInRange(lobbyWorld, -44, 134, 1, -23, 129, -1)
-            30 -> fillBlocksInRange(lobbyWorld, -23, 129, -2, -44, 134, 2)
-            35 -> fillBlocksInRange(lobbyWorld, -44, 134, 3, -23, 129, -3)
-            40 -> fillBlocksInRange(lobbyWorld, -44, 134, 4, -23, 129, -4)
-            45 -> fillBlocksInRange(lobbyWorld, -23, 129, -5, -44, 134, 5)
-            50 -> fillBlocksInRange(lobbyWorld, -44, 134, 6, -23, 129, -6)
-            55 -> fillBlocksInRange(lobbyWorld, -22, 129, -7, -44, 134, 7)
-            60 -> fillBlocksInRange(lobbyWorld, -22, 129, -8, -44, 134, 8)
-            65 -> fillBlocksInRange(lobbyWorld, -44, 134, 9, -22, 129, -9)
-            70 -> fillBlocksInRange(lobbyWorld, -22, 129, -10, -44, 134, 10)
-            75 -> fillBlocksInRange(lobbyWorld, -43, 134, 11, -21, 129, -11)
-            80 -> fillBlocksInRange(lobbyWorld, -21, 129, -12, -43, 134, 12)
-            85 -> fillBlocksInRange(lobbyWorld, -43, 134, 13, -21, 129, -13)
-            90 -> fillBlocksInRange(lobbyWorld, -43, 134, 14, -20, 129, -14)
-            95 -> fillBlocksInRange(lobbyWorld, -20, 129, -15, -42, 134, 15)
-            100 -> fillBlocksInRange(lobbyWorld, -42, 134, 16, -19, 129, -16)
-            105 -> fillBlocksInRange(lobbyWorld, -20, 129, -17, -42, 134, 17)
-            110 -> fillBlocksInRange(lobbyWorld, -41, 134, 18, -22, 129, -18)
-            115 -> fillBlocksInRange(lobbyWorld, -24, 129, -19, -41, 134, 19)
-            120 -> fillBlocksInRange(lobbyWorld, -41, 134, 20, -26, 129, -20)
-            125 -> fillBlocksInRange(lobbyWorld, -28, 129, -21, -40, 134, 21)
-            130 -> fillBlocksInRange(lobbyWorld, -39, 134, 22, -30, 129, -22)
-            135 -> fillBlocksInRange(lobbyWorld, -32, 129, -23, -37, 134, 23)
-            140 -> fillBlocksInRange(lobbyWorld, -41, 133, 18, -22, 129, -18)
-            145 -> fillBlocksInRange(lobbyWorld, -41, 133, 19, -24, 129, -19)
-            150 -> fillBlocksInRange(lobbyWorld, -26, 129, -20, -41, 133, 20)
-            155 -> fillBlocksInRange(lobbyWorld, -40, 133, 21, -28, 129, -21)
+            30 -> fillBlocksInRange(lobbyWorld, -44, 134, 1, -23, 129, -1)
+            40 -> fillBlocksInRange(lobbyWorld, -23, 129, -2, -44, 134, 2)
+            50 -> fillBlocksInRange(lobbyWorld, -44, 134, 3, -23, 129, -3)
+            60 -> fillBlocksInRange(lobbyWorld, -44, 134, 4, -23, 129, -4)
+            70 -> fillBlocksInRange(lobbyWorld, -23, 129, -5, -44, 134, 5)
+            80 -> fillBlocksInRange(lobbyWorld, -44, 134, 6, -23, 129, -6)
+            90 -> fillBlocksInRange(lobbyWorld, -22, 129, -7, -44, 134, 7)
+            100 -> fillBlocksInRange(lobbyWorld, -22, 129, -8, -44, 134, 8)
+            110 -> fillBlocksInRange(lobbyWorld, -44, 134, 9, -22, 129, -9)
+            120 -> fillBlocksInRange(lobbyWorld, -22, 129, -10, -44, 134, 10)
+            130 -> fillBlocksInRange(lobbyWorld, -43, 134, 11, -21, 129, -11)
+            140 -> fillBlocksInRange(lobbyWorld, -21, 129, -12, -43, 134, 12)
+            150 -> fillBlocksInRange(lobbyWorld, -43, 134, 13, -21, 129, -13)
+            160 -> fillBlocksInRange(lobbyWorld, -43, 134, 14, -20, 129, -14)
+            170 -> fillBlocksInRange(lobbyWorld, -20, 129, -15, -42, 134, 15)
+            180 -> fillBlocksInRange(lobbyWorld, -42, 134, 16, -19, 129, -16)
+            190 -> fillBlocksInRange(lobbyWorld, -20, 129, -17, -42, 134, 17)
+            200 -> fillBlocksInRange(lobbyWorld, -41, 134, 18, -22, 129, -18)
+            210 -> fillBlocksInRange(lobbyWorld, -24, 129, -19, -41, 134, 19)
+            220 -> fillBlocksInRange(lobbyWorld, -41, 134, 20, -26, 129, -20)
+            230 -> fillBlocksInRange(lobbyWorld, -28, 129, -21, -40, 134, 21)
+            240 -> fillBlocksInRange(lobbyWorld, -39, 134, 22, -30, 129, -22)
+            250 -> fillBlocksInRange(lobbyWorld, -32, 129, -23, -37, 134, 23)
+            260 -> fillBlocksInRange(lobbyWorld, -41, 133, 18, -22, 129, -18)
+            270 -> fillBlocksInRange(lobbyWorld, -41, 133, 19, -24, 129, -19)
+            280 -> fillBlocksInRange(lobbyWorld, -26, 129, -20, -41, 133, 20)
+            290 -> fillBlocksInRange(lobbyWorld, -40, 133, 21, -28, 129, -21)
         }
     }
 
@@ -191,7 +182,15 @@ object Start {
         object : BukkitRunnable() {
             var index = 0
             override fun run() {
-                val batchSize = 50 // 한 번에 처리할 블록 수
+                val batchSize = when {
+                    TPSManager.tps > 19.5 -> 100 // TPS 19.5 이상 → 최대 속도로 처리
+                    TPSManager.tps > 18 -> 75   // TPS 18~19.5 → 빠른 처리
+                    TPSManager.tps > 16 -> 50   // TPS 16~18 → 중간 속도
+                    TPSManager.tps > 10 -> 25   // TPS 10~16 → 부하 감소
+                    else -> 10  // TPS 10 이하 → 최소 부하 (서버 안정화)
+                }
+
+
 
                 for (i in 0 until batchSize) {
                     if (index >= blocks.size) {
