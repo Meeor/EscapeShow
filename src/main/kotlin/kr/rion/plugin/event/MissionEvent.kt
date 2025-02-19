@@ -66,12 +66,6 @@ class MissionEvent : Listener {
     }
 
     @EventHandler(ignoreCancelled = false)
-    fun blockStep(event: PlayerMoveEvent) {
-        val player = event.player
-        MissionManager.handleEvent(player, event)
-    }
-
-    @EventHandler(ignoreCancelled = false)
     fun itemDrop(event: PlayerDropItemEvent) {
         val player = event.player
         MissionManager.handleEvent(player, event)
