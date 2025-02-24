@@ -80,12 +80,7 @@ object MainMenu {
         val doorLore = listOf("대기실 문을 열거나 닫습니다.")
         val dooritem = createCustomItem(doorName, doorLore, Material.OAK_FENCE, persistentDataKey = "game-door")
 
-        val teamStatus = when{
-            teamPvpBoolean -> teamPvp.TRUE
-            !teamPvpBoolean -> teamPvp.FALSE
-            else -> teamPvp.FALSE
-        }
-        val teampvpItem = createTeamPvpItem(teamStatus)
+        val teampvpItem = createTeamPvpItem(teamPvpBoolean)
 
         val MaxplayerName = "${ChatColor.AQUA}설정된 인원수"
         val MaxplayerLore = listOf(
@@ -147,17 +142,19 @@ object MainMenu {
             )
         }
     }
-    private fun createTeamPvpItem(status: teamPvp): ItemStack{
-        return when (status){
-            teamPvp.TRUE -> createCustomItem(
+
+    private fun createTeamPvpItem(isPvpEnabled: Boolean): ItemStack {
+        return if (isPvpEnabled) {
+            createCustomItem(
                 "${ChatColor.GREEN}팀 PVP 허용",
-                listOf("클릭시 팀 PVP를 금지 시킵니다."),
+                listOf("클릭 시 팀 PVP를 금지합니다."),
                 Material.GREEN_WOOL,
                 persistentDataKey = "team-pvp-true"
             )
-            teamPvp.FALSE -> createCustomItem(
+        } else {
+            createCustomItem(
                 "${ChatColor.RED}팀 PVP 금지",
-                listOf("클릭시 팀 PVP를 금지합니다."),
+                listOf("클릭 시 팀 PVP를 허용합니다."),
                 Material.RED_WOOL,
                 persistentDataKey = "team-pvp-false"
             )
