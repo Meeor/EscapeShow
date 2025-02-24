@@ -2,6 +2,7 @@ package kr.rion.plugin.gui
 
 import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.manager.TeamManager.teamPvpBoolean
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.MissionEscapeMaxCount
 import kr.rion.plugin.util.Global.teamsMaxPlayers
@@ -79,6 +80,13 @@ object MainMenu {
         val doorLore = listOf("대기실 문을 열거나 닫습니다.")
         val dooritem = createCustomItem(doorName, doorLore, Material.OAK_FENCE, persistentDataKey = "game-door")
 
+        val teamStatus = when{
+            teamPvpBoolean -> teamPvp.TRUE
+            !teamPvpBoolean -> teamPvp.FALSE
+            else -> teamPvp.FALSE
+        }
+        val teampvpItem = createTeamPvpItem(teamStatus)
+
         val MaxplayerName = "${ChatColor.AQUA}설정된 인원수"
         val MaxplayerLore = listOf(
             "",
@@ -100,7 +108,7 @@ object MainMenu {
         gui.setItem(11, eventGUI)
         gui.setItem(13, randomtp)
         gui.setItem(15, resetGUI)
-        gui.setItem(18, notitem)
+        gui.setItem(18, teampvpItem)
         gui.setItem(22, dooritem)
         gui.setItem(26, Maxplayer)
         player.openInventory(gui) // 인벤토리열기
@@ -136,6 +144,22 @@ object MainMenu {
                 ),
                 Material.OBSIDIAN,
                 persistentDataKey = "game-starting"
+            )
+        }
+    }
+    private fun createTeamPvpItem(status: teamPvp): ItemStack{
+        return when (status){
+            teamPvp.TRUE -> createCustomItem(
+                "${ChatColor.GREEN}팀 PVP 허용",
+                listOf("클릭시 팀 PVP를 금지 시킵니다."),
+                Material.GREEN_WOOL,
+                persistentDataKey = "team-pvp-true"
+            )
+            teamPvp.FALSE -> createCustomItem(
+                "${ChatColor.RED}팀 PVP 금지",
+                listOf("클릭시 팀 PVP를 금지합니다."),
+                Material.RED_WOOL,
+                persistentDataKey = "team-pvp-false"
             )
         }
     }

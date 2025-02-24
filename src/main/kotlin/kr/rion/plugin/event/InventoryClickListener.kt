@@ -14,8 +14,11 @@ import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
 import kr.rion.plugin.gui.Giveitem.ItemGUI
+import kr.rion.plugin.gui.MainMenu
+import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.randomTP.RandomTpGUI
+import kr.rion.plugin.manager.TeamManager.teamPvpBoolean
 import kr.rion.plugin.util.Global.door
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
@@ -155,6 +158,20 @@ class InventoryClickListener : Listener {
 
                 hasCustomTag(meta, "game-player") -> {
                     event.isCancelled = true
+                }
+                hasCustomTag(meta, "team-pvp-true") || hasCustomTag(meta, "team-pvp-false") -> {
+                    event.isCancelled = true
+                    teamPvpBoolean = !teamPvpBoolean // ✅ 상태 반전 (true → false, false → true)
+
+                    player.closeInventory()
+                    openMainGUI(player) // ✅ 변경된 상태 반영하여 GUI 다시 열기
+
+                    val statusMessage = if (teamPvpBoolean) {
+                        "${ChatColor.GREEN}팀 PVP를 활성화 하였습니다."
+                    } else {
+                        "${ChatColor.RED}팀 PVP를 비활성화 하였습니다."
+                    }
+                    player.sendMessage("$prefix $statusMessage")
                 }
 
                 hasCustomTag(meta, "nothing") -> {
