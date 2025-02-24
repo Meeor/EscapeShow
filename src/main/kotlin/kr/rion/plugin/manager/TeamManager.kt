@@ -8,6 +8,7 @@ import org.bukkit.Bukkit
 object TeamManager {
     private val teams = mutableMapOf<String, MutableList<String>>() // 팀 데이터 (코드 내부용, 플레이어 닉네임 저장)
     private var teamCounter = 1 // 자동 증가되는 팀 번호
+    var teamPvpBoolean: Boolean = false
 
     /** 🔹 전체 플레이어를 랜덤 팀 배정 (최대 인원 수 적용) */
     fun random() {
