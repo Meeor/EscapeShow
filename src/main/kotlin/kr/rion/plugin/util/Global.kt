@@ -260,7 +260,6 @@ object Global {
         EscapePlayers.clear()
         MissionSuccessEscapePlayers.clear()
         reviveFlags.clear()
-        TeamManager.resetTeam()
     }
 
     fun PlayerAllReset() {
