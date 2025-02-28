@@ -20,6 +20,7 @@ import org.bukkit.*
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scoreboard.Team
 
 
 object Start {
@@ -45,61 +46,6 @@ object Start {
                     }
                 }
                 executeBlockFillingAndEffect()
-                isEnding = false
-
-
-                fillBlocks(
-                    Location(worldWait, 23.0, 60.0, -46.0),
-                    Location(worldWait, 23.0, 57.0, -44.0),
-                    Material.AIR
-                )
-                setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.AIR)
-                GameAllReset2()
-
-                val craftingItem = createCustomItem(
-                    "${ChatColor.GREEN}아이템 조합",
-                    listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
-                    Material.SLIME_BALL
-                )
-                val bookAndQuill = createCustomItem(
-                    "${ChatColor.GREEN}미션",
-                    listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
-                    Material.WRITABLE_BOOK
-                )
-                val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
-                Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                    PlayerAllReset()
-                    Bukkit.getScheduler().runTask(Loader.instance, Runnable {
-                        TeamManager.getTeamList().forEach { team ->
-                            val teamplayers = TeamManager.getPlayerList(team).mapNotNull { Bukkit.getPlayer(it) }
-                            teleportTeamToRandomLocation(teamplayers)
-                        }
-
-                        for (player in Bukkit.getOnlinePlayers()) {
-                            if (!player.scoreboardTags.contains("manager")) {
-                                MissionManager.assignMission(player) //플레이어에게 미션 부여
-                                for (i in 9..35) {
-                                    when (i) {
-                                        20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
-                                        24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
-                                        else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
-                                    }
-                                }
-                                player.removePotionEffect(PotionEffectType.BLINDNESS)
-                                player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
-                                player.sendTitle(
-                                    "${ChatColor.GREEN}게임을 시작합니다.",
-                                    "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
-                                )
-                            } else {
-                                // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
-                            }
-                        }
-                        immunePlayers.clear()
-                        stopPlayer.clear()
-                    })
-                }, 30)//연출이 끝난후 플레이어 세팅및 이동시작.
             }, 30)//랜덤이동좌표선정이후 연출 시작.
         }, 20)//게임시작 요청 받은후 1초뒤 팀선정 및 랜덤이동좌표선정 시작
     }
@@ -114,6 +60,10 @@ object Start {
                     // 작업 완료 시 추가 작업 실행
                     isStarting = true
                     isStart = false
+                    // 블록 처리 완료 후 텔레포트 및 게임 시작 메시지 출력
+                    Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+                        startAction2()
+                    })
                     cancel() // 반복 종료
                     return
                 }
@@ -208,6 +158,71 @@ object Start {
                 }
             }
         }.runTaskTimer(Loader.instance, 0L, 1L) // 1틱 간격으로 실행
+    }
+
+    private fun startAction2(){
+
+        isEnding = false
+
+
+        fillBlocks(
+            Location(worldWait, 23.0, 60.0, -46.0),
+            Location(worldWait, 23.0, 57.0, -44.0),
+            Material.AIR
+        )
+        setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.AIR)
+        GameAllReset2()
+
+        val craftingItem = createCustomItem(
+            "${ChatColor.GREEN}아이템 조합",
+            listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
+            Material.SLIME_BALL
+        )
+        val bookAndQuill = createCustomItem(
+            "${ChatColor.GREEN}미션",
+            listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
+            Material.WRITABLE_BOOK
+        )
+        val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
+        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+            PlayerAllReset()
+            Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+                Bukkit.getLogger().warning("[DEBUG] 팀 갯수 : ${TeamManager.getTeamCount()}")
+                TeamManager.getTeamList().forEach { team ->
+                    val teamplayers = TeamManager.getPlayerList(team).mapNotNull { playerName ->
+                        // 플레이어 이름을 통해 실제 플레이어 객체를 가져옴
+                        Bukkit.getPlayer(playerName)
+                    }
+                    Bukkit.getLogger().info("[DEBUG] 팀: $team, 팀 플레이어 목록: ${teamplayers.joinToString(", ") { it.name }}")
+                    teleportTeamToRandomLocation(teamplayers)
+                    Bukkit.getLogger().warning("[DEBUG] $team 이동 완료")
+                }
+
+                for (player in Bukkit.getOnlinePlayers()) {
+                    if (!player.scoreboardTags.contains("manager")) {
+                        MissionManager.assignMission(player) //플레이어에게 미션 부여
+                        for (i in 9..35) {
+                            when (i) {
+                                20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
+                                24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
+                                else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+                            }
+                        }
+                        player.removePotionEffect(PotionEffectType.BLINDNESS)
+                        player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
+                        player.sendTitle(
+                            "${ChatColor.GREEN}게임을 시작합니다.",
+                            "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
+                        )
+                    } else {
+                        // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
+                    }
+                }
+                immunePlayers.clear()
+                stopPlayer.clear()
+            })
+        }, 30)//연출이 끝난후 플레이어 세팅및 이동시작.
     }
 
 }
