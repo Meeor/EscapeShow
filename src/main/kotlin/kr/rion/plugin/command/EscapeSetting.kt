@@ -4,6 +4,7 @@ import kr.rion.plugin.Loader.Companion.instance
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.MissionEscapeMaxCount
 import kr.rion.plugin.util.Global.prefix
+import kr.rion.plugin.util.Global.teamsMaxPlayers
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.spigotmc.SpigotConfig.config
@@ -38,6 +39,7 @@ object EscapeSetting {
             "팀" -> {
                 val playerCount = parsePlayerCount(sender, args[1]) ?: return
                 config.set("teamsMaxPlayers", playerCount)
+                teamsMaxPlayers = playerCount
                 sender.sendMessage("$prefix ${ChatColor.GREEN}팀 최대 인원 수가 ${ChatColor.LIGHT_PURPLE}${playerCount}${ChatColor.GREEN}명으로 설정되었습니다.")
                 instance.saveConfig()
             }
