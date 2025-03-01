@@ -8,6 +8,7 @@ import org.bukkit.Bukkit
 object TeamManager {
     private val teams = mutableMapOf<String, MutableList<String>>() // 팀 데이터 (코드 내부용, 플레이어 닉네임 저장)
     private var teamCounter = 1 // 자동 증가되는 팀 번호
+    private var teamName = "Team$teamCounter"
     var teamPvpBoolean: Boolean = false
 
     /** 🔹 전체 플레이어를 랜덤 팀 배정 (최대 인원 수 적용) */
@@ -18,29 +19,33 @@ object TeamManager {
             .shuffled() // ✅ 무작위 섞기
 
         teams.clear() // ✅ 기존 팀 초기화
-        var teamCounter = 1 // ✅ 팀 번호 초기화
+        teamCounter = 1 // ✅ 팀 번호 초기화
 
         for (player in allPlayers) {
-            val teamName = "Team$teamCounter"
+            teamName = "Team$teamCounter"
+            val teamcount = teams[teamName]?.size ?: 0
+            Bukkit.getLogger().info("[DEBUG] 현재 $teamName 에 들어간플레이어수 : $teamcount ")
 
-            // ✅ 현재 팀의 인원이 최대값을 초과하면 새로운 팀 생성
-            if ((teams[teamName]?.size ?: 0) >= teamsMaxPlayers) {
-                teamCounter++
+            // ✅ 현재 팀에 배정된 인원이 최대 인원수를 초과하면 새로운 팀으로 배정
+            if (teamcount >= teamsMaxPlayers) {
+                teamCounter++ // 팀 번호 증가
+                teamName = "Team$teamCounter" // 새로운 팀 이름 할당
             }
 
-            teams.computeIfAbsent(teamName) { mutableListOf() }.add(player)
+            teams.computeIfAbsent(teamName) { mutableListOf() }.add(player) // 팀에 플레이어 추가
+            Bukkit.getLogger().info("[DEBUG] $teamName 에 $player 을 추가하였습니다.")
         }
 
         // ✅ 모든 플레이어에게 팀 배정 결과 전송
         Bukkit.getOnlinePlayers().forEach { player ->
             val teamName = teams.entries.find { it.value.contains(player.name) }?.key ?: "알 수 없음"
-
             player.sendMessage("$prefix ${ChatColor.GREEN}✅ 당신은 ${ChatColor.YELLOW}$teamName${ChatColor.GREEN} 팀에 배정되었습니다!")
         }
 
         // ✅ 전체 공지 메시지 출력
         Bukkit.broadcastMessage("$prefix ${ChatColor.AQUA}✅ 랜덤 팀 배정 완료!")
     }
+
 
 
     /** 🔹 플레이어가 속한 팀 이름 가져오기 */

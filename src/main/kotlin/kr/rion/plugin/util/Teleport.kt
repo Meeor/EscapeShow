@@ -135,27 +135,7 @@ object Teleport {
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             try {
                 for (player in players) {
-                    // 반경 5칸 내 랜덤 위치 선정
-                    val offsetX = (-5..5).random()
-                    val offsetZ = (-5..5).random()
-                    val candidateLocation = safeLocation.clone().add(offsetX.toDouble(), 0.0, offsetZ.toDouble())
-
-                    // 하늘에서부터 안전한 지점 찾기
-                    var teleportLocation: Location? = null
-                    for (y in 255 downTo 50) {
-                        val checkLocation = candidateLocation.clone().apply { this.y = y.toDouble() }
-                        if (isLocationCaveAir(checkLocation) && checkLocation.block.type == Material.AIR) {
-                            teleportLocation = checkLocation
-                            break
-                        }
-                    }
-
-                    if (teleportLocation != null) {
-                        player.teleport(teleportLocation)
-                    } else {
-                        console.sendMessage("$prefix ${player.name}의 안전한 좌표를 찾을 수 없어 기본 위치로 이동합니다.")
-                        player.teleport(safeLocation)
-                    }
+                    player.teleport(safeLocation)
                 }
 
                 // 텔레포트 완료 후 중앙 위치 제거
