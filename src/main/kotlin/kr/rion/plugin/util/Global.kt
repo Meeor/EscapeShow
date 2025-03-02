@@ -115,7 +115,8 @@ object Global {
         MissionSuccessCount++
         MissionSuccessEscapePlayers.add(player.name)
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}미션클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getTeamCount()}${ChatColor.AQUA} 팀")
-        player.addScoreboardTag("MissionSuccessCount")
+        player.addScoreboardTag("MissionSuccessEscape")
+        player.removeScoreboardTag("MissionSuccess")
         player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
         removeDirectionBossBar(player)
         endingPlayer()
