@@ -4,6 +4,9 @@ import net.md_5.bungee.api.ChatColor
 
 object ChatUtil {
     private const val CHAT_WIDTH = 320 // Minecraft 기본 채팅창 너비 (픽셀)
+    private const val BOOK_WIDTH = 114 // 마인크래프트 책 기준 너비
+    private const val BOOK_MAX_LINES = 14 // 한 페이지 최대 줄 수 (14줄)
+
 
     /**
      * 글자를 Minecraft 채팅창 기준으로 중앙 정렬합니다.
@@ -11,16 +14,39 @@ object ChatUtil {
      */
     fun centerText(text: String): String {
         val lines = text.split("\n") // 줄바꿈 인식
-        return lines.joinToString("\n") { centerLine(it) }
+        return lines.joinToString("\n") { centerLine(it, CHAT_WIDTH) }
     }
+
+    /**
+     * 마인크래프트 책 기준으로 중앙 정렬된 텍스트 반환 (좌우 정렬)
+     */
+    fun centerBookText(text: String): String {
+        val lines = text.split("\n")
+        return lines.joinToString("\n") { centerLine(it, BOOK_WIDTH) }
+    }
+
+    /**
+     * 마인크래프트 책 기준으로 **위아래 포함 중앙 정렬된 텍스트** 반환 (좌우 + 상하 정렬)
+     */
+    fun centerBookTextVertical(text: String): String {
+        val lines = text.split("\n").map { centerBookText(it) } // 좌우 정렬 먼저 수행
+        val totalLines = lines.size
+
+        // 위쪽 공백 추가 (최대한 중앙에 오도록)
+        val paddingLines = (BOOK_MAX_LINES - totalLines) / 2
+        val blankSpace = "\n".repeat(paddingLines.coerceAtLeast(0))
+
+        return blankSpace + lines.joinToString("\n")
+    }
+
 
     /**
      * 단일 줄을 채팅창 기준으로 중앙 정렬
      */
-    private fun centerLine(text: String): String {
+    private fun centerLine(text: String, maxWidth: Int): String {
         val strippedText = stripColorCodes(text) // 색 코드 제거
         val textWidth = getTextWidth(strippedText) // 텍스트 픽셀 너비 계산
-        val totalPadding = (CHAT_WIDTH - textWidth) / 2 / SPACE_WIDTH // 여백을 스페이스 개수로 변환
+        val totalPadding = (maxWidth - textWidth) / 2 / SPACE_WIDTH // 여백을 스페이스 개수로 변환
 
         return " ".repeat(totalPadding.coerceAtLeast(0)) + text
     }
