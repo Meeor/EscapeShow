@@ -10,6 +10,7 @@ import kr.rion.plugin.util.Global.PlayerAllReset
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
+import kr.rion.plugin.util.Item.ItemGuideBook
 import kr.rion.plugin.util.Item.createCustomItem
 import kr.rion.plugin.util.TPSManager
 import kr.rion.plugin.util.Teleport.immunePlayers
@@ -208,6 +209,7 @@ object Start {
                                 else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
                             }
                         }
+                        player.inventory.addItem(ItemGuideBook())
                         player.removePotionEffect(PotionEffectType.BLINDNESS)
                         player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
                         player.sendTitle(
