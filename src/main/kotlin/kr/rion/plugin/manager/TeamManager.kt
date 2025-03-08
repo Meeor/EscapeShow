@@ -3,9 +3,7 @@ package kr.rion.plugin.manager
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.teamsMaxPlayers
 import net.md_5.bungee.api.ChatColor
-
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 
 object TeamManager {
     private val teams = mutableMapOf<String, MutableList<String>>() // 팀 데이터 (코드 내부용, 플레이어 닉네임 저장)
@@ -134,7 +132,6 @@ object TeamManager {
             "$teamColor$teamName" // ✅ 색상 적용된 팀 이름 반환
         }
     }
-
 
 
     /** 🔹 두 플레이어가 같은 팀인지 확인 */
