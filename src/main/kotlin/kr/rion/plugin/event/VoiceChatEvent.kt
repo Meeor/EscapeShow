@@ -38,7 +38,7 @@ class VoiceChatEvent : VoicechatPlugin {
             // 서버의 모든 플레이어를 순회하며 태그 조건 확인 후 소리 전송
             Bukkit.getServer().onlinePlayers.filter { onlinePlayer ->
                 onlinePlayer.uniqueId != sender.uniqueId && onlinePlayer.scoreboardTags.any {
-                    it in listOf("EscapeComplete", "death", "manager")
+                    it in listOf("EscapeComplete", "death", "manager","MissionSuccessEscape")
                 }
             }.forEach { onlinePlayer ->
                 val senderLocation = sender.location
