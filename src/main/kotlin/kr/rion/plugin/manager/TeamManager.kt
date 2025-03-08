@@ -3,6 +3,7 @@ package kr.rion.plugin.manager
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.teamsMaxPlayers
 import net.md_5.bungee.api.ChatColor
+
 import org.bukkit.Bukkit
 
 object TeamManager {
@@ -11,40 +12,80 @@ object TeamManager {
     private var teamName = "Team$teamCounter"
     var teamPvpBoolean: Boolean = false
 
-    /** 🔹 전체 플레이어를 랜덤 팀 배정 (최대 인원 수 적용) */
+    /** 🔹 전체 플레이어를 랜덤 팀 배정 (RGB 색상 적용) */
     fun random() {
         val allPlayers = Bukkit.getOnlinePlayers()
             .filter { !it.scoreboardTags.contains("manager") }
-            .map { it.name }
             .shuffled() // ✅ 무작위 섞기
 
         teams.clear() // ✅ 기존 팀 초기화
         teamCounter = 1 // ✅ 팀 번호 초기화
 
-        for (player in allPlayers) {
-            teamName = "Team$teamCounter"
-            val teamcount = teams[teamName]?.size ?: 0
-            Bukkit.getLogger().info("[DEBUG] 현재 $teamName 에 들어간플레이어수 : $teamcount ")
+        val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
+        val usedColors: MutableSet<String> = mutableSetOf() // ✅ 사용된 색상 목록 (중복 방지)
 
-            // ✅ 현재 팀에 배정된 인원이 최대 인원수를 초과하면 새로운 팀으로 배정
-            if (teamcount >= teamsMaxPlayers) {
+        for (player in allPlayers) {
+            val teamColorHex = getRandomTeamColor(usedColors) // ✅ 랜덤 RGB 색상 선택
+            usedColors.add(teamColorHex) // ✅ 사용된 색상 저장
+
+            val teamKey = "Team$teamCounter" // ✅ 색상 없이 팀 이름 저장
+            teamName = "$teamColorHex[Team$teamKey]" // ✅ 팀 이름을 "색상코드[TeamX]"로 저장
+            val teamCount = teams[teamName]?.size ?: 0
+
+            Bukkit.getLogger().info("[DEBUG] 현재 $teamName 에 들어간 플레이어 수 : $teamCount")
+
+            // ✅ 현재 팀 인원이 최대 인원을 초과하면 새로운 팀 생성
+            if (teamCount >= teamsMaxPlayers) {
                 teamCounter++ // 팀 번호 증가
-                teamName = "Team$teamCounter" // 새로운 팀 이름 할당
+                val newTeamColorHex = getRandomTeamColor(usedColors) // ✅ 새로운 팀 색상 선택
+                usedColors.add(newTeamColorHex) // ✅ 사용된 색상 저장
+                teamName = "$newTeamColorHex[Team$teamCounter]" // ✅ 새 팀 생성 시에도 색상 포함
             }
 
-            teams.computeIfAbsent(teamName) { mutableListOf() }.add(player) // 팀에 플레이어 추가
-            Bukkit.getLogger().info("[DEBUG] $teamName 에 $player 을 추가하였습니다.")
+            // ✅ BungeeCord ChatColor (RGB) 생성
+            val teamColorBungee = ChatColor.of(teamColorHex)
+
+            var team = scoreboard?.getTeam(teamKey)
+            if (team == null) {
+                team = scoreboard?.registerNewTeam(teamKey)
+                team?.prefix = "$teamColorBungee[$teamKey] " // ✅ 팀 이름에 RGB 색상 적용
+            }
+
+            team?.addEntry(player.name) // ✅ 플레이어를 팀에 추가
+            teams.computeIfAbsent(teamName) { mutableListOf() }.add(player.name) // ✅ 로컬 변수에도 추가
+
+            // ✅ 플레이어 머리 위 닉네임 (네임태그) RGB 색상 적용
+            player.customName = "$teamColorBungee${player.name}"
+            player.isCustomNameVisible = true // ✅ 닉네임 항상 표시
+
+            // ✅ Tab 리스트 닉네임 색상 적용
+            player.setPlayerListName("$teamColorBungee${player.name}")
+
+            team?.let { Bukkit.getLogger().info("[DEBUG] $teamName 팀에 ${player.name} 을 추가하였습니다.") }
         }
 
         // ✅ 모든 플레이어에게 팀 배정 결과 전송
         Bukkit.getOnlinePlayers().forEach { player ->
             val teamName = teams.entries.find { it.value.contains(player.name) }?.key ?: "알 수 없음"
-            player.sendMessage("$prefix ${ChatColor.GREEN}✅ 당신은 ${ChatColor.YELLOW}$teamName${ChatColor.GREEN} 팀에 배정되었습니다!")
+            val teamColor = scoreboard?.getTeam(teamName)?.color ?: ChatColor.WHITE
+            player.sendMessage("$prefix ${ChatColor.GREEN}✅ 당신은 ${teamColor}$teamName${ChatColor.GREEN} 팀에 배정되었습니다!")
         }
 
         // ✅ 전체 공지 메시지 출력
         Bukkit.broadcastMessage("$prefix ${ChatColor.AQUA}✅ 랜덤 팀 배정 완료!")
     }
+
+    /** 🔹 사용되지 않은 랜덤 RGB 색상을 가져오는 함수 */
+    fun getRandomTeamColor(usedColors: MutableSet<String>): String {
+        var randomColor: String
+        do {
+            // ✅ 랜덤한 RGB 색상 생성
+            randomColor = String.format("#%02X%02X%02X", (0..255).random(), (0..255).random(), (0..255).random())
+        } while (randomColor in usedColors) // ✅ 중복 방지
+
+        return randomColor
+    }
+
 
 
 
