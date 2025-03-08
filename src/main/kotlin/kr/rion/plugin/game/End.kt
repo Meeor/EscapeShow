@@ -75,12 +75,8 @@ object End {
             world?.players?.forEach { player ->
                 if (!player.scoreboardTags.contains("manager")) { // 운영자는 제외
                     when {
-                        player.scoreboardTags.contains("MissionSuccess") -> {
-                            if (!MissionSuccessEscapePlayers.contains(player.name)){
-                                player.scoreboardTags.clear()
-                                Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}선착순 미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하신것으로 처리되었습니다. ")
-                                player.addScoreboardTag("MissionSuccessEscape")
-                            }
+                        player.scoreboardTags.contains("MissionSuccessEscape") -> {
+                            //추가 처리 하지 않음.
                         }
 
                         player.scoreboardTags.contains("EscapeComplete") -> {
