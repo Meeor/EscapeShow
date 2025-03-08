@@ -4,29 +4,23 @@ import kr.rion.plugin.Loader
 import kr.rion.plugin.game.Reset.handleGameReset
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.manager.ChunkyManager.loadChunkyForWorld
-import kr.rion.plugin.manager.TeamManager
 import kr.rion.plugin.manager.TeamManager.getSurvivorTeams
 import kr.rion.plugin.manager.TeamManager.resetTeam
-import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.GameAllReset
 import kr.rion.plugin.util.Global.GameAllReset2
 import kr.rion.plugin.util.Global.PlayerAllReset
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.reviveFlags
-import kr.rion.plugin.util.Global.survivalPlayers
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
-import kr.rion.plugin.util.Item.teleportCompass
 import org.bukkit.*
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 
 object End {
     var isEnding: Boolean = true
 
-    var EscapePlayers: MutableList<String> = mutableListOf()
-    var MissionSuccessEscapePlayers: MutableList<String> = mutableListOf() // ✅ 미션 성공 후 탈출한 플레이어
+    val EscapePlayers: MutableSet<String> = mutableSetOf()
+    val MissionSuccessEscapePlayers: MutableSet<String> = mutableSetOf() // ✅ 미션 성공 후 탈출한 플레이어
     var LastSurvivor: String? = null // ✅ 마지막 생존자
     private val soundName = "custom.bye"
 
@@ -49,7 +43,7 @@ object End {
 
         isEnding = true
         Bukkit.broadcastMessage("")
-        Bukkit.broadcastMessage("${prefix} 게임이 종료되었습니다.")
+        Bukkit.broadcastMessage("$prefix 게임이 종료되었습니다.")
 
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             // 모든 플레이어에게 게임 종료 사운드 전송 및 상태 초기화
@@ -80,7 +74,7 @@ object End {
                         }
 
                         player.scoreboardTags.contains("EscapeComplete") -> {
-                            EscapePlayers.add(player.name)
+                            //추가 처리 하지 않음.
                         }
 
                         player.scoreboardTags.contains("lastsuriver") -> { // ✅ 마지막 생존자 설정

@@ -50,7 +50,7 @@ object Global {
         for (player in Bukkit.getOnlinePlayers()) {
             if (player.scoreboardTags.contains("Escape")) {
                 performAction(player)
-            } else if(survivalPlayers().count <= 5){
+            } else if (survivalPlayers().count <= 5) {
                 missionclearAction()
             }
         }
@@ -75,11 +75,11 @@ object Global {
         player.addPotionEffect(healthEffect)
         player.inventory.clear()
         player.inventory.setItem(8, teleportCompass())
-        EscapePlayerCount++
-        EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
         Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getSurviverCount()}${ChatColor.AQUA} 팀")
+        EscapePlayerCount++
+        EscapePlayers.add(player.name)
         val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
 
         if (remainingPlayers > 0) {
@@ -92,10 +92,19 @@ object Global {
         removeDirectionBossBar(player)
         endingPlayer()
     }
-    fun missionclearAction(){
-        for(player in Bukkit.getOnlinePlayers()){
-            if(!player.scoreboardTags.any{it in listOf("DeathAndAlive","EscapeComplete", "death", "manager","MissionSuccessEscape")} && player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessEscapePlayers.contains(player.name)){
-                if(MissionSuccessCount < MissionEscapeMaxCount) {
+
+    fun missionclearAction() {
+        for (player in Bukkit.getOnlinePlayers()) {
+            if (!player.scoreboardTags.any {
+                    it in listOf(
+                        "DeathAndAlive",
+                        "EscapeComplete",
+                        "death",
+                        "manager",
+                        "MissionSuccessEscape"
+                    )
+                } && player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessEscapePlayers.contains(player.name)) {
+                if (MissionSuccessCount < MissionEscapeMaxCount) {
                     // 게임 모드 변경
                     player.gameMode = GameMode.ADVENTURE
                     // 플라이 허용
@@ -103,7 +112,8 @@ object Global {
                     player.isFlying = true
 
                     // 투명화 버프 부여 (무한지속시간)
-                    val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
+                    val invisibilityEffect =
+                        PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
                     val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
                     val hangerEffect = PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 1, false, false)
                     val healthEffect = PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 5, false, false)
@@ -113,9 +123,9 @@ object Global {
                     player.addPotionEffect(healthEffect)
                     player.inventory.clear()
                     player.inventory.setItem(8, teleportCompass())
+                    player.scoreboardTags.clear()
                     MissionSuccessCount++
                     MissionSuccessEscapePlayers.add(player.name)
-                    player.scoreboardTags.clear()
                     Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하신것으로 처리되었습니다. ")
                     player.addScoreboardTag("MissionSuccessEscape")
                     removeDirectionBossBar(player)
@@ -246,6 +256,7 @@ object Global {
         Bukkit.getLogger().warning("탐색 최대횟수 $helicopterfindattempt 에 도달하였지만. 월드보더 내의 좌표를잡지 못하였습니다.")
         return null
     }
+
     fun GameAllReset() {
         EscapePlayerCount = 0
         chestEnable = false
