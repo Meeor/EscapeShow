@@ -50,10 +50,8 @@ object Global {
         for (player in Bukkit.getOnlinePlayers()) {
             if (player.scoreboardTags.contains("Escape")) {
                 performAction(player)
-            } else if(player.scoreboardTags.contains("MissionSuccess")){
-                if(MissionSuccessCount < teamsMaxPlayers){
-                    missionclearAction(player)
-                }
+            } else if(survivalPlayers().count <= 5){
+                missionclearAction()
             }
         }
     }
@@ -94,9 +92,37 @@ object Global {
         removeDirectionBossBar(player)
         endingPlayer()
     }
-    fun missionclearAction(player: Player){
-        MissionSuccessCount++
-        MissionSuccessEscapePlayers.add(player.name)
+    fun missionclearAction(){
+        for(player in Bukkit.getOnlinePlayers()){
+            if(player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessEscapePlayers.contains(player.name)){
+                if(MissionSuccessCount < MissionEscapeMaxCount) {
+                    // 게임 모드 변경
+                    player.gameMode = GameMode.ADVENTURE
+                    // 플라이 허용
+                    player.allowFlight = true
+                    player.isFlying = true
+
+                    // 투명화 버프 부여 (무한지속시간)
+                    val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
+                    val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
+                    val hangerEffect = PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 1, false, false)
+                    val healthEffect = PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 5, false, false)
+                    player.addPotionEffect(invisibilityEffect)
+                    player.addPotionEffect(blindEffect)
+                    player.addPotionEffect(hangerEffect)
+                    player.addPotionEffect(healthEffect)
+                    player.inventory.clear()
+                    player.inventory.setItem(8, teleportCompass())
+                    MissionSuccessCount++
+                    MissionSuccessEscapePlayers.add(player.name)
+                    player.scoreboardTags.clear()
+                    Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하신것으로 처리되었습니다. ")
+                    player.addScoreboardTag("MissionSuccessEscape")
+                    removeDirectionBossBar(player)
+                    player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
+                }
+            }
+        }
     }
 
     fun setGameRulesForAllWorlds() {
@@ -241,6 +267,7 @@ object Global {
     }
 
     fun PlayerAllReset() {
+        val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
         for (player in Bukkit.getOnlinePlayers()) {
             if (!player.scoreboardTags.contains("manager")) {
                 // manager 태그가 없는 플레이어작업
@@ -254,6 +281,11 @@ object Global {
             for (effect in player.activePotionEffects) {
                 player.removePotionEffect(effect.type)
             }
+            val team = scoreboard?.getEntryTeam(player.name)
+            team?.removeEntry(player.name) // ✅ 팀에서 플레이어 제거 (색상 초기화)
+            player.customName = null // ✅ 머리 위 닉네임 리셋
+            player.setDisplayName(player.name)
+            player.setPlayerListName(player.name) // ✅ Tab 목록 닉네임 리셋
         }
     }
 
