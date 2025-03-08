@@ -12,7 +12,7 @@ object PlayerTeleport {
         val targetPlayers = Bukkit.getOnlinePlayers().filter {
             !it.scoreboardTags.contains("death") && !it.scoreboardTags.contains("manager") && !it.scoreboardTags.contains(
                 "EscapeComplete"
-            )
+            )&& !it.scoreboardTags.contains("MissionSuccessEscape")
         }
         if (targetPlayers.isEmpty()) {
             player.sendMessage("${ChatColor.RED}텔레포트할 수 있는 플레이어가 없습니다.")

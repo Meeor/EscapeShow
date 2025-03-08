@@ -24,7 +24,7 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitTask
 
 object Global {
-    val prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
+    var prefix = "${ChatColor.BOLD}${ChatColor.AQUA}[Escape Show]${ChatColor.RESET}${ChatColor.GREEN}"
     var EscapePlayerCount: Int = 0
     var MissionSuccessCount: Int = 0
     var EscapePlayerMaxCount: Int = 3
@@ -95,29 +95,10 @@ object Global {
         endingPlayer()
     }
     fun missionclearAction(player: Player){
-        // 게임 모드 변경
-        player.gameMode = GameMode.ADVENTURE
-        // 플라이 허용
-        player.allowFlight = true
-        player.isFlying = true
 
-        // 투명화 버프 부여 (무한지속시간)
-        val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
-        val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
-        val hangerEffect = PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 1, false, false)
-        val healthEffect = PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 5, false, false)
-        player.addPotionEffect(invisibilityEffect)
-        player.addPotionEffect(blindEffect)
-        player.addPotionEffect(hangerEffect)
-        player.addPotionEffect(healthEffect)
-        player.inventory.clear()
-        player.inventory.setItem(8, teleportCompass())
         MissionSuccessCount++
         MissionSuccessEscapePlayers.add(player.name)
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}미션클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getTeamCount()}${ChatColor.AQUA} 팀")
-        player.addScoreboardTag("MissionSuccessEscape")
-        player.removeScoreboardTag("MissionSuccess")
-        player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
+
         removeDirectionBossBar(player)
         endingPlayer()
     }

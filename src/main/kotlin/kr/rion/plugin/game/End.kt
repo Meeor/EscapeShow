@@ -4,17 +4,23 @@ import kr.rion.plugin.Loader
 import kr.rion.plugin.game.Reset.handleGameReset
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.manager.ChunkyManager.loadChunkyForWorld
+import kr.rion.plugin.manager.TeamManager
 import kr.rion.plugin.manager.TeamManager.getSurvivorTeams
 import kr.rion.plugin.manager.TeamManager.resetTeam
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.GameAllReset
 import kr.rion.plugin.util.Global.GameAllReset2
 import kr.rion.plugin.util.Global.PlayerAllReset
+import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.util.Global.survivalPlayers
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
+import kr.rion.plugin.util.Item.teleportCompass
 import org.bukkit.*
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 object End {
     var isEnding: Boolean = true
@@ -43,7 +49,7 @@ object End {
 
         isEnding = true
         Bukkit.broadcastMessage("")
-        Bukkit.broadcastMessage("${Global.prefix} 게임이 종료되었습니다.")
+        Bukkit.broadcastMessage("${prefix} 게임이 종료되었습니다.")
 
         Bukkit.getScheduler().runTask(Loader.instance, Runnable {
             // 모든 플레이어에게 게임 종료 사운드 전송 및 상태 초기화
@@ -69,8 +75,12 @@ object End {
             world?.players?.forEach { player ->
                 if (!player.scoreboardTags.contains("manager")) { // 운영자는 제외
                     when {
-                        player.scoreboardTags.contains("MissionSuccessEscape") -> {
-                            MissionSuccessEscapePlayers.add(player.name)
+                        player.scoreboardTags.contains("MissionSuccess") -> {
+                            if (!MissionSuccessEscapePlayers.contains(player.name)){
+                                player.scoreboardTags.clear()
+                                Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}선착순 미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하신것으로 처리되었습니다. ")
+                                player.addScoreboardTag("MissionSuccessEscape")
+                            }
                         }
 
                         player.scoreboardTags.contains("EscapeComplete") -> {
@@ -102,7 +112,7 @@ object End {
                     if (worldWait != null) {
                         player.teleport(Location(worldWait, 15.5, 58.5, -44.5))
                     } else {
-                        player.sendMessage("${Global.prefix}${ChatColor.RED}운영자에게 이동을 요청하세요.")
+                        player.sendMessage("${prefix}${ChatColor.RED}운영자에게 이동을 요청하세요.")
                     }
                 }
             })
