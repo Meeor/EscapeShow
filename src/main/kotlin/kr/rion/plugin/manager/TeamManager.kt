@@ -55,11 +55,11 @@ object TeamManager {
             teams.computeIfAbsent(teamName) { mutableListOf() }.add(player.name) // ✅ 로컬 변수에도 추가
 
             // ✅ 플레이어 머리 위 닉네임 (네임태그) RGB 색상 적용
-            player.customName = "$teamColorBungee${player.name}"
+            player.customName = "$teamColorBungee$$teamName${player.name}"
             player.isCustomNameVisible = true // ✅ 닉네임 항상 표시
 
             // ✅ Tab 리스트 닉네임 색상 적용
-            player.setPlayerListName("$teamColorBungee${player.name}")
+            player.setPlayerListName("$teamColorBungee$$teamName${player.name}")
 
             team?.let { Bukkit.getLogger().info("[DEBUG] $teamName 팀에 ${player.name} 을 추가하였습니다.") }
         }
