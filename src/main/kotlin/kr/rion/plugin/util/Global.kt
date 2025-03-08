@@ -81,7 +81,7 @@ object Global {
         EscapePlayers.add(player.name)
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getTeamCount()}${ChatColor.AQUA} 팀")
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getSurviverCount()}${ChatColor.AQUA} 팀")
         val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
 
         if (remainingPlayers > 0) {
@@ -95,12 +95,8 @@ object Global {
         endingPlayer()
     }
     fun missionclearAction(player: Player){
-
         MissionSuccessCount++
         MissionSuccessEscapePlayers.add(player.name)
-
-        removeDirectionBossBar(player)
-        endingPlayer()
     }
 
     fun setGameRulesForAllWorlds() {
