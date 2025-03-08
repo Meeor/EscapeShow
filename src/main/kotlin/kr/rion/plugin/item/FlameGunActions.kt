@@ -167,7 +167,8 @@ object FlameGunActions {
                         !it.scoreboardTags.contains("manager") &&
                                 !it.scoreboardTags.contains("EscapeComplete") &&
                                 !it.scoreboardTags.contains("death") &&
-                                !it.scoreboardTags.contains("DeathAndAlive")
+                                !it.scoreboardTags.contains("DeathAndAlive") &&
+                                !it.scoreboardTags.contains("MissionSuccessEscape")
                     }
                     .forEach { currentPlayer ->
 

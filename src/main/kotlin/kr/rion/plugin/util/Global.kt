@@ -94,7 +94,7 @@ object Global {
     }
     fun missionclearAction(){
         for(player in Bukkit.getOnlinePlayers()){
-            if(player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessEscapePlayers.contains(player.name)){
+            if(!player.scoreboardTags.any{it in listOf("DeathAndAlive","EscapeComplete", "death", "manager","MissionSuccessEscape")} && player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessEscapePlayers.contains(player.name)){
                 if(MissionSuccessCount < MissionEscapeMaxCount) {
                     // 게임 모드 변경
                     player.gameMode = GameMode.ADVENTURE

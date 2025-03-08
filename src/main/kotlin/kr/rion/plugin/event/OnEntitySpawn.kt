@@ -111,7 +111,9 @@ class OnEntitySpawn : Listener {
                     corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 1.5, 2.5, 1.5)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
-                    if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking) {
+                    if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking && !nearbyPlayer.scoreboardTags.any {
+                            it in listOf("EscapeComplete", "death", "manager","MissionSuccessEscape")
+                        }) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
                         val messagetime = 5 - currentTime
