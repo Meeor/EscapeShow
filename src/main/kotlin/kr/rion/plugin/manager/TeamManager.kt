@@ -11,17 +11,23 @@ object TeamManager {
     private var teamKey = "Team$teamCounter"
     var teamPvpBoolean: Boolean = false
 
-    /** 🔹 전체 플레이어를 랜덤 팀 배정 (RGB 색상 적용) */
+    // ✅ 팀별 색상을 저장하는 맵
+    private val teamColors: MutableMap<String, String> = mutableMapOf()
+    // ✅ 이미 사용된 색상 목록 (중복 방지)
+    private val usedColors: MutableSet<String> = mutableSetOf()
+
+    /** 🔹 전체 플레이어를 랜덤 팀 배정 (팀별 색상 적용 + 색상 중복 방지) */
     fun random() {
         val allPlayers = Bukkit.getOnlinePlayers()
             .filter { !it.scoreboardTags.contains("manager") }
             .shuffled() // ✅ 무작위 섞기
 
         teams.clear() // ✅ 기존 팀 초기화
+        teamColors.clear() // ✅ 팀 색상 초기화
+        usedColors.clear() // ✅ 사용된 색상 목록 초기화
         teamCounter = 1 // ✅ 팀 번호 초기화
 
         val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
-        val usedColors: MutableSet<String> = mutableSetOf() // ✅ 사용된 색상 목록 (중복 방지)
 
         for (player in allPlayers) {
             val teamCount = teams[teamKey]?.size ?: 0
@@ -30,10 +36,8 @@ object TeamManager {
                 teamKey = "Team$teamCounter"
             }
 
-            val teamColorHex = getRandomTeamColor(usedColors) // ✅ 랜덤 RGB 색상 선택
-            usedColors.add(teamColorHex) // ✅ 사용된 색상 저장
-
-            teamKey = "Team$teamCounter" // ✅ 색상 없이 팀 이름만 저장
+            // ✅ 기존 팀이 없다면 새로운 색상 생성 & 저장 (중복 방지)
+            val teamColorHex = teamColors.getOrPut(teamKey) { getUniqueTeamColor() }
             val teamColorBungee = ChatColor.of(teamColorHex) // ✅ RGB 색상 적용
 
             var team = scoreboard?.getTeam(teamKey)
@@ -46,11 +50,11 @@ object TeamManager {
             teams.computeIfAbsent(teamKey) { mutableListOf() }.add(player.name) // ✅ 로컬 변수에도 추가
 
             // ✅ 플레이어 머리 위 닉네임 (네임태그) RGB 색상 적용
-            player.customName = "${teamColorBungee}[${teamKey}]${player.name}"
+            player.customName = "$teamColorBungee[${teamKey}]${player.name}"
             player.isCustomNameVisible = true // ✅ 닉네임 항상 표시
 
             // ✅ Tab 리스트 닉네임 색상 적용
-            player.setPlayerListName("${teamColorBungee}[${teamKey}]${player.name}")
+            player.setPlayerListName("$teamColorBungee[${teamKey}]${player.name}")
 
             team?.let { Bukkit.getLogger().info("[DEBUG] $teamKey 팀에 ${player.name} 을 추가하였습니다.") }
         }
@@ -66,14 +70,15 @@ object TeamManager {
         Bukkit.broadcastMessage("$prefix ${ChatColor.AQUA}✅ 랜덤 팀 배정 완료!")
     }
 
-    /** 🔹 사용되지 않은 랜덤 RGB 색상을 가져오는 함수 */
-    fun getRandomTeamColor(usedColors: MutableSet<String>): String {
+    /** 🔹 중복되지 않은 랜덤 RGB 색상을 가져오는 함수 */
+    fun getUniqueTeamColor(): String {
         var randomColor: String
         do {
             // ✅ 랜덤한 RGB 색상 생성
             randomColor = String.format("#%02X%02X%02X", (0..255).random(), (0..255).random(), (0..255).random())
-        } while (randomColor in usedColors) // ✅ 중복 방지
+        } while (randomColor in usedColors) // ✅ 중복된 색상인지 확인
 
+        usedColors.add(randomColor) // ✅ 사용된 색상 목록에 추가
         return randomColor
     }
 
