@@ -87,6 +87,12 @@ object TeamManager {
     fun getTeam(player: String): String? {
         return teams.entries.find { it.value.contains(player) }?.key
     }
+    /** 🔹 색상코드가 포함된 팀 이름 가져오기 */
+    fun getTeamColorName(teamName: String): String {
+        val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
+        val teamColor = scoreboard?.getTeam(teamName)?.prefix ?: "§f"  // 없으면 흰색 적용
+        return "$teamColor$teamName"
+    }
 
     /** 🔹 특정 팀의 플레이어 목록 가져오기 */
     fun getPlayerList(teamName: String): List<String> {
