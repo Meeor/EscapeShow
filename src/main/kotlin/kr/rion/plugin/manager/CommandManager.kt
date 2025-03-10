@@ -17,6 +17,9 @@ class CommandManager(private val plugin: JavaPlugin) {
         plugin.getCommand("방송")?.setExecutor(commandHandler)
         plugin.getCommand("데미지")?.setExecutor(commandHandler)
         plugin.getCommand("부활불가")?.setExecutor(commandHandler)
+        plugin.getCommand("게임안내")?.setExecutor(commandHandler)
+        plugin.getCommand("아이템")?.setExecutor(commandHandler)
+        plugin.getCommand("조합법")?.setExecutor(commandHandler)
         // TabCompleter
         plugin.getCommand("인원설정")?.tabCompleter = TabComplete()
         plugin.getCommand("이벤트")?.tabCompleter = TabComplete()
