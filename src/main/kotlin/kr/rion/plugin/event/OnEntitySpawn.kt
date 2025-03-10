@@ -112,7 +112,7 @@ class OnEntitySpawn : Listener {
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
                     if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking && !nearbyPlayer.scoreboardTags.any {
-                            it in listOf("EscapeComplete", "death", "manager","MissionSuccessEscape")
+                            it in listOf("EscapeComplete", "death", "manager","MissionSuccessEscape","DeathAndAlive")
                         }) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
@@ -240,7 +240,9 @@ class OnEntitySpawn : Listener {
         val entity = event.rightClicked
 
         // 사망자 상태 확인
-        if (player.scoreboardTags.contains("DeathAndAlive")) {
+        if (player.scoreboardTags.any {
+                it in listOf("EscapeComplete", "death", "manager","MissionSuccessEscape","DeathAndAlive")
+            }) {
             // 모드 엔티티인지 확인
             if (entity is com.mohistmc.bukkit.entity.MohistModsEntity) {
                 // 상호작용 취소
