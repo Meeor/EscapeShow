@@ -63,7 +63,7 @@ object End {
 
             // 청크 강제 로드
             val chunk = world?.getChunkAt(Location(worldWait, 15.5, 58.5, -44.5))
-            chunk?.let { world?.loadChunk(it) }
+            chunk?.let { world.loadChunk(it) }
 
             // 게임 종료 시 플레이어 상태 확인
             world?.players?.forEach { player ->
@@ -87,6 +87,7 @@ object End {
 
                         else -> {
                             player.health = 0.0 // ✅ 즉시 사망 처리 (새로운 사망자만)
+                            player.addScoreboardTag("death") // ✅ 생존 팀에서 제외되도록 태그 추가
                         }
                     }
                 }
