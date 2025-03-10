@@ -30,24 +30,37 @@ class VoiceChatEvent : VoicechatPlugin {
         val api = event.voicechat  // VoiceChat API 인스턴스 가져오기
         val senderUUID = event.senderConnection?.player?.uuid  // 송신자 UUID 가져오기
         val sender = senderUUID?.let { Bukkit.getPlayer(it) }  // 송신자 Player 객체 가져오기
+        if (sender != null) {
+            if (sender.scoreboardTags.contains("DeathAndAlive")) {
+                event.cancel()  // 이벤트 취소
+                return
+            }
 
-        // 송신자 null 여부 및 태그 확인
-        if (sender != null && sender.scoreboardTags.any { it in listOf("EscapeComplete", "death") }) {
-            event.cancel()  // 이벤트 취소
+            // 송신자 null 여부 및 태그 확인
+            if (sender.scoreboardTags.any {
+                    it in listOf(
+                        "EscapeComplete",
+                        "death",
+                        "manager",
+                        "MissionSuccessEscape"
+                    )
+                }) {
+                event.cancel()  // 이벤트 취소
 
-            // 서버의 모든 플레이어를 순회하며 태그 조건 확인 후 소리 전송
-            Bukkit.getServer().onlinePlayers.filter { onlinePlayer ->
-                onlinePlayer.uniqueId != sender.uniqueId && onlinePlayer.scoreboardTags.any {
-                    it in listOf("EscapeComplete", "death", "manager", "MissionSuccessEscape")
+                // 서버의 모든 플레이어를 순회하며 태그 조건 확인 후 소리 전송
+                Bukkit.getServer().onlinePlayers.filter { onlinePlayer ->
+                    onlinePlayer.uniqueId != sender.uniqueId && onlinePlayer.scoreboardTags.any {
+                        it in listOf("EscapeComplete", "death", "manager", "MissionSuccessEscape")
+                    }
+                }.forEach { onlinePlayer ->
+                    val senderLocation = sender.location
+                    val senderPosition = api.createPosition(senderLocation.x, senderLocation.y, senderLocation.z)
+
+                    val connection = api.getConnectionOf(onlinePlayer.uniqueId) ?: return@forEach
+                    val locationalSoundPacket = event.packet.toLocationalSoundPacket(senderPosition)
+
+                    api.sendLocationalSoundPacketTo(connection, locationalSoundPacket)
                 }
-            }.forEach { onlinePlayer ->
-                val senderLocation = sender.location
-                val senderPosition = api.createPosition(senderLocation.x, senderLocation.y, senderLocation.z)
-
-                val connection = api.getConnectionOf(onlinePlayer.uniqueId) ?: return@forEach
-                val locationalSoundPacket = event.packet.toLocationalSoundPacket(senderPosition)
-
-                api.sendLocationalSoundPacketTo(connection, locationalSoundPacket)
             }
         }
     }
