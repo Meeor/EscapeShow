@@ -1,5 +1,6 @@
 package kr.rion.plugin.event
 
+import de.tr7zw.nbtapi.NBTCompoundList
 import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
 import kr.rion.plugin.customEvent.RevivalEvent
@@ -7,6 +8,7 @@ import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.endingPlayer
+import kr.rion.plugin.util.Global.originalInventory
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.processedPlayers
@@ -31,6 +33,7 @@ import org.bukkit.potion.PotionEffectType
 
 class OnEntitySpawn : Listener {
 
+
     @EventHandler
     fun onEntitySpawn(event: EntitySpawnEvent) {
         if (!isStarting || isEnding) return
@@ -47,6 +50,8 @@ class OnEntitySpawn : Listener {
                 Bukkit.getLogger().warning("PlayerName not found in Death NBT data!")
                 return
             }
+            val mainInventory = deathData.getCompoundList("MainInventory")
+            originalInventory[playerName] = mainInventory
             if (!processedPlayers.contains(playerName)) createTextDisplay(corpseEntity, "§a부활")
             // 플레이어별 부활 플래그 초기화
             if (!reviveFlags.containsKey(playerName)) {
@@ -66,7 +71,14 @@ class OnEntitySpawn : Listener {
 
                 // MainInventory 데이터 확인 및 시체 엔티티 제거 조건
                 val mainInventory = deathData.getCompoundList("MainInventory")
-                if (mainInventory == null || mainInventory.isEmpty) {
+                // ✅ 기존 저장된 인벤토리와 현재 시체 인벤토리를 비교하여 하나라도 사라졌는지 확인
+                val storedInventory = originalInventory[playerName] // 사망 시 저장된 인벤토리 가져오기
+                val isAnyItemTaken = storedInventory != null && storedInventory.any { originalItem ->
+                    !mainInventory.contains(originalItem) // ✅ 아이템이 하나라도 없어진 경우 감지
+                }
+
+
+                if (isAnyItemTaken) {
                     timerReset(playerName) // 플래그 상태 변경 시 타이머 초기화
                     processedPlayers.add(playerName) // 처리된 플레이어로 추가
                     reviveFlags[playerName] = false // 부활 불가능 상태로 변경

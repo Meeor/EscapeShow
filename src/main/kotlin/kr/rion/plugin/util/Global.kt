@@ -1,5 +1,7 @@
 package kr.rion.plugin.util
 
+import de.tr7zw.nbtapi.NBTCompoundList
+import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End
 import kr.rion.plugin.game.End.EscapePlayers
 import kr.rion.plugin.game.End.MissionSuccessEscapePlayers
@@ -38,6 +40,7 @@ object Global {
     var respawnTask = mutableMapOf<String, BukkitTask>()
     val processedPlayers = mutableSetOf<String>() // 이미 처리된 플레이어 저장
     val sneakingTimers = mutableMapOf<String, Int>() // 웅크리는 시간 추적
+    var originalInventory = mutableMapOf<String, NBTCompoundList>()
 
 
     //부활시 아이템 복구를 위한 변수
@@ -275,6 +278,7 @@ object Global {
         EscapePlayers.clear()
         MissionSuccessEscapePlayers.clear()
         reviveFlags.clear()
+        originalInventory.clear()
     }
 
     fun PlayerAllReset() {
