@@ -1,5 +1,6 @@
 package kr.rion.plugin.event
 
+import kr.rion.plugin.customEvent.IronMeltEvent
 import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.manager.MissionManager
 import org.bukkit.entity.Player
@@ -15,7 +16,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
-import org.bukkit.event.player.PlayerMoveEvent
 
 class MissionEvent : Listener {
     @EventHandler(ignoreCancelled = false)
@@ -104,5 +104,11 @@ class MissionEvent : Listener {
             MissionManager.handleEvent(player, event) // 관련 플레이어에 대해 미션 처리
             MissionManager.handleEvent(targetPlayer, event) // 대상 플레이어에 대해 미션 처리
         }
+    }
+
+    @EventHandler
+    fun ironMelt(event: IronMeltEvent) {
+        val player = event.player
+        MissionManager.handleEvent(player, event)
     }
 }

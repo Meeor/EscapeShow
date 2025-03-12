@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
+import java.util.UUID
 
 class CraftingMission(
     private val targetItems: List<Pair<Material, Int>> // 미션 아이템(Material)과 목표 수량(Int)
@@ -19,12 +20,12 @@ class CraftingMission(
     )
 
     // 플레이어별 누적 거래 아이템 수 관리
-    private val collectedItemCounts = mutableMapOf<Player, MutableMap<Material, Int>>()
+    private val collectedItemCounts = mutableMapOf<UUID, MutableMap<Material, Int>>()
 
     override fun missionStart(player: Player) {
-        collectedItemCounts[player] = mutableMapOf() // 초기화
+        collectedItemCounts[player.uniqueId] = mutableMapOf() // 초기화
         targetItems.forEach { (material, _) ->
-            collectedItemCounts[player]?.put(material, 0) // 목표 아이템 초기화
+            collectedItemCounts[player.uniqueId]?.put(material, 0) // 목표 아이템 초기화
         }
     }
 
@@ -35,13 +36,13 @@ class CraftingMission(
 
         // 모든 목표 아이템 수량을 충족했는지 확인
         return targetItems.all { (material, requiredCount) ->
-            (collectedItemCounts[player]?.get(material) ?: 0) >= requiredCount
+            (collectedItemCounts[player.uniqueId]?.get(material) ?: 0) >= requiredCount
         }
     }
 
     override fun onSuccess(player: Player) {
         player.addScoreboardTag("MissionSuccess")
-        collectedItemCounts.remove(player) // 완료 후 데이터 정리
+        collectedItemCounts.remove(player.uniqueId) // 완료 후 데이터 정리
     }
 
     override fun reset() {
@@ -63,14 +64,14 @@ class CraftingMission(
         // 클릭한 아이템이 목표 아이템인지 확인
         if (targetItems.any { it.first == material }) {
             val addedAmount = clickedItem.amount
-            val previousCount = collectedItemCounts[player]?.get(material) ?: 0
+            val previousCount = collectedItemCounts[player.uniqueId]?.get(material) ?: 0
 
             // 누적 수집량 업데이트
-            collectedItemCounts[player]?.put(material, previousCount + addedAmount)
+            collectedItemCounts[player.uniqueId]?.put(material, previousCount + addedAmount)
 
             // 진행도 액션바 출력
             val koreanName = itemNameMap[material] ?: material.name
-            val currentProgress = collectedItemCounts[player]?.get(material) ?: 0
+            val currentProgress = collectedItemCounts[player.uniqueId]?.get(material) ?: 0
             val requiredCount = targetItems.first { it.first == material }.second
             player.sendMessage("§b${koreanName} 조합 : §e${currentProgress}§b/§d${requiredCount}")
         }

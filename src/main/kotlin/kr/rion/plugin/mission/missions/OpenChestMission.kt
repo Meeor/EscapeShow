@@ -7,18 +7,19 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
+import java.util.UUID
 
 class OpenChestMission(private val requiredOpens: Int) : Mission {
-    private val playerOpens = mutableMapOf<Player, Int>()
+    private val playerOpens = mutableMapOf<UUID, Int>()
 
     override fun missionStart(player: Player) {
-        playerOpens[player] = 0 // 초기화
+        playerOpens[player.uniqueId] = 0 // 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
         if (event is InventoryOpenEvent && event.inventory.type == InventoryType.BARREL) {
-            val currentCount = playerOpens.getOrDefault(player, 0) + 1
-            playerOpens[player] = currentCount
+            val currentCount = playerOpens.getOrDefault(player.uniqueId, 0) + 1
+            playerOpens[player.uniqueId] = currentCount
             player.spigot()
                 .sendMessage(
                     ChatMessageType.ACTION_BAR,
@@ -44,7 +45,7 @@ class OpenChestMission(private val requiredOpens: Int) : Mission {
 
     override fun onSuccess(player: Player) {
         player.addScoreboardTag("MissionSuccess")
-        playerOpens.remove(player) // 데이터 정리
+        playerOpens.remove(player.uniqueId) // 데이터 정리
     }
 
     override fun reset() {

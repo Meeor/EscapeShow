@@ -7,12 +7,13 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.block.BlockPlaceEvent
+import java.util.UUID
 
 class PlacePlanksMission(private val requiredCount: Int) : Mission {
-    private val playerPlankPlacements = mutableMapOf<Player, Int>()
+    private val playerPlankPlacements = mutableMapOf<UUID, Int>()
 
     override fun missionStart(player: Player) {
-        playerPlankPlacements[player] = 0 // 초기화
+        playerPlankPlacements[player.uniqueId] = 0 // 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -28,8 +29,8 @@ class PlacePlanksMission(private val requiredCount: Int) : Mission {
                     Material.MANGROVE_PLANKS
                 )
             ) {
-                val currentCount = playerPlankPlacements.getOrDefault(player, 0) + 1
-                playerPlankPlacements[player] = currentCount
+                val currentCount = playerPlankPlacements.getOrDefault(player.uniqueId, 0) + 1
+                playerPlankPlacements[player.uniqueId] = currentCount
                 player.spigot()
                     .sendMessage(
                         ChatMessageType.ACTION_BAR,
@@ -46,7 +47,7 @@ class PlacePlanksMission(private val requiredCount: Int) : Mission {
 
     override fun onSuccess(player: Player) {
         player.addScoreboardTag("MissionSuccess")
-        playerPlankPlacements.remove(player) // 데이터 정리
+        playerPlankPlacements.remove(player.uniqueId) // 데이터 정리
     }
 
     override fun reset() {

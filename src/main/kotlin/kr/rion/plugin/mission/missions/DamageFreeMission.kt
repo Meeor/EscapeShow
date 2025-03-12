@@ -9,31 +9,32 @@ import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+import java.util.UUID
 
 class DamageFreeMission(
     private val durationSeconds: Int, // 미션 지속 시간 (초 단위)
     private val plugin: JavaPlugin
 ) : Mission {
-    private val lastDamageTimeMap = mutableMapOf<Player, Long>() // 플레이어별 마지막 데미지 시간
-    private val activePlayers = mutableSetOf<Player>() // 미션 활성화 중인 플레이어
+    private val lastDamageTimeMap = mutableMapOf<UUID, Long>() // 플레이어별 마지막 데미지 시간
+    private val activePlayers = mutableSetOf<UUID>() // 미션 활성화 중인 플레이어
 
     override fun missionStart(player: Player) {
-        activePlayers.add(player)
-        lastDamageTimeMap[player] = System.currentTimeMillis() // 현재 시간을 기록
+        activePlayers.add(player.uniqueId)
+        lastDamageTimeMap[player.uniqueId] = System.currentTimeMillis() // 현재 시간을 기록
 
         // 1초 간격으로 10분 동안 감시
         object : BukkitRunnable() {
             private var elapsedSeconds = 0
 
             override fun run() {
-                if (!activePlayers.contains(player)) {
+                if (!activePlayers.contains(player.uniqueId)) {
                     cancel() // 플레이어가 미션에서 제외되면 타이머 취소
                     return
                 }
 
                 elapsedSeconds++
 
-                val lastDamageTime = lastDamageTimeMap[player] ?: System.currentTimeMillis()
+                val lastDamageTime = lastDamageTimeMap[player.uniqueId] ?: System.currentTimeMillis()
                 val timeSinceLastDamage = (System.currentTimeMillis() - lastDamageTime) / 1000
 
                 if (timeSinceLastDamage >= durationSeconds) {
@@ -53,7 +54,7 @@ class DamageFreeMission(
             val entity = event.entity as? Player ?: return false
             if (entity == player) {
                 // 데미지를 받으면 마지막 시간 업데이트
-                lastDamageTimeMap[player] = System.currentTimeMillis()
+                lastDamageTimeMap[player.uniqueId] = System.currentTimeMillis()
                 player.spigot().sendMessage(
                     ChatMessageType.ACTION_BAR,
                     TextComponent("$MISSIONPREFIX §c데미지를 받아 미션진행시간이 초기화 되었습니다!")
@@ -65,8 +66,8 @@ class DamageFreeMission(
 
     override fun onSuccess(player: Player) {
         player.addScoreboardTag("MissionSuccess")
-        activePlayers.remove(player)
-        lastDamageTimeMap.remove(player)
+        activePlayers.remove(player.uniqueId)
+        lastDamageTimeMap.remove(player.uniqueId)
     }
 
     override fun reset() {

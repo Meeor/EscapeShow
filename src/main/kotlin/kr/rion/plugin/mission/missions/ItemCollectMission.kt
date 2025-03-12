@@ -8,16 +8,17 @@ import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
+import java.util.UUID
 
 class ItemCollectMission(private val targetItem: Material, private val requiredCount: Int) : Mission {
 
     // 플레이어별 현재 인벤토리 상태 및 누적 아이템 수 관리
-    private val currentInventoryCounts = mutableMapOf<Player, Int>()
-    private val totalCollectedCounts = mutableMapOf<Player, Int>()
+    private val currentInventoryCounts = mutableMapOf<UUID, Int>()
+    private val totalCollectedCounts = mutableMapOf<UUID, Int>()
 
     override fun missionStart(player: Player) {
-        currentInventoryCounts[player] = 0 // 초기화
-        totalCollectedCounts[player] = 0 // 초기화
+        currentInventoryCounts[player.uniqueId] = 0 // 초기화
+        totalCollectedCounts[player.uniqueId] = 0 // 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -29,13 +30,13 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
         }
 
         // 누적된 수집량이 조건을 충족했는지 확인
-        return (totalCollectedCounts[player] ?: 0) >= requiredCount
+        return (totalCollectedCounts[player.uniqueId] ?: 0) >= requiredCount
     }
 
     override fun onSuccess(player: Player) {
         player.addScoreboardTag("MissionSuccess")
-        currentInventoryCounts.remove(player) // 완료 후 데이터 정리
-        totalCollectedCounts.remove(player) // 완료 후 데이터 정리
+        currentInventoryCounts.remove(player.uniqueId) // 완료 후 데이터 정리
+        totalCollectedCounts.remove(player.uniqueId) // 완료 후 데이터 정리
     }
 
     override fun reset() {
@@ -51,19 +52,19 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
             .sumOf { it.amount } // 목표 아이템의 총 개수 계산
 
 
-        val previousInventoryCount = currentInventoryCounts.getOrDefault(player, 0)
+        val previousInventoryCount = currentInventoryCounts.getOrDefault(player.uniqueId, 0)
 
         if (currentInventoryCount > previousInventoryCount) {
             // 새로 추가된 아이템 계산
             val newlyCollected = currentInventoryCount - previousInventoryCount
 
             // 누적 수집량 업데이트
-            val previousTotal = totalCollectedCounts.getOrDefault(player, 0)
-            totalCollectedCounts[player] = previousTotal + newlyCollected
+            val previousTotal = totalCollectedCounts.getOrDefault(player.uniqueId, 0)
+            totalCollectedCounts[player.uniqueId] = previousTotal + newlyCollected
         }
 
         // 현재 상태 업데이트 (증가/감소 모두 반영)
-        currentInventoryCounts[player] = currentInventoryCount
+        currentInventoryCounts[player.uniqueId] = currentInventoryCount
     }
 
 
@@ -73,10 +74,10 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
         // 버린 아이템이 타겟 아이템인지 확인
         if (item.type == targetItem) {
             val droppedAmount = item.amount
-            val currentInventoryCount = currentInventoryCounts.getOrDefault(player, 0)
+            val currentInventoryCount = currentInventoryCounts.getOrDefault(player.uniqueId, 0)
 
             // 현재 인벤토리 상태에서 차감
-            currentInventoryCounts[player] = kotlin.math.max(0, currentInventoryCount - droppedAmount)
+            currentInventoryCounts[player.uniqueId] = kotlin.math.max(0, currentInventoryCount - droppedAmount)
         }
     }
 
@@ -85,10 +86,10 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
 
         // 섭취한 아이템이 타겟 아이템인지 확인
         if (item.type == targetItem) {
-            val currentInventoryCount = currentInventoryCounts.getOrDefault(player, 0)
+            val currentInventoryCount = currentInventoryCounts.getOrDefault(player.uniqueId, 0)
 
             // 섭취한 아이템 개수를 현재 상태에서 차감
-            currentInventoryCounts[player] = kotlin.math.max(0, currentInventoryCount - item.amount)
+            currentInventoryCounts[player.uniqueId] = kotlin.math.max(0, currentInventoryCount - item.amount)
         }
     }
 
@@ -100,10 +101,10 @@ class ItemCollectMission(private val targetItem: Material, private val requiredC
             // 주운 아이템이 타겟 아이템인지 확인
             if (item.type == targetItem) {
                 val pickedAmount = item.amount
-                val currentInventoryCount = currentInventoryCounts.getOrDefault(player, 0)
+                val currentInventoryCount = currentInventoryCounts.getOrDefault(player.uniqueId, 0)
 
                 // 현재 인벤토리 상태 업데이트
-                currentInventoryCounts[player] = currentInventoryCount + pickedAmount
+                currentInventoryCounts[player.uniqueId] = currentInventoryCount + pickedAmount
             }
         }
     }

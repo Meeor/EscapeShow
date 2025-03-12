@@ -7,9 +7,10 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.block.BlockBreakEvent
+import java.util.UUID
 
 class BreakPlanksMission(private val requiredCount: Int) : Mission {
-    private val playerPlankCounts = mutableMapOf<Player, Int>()
+    private val playerPlankCounts = mutableMapOf<UUID, Int>()
 
     // 나무 판자 종류를 정의
     private val plankMaterials = setOf(
@@ -25,15 +26,15 @@ class BreakPlanksMission(private val requiredCount: Int) : Mission {
     )
 
     override fun missionStart(player: Player) {
-        playerPlankCounts[player] = 0 // 초기화
+        playerPlankCounts[player.uniqueId] = 0 // 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
         if (event is BlockBreakEvent) {
             // 플레이어가 나무 판자 종류 중 하나를 캤는지 확인
             if (event.block.type in plankMaterials) {
-                val currentCount = playerPlankCounts.getOrDefault(player, 0) + 1
-                playerPlankCounts[player] = currentCount
+                val currentCount = playerPlankCounts.getOrDefault(player.uniqueId, 0) + 1
+                playerPlankCounts[player.uniqueId] = currentCount
                 player.spigot()
                     .sendMessage(
                         ChatMessageType.ACTION_BAR,
@@ -50,7 +51,7 @@ class BreakPlanksMission(private val requiredCount: Int) : Mission {
 
     override fun onSuccess(player: Player) {
         player.addScoreboardTag("MissionSuccess")
-        playerPlankCounts.remove(player) // 데이터 정리
+        playerPlankCounts.remove(player.uniqueId) // 데이터 정리
     }
 
     override fun reset() {
