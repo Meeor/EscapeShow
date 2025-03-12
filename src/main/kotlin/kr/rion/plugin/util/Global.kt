@@ -41,6 +41,7 @@ object Global {
     val processedPlayers = mutableSetOf<String>() // 이미 처리된 플레이어 저장
     val sneakingTimers = mutableMapOf<String, Int>() // 웅크리는 시간 추적
     var originalInventory = mutableMapOf<String, NBTCompoundList>()
+    var originalArmor = mutableMapOf<String, NBTCompoundList>()
 
 
     //부활시 아이템 복구를 위한 변수
@@ -279,6 +280,7 @@ object Global {
         MissionSuccessEscapePlayers.clear()
         reviveFlags.clear()
         originalInventory.clear()
+        originalArmor.clear()
     }
 
     fun PlayerAllReset() {

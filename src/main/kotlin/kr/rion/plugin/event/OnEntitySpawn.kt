@@ -8,6 +8,7 @@ import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.endingPlayer
+import kr.rion.plugin.util.Global.originalArmor
 import kr.rion.plugin.util.Global.originalInventory
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.prefix
@@ -51,7 +52,9 @@ class OnEntitySpawn : Listener {
                 return
             }
             val mainInventory = deathData.getCompoundList("MainInventory")
+            val armorInventory = deathData.getCompoundList("ArmorInventory") // 🔹 방어구 인벤토리 가져오기
             originalInventory[playerName] = mainInventory
+            originalArmor[playerName] = armorInventory
             if (!processedPlayers.contains(playerName)) createTextDisplay(corpseEntity, "§a부활")
             // 플레이어별 부활 플래그 초기화
             if (!reviveFlags.containsKey(playerName)) {
@@ -71,11 +74,13 @@ class OnEntitySpawn : Listener {
 
                 // MainInventory 데이터 확인 및 시체 엔티티 제거 조건
                 val mainInventory = deathData.getCompoundList("MainInventory")
+                val armorInventory = deathData.getCompoundList("ArmorInventory")
                 // ✅ 기존 저장된 인벤토리와 현재 시체 인벤토리를 비교하여 하나라도 사라졌는지 확인
                 val storedInventory = originalInventory[playerName] // 사망 시 저장된 인벤토리 가져오기
-                val isAnyItemTaken = storedInventory != null && storedInventory.any { originalItem ->
-                    !mainInventory.contains(originalItem) // ✅ 아이템이 하나라도 없어진 경우 감지
-                }
+                val storedArmor = originalArmor[playerName]
+                // ✅ 아이템이 하나라도 사라졌거나, 흉갑이 사라졌는지 확인
+                val isAnyItemTaken = (storedInventory != null && storedInventory.size > mainInventory.size) ||
+                        (storedArmor != null && storedArmor.any { it.getInteger("Slot") == 2 && it !in armorInventory })
 
 
                 if (isAnyItemTaken) {
