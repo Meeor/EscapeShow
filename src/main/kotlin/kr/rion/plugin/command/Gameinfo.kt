@@ -5,19 +5,19 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import java.io.File
 
-object gameinfo {
+object Gameinfo {
     fun handleGameInfo(sender: CommandSender){
         val file = File(Loader.instance.dataFolder, "message.txt")
 
         if (!file.exists()) {
             Bukkit.getLogger().warning("message.txt 파일을 찾을 수 없습니다!")
-            sender.sendMessage("message.txt 파일을 찾을 수 없습니다!")
+            sender.sendMessage("내용을 찾을수 없습니다. 운영자에게 문의하세요")
             return
         }
 
         val messages = file.readLines()
         sender.sendMessage("message.txt 파일을 찾았습니다. 순차적으로 안내 메세지 출력을 시작합니다.")
-        broadcastSequentialMessages(messages, 20L) // 1초 간격으로 출력
+        broadcastSequentialMessages(sender,messages, 20L) // 1초 간격으로 출력
     }
     fun handleItemInfo(sender: CommandSender){
         val file = File(Loader.instance.dataFolder, "Items.txt")
@@ -47,10 +47,10 @@ object gameinfo {
             sender.sendMessage(message)
         }
     }
-    fun broadcastSequentialMessages(messages: List<String>, intervalTicks: Long = 20L) {
+    fun broadcastSequentialMessages(sender: CommandSender ,messages: List<String>, intervalTicks: Long = 20L) {
         messages.forEachIndexed { index, message ->
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                Bukkit.broadcastMessage(message)
+                sender.sendMessage(message)
             }, index * intervalTicks)
         }
     }

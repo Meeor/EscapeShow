@@ -52,9 +52,9 @@ commands:
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
   게임안내:
-    description: 전체 플레이어에게 게임에대한 안내를 출력합니다.
+    description: 사용자에게 게임에대한 안내를 출력합니다.
     usage: /<command>
-    permission: default.op
+    permission: default.true
   아이템:
     description: 사용자에게 아이템에대한 설명을 출력합니다.
     usage: /<command>
