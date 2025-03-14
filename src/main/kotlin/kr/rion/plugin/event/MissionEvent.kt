@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 
 class MissionEvent : Listener {
@@ -36,6 +37,14 @@ class MissionEvent : Listener {
             // MissionManager에 이벤트 처리 요청
             MissionManager.handleEvent(player, event)
         }
+    }
+
+    @EventHandler(ignoreCancelled = false)
+    fun itemUse(event: PlayerInteractEvent) {
+        val player = event.player
+
+        // MissionManager에 이벤트 처리 요청
+        MissionManager.handleEvent(player, event)
     }
 
     @EventHandler(ignoreCancelled = false)

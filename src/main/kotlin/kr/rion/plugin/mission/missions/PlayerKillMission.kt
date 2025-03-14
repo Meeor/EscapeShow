@@ -6,13 +6,14 @@ import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.PlayerDeathEvent
-import java.util.UUID
+import java.util.*
 
 class PlayerKillMission(private val requiredKills: Int) : Mission {
     private val playerKillCounts = mutableMapOf<UUID, Int>()
 
     override fun missionStart(player: Player) {
-        playerKillCounts[player.uniqueId] = 0 // 초기화
+        val uuid = player.uniqueId
+        playerKillCounts[uuid] = 0 // 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -20,8 +21,9 @@ class PlayerKillMission(private val requiredKills: Int) : Mission {
             val killer = event.entity.killer ?: return false
 
             if (killer == player) {
-                val currentKills = playerKillCounts.getOrDefault(player.uniqueId, 0) + 1
-                playerKillCounts[player.uniqueId] = currentKills
+                val uuid = player.uniqueId
+                val currentKills = playerKillCounts.getOrDefault(uuid, 0) + 1
+                playerKillCounts[uuid] = currentKills
                 player.spigot()
                     .sendMessage(
                         ChatMessageType.ACTION_BAR,
@@ -37,8 +39,9 @@ class PlayerKillMission(private val requiredKills: Int) : Mission {
     }
 
     override fun onSuccess(player: Player) {
+        val uuid = player.uniqueId
         player.addScoreboardTag("MissionSuccess")
-        playerKillCounts.remove(player.uniqueId) // 데이터 정리
+        playerKillCounts.remove(uuid) // 데이터 정리
     }
 
     override fun reset() {

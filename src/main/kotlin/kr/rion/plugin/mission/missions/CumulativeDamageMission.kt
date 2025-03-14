@@ -6,13 +6,14 @@ import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import java.util.UUID
+import java.util.*
 
 class CumulativeDamageMission(private val requiredDamage: Double) : Mission {
     private val playerDamageMap = mutableMapOf<UUID, Double>() // 플레이어별 누적 데미지 추적
 
     override fun missionStart(player: Player) {
-        playerDamageMap[player.uniqueId] = 0.0 // 초기화
+        val uuid = player.uniqueId
+        playerDamageMap[uuid] = 0.0 // 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -20,9 +21,10 @@ class CumulativeDamageMission(private val requiredDamage: Double) : Mission {
             val damager = event.damager as? Player ?: return false
 
             if (damager == player) { // 미션 수행 중인 플레이어인지 확인
+                val uuid = player.uniqueId
                 if (event.entity is Player) { // 데미지를 받은 대상이 플레이어인지 확인
-                    val currentDamage = playerDamageMap.getOrDefault(player.uniqueId, 0.0) + event.damage
-                    playerDamageMap[player.uniqueId] = currentDamage
+                    val currentDamage = playerDamageMap.getOrDefault(uuid, 0.0) + event.damage
+                    playerDamageMap[uuid] = currentDamage
                     player.spigot()
                         .sendMessage(
                             ChatMessageType.ACTION_BAR,
@@ -41,8 +43,9 @@ class CumulativeDamageMission(private val requiredDamage: Double) : Mission {
 
 
     override fun onSuccess(player: Player) {
+        val uuid = player.uniqueId
         player.addScoreboardTag("MissionSuccess")
-        playerDamageMap.remove(player.uniqueId) // 데이터 정리
+        playerDamageMap.remove(uuid) // 데이터 정리
     }
 
     override fun reset() {

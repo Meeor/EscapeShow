@@ -8,7 +8,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.inventory.InventoryCloseEvent
-import java.util.UUID
+import java.util.*
 
 class WeaponAllCollect : Mission {
     // 필요한 아이템 목록
@@ -25,15 +25,17 @@ class WeaponAllCollect : Mission {
     private val collectedItemsMap = mutableMapOf<UUID, MutableMap<Material, Int>>()
 
     override fun missionStart(player: Player) {
-        collectedItemsMap[player.uniqueId] = mutableMapOf() // 플레이어 초기화
+        val uuid = player.uniqueId
+        collectedItemsMap[uuid] = mutableMapOf() // 플레이어 초기화
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
         if (event is InventoryCloseEvent) {
+            val uuid = player.uniqueId
             val inventory = player.inventory
 
             // 플레이어가 현재까지 수집한 아이템을 가져옴
-            val collectedItems = collectedItemsMap.getOrPut(player.uniqueId) { mutableMapOf() }
+            val collectedItems = collectedItemsMap.getOrPut(uuid) { mutableMapOf() }
 
             // 아이템을 확인하고 수량을 업데이트
             requiredItems.forEach { requiredItem ->
@@ -43,7 +45,7 @@ class WeaponAllCollect : Mission {
                 }
             }
 
-            collectedItemsMap[player.uniqueId] = collectedItems
+            collectedItemsMap[uuid] = collectedItems
 
             // 현재 상태를 액션바로 표시
             sendCollectionStatus(player, collectedItems.values.sum())
@@ -58,8 +60,9 @@ class WeaponAllCollect : Mission {
     }
 
     override fun onSuccess(player: Player) {
+        val uuid = player.uniqueId
         player.addScoreboardTag("MissionSuccess")
-        collectedItemsMap.remove(player.uniqueId) // 완료 후 데이터 정리
+        collectedItemsMap.remove(uuid) // 완료 후 데이터 정리
     }
 
     override fun reset() {

@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.UUID
+import java.util.*
 
 class ItemUsageMission(
     private val targetMaterial: Material, // 아이템 타입
@@ -22,7 +22,8 @@ class ItemUsageMission(
     private val playerUsageMap = mutableMapOf<UUID, Int>() // 플레이어별 사용 횟수 추적
 
     override fun missionStart(player: Player) {
-        playerUsageMap[player.uniqueId] = 0 // 초기 사용 횟수 설정
+        val uuid = player.uniqueId
+        playerUsageMap[uuid] = 0 // 초기 사용 횟수 설정
     }
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
@@ -47,8 +48,9 @@ class ItemUsageMission(
     }
 
     private fun incrementUsage(player: Player) {
-        val currentUsage = playerUsageMap.getOrDefault(player.uniqueId, 0) + 1
-        playerUsageMap[player.uniqueId] = currentUsage
+        val uuid = player.uniqueId
+        val currentUsage = playerUsageMap.getOrDefault(uuid, 0) + 1
+        playerUsageMap[uuid] = currentUsage
         player.spigot().sendMessage(
             ChatMessageType.ACTION_BAR,
             TextComponent("§d$targetMaterial §b아이템 사용 횟수: §e$currentUsage§b / §d$requiredUses")
@@ -56,12 +58,14 @@ class ItemUsageMission(
     }
 
     private fun isMissionCompleted(player: Player): Boolean {
-        return (playerUsageMap[player.uniqueId] ?: 0) >= requiredUses
+        val uuid = player.uniqueId
+        return (playerUsageMap[uuid] ?: 0) >= requiredUses
     }
 
     override fun onSuccess(player: Player) {
+        val uuid = player.uniqueId
         player.addScoreboardTag("MissionSuccess")
-        playerUsageMap.remove(player.uniqueId) // 플레이어 데이터 정리
+        playerUsageMap.remove(uuid) // 플레이어 데이터 정리
     }
 
     override fun reset() {

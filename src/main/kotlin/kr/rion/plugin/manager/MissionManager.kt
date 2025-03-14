@@ -3,6 +3,7 @@ package kr.rion.plugin.manager
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
 import org.bukkit.Bukkit
+import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -11,8 +12,8 @@ import java.util.*
 object MissionManager {
     val activeMissions = mutableMapOf<UUID, Int>()
     private val missionName = mapOf(
-        1 to "상자 100번열기",
-        2 to "상자 200번 열기",
+        1 to "통 100번열기",
+        2 to "통 200번 열기",
         3 to "단검 5개 얻기",
         4 to "철 15개 굽기",
         5 to "달콤한 열매 20개 얻기",
@@ -24,8 +25,8 @@ object MissionManager {
         11 to "맨손으로 플레이어 처치하기",
         12 to "돌멩이을 손에 들고 플레이어 처치하기",
         13 to "누적 40데미지 넣기",
-        14 to "갑옷 얻기",
-        15 to "강철 갑옷 얻기",
+        14 to "갑옷 조합 하기",
+        15 to "강철 갑옷 조합 하기",
         16 to "부활하기",
         17 to "시체 털기",
         18 to "가죽 30개 얻기",
@@ -51,7 +52,7 @@ object MissionManager {
             player.addScoreboardTag("MissionNo$randomMissionId")
             activeMissions[player.uniqueId] = randomMissionId
             mission.missionStart(player)
-            player.sendMessage("${MISSIONPREFIX}미션이 지급되었습니다.\n§b당신이 받은 미션은 : §e$missionName 입니다.")
+            player.sendMessage("${MISSIONPREFIX}미션이 지급되었습니다.\n§b당신이 받은 미션은 : §e${missionName[randomMissionId]} 입니다.")
         } else {
             player.sendMessage("${MISSIONPREFIX}등록되지 않은 미션이 확인되어 미션 지급이 취소되었습니다.")
         }
@@ -72,6 +73,7 @@ object MissionManager {
             mission.missionStart(player)
             player.sendMessage("${MISSIONPREFIX}미션이 성공적으로 부여되었습니다: ID $missionId")
             sender.sendMessage("${MISSIONPREFIX}미션이 성공적으로 부여되었습니다: ID $missionId")
+            player.sendMessage("${MISSIONPREFIX}미션이 지급되었습니다.\n§b당신이 받은 미션은 : §e${missionName[missionId]} 입니다.")
         } else {
             player.sendMessage("${MISSIONPREFIX}해당 미션을 찾을 수 없습니다: ID $missionId")
             sender.sendMessage("${MISSIONPREFIX}해당 미션을 찾을 수 없습니다: ID $missionId")
@@ -82,8 +84,7 @@ object MissionManager {
     fun removeMission(sender: CommandSender, player: Player) {
         // 플레이어에게 활성화된 미션이 있는지 확인
         val missionId = activeMissions[player.uniqueId]
-        player.removeScoreboardTag("MissionNo$missionId")
-        player.removeScoreboardTag("MissionSuccess")
+        player.scoreboardTags.clear()
         if (missionId != null) {
             activeMissions.remove(player.uniqueId)
             player.sendMessage("${MISSIONPREFIX}미션이 성공적으로 제거되었습니다: ID $missionId")
@@ -96,8 +97,8 @@ object MissionManager {
 
     // ID와 메시지를 매핑
     private val missionMessages = mapOf(
-        1 to "축하합니다! §d상자 §e100§b번 열기 미션을 완료하셨습니다!",
-        2 to "축하합니다! §d상자 §e200§b번 열기 미션을 완료하셨습니다!",
+        1 to "축하합니다! §d통 §e100§b번 열기 미션을 완료하셨습니다!",
+        2 to "축하합니다! §d통 §e200§b번 열기 미션을 완료하셨습니다!",
         3 to "축하합니다! §d단검 §e5§b개 얻기 미션을 완료하셨습니다!",
         4 to "축하합니다! §d철 §e15§b개 굽기 미션을 완료하셨습니다!",
         5 to "축하합니다! §d달콤한 열매 §e20§b개 얻기 미션을 완료하셨습니다!",
@@ -142,7 +143,7 @@ object MissionManager {
             player.sendMessage("$MISSIONPREFIX$successMessage")
             player.playSound(
                 player.location, // 플레이어 위치
-                "minecraft:ui.toast.challenge_complete", // 사운드 이름
+                Sound.UI_TOAST_CHALLENGE_COMPLETE, // 사운드 이름
                 1.0f, // 볼륨
                 1.0f // 피치
             )
