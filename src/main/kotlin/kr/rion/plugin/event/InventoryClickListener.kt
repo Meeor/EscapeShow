@@ -14,7 +14,6 @@ import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
 import kr.rion.plugin.gui.Giveitem.ItemGUI
-import kr.rion.plugin.gui.MainMenu
 import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.randomTP.RandomTpGUI
@@ -159,6 +158,7 @@ class InventoryClickListener : Listener {
                 hasCustomTag(meta, "game-player") -> {
                     event.isCancelled = true
                 }
+
                 hasCustomTag(meta, "team-pvp-true") || hasCustomTag(meta, "team-pvp-false") -> {
                     event.isCancelled = true
                     teamPvpBoolean = !teamPvpBoolean // ✅ 상태 반전 (true → false, false → true)

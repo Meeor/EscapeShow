@@ -1,6 +1,5 @@
 package kr.rion.plugin.event
 
-import de.tr7zw.nbtapi.NBTCompoundList
 import de.tr7zw.nbtapi.NBTEntity
 import kr.rion.plugin.Loader
 import kr.rion.plugin.customEvent.RevivalEvent
@@ -129,7 +128,7 @@ class OnEntitySpawn : Listener {
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
                     if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking && !nearbyPlayer.scoreboardTags.any {
-                            it in listOf("EscapeComplete", "death", "manager","MissionSuccessEscape","DeathAndAlive")
+                            it in listOf("EscapeComplete", "death", "manager", "MissionSuccessEscape", "DeathAndAlive")
                         }) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
                         sneakingTimers[playerName] = currentTime
@@ -258,7 +257,7 @@ class OnEntitySpawn : Listener {
 
         // 사망자 상태 확인
         if (player.scoreboardTags.any {
-                it in listOf("EscapeComplete", "death", "manager","MissionSuccessEscape","DeathAndAlive")
+                it in listOf("EscapeComplete", "death", "manager", "MissionSuccessEscape", "DeathAndAlive")
             }) {
             // 모드 엔티티인지 확인
             if (entity is com.mohistmc.bukkit.entity.MohistModsEntity) {

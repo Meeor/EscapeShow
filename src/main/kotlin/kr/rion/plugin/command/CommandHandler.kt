@@ -5,12 +5,12 @@ import kr.rion.plugin.command.Broadcast.handleBroadcast
 import kr.rion.plugin.command.Damage.handleDamage
 import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.GameEventCommand.handleEvent
-import kr.rion.plugin.command.Mission.HandleMission
-import kr.rion.plugin.command.Revive.handleRevive
-import kr.rion.plugin.command.game.handlegame
 import kr.rion.plugin.command.Gameinfo.handleCraftInfo
 import kr.rion.plugin.command.Gameinfo.handleGameInfo
 import kr.rion.plugin.command.Gameinfo.handleItemInfo
+import kr.rion.plugin.command.Mission.HandleMission
+import kr.rion.plugin.command.Revive.handleRevive
+import kr.rion.plugin.command.game.handlegame
 import org.bukkit.Location
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

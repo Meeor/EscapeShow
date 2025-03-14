@@ -151,7 +151,6 @@ object Teleport {
     }
 
 
-
     private fun isLocationCaveAir(loc: Location): Boolean {
         val block = loc.block
         // 해당 위치의 블록이 CAVE_AIR인지 확인
