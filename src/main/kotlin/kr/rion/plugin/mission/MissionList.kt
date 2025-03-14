@@ -21,42 +21,18 @@ object MissionList {
         MissionRegistry.registerMission(11, KillWithSpecificItemMission(Material.AIR)) //PlayerDeathEvent
         MissionRegistry.registerMission(12, KillWithSpecificItemMission(Material.FIREWORK_STAR)) //PlayerDeathEvent
         MissionRegistry.registerMission(13, CumulativeDamageMission(40.0)) //EntityDamageByEntityEvent
-        MissionRegistry.registerMission(
-            14,
-            CraftingMission(listOf(Material.IRON_CHESTPLATE to 1))
-        ) //inventoryClickEvent
-        MissionRegistry.registerMission(
-            15,
-            CraftingMission(listOf(Material.DIAMOND_CHESTPLATE to 1))
-        ) //inventoryClickEvent
+        MissionRegistry.registerMission(14, CraftingMission(listOf(Material.IRON_CHESTPLATE to 1))) //inventoryClickEvent
+        MissionRegistry.registerMission(15, CraftingMission(listOf(Material.DIAMOND_CHESTPLATE to 1))) //inventoryClickEvent
         MissionRegistry.registerMission(16, ReviveOnceMission())//RevivalEvent(CustomEvent)
         MissionRegistry.registerMission(17, StealItemsMission())//RevivalEvent(CustomEvent)
         MissionRegistry.registerMission(18, ItemCollectMission(Material.LEATHER, 30)) //inventoryCloseEvent
         MissionRegistry.registerMission(19, CumulativeHealingMission(20.0, Loader.instance)) //PlayerInteractEvent
-        MissionRegistry.registerMission(
-            20,
-            ItemUsageMission(Material.SKULL_BANNER_PATTERN, "contract", 3, Loader.instance)
-        ) //PlayerInteractEvent
-        MissionRegistry.registerMission(
-            21,
-            ItemUsageMission(Material.MOJANG_BANNER_PATTERN, "map", 3, Loader.instance)
-        ) //PlayerInteractEvent
-        MissionRegistry.registerMission(
-            22,
-            ItemUsageMission(Material.NETHER_BRICK, "gips", 5, Loader.instance)
-        ) //PlayerInteractEvent
-        MissionRegistry.registerMission(
-            23,
-            ItemUsageMission(Material.PAPER, "heal", 10, Loader.instance)
-        ) //PlayerInteractEvent
-        MissionRegistry.registerMission(
-            24,
-            ItemUsageMission(Material.PAPER, "heal", 15, Loader.instance)
-        ) //PlayerInteractEvent
-        MissionRegistry.registerMission(
-            25,
-            ItemUsageMission(Material.PAPER, "heal", 20, Loader.instance)
-        ) //PlayerInteractEvent
+        MissionRegistry.registerMission(20, ItemUsageMission(Material.SKULL_BANNER_PATTERN, "contract", 3, Loader.instance)) //PlayerInteractEvent
+        MissionRegistry.registerMission(21, ItemUsageMission(Material.MOJANG_BANNER_PATTERN, "map", 3, Loader.instance)) //PlayerInteractEvent
+        MissionRegistry.registerMission(22, ItemUsageMission(Material.NETHER_BRICK, "gips", 5, Loader.instance)) //PlayerInteractEvent
+        MissionRegistry.registerMission(23, ItemUsageMission(Material.PAPER, "heal", 10, Loader.instance)) //PlayerInteractEvent
+        MissionRegistry.registerMission(24, ItemUsageMission(Material.PAPER, "heal", 15, Loader.instance)) //PlayerInteractEvent
+        MissionRegistry.registerMission(25, ItemUsageMission(Material.PAPER, "heal", 20, Loader.instance)) //PlayerInteractEvent
         MissionRegistry.registerMission(26, CumulativeDamageTakenMission(20.0)) //EntityDamageByEntityEvent
         MissionRegistry.registerMission(27, DamageFreeMission(600, Loader.instance))
         MissionRegistry.registerMission(28, LastSurvivorMission())

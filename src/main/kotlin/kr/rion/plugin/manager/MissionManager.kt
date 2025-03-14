@@ -62,7 +62,7 @@ object MissionManager {
     fun assignSpecificMission(sender: CommandSender, player: Player, missionId: Int) {
         // 유효한 미션 ID 범위 확인
         if (missionId !in 1..28) {
-            sender.sendMessage("${MISSIONPREFIX}잘못된 미션 ID입니다. 유효한 범위는 1~15입니다.")
+            sender.sendMessage("${MISSIONPREFIX}잘못된 미션 ID입니다. 유효한 범위는 1~28입니다.")
             return
         }
         val mission = MissionRegistry.getMission(missionId)
@@ -131,7 +131,7 @@ object MissionManager {
         // 플레이어의 활성화된 미션 ID 확인
         val missionId = activeMissions[player.uniqueId] ?: return
         val mission = MissionRegistry.getMission(missionId) ?: return
-        if (missionId == 31) return
+        if (missionId == 28) return
 
         // 미션 성공 여부 확인
         if (mission.checkEventSuccess(player, event)) {
