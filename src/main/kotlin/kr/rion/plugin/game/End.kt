@@ -155,6 +155,6 @@ object End {
                 handleGameReset()
                 isStarting = false
             }, 20L * 10)
-        }, 20L * 15)
+        }, 20L * 20)
     }
 }
