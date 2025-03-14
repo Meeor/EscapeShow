@@ -21,7 +21,6 @@ import org.bukkit.*
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.scoreboard.Team
 
 
 object Start {
@@ -31,6 +30,7 @@ object Start {
 
     fun startAction() {
         GameAllReset()
+        TeamManager.resetTeam()
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
             Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 시작합니다.")
             TeamManager.random()
@@ -161,7 +161,7 @@ object Start {
         }.runTaskTimer(Loader.instance, 0L, 1L) // 1틱 간격으로 실행
     }
 
-    private fun startAction2(){
+    private fun startAction2() {
 
         isEnding = false
 
@@ -194,7 +194,8 @@ object Start {
                         // 플레이어 이름을 통해 실제 플레이어 객체를 가져옴
                         Bukkit.getPlayer(playerName)
                     }
-                    Bukkit.getLogger().info("[DEBUG] 팀: $team, 팀 플레이어 목록: ${teamplayers.joinToString(", ") { it.name }}")
+                    Bukkit.getLogger()
+                        .info("[DEBUG] 팀: $team, 팀 플레이어 목록: ${teamplayers.joinToString(", ") { it.name }}")
                     teleportTeamToRandomLocation(teamplayers)
                     Bukkit.getLogger().warning("[DEBUG] $team 이동 완료")
                 }
