@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender
 import java.io.File
 
 object Gameinfo {
-    fun handleGameInfo(sender: CommandSender){
+    fun handleGameInfo(sender: CommandSender) {
         val file = File(Loader.instance.dataFolder, "message.txt")
 
         if (!file.exists()) {
@@ -15,11 +15,14 @@ object Gameinfo {
             return
         }
 
-        val messages = file.readLines()
+        val messages = file.readText()
+            .replace("\\n", "\n")
+            .split("\n")
         sender.sendMessage("message.txt 파일을 찾았습니다. 순차적으로 안내 메세지 출력을 시작합니다.")
-        broadcastSequentialMessages(sender,messages, 20L) // 1초 간격으로 출력
+        broadcastSequentialMessages(sender, messages, 30L) // 1.5초 간격으로 출력
     }
-    fun handleItemInfo(sender: CommandSender){
+
+    fun handleItemInfo(sender: CommandSender) {
         val file = File(Loader.instance.dataFolder, "Items.txt")
 
         if (!file.exists()) {
@@ -28,12 +31,15 @@ object Gameinfo {
             return
         }
 
-        val messages = file.readLines()
-        messages.forEach {message ->
+        val messages = file.readText()
+            .replace("\\n", "\n")
+            .split("\n")
+        messages.forEach { message ->
             sender.sendMessage(message)
         }
     }
-    fun handleCraftInfo(sender: CommandSender){
+
+    fun handleCraftInfo(sender: CommandSender) {
         val file = File(Loader.instance.dataFolder, "Crafting.txt")
 
         if (!file.exists()) {
@@ -42,12 +48,15 @@ object Gameinfo {
             return
         }
 
-        val messages = file.readLines()
-        messages.forEach {message ->
+        val messages = file.readText()
+            .replace("\\n", "\n")
+            .split("\n")
+        messages.forEach { message ->
             sender.sendMessage(message)
         }
     }
-    fun broadcastSequentialMessages(sender: CommandSender ,messages: List<String>, intervalTicks: Long = 20L) {
+
+    fun broadcastSequentialMessages(sender: CommandSender, messages: List<String>, intervalTicks: Long = 20L) {
         messages.forEachIndexed { index, message ->
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 sender.sendMessage(message)
