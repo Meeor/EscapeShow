@@ -2,7 +2,6 @@ package kr.rion.plugin.manager
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.util.Global.prefix
-import kr.rion.plugin.util.Teleport
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.potion.PotionEffectType
@@ -32,10 +31,10 @@ object ChunkyManager {
                         val eventWorld = Bukkit.getWorld(event.world) // 이벤트의 월드를 Bukkit에서 가져옴
                         if (eventWorld != null && eventWorld == world) {
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
-                                for (player in eventWorld.players) {
+                                Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")
+                                for (player in Bukkit.getOnlinePlayers()) {
                                     player.removePotionEffect(PotionEffectType.BLINDNESS)
                                 }
-                                Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")
                             }, 100L)
                         }
                     }
