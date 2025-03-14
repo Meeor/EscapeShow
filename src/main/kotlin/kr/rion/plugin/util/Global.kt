@@ -1,7 +1,6 @@
 package kr.rion.plugin.util
 
 import de.tr7zw.nbtapi.NBTCompoundList
-import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End
 import kr.rion.plugin.game.End.EscapePlayers
 import kr.rion.plugin.game.End.MissionSuccessEscapePlayers
@@ -130,7 +129,7 @@ object Global {
                     player.scoreboardTags.clear()
                     MissionSuccessCount++
                     MissionSuccessEscapePlayers.add(player.name)
-                    Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하신것으로 처리되었습니다. ")
+                    Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이${ChatColor.AQUA}미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET} 처리되었습니다. ")
                     player.addScoreboardTag("MissionSuccessEscape")
                     removeDirectionBossBar(player)
                     player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
@@ -196,6 +195,11 @@ object Global {
                     Bukkit.getPlayer(it)?.addScoreboardTag("lastsuriver")
                 }
             }
+            End.EndAction()
+        } else if (remainingPlayers <= 0) {
+            if (!isEnding) return
+            endGame()
+            Bukkit.broadcastMessage("생존자가 없는것으로 확인되어 게임을 종료시킵니다.")
             End.EndAction()
         }
     }
@@ -284,7 +288,6 @@ object Global {
     }
 
     fun PlayerAllReset() {
-        val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
         for (player in Bukkit.getOnlinePlayers()) {
             if (!player.scoreboardTags.contains("manager")) {
                 // manager 태그가 없는 플레이어작업
@@ -298,11 +301,6 @@ object Global {
             for (effect in player.activePotionEffects) {
                 player.removePotionEffect(effect.type)
             }
-            val team = scoreboard?.getEntryTeam(player.name)
-            team?.removeEntry(player.name) // ✅ 팀에서 플레이어 제거 (색상 초기화)
-            player.customName = null // ✅ 머리 위 닉네임 리셋
-            player.setDisplayName(player.name)
-            player.setPlayerListName(player.name) // ✅ Tab 목록 닉네임 리셋
         }
     }
 
