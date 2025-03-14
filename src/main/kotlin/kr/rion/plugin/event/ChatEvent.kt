@@ -7,7 +7,6 @@ import kr.rion.plugin.manager.TeamManager.getTeamColorName
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerChatEvent
 
@@ -42,14 +41,14 @@ class ChatEvent : Listener {
 
             // 팀원에게 메시지 전송
             teamPlayers.forEach { teammateName ->
-                Bukkit.getPlayerExact(teammateName)?.sendMessage("§b[팀: $teamColorName] §f${player.name}: §7$message")
+                Bukkit.getPlayerExact(teammateName)?.sendMessage("§b팀: $teamColorName §f${player.name}: §7$message")
             }
 
             // "manager" 태그가 있는 관리자에게 팀 채팅을 보여줌
             Bukkit.getOnlinePlayers()
                 .filter { it.scoreboardTags.contains("manager") && !teamPlayers.contains(it.name) }
                 .forEach { manager ->
-                    manager.sendMessage("§e[관리자] §b[팀: $teamColorName] §f${player.name}: §7$message")
+                    manager.sendMessage("§e[관리자] §b팀: $teamColorName §f${player.name}: §7$message")
                 }
 
             // 콘솔에도 추가로 로그 표시
