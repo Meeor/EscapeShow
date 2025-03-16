@@ -23,7 +23,7 @@ class EscapePlayerEvent : Listener {
         val damager = event.damager
 
         // 공격자가 플레이어인지 확인
-        if (damager is Player && damager.gameMode == GameMode.ADVENTURE && listOf(
+        if (damager is Player && listOf(
                 "EscapeComplete",
                 "DeathAndAlive",
                 "MissionSuccessEscape"
@@ -39,7 +39,7 @@ class EscapePlayerEvent : Listener {
     fun onDamage(event: EntityDamageEvent) {
         if (event.entity is Player) {
             val player = event.entity as Player
-            if (player.gameMode == GameMode.ADVENTURE && listOf(
+            if (listOf(
                     "EscapeComplete",
                     "DeathAndAlive",
                     "MissionSuccessEscape"
@@ -55,7 +55,7 @@ class EscapePlayerEvent : Listener {
     fun onPlayerDropItem(event: PlayerDropItemEvent) {
         val player = event.player
 
-        if (player.gameMode == GameMode.ADVENTURE && listOf(
+        if (listOf(
                 "EscapeComplete",
                 "DeathAndAlive",
                 "MissionSuccessEscape"
@@ -70,7 +70,7 @@ class EscapePlayerEvent : Listener {
     fun onPlayerPickupItem(event: EntityPickupItemEvent) {
         val player = event.entity as? Player ?: return
 
-        if (player.gameMode == GameMode.ADVENTURE && listOf(
+        if (listOf(
                 "EscapeComplete",
                 "DeathAndAlive",
                 "MissionSuccessEscape"
@@ -86,7 +86,7 @@ class EscapePlayerEvent : Listener {
         val player = event.player
 
         // 탈출 플레이어인지 확인
-        if (player.gameMode == GameMode.ADVENTURE && listOf(
+        if (listOf(
                 "EscapeComplete",
                 "DeathAndAlive",
                 "MissionSuccessEscape"
