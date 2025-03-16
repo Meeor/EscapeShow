@@ -3,6 +3,7 @@ package kr.rion.plugin.mission.missions
 import kr.rion.plugin.mission.Mission
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -18,6 +19,7 @@ class CumulativeDamageTakenMission(private val requiredDamage: Double) : Mission
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
         if (event is EntityDamageByEntityEvent) {
+            Bukkit.getLogger().info("[미션 디버그] ${player.name}이(가) 데미지를 받거나 주었습니다. event.entity=${event.entity}, event.damager=${event.damager}")
             val target = event.entity as? Player ?: return false // 데미지를 받은 대상이 플레이어인지 확인
 
             if (target == player) { // 미션 수행 중인 플레이어인지 확인
