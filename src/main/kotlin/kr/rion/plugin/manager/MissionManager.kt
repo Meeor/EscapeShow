@@ -165,8 +165,8 @@ object MissionManager {
             player.sendMessage("$MISSIONPREFIX$successMessage")
             player.playSound(
                 player.location, // 플레이어 위치
-                "minecraft:ui.toast.challenge_complete", // 사운드 이름
-                1.0f, // 볼륨
+                Sound.UI_TOAST_CHALLENGE_COMPLETE, // 사운드 이름
+                0.2f, // 볼륨
                 1.0f // 피치
             )
 
