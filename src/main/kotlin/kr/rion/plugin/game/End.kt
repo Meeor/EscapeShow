@@ -86,8 +86,7 @@ object End {
                         }
 
                         else -> {
-                            player.health = 0.0 // ✅ 즉시 사망 처리 (새로운 사망자만)
-                            player.addScoreboardTag("death") // ✅ 생존 팀에서 제외되도록 태그 추가
+                            //생존자 팀 반환할수있게 남은사람 처리 X
                         }
                     }
                 }
@@ -109,9 +108,10 @@ object End {
             })
 
             // 생존한 팀 목록 가져오기
-            val survivingTeams = getSurvivorTeams().joinToString(", ") { team ->
+            val survivingTeams = getSurvivorTeams()?.joinToString(", ") { team ->
                 "${ChatColor.GOLD}${ChatColor.BOLD}${ChatColor.UNDERLINE}$team${ChatColor.RESET}"
-            }
+            } ?: "없음"
+
 
             // 탈출한 플레이어 출력
             val escapePlayersMessage = if (EscapePlayers.isNotEmpty()) {
