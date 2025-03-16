@@ -4,12 +4,10 @@ import kr.rion.plugin.mission.Mission
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.*
@@ -40,22 +38,14 @@ class CumulativeHealingMission(
     }
 
     private fun isHealingItem(item: ItemStack): Boolean {
-        val meta = item.itemMeta ?: return false
-        val data = meta.persistentDataContainer
-
-        // 아이템별 커스텀 태그 키 정의
-        val validItems = mapOf(
-            Material.NETHER_BRICK to "gips",
-            Material.PAPER to "heal",
-            Material.GLOW_BERRIES to "berries"
+        // ✅ 커스텀 태그 검사를 제거하고, 아이템 타입만 확인
+        val validHealingItems = setOf(
+            Material.NETHER_BRICK,
+            Material.PAPER,
+            Material.GLOW_BERRIES
         )
 
-        // 아이템이 지정된 목록에 포함되지 않으면 false 반환
-        val tagKey = validItems[item.type] ?: return false
-
-        // 지정된 태그 확인
-        val namespacedKey = NamespacedKey(plugin, tagKey)
-        return data.has(namespacedKey, PersistentDataType.STRING)
+        return validHealingItems.contains(item.type)
     }
 
     private fun activateHealingDetection(player: Player) {
