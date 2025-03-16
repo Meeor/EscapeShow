@@ -10,11 +10,12 @@ class IronMeltEvent(
     val item: ItemStack
 ) : Event() {
     companion object {
-        private val handlers = HandlerList()
-
+        private val handlerList = HandlerList()
         @JvmStatic
-        fun getHandlerList() = handlers
+        fun getHandlerList(): HandlerList = handlerList
+    }
+    override fun getHandlers(): HandlerList {
+        return handlerList // ✅ 올바른 방식
     }
 
-    override fun getHandlers(): HandlerList = handlers
 }
