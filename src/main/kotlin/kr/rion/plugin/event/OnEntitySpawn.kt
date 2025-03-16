@@ -68,6 +68,7 @@ class OnEntitySpawn : Listener {
             val task = Bukkit.getScheduler().runTaskTimer(Loader.instance, Runnable {
                 if (processedPlayers.contains(playerName)) {
                     respawnTask.remove(playerName)?.cancel() // 이미 처리된 플레이어라면 타이머 종료
+                    Bukkit.getLogger().info("[$playerName] 이미 부활 처리됨 - 타이머 종료")
                     return@Runnable
                 }
 
@@ -88,7 +89,6 @@ class OnEntitySpawn : Listener {
                     reviveFlags[playerName] = false // 부활 불가능 상태로 변경
                     respawnTask.remove(playerName)?.cancel()
                     removeTextDisplay(corpseEntity)
-                    corpseEntity.remove()
                     // 인벤토리 초기화 및 관전 모드로 변경
                     val player = Bukkit.getPlayer(playerName) ?: return@Runnable
                     val closestPlayer = getClosestPlayer(corpseEntity, 20.0) // 시체 근처 가장 가까운 사람 추적
@@ -127,7 +127,11 @@ class OnEntitySpawn : Listener {
                     corpseEntity.location.world?.getNearbyEntities(corpseEntity.location, 1.5, 2.5, 1.5)
                 val nearbyPlayers = nearbyEntities?.filterIsInstance<Player>() ?: emptyList()
                 for (nearbyPlayer in nearbyPlayers) {
-                    if (nearbyPlayer.name != playerName && nearbyPlayer.isSneaking && !nearbyPlayer.scoreboardTags.any {
+                    if (nearbyPlayer.name == playerName) {
+                        // 🔹 시체 주인이 근처에 있을 경우 타이머 초기화 방지
+                        continue
+                    }
+                    if (nearbyPlayer.isSneaking && !nearbyPlayer.scoreboardTags.any {
                             it in listOf("EscapeComplete", "death", "manager", "MissionSuccessEscape", "DeathAndAlive")
                         }) {
                         val currentTime = sneakingTimers.getOrDefault(playerName, 0) + 1
@@ -193,6 +197,7 @@ class OnEntitySpawn : Listener {
                             respawnTask.remove(playerName)?.cancel()
                             val corpseEntityloc = corpseEntity.location
                             player.teleport(corpseEntityloc)
+                            Bukkit.getLogger().info("[$playerName] 시체 엔티티가 삭제됨 - 타이머 종료")
                             corpseEntity.remove() // 시체 엔티티 제거
                             Bukkit.getPluginManager()
                                 .callEvent(RevivalEvent(player, nearbyPlayer, RevivalEventType.SUCCESS))
@@ -202,6 +207,7 @@ class OnEntitySpawn : Listener {
                         timerReset(playerName) // 웅크리지 않으면 시간 초기화
                     }
                 }
+                Bukkit.getLogger().info("[$playerName] 부활 검사 진행 중...")
             }, 20L, 20L) // 매초마다 체크
             respawnTask[playerName] = task
         }
