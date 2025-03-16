@@ -41,18 +41,18 @@ class ChatEvent : Listener {
 
             // 팀원에게 메시지 전송
             teamPlayers.forEach { teammateName ->
-                Bukkit.getPlayerExact(teammateName)?.sendMessage("§b팀: $teamColorName §f${player.name}: §7$message")
+                Bukkit.getPlayerExact(teammateName)?.sendMessage("§b팀: $teamColorName§f${player.name}: §7$message")
             }
 
             // "manager" 태그가 있는 관리자에게 팀 채팅을 보여줌
             Bukkit.getOnlinePlayers()
                 .filter { it.scoreboardTags.contains("manager") && !teamPlayers.contains(it.name) }
                 .forEach { manager ->
-                    manager.sendMessage("§e[관리자] §b팀: $teamColorName §f${player.name}: §7$message")
+                    manager.sendMessage("§e[관리자] §b팀: $teamColorName§f${player.name}: §7$message")
                 }
 
             // 콘솔에도 추가로 로그 표시
-            Bukkit.getLogger().info("[팀채팅][$teamName] ${player.name}: $message")
+            Bukkit.getLogger().info("[팀채팅][$teamName]${player.name}: $message")
 
             event.isCancelled = true // 팀채팅 완료 후 이벤트 취소
         } else {
