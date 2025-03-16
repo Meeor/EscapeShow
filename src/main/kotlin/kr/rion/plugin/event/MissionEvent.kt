@@ -1,8 +1,10 @@
 package kr.rion.plugin.event
 
+import kr.rion.plugin.Loader
 import kr.rion.plugin.customEvent.IronMeltEvent
 import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.manager.MissionManager
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -17,6 +19,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
+import org.bukkit.metadata.FixedMetadataValue
 
 class MissionEvent : Listener {
     @EventHandler(ignoreCancelled = false)
@@ -108,12 +111,25 @@ class MissionEvent : Listener {
         val player = event.relatedPlayer
         val targetPlayer = event.player
 
-        // 두 플레이어가 모두 유효한 경우에만 처리
-        if (player != null) {
-            MissionManager.handleEvent(player, event) // 관련 플레이어에 대해 미션 처리
-            MissionManager.handleEvent(targetPlayer, event) // 대상 플레이어에 대해 미션 처리
-        }
+        // ✅ 이벤트 중복 실행 방지
+        if (player?.hasMetadata("RevivalEventProcessed") == true) return
+        if (targetPlayer.hasMetadata("RevivalEventProcessed")) return
+
+        // ✅ 중복 실행 방지를 위한 태그 추가
+        player?.setMetadata("RevivalEventProcessed", FixedMetadataValue(Loader.instance, true))
+        targetPlayer.setMetadata("RevivalEventProcessed", FixedMetadataValue(Loader.instance, true))
+
+        // ✅ 미션 처리
+        MissionManager.handleEvent(player ?: return, event)
+        MissionManager.handleEvent(targetPlayer, event)
+
+        // 일정 시간 후 다시 부활 가능하도록 설정 (메모리 관리)
+        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+            player.removeMetadata("RevivalEventProcessed", Loader.instance)
+            targetPlayer.removeMetadata("RevivalEventProcessed", Loader.instance)
+        }, 100L) // 5초 후 초기화 (원하는 시간으로 조정 가능)
     }
+
 
     @EventHandler
     fun ironMelt(event: IronMeltEvent) {
