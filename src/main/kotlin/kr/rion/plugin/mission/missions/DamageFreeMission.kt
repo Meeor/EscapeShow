@@ -15,35 +15,26 @@ class DamageFreeMission(
     private val durationSeconds: Int, // 미션 지속 시간 (초 단위)
     private val plugin: JavaPlugin
 ) : Mission {
-    private val lastDamageTimeMap = mutableMapOf<UUID, Long>() // 플레이어별 마지막 데미지 시간
-    private val activePlayers = mutableSetOf<UUID>() // 미션 활성화 중인 플레이어
+    private val lastDamageTimeMap = mutableMapOf<UUID, Long>() // 마지막 데미지 시간
+    private val activePlayers = mutableSetOf<UUID>() // 현재 미션 진행 중인 플레이어
 
     override fun missionStart(player: Player) {
         val uuid = player.uniqueId
         activePlayers.add(uuid)
-        lastDamageTimeMap[uuid] = System.currentTimeMillis() // 현재 시간을 기록
+        lastDamageTimeMap[uuid] = System.currentTimeMillis() // 현재 시간으로 초기화
 
-        // 1초 간격으로 10분 동안 감시
         object : BukkitRunnable() {
-            private var elapsedSeconds = 0
-
             override fun run() {
                 if (!activePlayers.contains(uuid)) {
-                    cancel() // 플레이어가 미션에서 제외되면 타이머 취소
+                    cancel() // 미션 진행 중이 아니면 타이머 종료
                     return
                 }
-
-                elapsedSeconds++
 
                 val lastDamageTime = lastDamageTimeMap[uuid] ?: System.currentTimeMillis()
                 val timeSinceLastDamage = (System.currentTimeMillis() - lastDamageTime) / 1000
 
                 if (timeSinceLastDamage >= durationSeconds) {
-                    onSuccess(player) // 10분 동안 데미지를 받지 않았으면 성공 처리
-                    cancel()
-                }
-
-                if (elapsedSeconds >= durationSeconds) {
+                    onSuccess(player) // 지정된 시간 동안 데미지를 안 받으면 성공 처리
                     cancel()
                 }
             }
@@ -52,30 +43,29 @@ class DamageFreeMission(
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
         if (event is EntityDamageByEntityEvent) {
-            val entity = event.entity as? Player ?: return false
-            if (entity == player) {
-                val uuid = player.uniqueId
-                // 데미지를 받으면 마지막 시간 업데이트
-                lastDamageTimeMap[uuid] = System.currentTimeMillis()
+            val uuid = player.uniqueId
+            if (activePlayers.contains(uuid)) { // 현재 미션 진행 중인 경우만 처리
+                lastDamageTimeMap[uuid] = System.currentTimeMillis() // 데미지 받으면 시간 초기화
                 player.spigot().sendMessage(
                     ChatMessageType.ACTION_BAR,
-                    TextComponent("$MISSIONPREFIX §c데미지를 받아 미션진행시간이 초기화 되었습니다!")
+                    TextComponent("$MISSIONPREFIX §c데미지를 받아 미션 진행 시간이 초기화되었습니다!")
                 )
             }
         }
-        return false
+        return false // 미션은 계속 진행됨
     }
 
     override fun onSuccess(player: Player) {
         val uuid = player.uniqueId
+        if (!activePlayers.contains(uuid)) return // 이미 완료된 경우 중복 실행 방지
+
         player.addScoreboardTag("MissionSuccess")
-        activePlayers.remove(uuid)
+        activePlayers.remove(uuid) // 미션 성공 후 목록에서 제거
         lastDamageTimeMap.remove(uuid)
     }
 
     override fun reset() {
-        // 모든 플레이어의 데이터 초기화
-        activePlayers.clear()
+        activePlayers.clear() // 모든 미션 데이터 초기화
         lastDamageTimeMap.clear()
     }
 }
