@@ -57,7 +57,7 @@ object TeamManager {
         Bukkit.getOnlinePlayers().forEach { player ->
             val teamName = teams.entries.find { it.value.contains(player.name) }?.key ?: "알 수 없음"
             val teamColor = scoreboard?.getTeam(teamName)?.prefix ?: ChatColor.WHITE
-            player.sendMessage("$prefix ${ChatColor.GREEN}✅ 당신은 ${teamColor}$teamName${ChatColor.GREEN} 팀에 배정되었습니다!")
+            player.sendMessage("$prefix ${ChatColor.GREEN}✅ 당신은 ${teamColor}${ChatColor.GREEN} 팀에 배정되었습니다!")
         }
 
         // ✅ 전체 공지 메시지 출력
@@ -123,8 +123,7 @@ object TeamManager {
         }
     }
 
-    /** 🔹 생존한 팀들의 목록 반환 (팀 색상 포함) */
-    fun getSurvivorTeams(): List<String> {
+    fun getSurvivorTeams(): List<String>? {
         val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
 
         return teams.entries.filter { (_, members) ->
@@ -136,8 +135,9 @@ object TeamManager {
             val team = scoreboard?.getTeam(teamName) // ✅ Scoreboard에서 팀 정보 가져오기
             val teamColor = team?.prefix ?: "§f" // ✅ 팀 색상 적용 (없으면 기본 흰색)
             "$teamColor$teamName" // ✅ 색상 적용된 팀 이름 반환
-        }
+        }.takeIf { it.isNotEmpty() } // ✅ 리스트가 비어 있으면 null 반환
     }
+
 
 
     /** 🔹 두 플레이어가 같은 팀인지 확인 */
