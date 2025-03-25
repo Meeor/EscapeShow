@@ -2,7 +2,6 @@ package kr.rion.plugin.gui
 
 import kr.rion.plugin.game.Start.isStart
 import kr.rion.plugin.game.Start.isStarting
-import kr.rion.plugin.manager.TeamManager.teamPvpBoolean
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.MissionEscapeMaxCount
 import kr.rion.plugin.util.Global.teamsMaxPlayers
@@ -55,14 +54,14 @@ object MainMenu {
             createCustomItem(eventguiName, eventguiLore, Material.MAGMA_BLOCK, persistentDataKey = "game-event")
 
         //랜덤티피창
-        val randomtpName = "${ChatColor.GREEN}랜덤티피"
-        val randomtpLore = listOf(
-            "랜덤티피 메뉴로 이동합니다.",
+        val settingName = "${ChatColor.GREEN}게임설정"
+        val settingLore = listOf(
+            "게임설정 메뉴로 이동합니다.",
             "",
-            "설정되어있는 랜덤티피에 관련된 메뉴입니다."
+            "게임방식및 설정에 관련된 메뉴입니다."
         )
-        val randomtp =
-            createCustomItem(randomtpName, randomtpLore, Material.BEACON, persistentDataKey = "game-randomtp")
+        val setting =
+            createCustomItem(settingName, settingLore, Material.BEACON, persistentDataKey = "game-setting")
 
         //리셋창
         val resetGUIName = "${ChatColor.RED}리셋"
@@ -79,8 +78,6 @@ object MainMenu {
         val doorName = "${ChatColor.GREEN}대기실 문"
         val doorLore = listOf("대기실 문을 열거나 닫습니다.")
         val dooritem = createCustomItem(doorName, doorLore, Material.OAK_FENCE, persistentDataKey = "game-door")
-
-        val teampvpItem = createTeamPvpItem(teamPvpBoolean)
 
         val MaxplayerName = "${ChatColor.AQUA}설정된 인원수"
         val MaxplayerLore = listOf(
@@ -101,9 +98,8 @@ object MainMenu {
         gui.setItem(5, notitem)
         gui.setItem(7, giveitem)
         gui.setItem(11, eventGUI)
-        gui.setItem(13, randomtp)
+        gui.setItem(13, setting)
         gui.setItem(15, resetGUI)
-        gui.setItem(18, teampvpItem)
         gui.setItem(22, dooritem)
         gui.setItem(26, Maxplayer)
         player.openInventory(gui) // 인벤토리열기
@@ -143,23 +139,7 @@ object MainMenu {
         }
     }
 
-    private fun createTeamPvpItem(isPvpEnabled: Boolean): ItemStack {
-        return if (isPvpEnabled) {
-            createCustomItem(
-                "${ChatColor.GREEN}팀 PVP 허용",
-                listOf("클릭 시 팀 PVP를 금지합니다."),
-                Material.GREEN_WOOL,
-                persistentDataKey = "team-pvp-true"
-            )
-        } else {
-            createCustomItem(
-                "${ChatColor.RED}팀 PVP 금지",
-                listOf("클릭 시 팀 PVP를 허용합니다."),
-                Material.RED_WOOL,
-                persistentDataKey = "team-pvp-false"
-            )
-        }
-    }
+
 }
 
 
