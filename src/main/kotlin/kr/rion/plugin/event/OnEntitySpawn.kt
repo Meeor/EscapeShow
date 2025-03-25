@@ -6,6 +6,7 @@ import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.originalArmor
 import kr.rion.plugin.util.Global.originalInventory
@@ -17,6 +18,7 @@ import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Global.sneakingTimers
 import kr.rion.plugin.util.Global.timerReset
 import kr.rion.plugin.util.Item.createCustomItem
+import kr.rion.plugin.util.delay
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Entity
@@ -37,6 +39,7 @@ class OnEntitySpawn : Listener {
     @EventHandler
     fun onEntitySpawn(event: EntitySpawnEvent) {
         if (!isStarting || isEnding) return
+        if (!TeamGame) return
         val entity = event.entity
 
         // MohistModsEntity 감지
@@ -61,9 +64,9 @@ class OnEntitySpawn : Listener {
             }
 
             // 30초 후 부활 불가능 처리
-            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+            delay.delayRun(600) {
                 reviveFlags[playerName] = false // 부활 불가능 상태로 변경
-            }, 600L) // 30초 = 600 ticks
+            } // 30초 = 600 ticks
 
             val task = Bukkit.getScheduler().runTaskTimer(Loader.instance, Runnable {
                 if (processedPlayers.contains(playerName)) {
