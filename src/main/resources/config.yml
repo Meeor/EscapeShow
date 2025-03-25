@@ -10,3 +10,6 @@ helicopterfindattempt: 100
 
 # 팀에 최대 들어갈수있는 인원수 제한
 teamsMaxPlayers : 3
+
+# 팀전에서 미션성공시 공격력 증가하는 량
+damagebuff : 3.0
