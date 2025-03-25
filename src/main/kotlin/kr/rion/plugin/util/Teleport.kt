@@ -1,9 +1,9 @@
 package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.manager.TeamManager
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.Global.prefix
+import kr.rion.plugin.util.delay.delayForEachPlayer
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -21,9 +21,7 @@ object Teleport {
 
     private lateinit var plugin: JavaPlugin
     lateinit var safeLocations: MutableList<Location>
-    private val designatedWorldName = "lobby"
     private val destinationWorldName = "game"
-    private var designatedWorld: World? = null
     private var destinationWorld: World? = null
     val console = Bukkit.getServer().consoleSender
     val immunePlayers = mutableSetOf<Player>() // 플레이어와 면역 시간 맵
@@ -41,7 +39,7 @@ object Teleport {
         }, 20L) // 20틱 (1초) 지연
     }
 
-    fun initializeSafeLocations() {
+    fun initializeSafeLocations(teamcount: Int) {
 
         destinationWorld = worldManager?.getMultiverseWorld(destinationWorldName)
 
@@ -67,7 +65,6 @@ object Teleport {
         val radius = 326 // 반경 326 블록
         val minY = 53  // 최소 Y 좌표
         val maxY = 97  // 최대 Y 좌표
-        val teamcount = TeamManager.getTeamCount()
 
         val requiredSafeLocations = 5 + teamcount // 목표: 60개
         val maxAttempts = 1000000 // 시도 횟수 제한 (필요에 따라 조정 가능)
@@ -93,20 +90,8 @@ object Teleport {
         }
 
         val endTime = System.currentTimeMillis()
-        Bukkit.broadcastMessage("$prefix 팀들이 이동될 좌표를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
+        Bukkit.broadcastMessage("$prefix 플레이어들이 이동될 좌표를 찾았습니다. 걸린시간 : ${ChatColor.LIGHT_PURPLE}${endTime - startTime}ms")
         hasInitializedSafeLocations = true
-    }
-
-
-    fun isInDesignatedArea(loc: Location): Boolean {
-        designatedWorld = worldManager?.getMultiverseWorld(designatedWorldName)
-        val world = loc.world ?: return false
-        if (world != designatedWorld) {
-            return false
-        }
-        return loc.x in -69.0..11.0 &&
-                loc.y in 124.0..124.0 &&
-                loc.z in -40.0..40.0
     }
 
     fun teleportTeamToRandomLocation(players: List<Player>) {
@@ -132,21 +117,51 @@ object Teleport {
             targetChunk.load()  // 청크 강제 로드
         }
 
-        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
-            try {
-                for (player in players) {
-                    player.teleport(safeLocation)
-                }
-
+        delayForEachPlayer(
+            players,
+            action = { player ->
+                player.teleport(safeLocation)
+            },
+            onComplete = {
                 // 텔레포트 완료 후 중앙 위치 제거
                 safeLocations.remove(safeLocation)
 
                 val endTime = System.currentTimeMillis()
-                console.sendMessage("$prefix 팀 텔레포트 지연시간: ${endTime - startTime}ms")
-
-            } catch (e: Exception) {
-                console.sendMessage("$prefix 텔레포트 중 오류가 발생했습니다: ${e.message}")
+                console.sendMessage("$prefix 텔레포트 지연시간: ${endTime - startTime}ms")
             }
+        )
+    }
+
+    fun teleportSoleToRandomLocation(player: Player) {
+        Bukkit.getLogger().warning("[DEBUG] 함수 호출됨.")
+        if (!hasInitializedSafeLocations) {
+            player.sendMessage("$prefix 안전한 좌표가 초기화되지 않았습니다. 나중에 다시 시도해주세요.")
+
+            Bukkit.getLogger().warning("[DEBUG] 안전한 좌표가 초기화되지 않았습니다. 나중에 다시 시도해주세요.")
+            return
+        }
+
+        val startTime = System.currentTimeMillis()
+        val safeLocation = safeLocations.randomOrNull()
+
+        if (safeLocation == null) {
+            console.sendMessage("$prefix 좌표를 찾을 수 없습니다. 재설정을 해주세요.")
+            player.sendMessage("$prefix 저장된 좌표값이 없어 이동에 실패하였습니다.\n$prefix 운영자에게 좌표설정을 부탁하시길 바랍니다.")
+            return
+        }
+
+        val targetChunk = safeLocation.chunk
+        if (!targetChunk.isLoaded) {
+            targetChunk.load()  // 청크 강제 로드
+        }
+
+        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+            player.teleport(safeLocation)
+            // 텔레포트 완료 후 중앙 위치 제거
+            safeLocations.remove(safeLocation)
+
+            val endTime = System.currentTimeMillis()
+            console.sendMessage("$prefix 팀 텔레포트 지연시간: ${endTime - startTime}ms")
         })
     }
 

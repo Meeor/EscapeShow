@@ -7,6 +7,7 @@ import kr.rion.plugin.manager.TeamManager
 import kr.rion.plugin.util.Global.GameAllReset
 import kr.rion.plugin.util.Global.GameAllReset2
 import kr.rion.plugin.util.Global.PlayerAllReset
+import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
@@ -16,7 +17,9 @@ import kr.rion.plugin.util.TPSManager
 import kr.rion.plugin.util.Teleport.immunePlayers
 import kr.rion.plugin.util.Teleport.initializeSafeLocations
 import kr.rion.plugin.util.Teleport.stopPlayer
+import kr.rion.plugin.util.Teleport.teleportSoleToRandomLocation
 import kr.rion.plugin.util.Teleport.teleportTeamToRandomLocation
+import kr.rion.plugin.util.delay
 import org.bukkit.*
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -29,26 +32,70 @@ object Start {
     private val worldWait = Bukkit.getWorld("vip")
 
     fun startAction() {
+        if (TeamGame) {
+            Bukkit.broadcastMessage("$prefix 설정된 게임방식 : §e팀전")
+            delay.delayRun(20) {
+                startTeamAction()
+            }
+        } else {
+            Bukkit.broadcastMessage("$prefix 설정된 게임방식 : §e개인전")
+            delay.delayRun(20) {
+                startSoleAction()
+            }
+        }
+    }
+
+    fun startSoleAction() {
+        GameAllReset()
+        delay.delayRun(20){
+            initializeSafeLocations(Bukkit.getOnlinePlayers().size)//랜덤좌표 설정
+            delay.delayRun(30) {
+                isStart = true
+                delay.delayForEachPlayer(
+                    Bukkit.getOnlinePlayers(),
+                    action = { player ->
+                        player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
+                        if (!player.scoreboardTags.contains("manager")) {
+                            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300, 1, false, false))
+                            stopPlayer[player] = true
+                            immunePlayers.add(player)
+                        }
+                    },
+                    onComplete = {
+                        executeBlockFillingAndEffect()
+                    }
+                )
+            }
+        }
+    }
+
+
+    fun startTeamAction() {
         GameAllReset()
         TeamManager.resetTeam()
-        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+        delay.delayRun(20) {
             Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 시작합니다.")
             TeamManager.random()
             Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 끝냈습니다. 게임맵에서 각팀이 이동될 좌표 선정을 시작합니다.")
-            initializeSafeLocations()//랜덤좌표 설정
-            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+            initializeSafeLocations(TeamManager.getTeamCount())//랜덤좌표 설정
+            delay.delayRun(30) {
                 isStart = true
-                for (player in Bukkit.getOnlinePlayers()) {
-                    player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
-                    if (!player.scoreboardTags.contains("manager")) {
-                        player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300, 1, false, false))
-                        stopPlayer[player] = true
-                        immunePlayers.add(player)
+                delay.delayForEachPlayer(
+                    Bukkit.getOnlinePlayers(),
+                    action = { player ->
+                        player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
+                        if (!player.scoreboardTags.contains("manager")) {
+                            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300, 1, false, false))
+                            stopPlayer[player] = true
+                            immunePlayers.add(player)
+                        }
+                    },
+                    onComplete = {
+                        executeBlockFillingAndEffect()
                     }
-                }
-                executeBlockFillingAndEffect()
-            }, 30)//랜덤이동좌표선정이후 연출 시작.
-        }, 20)//게임시작 요청 받은후 1초뒤 팀선정 및 랜덤이동좌표선정 시작
+                )
+            }//랜덤이동좌표선정이후 연출 시작.
+        }//게임시작 요청 받은후 1초뒤 팀선정 및 랜덤이동좌표선정 시작
     }
 
 
@@ -63,7 +110,11 @@ object Start {
                     isStart = false
                     // 블록 처리 완료 후 텔레포트 및 게임 시작 메시지 출력
                     Bukkit.getScheduler().runTask(Loader.instance, Runnable {
-                        startAction2()
+                        if (TeamGame) {
+                            startTeamAction2()
+                        } else {
+                            startSoleAction2()
+                        }
                     })
                     cancel() // 반복 종료
                     return
@@ -161,8 +212,23 @@ object Start {
         }.runTaskTimer(Loader.instance, 0L, 1L) // 1틱 간격으로 실행
     }
 
-    private fun startAction2() {
+    /////////////////////인벤 아이템 세팅/////////////////
+    val craftingItem = createCustomItem(
+        "${ChatColor.GREEN}아이템 조합",
+        listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
+        Material.SLIME_BALL
+    )
+    val bookAndQuill = createCustomItem(
+        "${ChatColor.GREEN}미션",
+        listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
+        Material.WRITABLE_BOOK
+    )
+    val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
 
+    ///////////////////////////////////////////////////
+
+    //대기실 문열고 게임시작전 리셋
+    fun startSetting() {
         isEnding = false
 
 
@@ -173,19 +239,13 @@ object Start {
         )
         setBlockWithAttributes(Location(worldWait, 23.0, 61.0, -45.0), Material.AIR)
         GameAllReset2()
+    }
 
-        val craftingItem = createCustomItem(
-            "${ChatColor.GREEN}아이템 조합",
-            listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
-            Material.SLIME_BALL
-        )
-        val bookAndQuill = createCustomItem(
-            "${ChatColor.GREEN}미션",
-            listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
-            Material.WRITABLE_BOOK
-        )
-        val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
-        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+    private fun startTeamAction2() {
+
+        startSetting()
+
+        delay.delayRun(30) {
             PlayerAllReset()
             Bukkit.getScheduler().runTask(Loader.instance, Runnable {
                 Bukkit.getLogger().warning("[DEBUG] 팀 갯수 : ${TeamManager.getTeamCount()}")
@@ -200,7 +260,54 @@ object Start {
                     Bukkit.getLogger().warning("[DEBUG] $team 이동 완료")
                 }
 
-                for (player in Bukkit.getOnlinePlayers()) {
+                delay.delayForEachPlayer(
+                    Bukkit.getOnlinePlayers(),
+                    action = { player ->
+                        if (!player.scoreboardTags.contains("manager")) {
+                            MissionManager.assignMission(player) //플레이어에게 미션 부여
+                            for (i in 9..35) {
+                                when (i) {
+                                    20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
+                                    24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
+                                    else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+                                }
+                            }
+                            player.inventory.addItem(ItemGuideBook())
+                            player.removePotionEffect(PotionEffectType.BLINDNESS)
+                            player.sendTitle(
+                                "${ChatColor.GREEN}게임을 시작합니다.",
+                                "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
+                            )
+                            player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
+                        } else {
+                            // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
+                        }
+                    },
+                    onComplete = {
+                        immunePlayers.clear()
+                        stopPlayer.clear()
+                    })
+            })
+        }//연출이 끝난후 플레이어 세팅및 이동시작.
+    }
+
+    private fun startSoleAction2() {
+
+        startSetting()
+
+        delay.delayRun(30) {
+            PlayerAllReset()
+            delay.delayForEachPlayer(
+                Bukkit.getOnlinePlayers(),
+                action = { player ->
+                    teleportSoleToRandomLocation(player)
+                }
+            )
+
+            delay.delayForEachPlayer(
+                Bukkit.getOnlinePlayers(),
+                action = { player ->
                     if (!player.scoreboardTags.contains("manager")) {
                         MissionManager.assignMission(player) //플레이어에게 미션 부여
                         for (i in 9..35) {
@@ -212,20 +319,20 @@ object Start {
                         }
                         player.inventory.addItem(ItemGuideBook())
                         player.removePotionEffect(PotionEffectType.BLINDNESS)
-                        player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
                         player.sendTitle(
                             "${ChatColor.GREEN}게임을 시작합니다.",
                             "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
                         )
+                        player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
                     } else {
                         // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
                     }
-                }
-                immunePlayers.clear()
-                stopPlayer.clear()
-            })
-        }, 30)//연출이 끝난후 플레이어 세팅및 이동시작.
+                },
+                onComplete = {
+                    immunePlayers.clear()
+                    stopPlayer.clear()
+                })
+        }//연출이 끝난후 플레이어 세팅및 이동시작.
     }
-
 }
