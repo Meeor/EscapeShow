@@ -2,6 +2,7 @@ package kr.rion.plugin.manager
 
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
+import kr.rion.plugin.util.delay
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
@@ -153,10 +154,12 @@ object MissionManager {
     }
 
     fun endGame() {
-        for (player in Bukkit.getOnlinePlayers()) {
-            val missionId = activeMissions[player.uniqueId] ?: return
-            val mission = MissionRegistry.getMission(missionId) ?: return
-            if (missionId != 28) return
+        delay.delayForEachPlayer(
+            Bukkit.getOnlinePlayers(),
+            action = { player ->
+            val missionId = activeMissions[player.uniqueId] ?: return@delayForEachPlayer
+            val mission = MissionRegistry.getMission(missionId) ?: return@delayForEachPlayer
+            if (missionId != 28) return@delayForEachPlayer
             mission.onSuccess(player)
 
             // ID에 따른 메시지 출력
@@ -172,6 +175,7 @@ object MissionManager {
 
             activeMissions.remove(player.uniqueId) // 미션 완료 후 제거
         }
+    )
     }
 
     fun resetMissions() {

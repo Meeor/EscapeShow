@@ -395,9 +395,12 @@ object Helicopter {
             slabType = Slab.Type.BOTTOM
         )
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
-        for (allplayer in Bukkit.getOnlinePlayers()) {
-            allplayer.playSound(allplayer, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
-        }
+        delay.delayForEachPlayer(
+            Bukkit.getOnlinePlayers(),
+            action = { allplayer ->
+                allplayer.playSound(allplayer, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
+            }
+        )
         createDirectionBossBarForAll(HelicopterLoc!!, "헬기 방향")
         bossbarEnable = 2 //헬기위치로 변경
         HelicopterisSpawn = true
@@ -405,7 +408,7 @@ object Helicopter {
 
     fun remove() {
         if (HelicopterLoc == null) return
-        Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+        delay.delayRun(20L * 30){
             // 블럭을 공기로 변경
             HelicopterLoc?.let { getloc ->
                 setBlockWithAttributes(setloc(getloc, 1.0, 0.0, 2.0), Material.AIR)
@@ -531,14 +534,17 @@ object Helicopter {
                 fillBlocks(setloc(getloc, -1.0, 9.0, -8.0), setloc(getloc, -1.0, 9.0, -10.0), Material.AIR)
                 setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.AIR)
             }
-        }, 20L * 30) // 30초 후
+        } // 30초 후
         startEscape = false
         flaregunstart?.cancel()
         flaregunstart = null
         bossbarEnable = 0 //보스바 업데이트 종료
-        for (player in Bukkit.getOnlinePlayers()) {
+        delay.delayForEachPlayer(
+            Bukkit.getOnlinePlayers(),
+            action = {player ->
             removeDirectionBossBar(player)
         }
+        )
     }
 
     private fun setloc(base: Location, x: Double, y: Double, z: Double): Location {

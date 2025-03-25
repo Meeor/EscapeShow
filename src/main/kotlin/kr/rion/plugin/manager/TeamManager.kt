@@ -2,6 +2,7 @@ package kr.rion.plugin.manager
 
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.teamsMaxPlayers
+import kr.rion.plugin.util.delay
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 
@@ -139,7 +140,6 @@ object TeamManager {
     }
 
 
-
     /** 🔹 두 플레이어가 같은 팀인지 확인 */
     fun isSameTeam(player1: String, player2: String): Boolean {
         val team1 = getTeam(player1)
@@ -163,11 +163,14 @@ object TeamManager {
         }
 
         // ✅ 모든 플레이어의 머리 위 닉네임, 탭 리스트 닉네임, 채팅 닉네임 초기화
-        for (player in Bukkit.getOnlinePlayers()) {
-            player.setPlayerListName(player.name) // ✅ 탭 리스트 기본값 (플레이어 이름만 표시)
-            player.customName = player.name // ✅ 머리 위 닉네임 기본값
-            player.isCustomNameVisible = true // ✅ 기본적으로 머리 위 닉네임 숨김 (필요시 true로 변경)
-        }
+        delay.delayForEachPlayer(
+            Bukkit.getOnlinePlayers(),
+            action = { player ->
+                player.setPlayerListName(player.name) // ✅ 탭 리스트 기본값 (플레이어 이름만 표시)
+                player.customName = player.name // ✅ 머리 위 닉네임 기본값
+                player.isCustomNameVisible = true // ✅ 기본적으로 머리 위 닉네임 숨김 (필요시 true로 변경)
+            }
+        )
     }
 
 

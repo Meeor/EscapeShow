@@ -9,6 +9,7 @@ import kr.rion.plugin.util.Global.adjustToAboveSpecificBlock
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
+import kr.rion.plugin.util.delay
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
@@ -47,99 +48,102 @@ object FlameGunActions {
         val particleData1 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.5f)
         val particleData2 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0f)
 
-        for (onlinePlayer in Bukkit.getOnlinePlayers()) {
-            object : BukkitRunnable() {
-                private var t = 0.0
-                private val loc = initialLoc.clone()
+        delay.delayForEachPlayer(
+            Bukkit.getOnlinePlayers(),
+            action = { onlinePlayer ->
+                object : BukkitRunnable() {
+                    private var t = 0.0
+                    private val loc = initialLoc.clone()
 
-                override fun run() {
-                    t += 1
-                    loc.add(0.0, 1.0, 0.0) // 매 틱마다 위치를 위로 이동
-                    onlinePlayer.world.spawnParticle(
-                        Particle.CLOUD,
-                        loc,
-                        2,
-                        0.0,
-                        0.6,
-                        0.0,
-                        0.0
-                    )
-                    onlinePlayer.world.spawnParticle(
-                        Particle.FLAME,
-                        loc,
-                        2,
-                        0.0,
-                        0.6,
-                        0.0,
-                        0.0
-                    )
-                    // 80틱 작업 끝나면 중지
-                    if (t > 120) {
-                        val movedLoc = loc.clone().add(0.0, -5.0, 0.0)
+                    override fun run() {
+                        t += 1
+                        loc.add(0.0, 1.0, 0.0) // 매 틱마다 위치를 위로 이동
                         onlinePlayer.world.spawnParticle(
-                            Particle.REDSTONE,
-                            movedLoc,
-                            50,
-                            1.0,
-                            1.0,
-                            1.0,
-                            0.1,
-                            particleData1,
-                            true
-                        )
-                        onlinePlayer.world.spawnParticle(
-                            Particle.REDSTONE,
+                            Particle.CLOUD,
                             loc,
-                            50,
+                            2,
                             0.0,
                             0.6,
                             0.0,
-                            0.1,
-                            particleData2,
-                            true
+                            0.0
                         )
-                        if (!startEscapecheck) {
-                            startEscapecheck = true
-                            Bukkit.broadcastMessage("${ChatColor.BOLD}${ChatColor.YELLOW}헬기가 오고있습니다..")
-                            Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
+                        onlinePlayer.world.spawnParticle(
+                            Particle.FLAME,
+                            loc,
+                            2,
+                            0.0,
+                            0.6,
+                            0.0,
+                            0.0
+                        )
+                        // 80틱 작업 끝나면 중지
+                        if (t > 120) {
+                            val movedLoc = loc.clone().add(0.0, -5.0, 0.0)
+                            onlinePlayer.world.spawnParticle(
+                                Particle.REDSTONE,
+                                movedLoc,
+                                50,
+                                1.0,
+                                1.0,
+                                1.0,
+                                0.1,
+                                particleData1,
+                                true
+                            )
+                            onlinePlayer.world.spawnParticle(
+                                Particle.REDSTONE,
+                                loc,
+                                50,
+                                0.0,
+                                0.6,
+                                0.0,
+                                0.1,
+                                particleData2,
+                                true
+                            )
+                            if (!startEscapecheck) {
+                                startEscapecheck = true
+                                Bukkit.broadcastMessage("${ChatColor.BOLD}${ChatColor.YELLOW}헬기가 오고있습니다..")
+                                delay.delayRun(30 * 20L) {
 
-                                val newLocation: Location? = initialLoc.world?.let {
-                                    adjustToAboveSpecificBlock(
-                                        it,
-                                        initialLoc.clone().subtract(0.0, 1.0, 0.0),
-                                        Material.CAVE_AIR
+                                    val newLocation: Location? = initialLoc.world?.let {
+                                        adjustToAboveSpecificBlock(
+                                            it,
+                                            initialLoc.clone().subtract(0.0, 1.0, 0.0),
+                                            Material.CAVE_AIR
+                                        )
+                                    }
+
+                                    if (newLocation == null) {
+                                        // 실패 시 작업 수행
+                                        Bukkit.broadcastMessage("$prefix §c헬기 도착 위치를 설정하지 못했습니다. 헬기 호출이 중단됩니다.")
+                                        chestEnable = false // 플레어건 상자 소환 초기화
+                                        Bukkit.getOnlinePlayers().filter { it.scoreboardTags.contains("manager") }
+                                            .forEach { managerPlayer ->
+                                                managerPlayer.sendMessage("§l§b헬기 랜덤 좌표 생성을 실패하였습니다.")
+                                                managerPlayer.sendMessage("§l§b플레어건 상자 소환이 초기화되었습니다. 재소환하실 수 있습니다.")
+                                            }
+                                        cancel()
+                                        return@delayRun // 조기 종료
+                                    }
+
+                                    EscapeLocation = newLocation
+
+
+                                    Helicopter.spawn(
+                                        EscapeLocation.clone().add(0.0, 51.0, 0.0)
                                     )
+                                    startEscape(player)
+                                    startEscape = true
+                                    startEscapecheck = false
                                 }
-
-                                if (newLocation == null) {
-                                    // 실패 시 작업 수행
-                                    Bukkit.broadcastMessage("$prefix §c헬기 도착 위치를 설정하지 못했습니다. 헬기 호출이 중단됩니다.")
-                                    chestEnable = false // 플레어건 상자 소환 초기화
-                                    Bukkit.getOnlinePlayers().filter { it.scoreboardTags.contains("manager") }
-                                        .forEach { managerPlayer ->
-                                            managerPlayer.sendMessage("§l§b헬기 랜덤 좌표 생성을 실패하였습니다.")
-                                            managerPlayer.sendMessage("§l§b플레어건 상자 소환이 초기화되었습니다. 재소환하실 수 있습니다.")
-                                        }
-                                    cancel()
-                                    return@Runnable // 조기 종료
-                                }
-
-                                EscapeLocation = newLocation
-
-
-                                Helicopter.spawn(
-                                    EscapeLocation.clone().add(0.0, 51.0, 0.0)
-                                )
-                                startEscape(player)
-                                startEscape = true
-                                startEscapecheck = false
-                            }, 30 * 20L)
+                            }
+                            cancel()
                         }
-                        cancel()
                     }
-                }
-            }.runTaskTimer(Loader.instance, 0L, 1L)
-        }
+                }.runTaskTimer(Loader.instance, 0L, 1L)
+            }
+        )
     }
 
     fun startEscape(player: Player) {
@@ -230,29 +234,32 @@ object FlameGunActions {
                             }
                         }
                     }
-                for (particlePlayer in Bukkit.getOnlinePlayers()) {
-                    // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)
-                    if (HelicopterLoc != null) {
-                        try {
-                            for (i in 0..55) {
-                                val particleLocation = HelicopterLoc!!.clone().subtract(0.0, i.toDouble(), 0.0)
-                                HelicopterLoc!!.world?.spawnParticle(
-                                    Particle.END_ROD,
-                                    particleLocation,
-                                    1,
-                                    0.0,
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                )
+                delay.delayForEachPlayer(
+                    Bukkit.getOnlinePlayers(),
+                    action = {
+                        // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)
+                        if (HelicopterLoc != null) {
+                            try {
+                                for (i in 0..55) {
+                                    val particleLocation = HelicopterLoc!!.clone().subtract(0.0, i.toDouble(), 0.0)
+                                    HelicopterLoc!!.world?.spawnParticle(
+                                        Particle.END_ROD,
+                                        particleLocation,
+                                        1,
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
                             }
-                        } catch (e: Exception) {
-                            Bukkit.getLogger().warning("파티클 생성 중 오류 발생: ${e.message}")
+                        } else {
+                            Bukkit.getLogger().warning("HelicopterLoc의 저장된 좌표가 없습니다. 파티클을 생성할 수 없습니다.")
                         }
-                    } else {
-                        Bukkit.getLogger().warning("HelicopterLoc의 저장된 좌표가 없습니다. 파티클을 생성할 수 없습니다.")
                     }
-                }
+                )
                 tickCount += 1
             }
         }.runTaskTimer(Loader.instance, 0L, 20L)  // 매 1초마다 실행
