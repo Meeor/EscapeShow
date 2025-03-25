@@ -3,7 +3,7 @@ package kr.rion.plugin.util
 import de.tr7zw.nbtapi.NBTCompoundList
 import kr.rion.plugin.game.End
 import kr.rion.plugin.game.End.EscapePlayers
-import kr.rion.plugin.game.End.MissionSuccessEscapePlayers
+import kr.rion.plugin.game.End.MissionSuccessPlayers
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Reset.resetplayerAttribute
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestEnable
@@ -18,6 +18,7 @@ import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
 import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.*
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
@@ -31,6 +32,7 @@ object Global {
     var EscapePlayerMaxCount: Int = 3
     var MissionEscapeMaxCount: Int = 3
     var helicopterfindattempt: Int = 100
+    var damageBuff: Double = 3.0
     var teamsMaxPlayers: Int = 3
     var door = true
 
@@ -42,6 +44,8 @@ object Global {
     var originalInventory = mutableMapOf<String, NBTCompoundList>()
     var originalArmor = mutableMapOf<String, NBTCompoundList>()
 
+    //게임방식 변수
+    var TeamGame = true
 
     //부활시 아이템 복구를 위한 변수
     val playerItem = mutableMapOf<String, MutableList<ItemStack?>>()
@@ -53,8 +57,15 @@ object Global {
         for (player in Bukkit.getOnlinePlayers()) {
             if (player.scoreboardTags.contains("Escape")) {
                 performAction(player)
-            } else if (survivalPlayers().count <= 5) {
-                missionclearAction()
+            } else if (TeamGame) {
+                if (survivalPlayers().count <= 5) {
+                    missionclearTeamAction(player)
+                }
+            } else {
+                val name = player.name
+                if (player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessPlayers.contains(name)) {
+                    missionclearSoleAction()
+                }
             }
         }
     }
@@ -96,46 +107,64 @@ object Global {
         endingPlayer()
     }
 
-    fun missionclearAction() {
-        for (player in Bukkit.getOnlinePlayers()) {
-            if (!player.scoreboardTags.any {
-                    it in listOf(
-                        "DeathAndAlive",
-                        "EscapeComplete",
-                        "death",
-                        "manager",
-                        "MissionSuccessEscape"
-                    )
-                } && player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessEscapePlayers.contains(player.name)) {
-                if (MissionSuccessCount < MissionEscapeMaxCount) {
-                    // 게임 모드 변경
-                    player.gameMode = GameMode.ADVENTURE
-                    // 플라이 허용
-                    player.allowFlight = true
-                    player.isFlying = true
+    fun missionclearTeamAction(player: Player) {
 
-                    // 투명화 버프 부여 (무한지속시간)
-                    val invisibilityEffect =
-                        PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
-                    val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
-                    val hangerEffect = PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 1, false, false)
-                    val healthEffect = PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 5, false, false)
-                    player.addPotionEffect(invisibilityEffect)
-                    player.addPotionEffect(blindEffect)
-                    player.addPotionEffect(hangerEffect)
-                    player.addPotionEffect(healthEffect)
-                    player.inventory.clear()
-                    player.inventory.setItem(8, teleportCompass())
-                    player.scoreboardTags.clear()
-                    MissionSuccessCount++
-                    MissionSuccessEscapePlayers.add(player.name)
-                    Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.AQUA}미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}처리되었습니다. ")
-                    player.addScoreboardTag("MissionSuccessEscape")
-                    removeDirectionBossBar(player)
-                    player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
+        val name = player.name
+        MissionSuccessPlayers.add(name)
+
+        val attribute = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)
+        if (attribute != null) {
+            attribute.baseValue = attribute.baseValue + damageBuff
+            player.sendMessage("§a[미션 클리어] 공격력이 ${damageBuff}만큼 증가했습니다!")
+        }
+    }
+
+    fun missionclearSoleAction() {
+        delay.delayForEachPlayer(
+            Bukkit.getOnlinePlayers().shuffled(),
+            action = { player ->
+                if (!player.scoreboardTags.any {
+                        it in listOf(
+                            "DeathAndAlive",
+                            "EscapeComplete",
+                            "death",
+                            "manager",
+                            "MissionSuccessEscape"
+                        )
+                    } && player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessPlayers.contains(
+                        player.name
+                    )) {
+                    if (MissionSuccessCount < MissionEscapeMaxCount) {
+                        // 게임 모드 변경
+                        player.gameMode = GameMode.ADVENTURE
+                        // 플라이 허용
+                        player.allowFlight = true
+                        player.isFlying = true
+
+                        // 투명화 버프 부여 (무한지속시간)
+                        val invisibilityEffect =
+                            PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
+                        val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
+                        val hangerEffect = PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 1, false, false)
+                        val healthEffect =
+                            PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 5, false, false)
+                        player.addPotionEffect(invisibilityEffect)
+                        player.addPotionEffect(blindEffect)
+                        player.addPotionEffect(hangerEffect)
+                        player.addPotionEffect(healthEffect)
+                        player.inventory.clear()
+                        player.inventory.setItem(8, teleportCompass())
+                        player.scoreboardTags.clear()
+                        MissionSuccessCount++
+                        MissionSuccessPlayers.add(player.name)
+                        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.AQUA}미션 클리어로 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}처리되었습니다. ")
+                        player.addScoreboardTag("MissionSuccessEscape")
+                        removeDirectionBossBar(player)
+                        player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
+                    }
                 }
             }
-        }
+        )
     }
 
     fun setGameRulesForAllWorlds() {
@@ -183,26 +212,34 @@ object Global {
         val remainingTeams = TeamManager.getSurviverCount() // 생존한 팀 수 가져오기
         val remainingPlayers = survivalPlayers().count // 생존한 플레이어 수
 
-        // ✅ 생존한 팀이 1팀만 남거나, 생존자가 1명만 남은 경우 게임 종료
-        if (remainingTeams == 1 || remainingPlayers == 1) {
+        // ✅ 팀전일 경우, 생존한 팀이 1팀만 남았으면 종료
+        if (TeamGame && remainingTeams == 1) {
+            if (!isEnding) return
+            endGame()
+            End.EndAction()
+        }
+        // ✅ 개인전일 경우, 생존한 플레이어가 1명만 남으면 종료
+        else if (!TeamGame && remainingPlayers == 1) {
             if (!isEnding) return
             endGame()
 
-            // ✅ 생존자가 1명 남았다면 마지막 생존자로 처리
-            if (remainingPlayers == 1) {
-                val lastSurvivor = survivalPlayers().names.firstOrNull()
-                lastSurvivor?.let {
-                    Bukkit.getPlayer(it)?.addScoreboardTag("lastsuriver")
-                }
+            // 마지막 생존자 처리
+            val lastSurvivor = survivalPlayers().names.firstOrNull()
+            lastSurvivor?.let {
+                Bukkit.getPlayer(it)?.addScoreboardTag("lastsuriver")
             }
+
             End.EndAction()
-        } else if (remainingPlayers <= 0) {
+        }
+        // 생존자 없으면 게임 종료
+        else if (remainingPlayers <= 0) {
             if (!isEnding) return
             endGame()
-            Bukkit.broadcastMessage("생존자가 없는것으로 확인되어 게임을 종료시킵니다.")
+            Bukkit.broadcastMessage("생존자가 없는 것으로 확인되어 게임을 종료시킵니다.")
             End.EndAction()
         }
     }
+
 
 
     fun timerReset(playerName: String) {
@@ -281,27 +318,29 @@ object Global {
         resetplayerAttribute()
         playersAtParticle.clear()
         EscapePlayers.clear()
-        MissionSuccessEscapePlayers.clear()
+        MissionSuccessPlayers.clear()
         reviveFlags.clear()
         originalInventory.clear()
         originalArmor.clear()
     }
 
     fun PlayerAllReset() {
-        for (player in Bukkit.getOnlinePlayers()) {
-            if (!player.scoreboardTags.contains("manager")) {
-                // manager 태그가 없는 플레이어작업
-                removeDirectionBossBar(player)
-                player.scoreboardTags.clear()
-                player.allowFlight = false
-                player.isFlying = false
-                player.gameMode = GameMode.ADVENTURE
-            }
-            player.inventory.clear()
-            for (effect in player.activePotionEffects) {
-                player.removePotionEffect(effect.type)
-            }
-        }
+        delay.delayForEachPlayer(
+            Bukkit.getOnlinePlayers(),
+            action = { player ->
+                if (!player.scoreboardTags.contains("manager")) {
+                    // manager 태그가 없는 플레이어작업
+                    removeDirectionBossBar(player)
+                    player.scoreboardTags.clear()
+                    player.allowFlight = false
+                    player.isFlying = false
+                    player.gameMode = GameMode.ADVENTURE
+                }
+                player.inventory.clear()
+                for (effect in player.activePotionEffects) {
+                    player.removePotionEffect(effect.type)
+                }
+            })
     }
 
 
