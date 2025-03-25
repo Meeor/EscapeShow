@@ -1,6 +1,5 @@
 package kr.rion.plugin.event
 
-import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.util.Global.TeamGame

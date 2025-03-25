@@ -1,6 +1,5 @@
 package kr.rion.plugin.util
 
-import kr.rion.plugin.Loader
 import kr.rion.plugin.item.FlameGunActions.flaregunstart
 import kr.rion.plugin.item.FlameGunActions.startEscape
 import kr.rion.plugin.util.Bossbar.bossbarEnable
@@ -408,7 +407,7 @@ object Helicopter {
 
     fun remove() {
         if (HelicopterLoc == null) return
-        delay.delayRun(20L * 30){
+        delay.delayRun(20L * 30) {
             // 블럭을 공기로 변경
             HelicopterLoc?.let { getloc ->
                 setBlockWithAttributes(setloc(getloc, 1.0, 0.0, 2.0), Material.AIR)
@@ -541,9 +540,9 @@ object Helicopter {
         bossbarEnable = 0 //보스바 업데이트 종료
         delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
-            action = {player ->
-            removeDirectionBossBar(player)
-        }
+            action = { player ->
+                removeDirectionBossBar(player)
+            }
         )
     }
 
