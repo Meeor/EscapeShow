@@ -2,6 +2,7 @@ package kr.rion.plugin.command
 
 
 import kr.rion.plugin.command.Broadcast.handleBroadcast
+import kr.rion.plugin.command.BuffDamageSetting.handleDamageSetting
 import kr.rion.plugin.command.Damage.handleDamage
 import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.GameEventCommand.handleEvent
@@ -38,6 +39,7 @@ class CommandHandler : CommandExecutor {
             "게임안내" -> handleGameInfo(sender)
             "아이템" -> handleItemInfo(sender)
             "조합법" -> handleCraftInfo(sender)
+            "버프데미지" -> handleDamageSetting(sender, args)
 
             else -> return false
         }

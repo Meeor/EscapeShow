@@ -52,6 +52,12 @@ commands:
     aliases: [revivepass,rp]
     permission: default.op
     permission-message: 이 명령어를 사용할 권한이 없습니다.
+  버프데미지:
+    description: 팀전에서 미션클리어후 받은 버프의 공격력을 설정합니다.
+    usage: /<command>
+    aliases: [ buffdamage,buff,bfd ]
+    permission: default.op
+    permission-message: 이 명령어를 사용할 권한이 없습니다.
   게임안내:
     description: 사용자에게 게임에대한 안내를 출력합니다.
     usage: /<command>

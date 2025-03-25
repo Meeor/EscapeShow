@@ -11,6 +11,7 @@ import kr.rion.plugin.mission.MissionList
 import kr.rion.plugin.util.Global
 import kr.rion.plugin.util.Global.EscapePlayerMaxCount
 import kr.rion.plugin.util.Global.MissionEscapeMaxCount
+import kr.rion.plugin.util.Global.damageBuff
 import kr.rion.plugin.util.Global.helicopterfindattempt
 import kr.rion.plugin.util.Global.teamsMaxPlayers
 import kr.rion.plugin.util.Teleport
@@ -74,6 +75,7 @@ class Loader : JavaPlugin() {
         MissionEscapeMaxCount = config.getInt("MissionEscapeMaxCount", 3)
         helicopterfindattempt = config.getInt("helicopterfindattempt", 100)
         teamsMaxPlayers = config.getInt("teamsMaxPlayers", 3)
+        damageBuff = config.getDouble("damagebuff",3.0)
 
 
         object : BukkitRunnable() {
@@ -112,15 +114,15 @@ class Loader : JavaPlugin() {
                 §e게임의 안내를 시작하겠습니다.\n
                 §e게임의 장르는 헝거게임이며, 맵에있는 §a통§e에서 아이템을얻고 조합하여 무기를 만들고.\n§e다른플레이어들과 싸워 탈출하는 게임입니다.\n
                 §e게임시작직후 각플레이어에게 미션이 지급됩니다. \n§e미션은 인벤토리를 열어 책과깃펜 아이템을 클릭하면 \n§e받은 미션을 확인하실수 있습니다.\n
-                §e게임은 팀게임으로 진행되며 팀은 플러그인에 의해 자동으로 설정됩니다.\n
+                §e게임은 팀전 또는 개인전으로 진행되며 팀은 플러그인에 의해 자동으로 설정됩니다.\n
                 §e게임 시작후 §a채팅 메세지§e는 §b팀과의 소통§e으로 사용하실수있으며 §a음성채팅§e은 생존자모두에게 들립니다.\n§e음성채팅은 거리에따라 사운드가 줄어들거나 커지며 플레이어간의 거리가 멀어지면 목소리가 들리지 않습니다.\n
-                §e탈출 방법에는 §a미션 클리어§e,§a플레어건 탈출§e,§a최후의 1팀§e이 있습니다.\n
-                §e미션 탈출의경우 생존자가 5명 남았을때 처리되며 그때 살아남아있고 미션을 클리어한 사람중 제한인원에 맞게 자동 탈출이됩니다.\n
+                §e탈출 방법에는 §a미션 클리어(개인전)§e,§a플레어건 탈출§e,§a최후의 (1팀/1인) §e이 있습니다.\n
+                §e미션클리어 탈출의경우 생존자가 5명 남았을때 처리되며 그때 살아남아있고 미션을 클리어한 사람중 제한인원에 맞게 자동 탈출이됩니다.\n
                 §e플레어건 탈출의 경우 운영자가 수동으로 플레어건을 소환해드리기에 불시에 플레어건이 소환됩니다.\n§e플레어건이 소환될경우 상단에 플레어건위치가 본인이 바라보고있는방향에 있는지 표시되며.\n§e소환됬다는 메세지가 화면 중앙에 나타납니다.\n
                 §e플레어건을 사용할경우 사용한지점으로부터 반경 30칸 이내 랜덤한위치에 헬기가 소환되며 소환된자리에 나타나는 빛줄기에 §a3§e초간 가까이 붙어있으면 탈출이 됩니다.\n
                 §e각 아이템에 관련된 설명은 §a/아이템§e 명령어를 사용하여 확인하시길 바랍니다.\n
                 §e조합은 인벤토리를열어 조합아이템을 클릭하면 조합창이열리며 리스트에 있는 아이템에 맞게 넣으실경우 조합을 하실수 있습니다. \n§e조합법을 설명으로 보시려면 §a/조합법 §e명령어를 사용하여 주시기 바랍니다.
-                §e해당 게임에는 부활시스템이 존재합니다.\n§e첫 사망시 시체가 남으며 시체위에는 부활이라는 메세지가 떠있게됩니다.\n§e다른사람이 본인의 시체위에서 §a웅크리고§e있을경우 §b부활§e을 시켜줄수 있으며. \n§e시체의 아이템을 §a한개라도§e가져갈경우 시체의주인은 부활이 금지되며 즉시 사망하게됩니다.\n
+                §e해당 게임에는 부활시스템이 존재합니다. (팀전에만 적용됩니다.)\n§e첫 사망시 시체가 남으며 시체위에는 부활이라는 메세지가 떠있게됩니다.\n§e다른사람이 본인의 시체위에서 §a웅크리고§e있을경우 §b부활§e을 시켜줄수 있으며. \n§e시체의 아이템을 §a한개라도§e가져갈경우 시체의주인은 부활이 금지되며 즉시 사망하게됩니다.\n
                 §e탈출자들은 9번째칸에 지급되는 나침반을 우클릭하여 다른플레이어에게 텔레포트가 가능하며 자유롭게 관전이 가능해집니다.
                 §e또한 탈출자및 사망자는 서로 음성대화가 가능해지며 탈출자와 사망자의 목소리는 생존자에게 들리지 않습니다.
                 §e게임이 종료된이후에는 게임맵 복구를위하여 렉이 걸릴수있습니다. 종료시점엔 잠시 마우스와 키보드에서 손을떼고 대기하여 주시길 바랍니다. \n§l§b감사합니다.
