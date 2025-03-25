@@ -2,7 +2,6 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import org.bukkit.ChatColor
-import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player

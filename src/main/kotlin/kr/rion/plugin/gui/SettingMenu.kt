@@ -24,10 +24,10 @@ object SettingMenu {
     }
 
     private fun createTeamPvpItem(isPvpEnabled: Boolean): ItemStack {
-        return if(TeamGame){
+        return if (TeamGame) {
             createCustomItem(
                 "${org.bukkit.ChatColor.GREEN}팀 PVP 설정",
-                listOf("팀 PVP 를 허용할지 금지할지 설정합니다","","현재 개인전 상태입니다. PVP설정을 하실수 없습니다."),
+                listOf("팀 PVP 를 허용할지 금지할지 설정합니다", "", "현재 개인전 상태입니다. PVP설정을 하실수 없습니다."),
                 Material.GRAY_WOOL,
                 persistentDataKey = "team-pvp-noting"
             )
@@ -47,6 +47,7 @@ object SettingMenu {
             )
         }
     }
+
     private fun createTeamGame(Teamgame: Boolean): ItemStack {
         return if (Teamgame) {
             createCustomItem(

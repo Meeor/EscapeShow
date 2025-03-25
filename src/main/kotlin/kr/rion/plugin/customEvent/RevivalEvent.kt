@@ -1,6 +1,5 @@
 package kr.rion.plugin.customEvent
 
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
@@ -17,9 +16,11 @@ class RevivalEvent(
 ) : Event() {
     companion object {
         private val handlerList = HandlerList()
+
         @JvmStatic
         fun getHandlerList(): HandlerList = handlerList
     }
+
     override fun getHandlers(): HandlerList {
         return handlerList // ✅ 올바른 방식
     }

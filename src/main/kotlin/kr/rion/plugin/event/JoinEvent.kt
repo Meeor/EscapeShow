@@ -1,15 +1,12 @@
 package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
-import kr.rion.plugin.util.ChatUtil.centerText
-import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.scheduler.BukkitRunnable
 
 class JoinEvent : Listener {
     val line = "=".repeat(40)

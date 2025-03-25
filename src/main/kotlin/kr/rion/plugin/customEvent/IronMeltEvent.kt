@@ -11,9 +11,11 @@ class IronMeltEvent(
 ) : Event() {
     companion object {
         private val handlerList = HandlerList()
+
         @JvmStatic
         fun getHandlerList(): HandlerList = handlerList
     }
+
     override fun getHandlers(): HandlerList {
         return handlerList // ✅ 올바른 방식
     }

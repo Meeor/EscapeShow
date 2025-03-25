@@ -157,25 +157,25 @@ object MissionManager {
         delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player ->
-            val missionId = activeMissions[player.uniqueId] ?: return@delayForEachPlayer
-            val mission = MissionRegistry.getMission(missionId) ?: return@delayForEachPlayer
-            if (missionId != 28) return@delayForEachPlayer
-            mission.onSuccess(player)
+                val missionId = activeMissions[player.uniqueId] ?: return@delayForEachPlayer
+                val mission = MissionRegistry.getMission(missionId) ?: return@delayForEachPlayer
+                if (missionId != 28) return@delayForEachPlayer
+                mission.onSuccess(player)
 
-            // ID에 따른 메시지 출력
-            val successMessage = missionMessages[missionId]
-                ?: "축하합니다! 미션을 완료했습니다!" // 기본 메시지
-            player.sendMessage("$MISSIONPREFIX$successMessage")
-            player.playSound(
-                player.location, // 플레이어 위치
-                Sound.UI_TOAST_CHALLENGE_COMPLETE, // 사운드 이름
-                0.2f, // 볼륨
-                1.0f // 피치
-            )
+                // ID에 따른 메시지 출력
+                val successMessage = missionMessages[missionId]
+                    ?: "축하합니다! 미션을 완료했습니다!" // 기본 메시지
+                player.sendMessage("$MISSIONPREFIX$successMessage")
+                player.playSound(
+                    player.location, // 플레이어 위치
+                    Sound.UI_TOAST_CHALLENGE_COMPLETE, // 사운드 이름
+                    0.2f, // 볼륨
+                    1.0f // 피치
+                )
 
-            activeMissions.remove(player.uniqueId) // 미션 완료 후 제거
-        }
-    )
+                activeMissions.remove(player.uniqueId) // 미션 완료 후 제거
+            }
+        )
     }
 
     fun resetMissions() {

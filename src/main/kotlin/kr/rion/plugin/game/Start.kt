@@ -47,7 +47,7 @@ object Start {
 
     fun startSoleAction() {
         GameAllReset()
-        delay.delayRun(20){
+        delay.delayRun(20) {
             initializeSafeLocations(Bukkit.getOnlinePlayers().size)//랜덤좌표 설정
             delay.delayRun(30) {
                 isStart = true

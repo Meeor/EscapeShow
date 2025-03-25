@@ -25,7 +25,7 @@ object BerriesAction {
 
         delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
-            action = {player -> // 파티클을 플레이어의 위치에 생성
+            action = { player -> // 파티클을 플레이어의 위치에 생성
                 player.world.spawnParticle(
                     Particle.HEART,
                     loc,

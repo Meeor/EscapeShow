@@ -21,8 +21,14 @@ object MissionList {
         MissionRegistry.registerMission(11, KillWithSpecificItemMission(Material.AIR)) //PlayerDeathEvent
         MissionRegistry.registerMission(12, KillWithSpecificItemMission(Material.FIREWORK_STAR)) //PlayerDeathEvent
         MissionRegistry.registerMission(13, CumulativeDamageMission(40.0)) //EntityDamageByEntityEvent
-        MissionRegistry.registerMission(14, CraftingMission(listOf(Material.IRON_CHESTPLATE to 1))) //inventoryClickEvent
-        MissionRegistry.registerMission(15, CraftingMission(listOf(Material.DIAMOND_CHESTPLATE to 1))) //inventoryClickEvent
+        MissionRegistry.registerMission(
+            14,
+            CraftingMission(listOf(Material.IRON_CHESTPLATE to 1))
+        ) //inventoryClickEvent
+        MissionRegistry.registerMission(
+            15,
+            CraftingMission(listOf(Material.DIAMOND_CHESTPLATE to 1))
+        ) //inventoryClickEvent
         MissionRegistry.registerMission(16, ReviveOnceMission())//RevivalEvent(CustomEvent)
         MissionRegistry.registerMission(17, StealItemsMission())//RevivalEvent(CustomEvent)
         MissionRegistry.registerMission(18, ItemCollectMission(Material.LEATHER, 30)) //inventoryCloseEvent
@@ -31,8 +37,8 @@ object MissionList {
         MissionRegistry.registerMission(21, ItemUsageMission(Material.MOJANG_BANNER_PATTERN, 3)) //PlayerInteractEvent
         MissionRegistry.registerMission(22, ItemUsageMission(Material.NETHER_BRICK, 5)) //PlayerInteractEvent
         MissionRegistry.registerMission(23, ItemUsageMission(Material.PAPER, 10)) //PlayerInteractEvent
-        MissionRegistry.registerMission(24, ItemUsageMission(Material.PAPER,  15)) //PlayerInteractEvent
-        MissionRegistry.registerMission(25, ItemUsageMission(Material.PAPER,  20)) //PlayerInteractEvent
+        MissionRegistry.registerMission(24, ItemUsageMission(Material.PAPER, 15)) //PlayerInteractEvent
+        MissionRegistry.registerMission(25, ItemUsageMission(Material.PAPER, 20)) //PlayerInteractEvent
         MissionRegistry.registerMission(26, CumulativeDamageTakenMission(20.0)) //EntityDamageByEntityEvent
         MissionRegistry.registerMission(27, DamageFreeMission(600, Loader.instance))
         MissionRegistry.registerMission(28, LastSurvivorMission())

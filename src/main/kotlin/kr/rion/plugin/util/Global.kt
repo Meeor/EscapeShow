@@ -241,7 +241,6 @@ object Global {
     }
 
 
-
     fun timerReset(playerName: String) {
         sneakingTimers.remove(playerName)
     }

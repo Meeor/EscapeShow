@@ -75,7 +75,7 @@ class Loader : JavaPlugin() {
         MissionEscapeMaxCount = config.getInt("MissionEscapeMaxCount", 3)
         helicopterfindattempt = config.getInt("helicopterfindattempt", 100)
         teamsMaxPlayers = config.getInt("teamsMaxPlayers", 3)
-        damageBuff = config.getDouble("damagebuff",3.0)
+        damageBuff = config.getDouble("damagebuff", 3.0)
 
 
         object : BukkitRunnable() {

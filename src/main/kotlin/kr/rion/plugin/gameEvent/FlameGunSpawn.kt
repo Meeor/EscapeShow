@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitTask
 object FlameGunSpawn {
     var chestLocation: Location? = null // 플레어건 상자의 위치 저장
     var particleTask: BukkitTask? = null // 파티클 반복 작업 저장
+
     @Volatile
     var chestEnable: Boolean = false
 

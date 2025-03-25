@@ -22,9 +22,9 @@ object Reset {
         setInitializedSafeLocations(false)
         delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
-            action = {player ->
-            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300 * 20, 1, false, false))
-        })
+            action = { player ->
+                player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300 * 20, 1, false, false))
+            })
         Bukkit.broadcastMessage("$prefix 게임월드 리셋을 시작합니다.")
         movePlayersToLobby("game")
         Bukkit.broadcastMessage("${ChatColor.GOLD}** 게임맵을 리셋하는 도중에는 잠시 서버가 렉이 걸릴수있습니다. ** \n** 움직임을 최소화 해주시길 바랍니다. **")
@@ -95,7 +95,7 @@ object Reset {
     fun resetplayerAttribute() {
         delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
-            action = {player ->
+            action = { player ->
                 val playerhealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)
                 playerhealth?.baseValue = 20.0 // 최대 체력을 설정합니다.
                 player.health = 20.0 // 현재 체력도 최대 체력에 맞춰줍니다.
