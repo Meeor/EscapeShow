@@ -2,9 +2,6 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End.EndAction
-import kr.rion.plugin.game.RandomTp.handleRandomListClear
-import kr.rion.plugin.game.RandomTp.handleRandomReset
-import kr.rion.plugin.game.RandomTp.handleRandomTPList
 import kr.rion.plugin.game.Reset.handleGameReset
 import kr.rion.plugin.game.Reset.handleLobbyReset
 import kr.rion.plugin.game.Start.isStart
@@ -14,10 +11,10 @@ import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
 import kr.rion.plugin.gui.Giveitem.ItemGUI
-import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
-import kr.rion.plugin.gui.randomTP.RandomTpGUI
+import kr.rion.plugin.gui.SettingMenu.settingGUI
 import kr.rion.plugin.manager.TeamManager.teamPvpBoolean
+import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.door
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
@@ -26,6 +23,7 @@ import kr.rion.plugin.util.Item.berries
 import kr.rion.plugin.util.Item.flamegun
 import kr.rion.plugin.util.Item.mainMenu
 import kr.rion.plugin.util.Item.teleportCompass
+import kr.rion.plugin.util.delay
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -120,10 +118,10 @@ class InventoryClickListener : Listener {
                     eventGUI(player)
                 }
 
-                hasCustomTag(meta, "game-randomtp") -> {
+                hasCustomTag(meta, "game-setting") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    RandomTpGUI(player)
+                    settingGUI(player)
                 }
 
                 hasCustomTag(meta, "game-reset") -> {
@@ -159,20 +157,6 @@ class InventoryClickListener : Listener {
                     event.isCancelled = true
                 }
 
-                hasCustomTag(meta, "team-pvp-true") || hasCustomTag(meta, "team-pvp-false") -> {
-                    event.isCancelled = true
-                    teamPvpBoolean = !teamPvpBoolean // ✅ 상태 반전 (true → false, false → true)
-
-                    player.closeInventory()
-                    openMainGUI(player) // ✅ 변경된 상태 반영하여 GUI 다시 열기
-
-                    val statusMessage = if (teamPvpBoolean) {
-                        "${ChatColor.GREEN}팀 PVP를 활성화 하였습니다."
-                    } else {
-                        "${ChatColor.RED}팀 PVP를 비활성화 하였습니다."
-                    }
-                    player.sendMessage("$prefix $statusMessage")
-                }
 
                 hasCustomTag(meta, "nothing") -> {
                     event.isCancelled = true
@@ -242,31 +226,55 @@ class InventoryClickListener : Listener {
     }
 
     @EventHandler
-    fun randomTpClickEvent(event: InventoryClickEvent) {
-        if (event.view.title != "${ChatColor.DARK_BLUE}랜덤티피") return
+    fun settingClickEvent(event: InventoryClickEvent) {
+        if (event.view.title != "${ChatColor.DARK_BLUE}게임설정") return
         val player = event.whoClicked as? Player ?: return
         val item = event.currentItem
         if (item != null && item.hasItemMeta()) {
             val meta = item.itemMeta ?: return
+            if (isStarting && isStart) {
+                player.sendMessage("$prefix §c게임 진행중에는 변경하실수 없습니다.")
+                return
+            }
 
             when {
-                hasCustomTag(meta, "randomtp-list") -> {
+                hasCustomTag(meta, "team-pvp-noting") -> {
                     event.isCancelled = true
-                    player.closeInventory()
-                    handleRandomTPList(player)
                 }
 
-                hasCustomTag(meta, "randomtp-reset") -> {
+                hasCustomTag(meta, "team-pvp-true") || hasCustomTag(meta, "team-pvp-false") -> {
                     event.isCancelled = true
-                    player.closeInventory()
-                    handleRandomReset(player)
+                    teamPvpBoolean = !teamPvpBoolean // ✅ 상태 반전 (true → false, false → true)
+
+                    delay.delayRun(2) {
+                        player.closeInventory()
+                        settingGUI(player) // ✅ 변경된 상태 반영하여 GUI 다시 열기
+                    }
+
+                    val statusMessage = if (teamPvpBoolean) {
+                        "${ChatColor.GREEN}팀 PVP를 활성화 하였습니다."
+                    } else {
+                        "${ChatColor.RED}팀 PVP를 비활성화 하였습니다."
+                    }
+                    player.sendMessage("$prefix $statusMessage")
                 }
 
-                hasCustomTag(meta, "randomtp-delete") -> {
+                hasCustomTag(meta, "team-game") || hasCustomTag(meta, "solo-game") -> {
                     event.isCancelled = true
-                    player.closeInventory()
-                    handleRandomListClear(player)
+                    TeamGame = !TeamGame // ✅ 상태 반전 (true → false, false → true)
+                    delay.delayRun(2) {
+                        player.closeInventory()
+                        settingGUI(player) // ✅ 변경된 상태 반영하여 GUI 다시 열기
+                    }
+
+                    val statusMessage = if (TeamGame) {
+                        "${ChatColor.AQUA}게임방식이 ${ChatColor.YELLOW}팀전${ChatColor.AQUA}으로 변경되었습니다."
+                    } else {
+                        "${ChatColor.AQUA}게임방식이 ${ChatColor.YELLOW}개인전${ChatColor.AQUA}으로 변경되었습니다."
+                    }
+                    player.sendMessage("$prefix $statusMessage")
                 }
+
             }
         }
     }
