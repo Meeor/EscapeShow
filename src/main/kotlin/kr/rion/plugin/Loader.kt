@@ -66,6 +66,8 @@ class Loader : JavaPlugin() {
 
         // config.yml 생성
         saveDefaultConfig()
+        // 디스크에서 읽어옴
+        reloadConfig()
         //message.txt 생성
         setupMessageFile()
 
