@@ -55,17 +55,19 @@ object Global {
     fun checkPlayersWithTag() {
         // 모든 플레이어를 순회하며 태그 확인
         for (player in Bukkit.getOnlinePlayers()) {
+            val name = player.name
             if (player.scoreboardTags.contains("Escape")) {
                 performAction(player)
-            } else if (TeamGame) {
-                if (survivalPlayers().count <= 5) {
-                    missionclearTeamAction(player)
-                }
-            } else {
-                val name = player.name
-                if (player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessPlayers.contains(name)) {
+            } else if (player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessPlayers.contains(name)) {
+                if (TeamGame) {
+                    if (survivalPlayers().count <= 5) {
+                        missionclearTeamAction(player)
+                    }
+                } else {
                     missionclearSoleAction()
                 }
+
+
             }
         }
     }
