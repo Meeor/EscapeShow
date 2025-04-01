@@ -8,11 +8,11 @@ import kr.rion.plugin.util.Global.GameAllReset
 import kr.rion.plugin.util.Global.GameAllReset2
 import kr.rion.plugin.util.Global.PlayerAllReset
 import kr.rion.plugin.util.Global.TeamGame
+import kr.rion.plugin.util.Global.playerInventorySetting
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Item.ItemGuideBook
-import kr.rion.plugin.util.Item.createCustomItem
 import kr.rion.plugin.util.TPSManager
 import kr.rion.plugin.util.Teleport.immunePlayers
 import kr.rion.plugin.util.Teleport.initializeSafeLocations
@@ -212,20 +212,6 @@ object Start {
         }.runTaskTimer(Loader.instance, 0L, 1L) // 1틱 간격으로 실행
     }
 
-    /////////////////////인벤 아이템 세팅/////////////////
-    val craftingItem = createCustomItem(
-        "${ChatColor.GREEN}아이템 조합",
-        listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
-        Material.SLIME_BALL
-    )
-    val bookAndQuill = createCustomItem(
-        "${ChatColor.GREEN}미션",
-        listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
-        Material.WRITABLE_BOOK
-    )
-    val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
-
-    ///////////////////////////////////////////////////
 
     //대기실 문열고 게임시작전 리셋
     fun startSetting() {
@@ -265,13 +251,7 @@ object Start {
                     action = { player ->
                         if (!player.scoreboardTags.contains("manager")) {
                             MissionManager.assignMission(player) //플레이어에게 미션 부여
-                            for (i in 9..35) {
-                                when (i) {
-                                    20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
-                                    24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
-                                    else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
-                                }
-                            }
+                            playerInventorySetting(player)
                             player.inventory.addItem(ItemGuideBook())
                             player.removePotionEffect(PotionEffectType.BLINDNESS)
                             player.sendTitle(
@@ -310,13 +290,7 @@ object Start {
                 action = { player ->
                     if (!player.scoreboardTags.contains("manager")) {
                         MissionManager.assignMission(player) //플레이어에게 미션 부여
-                        for (i in 9..35) {
-                            when (i) {
-                                20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
-                                24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
-                                else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
-                            }
-                        }
+                        playerInventorySetting(player)
                         player.inventory.addItem(ItemGuideBook())
                         player.removePotionEffect(PotionEffectType.BLINDNESS)
                         player.sendTitle(

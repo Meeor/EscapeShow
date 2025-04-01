@@ -10,6 +10,7 @@ import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.originalArmor
 import kr.rion.plugin.util.Global.originalInventory
+import kr.rion.plugin.util.Global.playerInventorySetting
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.processedPlayers
@@ -17,9 +18,11 @@ import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Global.sneakingTimers
 import kr.rion.plugin.util.Global.timerReset
-import kr.rion.plugin.util.Item.createCustomItem
 import kr.rion.plugin.util.delay
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
@@ -175,28 +178,7 @@ class OnEntitySpawn : Listener {
                                 }
                                 playerItem.remove(playerName) // 데이터 삭제 (메모리 관리)
                             }
-                            val craftingItem = createCustomItem(
-                                "${ChatColor.GREEN}조합아이템",
-                                listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
-                                Material.SLIME_BALL
-                            )
-                            val bookAndQuill = createCustomItem(
-                                "${ChatColor.GREEN}미션",
-                                listOf(
-                                    "${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.",
-                                    "",
-                                    "${ChatColor.RED}진행상황은 표시되지 않습니다!"
-                                ),
-                                Material.WRITABLE_BOOK
-                            )
-                            val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
-                            for (i in 9..35) {
-                                when (i) {
-                                    20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬롯에 책과 깃펜
-                                    24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 지도
-                                    else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
-                                }
-                            }
+                            playerInventorySetting(player)
                             respawnTask.remove(playerName)?.cancel()
                             val corpseEntityloc = corpseEntity.location
                             player.teleport(corpseEntityloc)
