@@ -14,6 +14,7 @@ import kr.rion.plugin.manager.TeamManager
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
+import kr.rion.plugin.util.Item.createCustomItem
 import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
 import kr.rion.plugin.util.Teleport.stopPlayer
@@ -342,6 +343,36 @@ object Global {
                     player.removePotionEffect(effect.type)
                 }
             })
+    }
+
+    fun playerInventorySetting(player: Player){
+        /////////////////////인벤 아이템 세팅/////////////////
+        val craftingItem = createCustomItem(
+            "${ChatColor.GREEN}아이템 조합",
+            listOf("${ChatColor.YELLOW}클릭시 조합창이 오픈됩니다."),
+            Material.SLIME_BALL
+        )
+        val bookAndQuill = createCustomItem(
+            "${ChatColor.GREEN}미션",
+            listOf("${ChatColor.YELLOW}현재 본인이 받은 미션을 확인합니다.", "", "${ChatColor.RED}진행상황은 표시되지 않습니다!"),
+            Material.WRITABLE_BOOK
+        )
+        val refresh = createCustomItem(
+            "${ChatColor.LIGHT_PURPLE}새로고침",
+            listOf(""),
+            Material.PINK_STAINED_GLASS_PANE
+        )
+        val barrier = createCustomItem("${ChatColor.RED}사용할수 없는칸", emptyList(), Material.BARRIER)
+
+        ///////////////////////////////////////////////////
+        for (i in 9..35) {
+            when (i) {
+                20 -> player.inventory.setItem(i, bookAndQuill) // 20번 슬룻에 미션책
+                22 -> player.inventory.setItem(i, refresh)// 22번 슬룻에 새로고침
+                24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
+                else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
+            }
+        }
     }
 
 
