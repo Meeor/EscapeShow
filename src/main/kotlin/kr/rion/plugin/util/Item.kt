@@ -92,35 +92,36 @@ object Item {
         val book = ItemStack(Material.WRITTEN_BOOK)
         val meta = book.itemMeta as BookMeta
 
-        meta.title = "조합법"
+        meta.title = "아이템 룰북"
         meta.author = "주최자측"
 
         val pages = listOf(
-            centerBookTextVertical(" §f☜ \n§0재킷 \n§0체력이 5칸 추가된다"),
-            centerBookTextVertical(" §f☞ \n§0사슬갑옷 \n§0체력이 10칸 추가된다"),
-            centerBookTextVertical(" §f↔ \n§0갑옷 \n§0체력이 15칸 추가된다"),
-            centerBookTextVertical(" §f← \n§0강철갑옷 \n§0체력이 20칸 추가된다"),
-            centerBookTextVertical(" §f↑ \n§0계약서 \n§0최대 체력이 줄고 데미지가 2배가 된다"),
-            centerBookTextVertical(" §f↓ \n§0지도 \n§0주위 50블럭 이내의 사람이 모두 보인다"),
-            centerBookTextVertical(" §f③ \n§0나무막대기 \n§0재료 아이템. 무기로도 쓸 수 있다"),
-            centerBookTextVertical(" §f→ \n§0돌덩이 \n§0무기"),
-            centerBookTextVertical(" §f⚅ \n§0단검 \n§0무기"),
-            centerBookTextVertical(" §f⚄ \n§0사냥도끼 \n§0무기"),
-            centerBookTextVertical(" §f⚃ \n§0마체테 \n§0무기"),
-            centerBookTextVertical(" §f⚂ \n§0대형망치 \n§0무기"),
-            centerBookTextVertical(" §f⚁ \n§0모닥불 \n§0설치할 수 있다"),
-            centerBookTextVertical(" §f⚀ \n§0붕대 \n§0사용 후 3초 뒤 회복한다"),
-            centerBookTextVertical(" §f♦ \n§0부목 \n§05초간 느려지지만 크게 회복한다"),
-            centerBookTextVertical(" §f♥ \n§0판자더미 \n§0설치할 수 있다"),
-            centerBookTextVertical(" §f♣ \n§0사슬 \n§0재료 아이템"),
-            centerBookTextVertical(" §f♠ \n§0유리조각 \n§0재료 아이템"),
-            centerBookTextVertical(" §f♬ \n§0잔해 \n§0재료 아이템"),
-            centerBookTextVertical(" §f♪ \n§0판자 \n§0재료 아이템"),
-            centerBookTextVertical(" §f♩ \n§0철 \n§0재료 아이템"),
-            centerBookTextVertical(" §f♫ \n§0가죽 \n§0재료 아이템"),
-            centerBookTextVertical(" §f⓪ \n§0농축된 열매 \n§0배고픔이 채워지며 조금씩 회복한다"),
-            centerBookTextVertical(" §f① \n§0광석 \n§0모닥불로 구워 철을 얻을 수 있다"),
-            centerBookTextVertical(" §f② \n§0플레어건 \n§03명까지 탈출할 수 있다")
+            centerBookTextVertical(" §f☜ §0재킷 §0가죽 + 가죽으로 만들 수 있다 입으면 추가체력 5가 추가된다"),
+            centerBookTextVertical(" §f☞ §0사슬갑옷 §0비늘 + 비늘로 만들 수 있다 입으면 추가체력 10이 추가된다"),
+            centerBookTextVertical(" §f↔ §0갑옷 §0사슬갑옷 + 철 4개로 만들 수 있다 입으면 추가체력 15가 추가된다"),
+            centerBookTextVertical(" §f← §0강철갑옷 §0철덩어리 + 갑옷 으로 만들 수 있다 입으면 추가체력 20이 추가된다"),
+            centerBookTextVertical(" §f↑ §0계약서 §0가죽 + 먹물로 만들 수 있다 사용시 10초동안 최대체력이 반 줄고 데미지가 2배 강해진다"),
+            centerBookTextVertical(" §f↓ §0지도 §0가죽 + 유리조각으로 만들 수 있다 사용시 주변 50m 내에 모든 플레이어가 빛난다"),
+            centerBookTextVertical(" §f③ §0나무막대기 §0재료로 자주 쓰이는 아이템이다. 약하지만 무기로도 쓸 수 있다"),
+            centerBookTextVertical(" §f→ §0돌덩이 §0데미지가 4정도 되는 준수한 무기다"),
+            centerBookTextVertical(" §f⚅ §0단검 §0데미지가 4지만 공격속도가 빠르다"),
+            centerBookTextVertical(" §f⚄ §0사냥도끼 §04의 데미지와 보통의 공격속도를 가진 무기다"),
+            centerBookTextVertical(" §f⚃ §0마체테 §05의 데미지와 평범한 공속을 가진 무기다"),
+            centerBookTextVertical(" §f⚂ §0대형망치 §0공속이 느리지만 7의 데미지를 줄 수 있다"),
+            centerBookTextVertical(" §f⚁ §0모닥불 §0바닥에 설치할 수 있다 모닥불에서 우클릭으로 광석을 구울 수 있다"),
+            centerBookTextVertical(" §f⚀ §0붕대 §0사용시 3초후 피가 5가찬다 추가체력은 채워지지않는다"),
+            centerBookTextVertical(" §f♦ §0부목 §05초동안 느려지지만 피 5를 회복한다 추가체력도 회복할 수 있다"),
+            centerBookTextVertical(" §f♥ §0판자더미 §0판자 + 판자로 만들 수 있다 설치 할 수 있으며 도끼와 망치로 부술 수 있다"),
+            centerBookTextVertical(" §f♣ §0비늘 §0물가 근처만 나온다 재료로 쓸 수 있다"),
+            centerBookTextVertical(" §f♠ §0유리조각 §0재료아이템으로 쓸 수 있다"),
+            centerBookTextVertical(" §f♬ §0잔해 §0부서진 판자이다"),
+            centerBookTextVertical(" §f♪ §0판자 §0잔해 + 잔해로 만들 수 있다"),
+            centerBookTextVertical(" §f♩ §0철 §0광석으로 구워 만들 수 있다"),
+            centerBookTextVertical(" §f♫ §0가죽 §0재료아이템이다"),
+            centerBookTextVertical(" §f⓪ §0농축된 열매 §0사용시 배고픔이 채워지며 10초동안 조금씩 회복한다"),
+            centerBookTextVertical(" §f① §0광석 §0모닥불로 구워 철을 얻을 수 있다"),
+            centerBookTextVertical(" §f② §0플레어건 §0사용시 하늘에 발사하며, 30초 후 사용한 곳에서 50블럭 내에 랜덤하게 헬기가 도착한다")
+
         )
         meta.pages = pages
         book.itemMeta = meta

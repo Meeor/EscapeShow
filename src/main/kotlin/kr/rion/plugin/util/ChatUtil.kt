@@ -5,7 +5,7 @@ import net.md_5.bungee.api.ChatColor
 object ChatUtil {
     private const val CHAT_WIDTH = 320 // Minecraft 기본 채팅창 너비 (픽셀)
     private const val BOOK_WIDTH = 114 // 마인크래프트 책 기준 너비
-    private const val BOOK_MAX_LINES = 14 // 한 페이지 최대 줄 수 (14줄)
+    private const val BOOK_MAX_LINES = 20 // 한 페이지 최대 줄 수 (14줄)
 
 
     /**
