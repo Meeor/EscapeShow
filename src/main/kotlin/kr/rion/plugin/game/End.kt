@@ -24,7 +24,7 @@ object End {
     val EscapePlayers: MutableSet<String> = mutableSetOf()
     val MissionSuccessPlayers: MutableSet<String> = mutableSetOf() // ✅ 미션 성공 후 탈출한 플레이어
     var LastSurvivor: String? = null // ✅ 마지막 생존자
-    private val soundName = "custom.bye"
+    private val soundName = "minecraft:custom.gameend"
 
     fun EndAction() {
         val world = Bukkit.getWorld("game")

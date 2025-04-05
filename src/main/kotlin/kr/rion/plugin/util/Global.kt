@@ -104,6 +104,9 @@ object Global {
         } else {
             Bukkit.broadcastMessage("${ChatColor.LIGHT_PURPLE}탈출 허용 인원이 가득 차 헬기가 떠납니다.")
             Helicopter.remove() // 내부적으로 null 체크를 처리함
+            for(players in Bukkit.getOnlinePlayers()){
+                players.playSound(players,"minecraft:custom.awayhell", SoundCategory.MASTER,1.0f,1.0f)
+            }
         }
         player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
         removeDirectionBossBar(player)
