@@ -17,6 +17,8 @@ class ChatEvent : Listener {
         val message = event.message
 
         if (isStarting) {
+
+            if(player.scoreboardTags.contains("manager")) return
             val teamName = getTeam(player.name)
 
             if (teamName == null) {
@@ -48,7 +50,7 @@ class ChatEvent : Listener {
             Bukkit.getOnlinePlayers()
                 .filter { it.scoreboardTags.contains("manager") && !teamPlayers.contains(it.name) }
                 .forEach { manager ->
-                    manager.sendMessage("§e[관리자] §b팀: $teamColorName§f${player.name}: §7$message")
+                    manager.sendMessage("§e[관리자 뷰] §b팀: $teamColorName§f${player.name}: §7$message")
                 }
 
             // 콘솔에도 추가로 로그 표시
