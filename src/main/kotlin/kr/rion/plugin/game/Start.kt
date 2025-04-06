@@ -33,12 +33,12 @@ object Start {
 
     fun startAction() {
         if (TeamGame) {
-            Bukkit.broadcastMessage("$prefix 설정된 게임방식 : §e팀전")
+            Bukkit.broadcastMessage("$prefix §a설정된 게임방식 : §e팀전")
             delay.delayRun(20) {
                 startTeamAction()
             }
         } else {
-            Bukkit.broadcastMessage("$prefix 설정된 게임방식 : §e개인전")
+            Bukkit.broadcastMessage("$prefix §a설정된 게임방식 : §e개인전")
             delay.delayRun(20) {
                 startSoleAction()
             }
