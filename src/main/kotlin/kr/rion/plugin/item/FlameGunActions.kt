@@ -187,9 +187,9 @@ object FlameGunActions {
                         }
                         if (playersAtParticle.contains(currentPlayer)) { //파티클에 도달한적 있는플레이어만 인식.
 
-                            // 플레이어가 playerloc에서 0.5칸 이상 움직였는지 확인(y좌표는 위아래로1씩 추가확인)
-                            if (abs(currentLocation.y - startLocation.y) <= 1 &&
-                                currentLocation.distance(startLocation) > 0.5
+                            // 플레이어가 playerloc에서 1칸 이상 움직였는지 확인(y좌표는 위아래로1씩 추가확인)
+                            if (abs(currentLocation.y - startLocation.y) <= 1.5 &&
+                                currentLocation.distance(startLocation) > 1
                             ) {
                                 // 탈출 실패 메시지를 한 번만 보내기 위해 확인
                                 if (!failedPlayers.contains(currentPlayer)) {
