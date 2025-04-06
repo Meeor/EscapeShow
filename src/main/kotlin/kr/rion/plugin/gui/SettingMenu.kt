@@ -24,7 +24,7 @@ object SettingMenu {
     }
 
     private fun createTeamPvpItem(isPvpEnabled: Boolean): ItemStack {
-        return if (TeamGame) {
+        return if (!TeamGame) {
             createCustomItem(
                 "${org.bukkit.ChatColor.GREEN}팀 PVP 설정",
                 listOf("팀 PVP 를 허용할지 금지할지 설정합니다", "", "현재 개인전 상태입니다. PVP설정을 하실수 없습니다."),
@@ -48,19 +48,19 @@ object SettingMenu {
         }
     }
 
-    private fun createTeamGame(Teamgame: Boolean): ItemStack {
-        return if (Teamgame) {
+    private fun createTeamGame(teamgame: Boolean): ItemStack {
+        return if (teamgame) {
             createCustomItem(
                 "${org.bukkit.ChatColor.GREEN}개인전으로 변경",
                 listOf("클릭 시 게임방식을 개인전으로 변경합니다."),
-                Material.GREEN_WOOL,
+                Material.RAW_GOLD,
                 persistentDataKey = "team-game"
             )
         } else {
             createCustomItem(
                 "${org.bukkit.ChatColor.GREEN}팀전으로 변경",
                 listOf("클릭 시 게임방식을 팀전으로 변경합니다."),
-                Material.RED_WOOL,
+                Material.RAW_GOLD_BLOCK,
                 persistentDataKey = "solo-game"
             )
         }
