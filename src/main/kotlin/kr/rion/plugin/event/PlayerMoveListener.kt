@@ -26,7 +26,19 @@ class PlayerMoveListener : Listener {
     @EventHandler
     fun stopPlayerMove(event: PlayerMoveEvent) {
         if (stopPlayer[event.player] == true) {
-            event.setTo(event.from) // ✅ 움직임만 막고 시야는 유지
+            val from = event.from
+            val to = event.to
+
+            val fixed = from.clone().apply {
+                to?.let {
+                    yaw = it.yaw
+                    pitch = it.pitch
+                }
+            }
+
+
+            event.setTo(fixed)
         }
+
     }
 }
