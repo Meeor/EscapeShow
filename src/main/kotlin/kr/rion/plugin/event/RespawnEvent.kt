@@ -2,11 +2,14 @@ package kr.rion.plugin.event
 
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.manager.TeamManager
 import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.reviveFlags
+import kr.rion.plugin.util.Global.survivalPlayers
 import kr.rion.plugin.util.delay
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -30,24 +33,28 @@ class RespawnEvent : Listener {
             delay.delayRun(10) {
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1)) // 40틱(2초) 동안 실명 효과
                 player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 20 * 3600, 1, false, false))
-            } // 5틱 후에 실행
-            if (!TeamGame) {
-                // 개인전일 경우 무조건 관전 모드
-                player.gameMode = GameMode.SPECTATOR
-                player.sendMessage("§c사망 하셨습니다.")
-                player.addScoreboardTag("death")
-                playerItem.remove(player.name)
-            } else if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) { //팀전이고 부활이 가능할경우
-                player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
-                player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 타인이 웅크리고 3초간 있을경우 부활할수있습니다.")
-                player.addScoreboardTag("DeathAndAlive")
-            } else { //팀전이지만 부활이 불가능한상태일 경우
-                player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경
-                player.sendMessage("§c사망 하셨습니다.")
-                player.addScoreboardTag("death")
-                playerItem.remove(player.name) // 데이터 삭제 (메모리 관리)
-            }
-            endingPlayer()
+                if (!TeamGame) {
+                    // 개인전일 경우 무조건 관전 모드
+                    player.gameMode = GameMode.SPECTATOR
+                    player.sendMessage("§c사망 하셨습니다.")
+                    player.addScoreboardTag("death")
+                    playerItem.remove(player.name)
+                } else if (reviveFlags[player.name] == true || reviveFlags[player.name] == null) { //팀전이고 부활이 가능할경우
+                    player.gameMode = GameMode.ADVENTURE // 모험 모드로 변경
+                    player.sendMessage("§c사망하셨습니다.§a본인의 시체위에서 타인이 웅크리고 3초간 있을경우 부활할수있습니다.")
+                    player.addScoreboardTag("DeathAndAlive")
+                } else { //팀전이지만 부활이 불가능한상태일 경우
+                    player.gameMode = GameMode.SPECTATOR // 관전 모드로 변경
+                    player.sendMessage("§c사망 하셨습니다.")
+                    player.addScoreboardTag("death")
+                    playerItem.remove(player.name) // 데이터 삭제 (메모리 관리)
+                }
+                Bukkit.broadcastMessage(
+                    "${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE} \n" +
+                            "${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}${if (TeamGame) "/ ${org.bukkit.ChatColor.AQUA}남은 팀 : ${org.bukkit.ChatColor.YELLOW}${TeamManager.getSurviverCount()}${org.bukkit.ChatColor.AQUA} 팀" else null}"
+                )
+                endingPlayer()
+            }//10틱이후 실행
         } else {
             event.respawnLocation = Location(Bukkit.getWorld("vip"), 15.5, 58.5, -44.5)
             delay.delayRun(1) {
