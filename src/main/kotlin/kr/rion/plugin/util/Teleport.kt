@@ -105,6 +105,7 @@ object Teleport {
 
         val startTime = System.currentTimeMillis()
         val safeLocation = safeLocations.randomOrNull()
+        safeLocations.remove(safeLocation)
 
         if (safeLocation == null) {
             console.sendMessage("$prefix 좌표를 찾을 수 없습니다. 재설정을 해주세요.")
@@ -117,19 +118,19 @@ object Teleport {
             targetChunk.load()  // 청크 강제 로드
         }
 
-        delayForEachPlayer(
-            players,
-            action = { player ->
-                player.teleport(safeLocation)
-            },
-            onComplete = {
-                // 텔레포트 완료 후 중앙 위치 제거
-                safeLocations.remove(safeLocation)
+        delay.delayRun(20) {
+            delayForEachPlayer(
+                players,
+                action = { player ->
+                    player.teleport(safeLocation)
+                },
+                onComplete = {
 
-                val endTime = System.currentTimeMillis()
-                console.sendMessage("$prefix 텔레포트 지연시간: ${endTime - startTime}ms")
-            }
-        )
+                    val endTime = System.currentTimeMillis()
+                    console.sendMessage("$prefix 팀 텔레포트 지연시간: ${endTime - startTime}ms")
+                }
+            )
+        }
     }
 
     fun teleportSoleToRandomLocation(player: Player) {
@@ -155,14 +156,16 @@ object Teleport {
             targetChunk.load()  // 청크 강제 로드
         }
 
-        Bukkit.getScheduler().runTask(Loader.instance, Runnable {
-            player.teleport(safeLocation)
-            // 텔레포트 완료 후 중앙 위치 제거
-            safeLocations.remove(safeLocation)
+        delay.delayRun(20) {
+            Bukkit.getScheduler().runTask(Loader.instance, Runnable {
+                player.teleport(safeLocation)
+                // 텔레포트 완료 후 중앙 위치 제거
+                safeLocations.remove(safeLocation)
 
-            val endTime = System.currentTimeMillis()
-            console.sendMessage("$prefix 팀 텔레포트 지연시간: ${endTime - startTime}ms")
-        })
+                val endTime = System.currentTimeMillis()
+                console.sendMessage("$prefix 텔레포트 지연시간: ${endTime - startTime}ms")
+            })
+        }
     }
 
 
