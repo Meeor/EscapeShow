@@ -4,6 +4,7 @@ import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.manager.TeamManager
 import kr.rion.plugin.util.Bossbar
+import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.processedPlayers
 import kr.rion.plugin.util.Global.survivalPlayers
@@ -42,10 +43,7 @@ class DeathEvent : Listener {
             inventory.setItem(slot, null) // 해당 슬롯의 아이템 제거
         }
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 2 * 20, 1, false, false))
-        Bukkit.broadcastMessage(
-            "${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE} \n" +
-                    "${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getSurviverCount()}${ChatColor.AQUA} 팀"
-        )
+
         console.sendMessage("${ChatColor.YELLOW}${event.player.name}${ChatColor.RESET}님이${ChatColor.RED}사망${ChatColor.RESET}하였습니다.")
         Bossbar.removeDirectionBossBar(player)
         processedPlayers.remove(player.name)
