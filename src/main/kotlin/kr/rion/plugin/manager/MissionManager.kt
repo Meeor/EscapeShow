@@ -2,6 +2,7 @@ package kr.rion.plugin.manager
 
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
+import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.delay
 import org.bukkit.Bukkit
 import org.bukkit.Sound
@@ -45,7 +46,10 @@ object MissionManager {
 
     fun assignMission(player: Player) {
         // 1~50 사이의 랜덤 번호 생성
-        val randomMissionId = (1..28).random()
+        val excludedMissions = if (!TeamGame) listOf(16) else emptyList()
+        val availableMissions = (1..28).filterNot { it in excludedMissions }
+        val randomMissionId = availableMissions.random()
+
 
         val mission = MissionRegistry.getMission(randomMissionId)
         if (mission != null) {
