@@ -6,9 +6,6 @@ import kr.rion.plugin.command.BuffDamageSetting.handleDamageSetting
 import kr.rion.plugin.command.Damage.handleDamage
 import kr.rion.plugin.command.EscapeSetting.HandleSetting
 import kr.rion.plugin.command.GameEventCommand.handleEvent
-import kr.rion.plugin.command.Gameinfo.handleCraftInfo
-import kr.rion.plugin.command.Gameinfo.handleGameInfo
-import kr.rion.plugin.command.Gameinfo.handleItemInfo
 import kr.rion.plugin.command.Mission.HandleMission
 import kr.rion.plugin.command.Revive.handleRevive
 import kr.rion.plugin.command.game.handlegame
@@ -36,9 +33,6 @@ class CommandHandler : CommandExecutor {
             "방송" -> handleBroadcast(sender, args)
             "데미지" -> handleDamage(sender, args)
             "부활불가" -> handleRevive(sender)
-            "게임안내" -> handleGameInfo(sender)
-            "아이템" -> handleItemInfo(sender)
-            "조합법" -> handleCraftInfo(sender)
             "버프데미지" -> handleDamageSetting(sender, args)
 
             else -> return false
