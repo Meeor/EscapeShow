@@ -1,5 +1,6 @@
 package kr.rion.plugin.gameEvent
 
+import kr.rion.plugin.gameEvent.GameEvent.excludedTags
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.Sound
@@ -9,9 +10,6 @@ object WeatherRain {
     fun applyRainWeather() {
         // 날씨를 폭우로 설정
         Bukkit.getWorlds().forEach { world -> world.setStorm(true); world.isThundering = true }
-
-        // 확인할 태그 리스트
-        val excludedTags = setOf("manager", "EscapeComplete", "MissionSuccessEscape", "death")
 
         // 플레이어에게 어둠 효과 적용 (30초간)
         Bukkit.getOnlinePlayers()
