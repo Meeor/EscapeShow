@@ -288,7 +288,7 @@ class InventoryClickListener : Listener {
             val meta = item.itemMeta ?: return
 
             when {
-                hasCustomTag(meta, "event-sun") -> {
+                hasCustomTag(meta, "event-clear") -> {
                     event.isCancelled = true
                     player.closeInventory()
                     if (isStarting) {
@@ -303,6 +303,33 @@ class InventoryClickListener : Listener {
                     player.closeInventory()
                     if (isStarting) {
                         GameEvent.weatherRain()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
+                }
+                hasCustomTag(meta, "event-sun") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
+                    if (isStarting) {
+                        GameEvent.weatherSun()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
+                }
+                hasCustomTag(meta, "event-wind") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
+                    if (isStarting) {
+                        GameEvent.weatherWind()
+                    } else {
+                        player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
+                    }
+                }
+                hasCustomTag(meta, "event-thunder") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
+                    if (isStarting) {
+                        GameEvent.weatherThunder()
                     } else {
                         player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
                     }
