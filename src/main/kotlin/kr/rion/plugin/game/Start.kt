@@ -21,6 +21,7 @@ import kr.rion.plugin.util.Teleport.teleportSoleToRandomLocation
 import kr.rion.plugin.util.Teleport.teleportTeamToRandomLocation
 import kr.rion.plugin.util.delay
 import org.bukkit.*
+import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
@@ -85,7 +86,7 @@ object Start {
                     action = { player ->
                         player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
                         if (!player.scoreboardTags.contains("manager")) {
-                            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300, 1, false, false))
+                            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 500, 1, false, false))
                             stopPlayer[player] = true
                             immunePlayers.add(player)
                         }
@@ -253,7 +254,7 @@ object Start {
                             MissionManager.assignMission(player) //플레이어에게 미션 부여
                             playerInventorySetting(player)
                             player.inventory.addItem(ItemGuideBook())
-                            player.removePotionEffect(PotionEffectType.BLINDNESS)
+                            clearBlindnessProperly(player)
                             player.sendTitle(
                                 "${ChatColor.GREEN}게임을 시작합니다.",
                                 "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
@@ -292,7 +293,7 @@ object Start {
                         MissionManager.assignMission(player) //플레이어에게 미션 부여
                         playerInventorySetting(player)
                         player.inventory.addItem(ItemGuideBook())
-                        player.removePotionEffect(PotionEffectType.BLINDNESS)
+                        clearBlindnessProperly(player)
                         player.sendTitle(
                             "${ChatColor.GREEN}게임을 시작합니다.",
                             "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
@@ -309,4 +310,27 @@ object Start {
                 })
         }//연출이 끝난후 플레이어 세팅및 이동시작.
     }
+
+    fun clearBlindnessProperly(player: Player) {
+        // 1. 실명 제거 시도
+        player.removePotionEffect(PotionEffectType.BLINDNESS)
+
+        // 2. 억지로 실명 1틱 넣고 다시 제거
+        player.addPotionEffect(
+            PotionEffect(PotionEffectType.BLINDNESS, 1, 0, false, false)
+        )
+
+        // 3. delayRun: 실명 재제거 + 이동속도/스프린트 초기화
+        delay.delayRun(2L) {
+            player.removePotionEffect(PotionEffectType.BLINDNESS)
+            player.walkSpeed = 0.2f
+            player.isSprinting = false
+
+            // 4. 클라 스프린트 상태 다시 활성화
+            delay.delayRun(2L) {
+                player.isSprinting = true
+            }
+        }
+    }
+
 }
