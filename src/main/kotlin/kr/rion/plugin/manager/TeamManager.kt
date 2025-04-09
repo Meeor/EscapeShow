@@ -5,6 +5,7 @@ import kr.rion.plugin.util.Global.teamsMaxPlayers
 import kr.rion.plugin.util.delay
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
+import org.bukkit.scoreboard.Team
 
 object TeamManager {
     private val teams = mutableMapOf<String, MutableList<String>>() // 팀 데이터 (코드 내부용, 플레이어 닉네임 저장)
@@ -46,6 +47,7 @@ object TeamManager {
             if (team == null) {
                 team = scoreboard?.registerNewTeam(teamKey)
                 team?.prefix = "$teamColorBungee[Team$teamCounter] " // ✅ Tab 목록 팀 이름에 색상 적용
+                team?.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
             }
 
             team?.addEntry(player.name) // ✅ 플레이어를 팀에 추가
