@@ -18,7 +18,7 @@ class ChatEvent : Listener {
 
         if (isStarting) {
 
-            if(player.scoreboardTags.contains("manager")) return
+            if (player.scoreboardTags.contains("manager")) return
             val teamName = getTeam(player.name)
 
             if (teamName == null) {

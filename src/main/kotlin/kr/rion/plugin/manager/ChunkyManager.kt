@@ -5,7 +5,6 @@ import kr.rion.plugin.game.Start.clearBlindnessProperly
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.potion.PotionEffectType
 import org.popcraft.chunky.api.ChunkyAPI
 import org.popcraft.chunky.api.event.task.GenerationCompleteEvent
 

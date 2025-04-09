@@ -307,6 +307,7 @@ class InventoryClickListener : Listener {
                         player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
                     }
                 }
+
                 hasCustomTag(meta, "event-sun") -> {
                     event.isCancelled = true
                     player.closeInventory()
@@ -316,6 +317,7 @@ class InventoryClickListener : Listener {
                         player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
                     }
                 }
+
                 hasCustomTag(meta, "event-wind") -> {
                     event.isCancelled = true
                     player.closeInventory()
@@ -325,6 +327,7 @@ class InventoryClickListener : Listener {
                         player.sendMessage("$prefix 게임 진행중이 아닌것같습니다.")
                     }
                 }
+
                 hasCustomTag(meta, "event-thunder") -> {
                     event.isCancelled = true
                     player.closeInventory()

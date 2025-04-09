@@ -9,7 +9,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 
 class JoinEvent : Listener {
-    val line = "=".repeat(40)
 
     //접속 메세지
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

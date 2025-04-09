@@ -46,7 +46,7 @@ object MissionManager {
 
     fun assignMission(player: Player) {
         // 1~50 사이의 랜덤 번호 생성
-        val excludedMissions = if (!TeamGame) listOf(16,17) else emptyList()
+        val excludedMissions = if (!TeamGame) listOf(16, 17) else emptyList()
         val availableMissions = (1..28).filterNot { it in excludedMissions }
         val randomMissionId = availableMissions.random()
 

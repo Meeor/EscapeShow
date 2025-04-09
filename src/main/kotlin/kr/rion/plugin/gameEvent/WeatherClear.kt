@@ -8,10 +8,10 @@ import org.bukkit.potion.PotionEffectType
 object WeatherClear {
     fun applyClearWeather() {
         // 날씨를 맑게 설정
-        Bukkit.getWorlds().forEach { world -> world.setStorm(false); world.isThundering = false}
+        Bukkit.getWorlds().forEach { world -> world.setStorm(false); world.isThundering = false }
 
         Bukkit.getOnlinePlayers().forEach { player ->
-            for(effect in PotionEffectType.values()) {
+            for (effect in PotionEffectType.values()) {
                 player.removePotionEffect(effect)
             }
         }

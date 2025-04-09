@@ -18,7 +18,6 @@ import kr.rion.plugin.util.Teleport
 import org.bukkit.ChatColor
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
-import java.io.File
 
 
 class Loader : JavaPlugin() {
@@ -83,10 +82,6 @@ class Loader : JavaPlugin() {
                 console.sendMessage("${ChatColor.GOLD}$line")
                 console.sendMessage("")
                 console.sendMessage("    ${ChatColor.GREEN}Escape Show 서버가 시작되었습니다.")
-                console.sendMessage("")
-                console.sendMessage("        ${ChatColor.AQUA}서버에는 왁타버스 마크조공")
-                console.sendMessage("       ${ChatColor.AQUA}Escape Show 를 위한 자체제작")
-                console.sendMessage("        ${ChatColor.AQUA}플러그인이 적용되어있습니다.")
                 console.sendMessage("")
                 console.sendMessage("${ChatColor.GOLD}$line")
                 console.sendMessage("")

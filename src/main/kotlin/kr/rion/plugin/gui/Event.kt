@@ -27,7 +27,8 @@ object Event {
         val rain = createCustomItem(rainName, rainLore, Material.LINGERING_POTION, persistentDataKey = "event-rain")
         val sun = createCustomItem(sunName, sunLore, Material.FIRE_CHARGE, persistentDataKey = "event-sun")
         val wind = createCustomItem(windName, windLore, Material.WHITE_BANNER, persistentDataKey = "event-wind")
-        val thunder = createCustomItem(thunderName, thunderLore, Material.LIGHTNING_ROD, persistentDataKey = "event-thunder")
+        val thunder =
+            createCustomItem(thunderName, thunderLore, Material.LIGHTNING_ROD, persistentDataKey = "event-thunder")
         val notitem = createCustomItem("", listOf(""), Material.BARRIER, persistentDataKey = "nothing")
         gui.setItem(0, clear)
         gui.setItem(1, notitem)
