@@ -60,12 +60,12 @@ object Global {
             if (player.scoreboardTags.contains("Escape")) {
                 performAction(player)
             } else if (player.scoreboardTags.contains("MissionSuccess") && !MissionSuccessPlayers.contains(name)) {
-                if (TeamGame) {
+                if (!TeamGame) {
                     if (survivalPlayers().count <= 5) {
-                        missionclearTeamAction(player)
+                        missionclearSoleAction()
                     }
                 } else {
-                    missionclearSoleAction()
+                    missionclearTeamAction(player)
                 }
 
 
@@ -80,7 +80,6 @@ object Global {
         // 플라이 허용
         player.allowFlight = true
         player.isFlying = true
-
         // 투명화 버프 부여 (무한지속시간)
         val invisibilityEffect = PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
         val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
@@ -94,7 +93,7 @@ object Global {
         player.inventory.setItem(8, teleportCompass())
         player.addScoreboardTag("EscapeComplete")
         player.removeScoreboardTag("Escape")
-        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}${if(TeamGame)"/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getSurviverCount()}${ChatColor.AQUA} 팀" else null}" )
+        Bukkit.broadcastMessage("${ChatColor.YELLOW}${player.name}${ChatColor.RESET}님이 ${ChatColor.GREEN}탈출 ${ChatColor.RESET}하셨습니다. \n${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}${if (TeamGame) "/ ${ChatColor.AQUA}남은 팀 : ${ChatColor.YELLOW}${TeamManager.getSurviverCount()}${ChatColor.AQUA} 팀" else ""}")
         EscapePlayerCount++
         EscapePlayers.add(player.name)
         val remainingPlayers = EscapePlayerMaxCount - EscapePlayerCount
@@ -104,8 +103,8 @@ object Global {
         } else {
             Bukkit.broadcastMessage("${ChatColor.LIGHT_PURPLE}탈출 허용 인원이 가득 차 헬기가 떠납니다.")
             Helicopter.remove() // 내부적으로 null 체크를 처리함
-            for(players in Bukkit.getOnlinePlayers()){
-                players.playSound(players,"minecraft:custom.awayhell", SoundCategory.MASTER,1.0f,1.0f)
+            for (players in Bukkit.getOnlinePlayers()) {
+                players.playSound(players, "minecraft:custom.awayhell", SoundCategory.MASTER, 1.0f, 1.0f)
             }
         }
         player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
@@ -146,8 +145,6 @@ object Global {
                         // 플라이 허용
                         player.allowFlight = true
                         player.isFlying = true
-
-                        // 투명화 버프 부여 (무한지속시간)
                         val invisibilityEffect =
                             PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false)
                         val blindEffect = PotionEffect(PotionEffectType.BLINDNESS, 2, 1, false, false)
@@ -348,7 +345,7 @@ object Global {
             })
     }
 
-    fun playerInventorySetting(player: Player){
+    fun playerInventorySetting(player: Player) {
         /////////////////////인벤 아이템 세팅/////////////////
         val craftingItem = createCustomItem(
             "${ChatColor.GREEN}아이템 조합",
@@ -377,6 +374,4 @@ object Global {
             }
         }
     }
-
-
 }
