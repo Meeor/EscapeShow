@@ -46,6 +46,7 @@ object ChunkyManager {
                     api.onGenerationComplete { event: GenerationCompleteEvent ->
                         val eventWorld = Bukkit.getWorld(event.world) // 이벤트의 월드를 Bukkit에서 가져옴
                         if (eventWorld != null && eventWorld == world) {
+                            null
                         }
                     }
                 } else {
