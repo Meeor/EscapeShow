@@ -51,7 +51,7 @@ class RespawnEvent : Listener {
                 }
                 Bukkit.broadcastMessage(
                     "${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE} \n" +
-                            "${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}${if (TeamGame) "/ ${org.bukkit.ChatColor.AQUA}남은 팀 : ${org.bukkit.ChatColor.YELLOW}${TeamManager.getSurviverCount()}${org.bukkit.ChatColor.AQUA} 팀" else null}"
+                            "${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}${if (TeamGame) "/ ${org.bukkit.ChatColor.AQUA}남은 팀 : ${org.bukkit.ChatColor.YELLOW}${TeamManager.getSurviverCount()}${org.bukkit.ChatColor.AQUA} 팀" else ""}"
                 )
                 endingPlayer()
             }//10틱이후 실행
