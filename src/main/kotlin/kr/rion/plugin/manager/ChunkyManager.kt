@@ -1,6 +1,7 @@
 package kr.rion.plugin.manager
 
 import kr.rion.plugin.Loader
+import kr.rion.plugin.game.Start.clearBlindnessProperly
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -33,7 +34,7 @@ object ChunkyManager {
                             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                                 Bukkit.broadcastMessage("$prefix 게임맵 리셋이 완료되었습니다.")
                                 for (player in Bukkit.getOnlinePlayers()) {
-                                    player.removePotionEffect(PotionEffectType.BLINDNESS)
+                                    clearBlindnessProperly(player)
                                 }
                             }, 100L)
                         }
