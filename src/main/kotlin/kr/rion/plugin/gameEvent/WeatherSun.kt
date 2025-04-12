@@ -13,7 +13,9 @@ object WeatherSun {
     // 햇살 (30초간 적용)
     fun applySunWeather() {
         // 시간을 아침으로 변경
-        Bukkit.getWorlds().forEach { world -> world.time = 3000L }
+        Bukkit.getWorlds().forEach { world ->
+            world.time = 500L
+        }
 
         Bukkit.getOnlinePlayers()
             .filter { player -> excludedTags.none { player.scoreboardTags.contains(it) } }

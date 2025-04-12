@@ -10,7 +10,9 @@ object Weatherthunder {
     // 폭풍 (30초간 적용)
     fun applyThunderWeather() {
         // 날씨를 폭풍으로 설정
-        Bukkit.getWorlds().forEach { world -> world.time = 0L }
+        Bukkit.getWorlds().forEach { world ->
+            world.time = 23000L
+        }
 
         // 플레이어에게 구속 효과 적용 (30초간)
         Bukkit.getOnlinePlayers()
