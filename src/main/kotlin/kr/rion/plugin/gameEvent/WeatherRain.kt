@@ -9,7 +9,7 @@ object WeatherRain {
     // 폭우 (30초간 적용)
     fun applyRainWeather() {
         // 날씨를 폭우로 설정
-        Bukkit.getWorlds().forEach { world -> world.setStorm(true); world.isThundering = true; world.time = 5000L }
+        Bukkit.getWorlds().forEach { world -> world.setStorm(true); world.isThundering = true; world.time = 12500L }
 
         // 플레이어에게 어둠 효과 적용 (30초간)
         Bukkit.getOnlinePlayers()
