@@ -14,7 +14,7 @@ object WeatherWind {
             world.time = 3000L
         }
         val defaultWalkSpeed = 0.2f  // 기본 이동 속도
-        val walkSpeed = 1.2 //이속수정 퍼센트
+        val walkSpeed = 1.5 //이속수정 퍼센트
         Bukkit.getOnlinePlayers()
             .filter { player -> excludedTags.none { player.scoreboardTags.contains(it) } }
             .forEach { player ->

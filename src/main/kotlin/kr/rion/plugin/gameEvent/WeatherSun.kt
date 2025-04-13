@@ -20,7 +20,7 @@ object WeatherSun {
         Bukkit.getOnlinePlayers()
             .filter { player -> excludedTags.none { player.scoreboardTags.contains(it) } }
             .forEach { player ->
-                applyAttackBoostFlat(player, 1.0)
+                applyAttackBoostFlat(player, 2.0)
                 // 메세지 출력
                 player.sendMessage("$prefix 날이 밝았습니다! 하루의 시작을 열심히 해볼까요?")
                 delay.delayRun(30 * 20) {
