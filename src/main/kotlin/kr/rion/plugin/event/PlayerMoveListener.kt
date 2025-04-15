@@ -26,19 +26,17 @@ class PlayerMoveListener : Listener {
     @EventHandler
     fun stopPlayerMove(event: PlayerMoveEvent) {
         if (stopPlayer[event.player] == true) {
+            val to = event.to ?: return
             val from = event.from
-            val to = event.to
 
-            val fixed = from.clone().apply {
-                to?.let {
-                    yaw = it.yaw
-                    pitch = it.pitch
-                }
+            // XZ 좌표만 고정 (Y와 머리 방향은 유지)
+            val fixed = to.clone().apply {
+                x = from.x
+                z = from.z
             }
-
 
             event.setTo(fixed)
         }
-
     }
+
 }
