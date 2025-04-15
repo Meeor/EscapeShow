@@ -88,6 +88,31 @@ object Item {
         return item
     }
 
+    ///////////////////////수정예정////////////////
+    fun speedItem(): ItemStack {
+        val itemName = "${ChatColor.GREEN}신속아이템"
+        val itemlore = listOf("", "")
+        val item = createCustomItem(itemName, itemlore, Material.BEETROOT, persistentDataKey = "speed")
+        return item
+    }
+
+    fun upgradeItem(): ItemStack {
+        val itemName = "${ChatColor.GREEN}강화제"
+        val itemlore = listOf( "", "")
+        val item = createCustomItem(itemName, itemlore, Material.PUFFERFISH, persistentDataKey = "upgrade")
+        return item
+    }
+
+    // 미션 탈출 종이 생성 함수
+    fun createMissionEscapePaper(): ItemStack {
+        return createCustomItem(
+            itemName = "§f미션 클리어 인증서",
+            itemLore = listOf("§b 어딘가에 이종이를 넣으면 탈출 할 수 있다."),
+            itemType = Material.PAPER,
+            persistentDataKey = "mission_escape_paper"
+        )
+    }
+
     fun ItemGuideBook(): ItemStack {
         val book = ItemStack(Material.WRITTEN_BOOK)
         val meta = book.itemMeta as BookMeta

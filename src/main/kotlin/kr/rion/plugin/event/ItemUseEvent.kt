@@ -6,6 +6,8 @@ import kr.rion.plugin.gui.MainMenu.openMainGUI
 import kr.rion.plugin.gui.PlayerTeleport.openTeleportGUI
 import kr.rion.plugin.item.ItemAction.handleBerries
 import kr.rion.plugin.item.ItemAction.handleFlameGun
+import kr.rion.plugin.item.ItemAction.handleSpeed
+import kr.rion.plugin.item.ItemAction.handleUpgrade
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -54,6 +56,8 @@ class ItemUseEvent : Listener {
             val tag = when (item.type) {
                 Material.FLINT -> "flamegun"
                 Material.GLOW_BERRIES -> "berries"
+                Material.BEETROOT -> "speed"
+                Material.PUFFERFISH -> "upgrade"
                 else -> return
             }
 
@@ -75,13 +79,23 @@ class ItemUseEvent : Listener {
         try {
             when (tag) {
                 "flamegun" -> {
-                    println("🔥 handleFlameGun 호출됨") // 로그 추가
+                    println("handleFlameGun 호출됨") // 로그 추가
                     handleFlameGun(player)
                 }
 
                 "berries" -> {
-                    println("🍓 handleBerries 호출됨") // 로그 추가
+                    println("handleBerries 호출됨") // 로그 추가
                     handleBerries(player)
+                }
+
+                "speed" -> {
+                    println("handleSpeed 호출됨") // 로그 추가
+                    handleSpeed(player)
+                }
+
+                "upgrade" -> {
+                    println("handleUpgrade 호출됨") // 로그 추가
+                    handleUpgrade(player)
                 }
             }
         } catch (e: Exception) {
@@ -95,6 +109,8 @@ class ItemUseEvent : Listener {
         return when (tag) {
             "flamegun" -> "플레어건"
             "berries" -> "농축된 열매"
+            "speed" -> "신속아이템" //수정예정
+            "upgrade" -> "강화제"
             else -> ""
         }
     }

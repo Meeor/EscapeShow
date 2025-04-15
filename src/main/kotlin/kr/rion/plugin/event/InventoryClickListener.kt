@@ -22,8 +22,10 @@ import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Item.berries
 import kr.rion.plugin.util.Item.flamegun
 import kr.rion.plugin.util.Item.mainMenu
+import kr.rion.plugin.util.Item.speedItem
 import kr.rion.plugin.util.Item.teleportCompass
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Item.upgradeItem
+import kr.rion.plugin.util.Delay
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -186,6 +188,18 @@ class InventoryClickListener : Listener {
                     player.inventory.addItem(berries())
                 }
 
+                hasCustomTag(meta, "give-speed") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
+                    player.inventory.addItem(speedItem())
+                }
+
+                hasCustomTag(meta, "give-upgrade") -> {
+                    event.isCancelled = true
+                    player.closeInventory()
+                    player.inventory.addItem(upgradeItem())
+                }
+
                 hasCustomTag(meta, "give-teleportCompass") -> {
                     event.isCancelled = true
                     player.closeInventory()
@@ -246,7 +260,7 @@ class InventoryClickListener : Listener {
                     event.isCancelled = true
                     teamPvpBoolean = !teamPvpBoolean // ✅ 상태 반전 (true → false, false → true)
 
-                    delay.delayRun(2) {
+                    Delay.delayRun(2) {
                         player.closeInventory()
                         settingGUI(player) // ✅ 변경된 상태 반영하여 GUI 다시 열기
                     }
@@ -262,7 +276,7 @@ class InventoryClickListener : Listener {
                 hasCustomTag(meta, "team-game") || hasCustomTag(meta, "solo-game") -> {
                     event.isCancelled = true
                     TeamGame = !TeamGame // ✅ 상태 반전 (true → false, false → true)
-                    delay.delayRun(2) {
+                    Delay.delayRun(2) {
                         player.closeInventory()
                         settingGUI(player) // ✅ 변경된 상태 반영하여 GUI 다시 열기
                     }
