@@ -19,6 +19,8 @@ import kr.rion.plugin.util.Teleport.initializeSafeLocations
 import kr.rion.plugin.util.Teleport.teleportSoleToRandomLocation
 import kr.rion.plugin.util.Teleport.teleportTeamToRandomLocation
 import kr.rion.plugin.util.Delay
+import kr.rion.plugin.util.Global.allUnStopPlayer
+import kr.rion.plugin.util.Global.stopPlayer
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -57,7 +59,7 @@ object Start {
                         player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
                         if (!player.scoreboardTags.contains("manager")) {
                             player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300, 1, false, false))
-                            player.walkSpeed = 0f
+                            stopPlayer(player)
                             immunePlayers.add(player)
                         }
                     },
@@ -99,7 +101,7 @@ object Start {
                                             false
                                         )
                                     )
-                                    player.walkSpeed = 0f
+                                    stopPlayer(player)
                                     immunePlayers.add(player)
                                 }
                             },
@@ -284,7 +286,7 @@ object Start {
                         },
                         onComplete = {
                             immunePlayers.clear()
-                            for(player in Bukkit.getOnlinePlayers()) player.walkSpeed = 0.2f
+                            allUnStopPlayer()
                         })
                 }
             })
@@ -326,7 +328,7 @@ object Start {
                     },
                     onComplete = {
                         immunePlayers.clear()
-                        for(player in Bukkit.getOnlinePlayers()) player.walkSpeed = 0.2f
+                        allUnStopPlayer()
                     })
             }
         }//연출이 끝난후 플레이어 세팅및 이동시작.

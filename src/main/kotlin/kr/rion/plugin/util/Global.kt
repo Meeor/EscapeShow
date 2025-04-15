@@ -304,7 +304,7 @@ object Global {
         cancelAllTasks()
         door = true
         HelicopterisSpawn = false
-        for(player in Bukkit.getOnlinePlayers()) player.walkSpeed = 0.2f
+        allUnStopPlayer()
     }
 
     fun GameAllReset2() {
@@ -363,6 +363,15 @@ object Global {
                 24 -> player.inventory.setItem(i, craftingItem) // 24번 슬롯에 제작아이템
                 else -> player.inventory.setItem(i, barrier) // 나머지 슬롯에 방벽
             }
+        }
+    }
+
+    fun stopPlayer(player: Player){
+        player.walkSpeed = 0f
+    }
+    fun allUnStopPlayer(){
+        for(player in Bukkit.getOnlinePlayers()){
+            player.walkSpeed = 0.2f
         }
     }
 }
