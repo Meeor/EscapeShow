@@ -23,7 +23,7 @@ object WeatherWind {
                 player.walkSpeed = newSpeed.toFloat()
                 player.world.spawnParticle(
                     Particle.CLOUD,               // 파티클 종류
-                    player.location.clone().add(0.0,1.0,0.0),              // 위치 (~ ~ ~)
+                    player.location.clone().add(0.0,0.5,0.0),              // 위치 (~ ~ ~)
                     100,                          // 수량
                     5.0, 5.0, 5.0,                // x, y, z 퍼짐 범위
                     0.0                           // 속도

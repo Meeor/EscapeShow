@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffectType
 
 object SpeedAction {
     fun lunchSpeed(player: Player) {
-        val loc = player.location.clone().add(0.0, 1.0, 0.0)
+        val loc = player.location.clone().add(0.0, 0.5, 0.0)
         inventory.removeItemFromInventory(player, Material.BEETROOT, 1)
         for (playerall in Bukkit.getOnlinePlayers()) {
             playerall.playSound(player.location, Sound.ENTITY_PLAYER_BURP, 1.0f, 0.0f)
