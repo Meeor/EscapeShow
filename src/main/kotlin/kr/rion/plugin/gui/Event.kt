@@ -29,15 +29,11 @@ object Event {
         val wind = createCustomItem(windName, windLore, Material.WHITE_BANNER, persistentDataKey = "event-wind")
         val thunder =
             createCustomItem(thunderName, thunderLore, Material.LIGHTNING_ROD, persistentDataKey = "event-thunder")
-        val notitem = createCustomItem("", listOf(""), Material.BARRIER, persistentDataKey = "nothing")
+//        val notitem = createCustomItem("", listOf(""), Material.BARRIER, persistentDataKey = "nothing")
         gui.setItem(0, clear)
-        gui.setItem(1, notitem)
         gui.setItem(2, sun)
-        gui.setItem(3, notitem)
         gui.setItem(4, wind)
-        gui.setItem(5, notitem)
         gui.setItem(6, thunder)
-        gui.setItem(7, notitem)
         gui.setItem(8, rain)
 
         player.openInventory(gui)
