@@ -1,16 +1,26 @@
 package kr.rion.plugin.event
 
+import kr.rion.plugin.Loader
+import kr.rion.plugin.game.End.MissionSuccessPlayers
 import kr.rion.plugin.gameEvent.FlameGunSpawn.chestLocation
 import kr.rion.plugin.gameEvent.FlameGunSpawn.particleTask
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
+import kr.rion.plugin.util.Global.missionclearSoleAction
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.BlockState
+import org.bukkit.block.Container
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 
 class InventoryCloseEvent : Listener {
     @EventHandler
@@ -36,5 +46,46 @@ class InventoryCloseEvent : Listener {
             }
         }
     }
+
+    @EventHandler
+    fun missionClearCheck(event: InventoryCloseEvent) {
+        val holder = event.inventory.holder as? Container ?: return
+        val loc = holder.location
+        val player = event.player as Player
+
+        // 이미 성공한 플레이어면 리턴
+        if (MissionSuccessPlayers.contains(player.name)) return
+
+        val targetLocations = listOf(
+            Location(Bukkit.getWorld("game"), 227.0, 51.0, -669.0),
+            Location(Bukkit.getWorld("game"), -19.0, 61.0, -460.0),
+            Location(Bukkit.getWorld("game"), -38.0, 73.0, -13.0),
+            Location(Bukkit.getWorld("game"), 317.0, 57.0, -213.0)
+        )
+
+        // 좌표 일치하는지 체크
+        if (targetLocations.none { it == loc }) return
+
+        if (!isMissionEscapePaperExists(holder.inventory)) return
+
+        missionclearSoleAction(player)
+    }
+
+
+
+    fun isMissionEscapePaperExists(inventory: Inventory): Boolean {
+        return inventory.contents.any { isMissionEscapePaper(it) }
+    }
+
+    // 미션 탈출 종이인지 체크 (PDC만)
+    fun isMissionEscapePaper(item: ItemStack?): Boolean {
+        if (item == null || item.type != Material.PAPER) return false
+
+        val meta = item.itemMeta ?: return false
+        val key = NamespacedKey(Loader.instance, "mission_escape_paper")
+
+        return meta.persistentDataContainer.has(key, PersistentDataType.BOOLEAN)
+    }
+
 
 }
