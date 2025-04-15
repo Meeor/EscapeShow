@@ -8,7 +8,7 @@ import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Global.survivalPlayers
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -30,7 +30,7 @@ class RespawnEvent : Listener {
         if (isStarting) {
             event.respawnLocation = player.location // 플레이어의 사망 위치로 리스폰 설정
             if (isEnding) return
-            delay.delayRun(10) {
+            Delay.delayRun(10) {
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1)) // 40틱(2초) 동안 실명 효과
                 player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 20 * 3600, 1, false, false))
                 if (!TeamGame) {
@@ -57,7 +57,7 @@ class RespawnEvent : Listener {
             }//10틱이후 실행
         } else {
             event.respawnLocation = Location(Bukkit.getWorld("vip"), 15.5, 58.5, -44.5)
-            delay.delayRun(1) {
+            Delay.delayRun(1) {
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1)) // 40틱(2초) 동안 실명 효과
             } // 1틱 후에 실행
         }

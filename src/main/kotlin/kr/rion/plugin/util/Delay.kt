@@ -4,7 +4,7 @@ import kr.rion.plugin.Loader
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-object delay {
+object Delay {
     fun delayRun(ticks: Long, block: () -> Unit) {
         Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable { block() }, ticks)
     }
@@ -19,7 +19,9 @@ object delay {
             Bukkit.getScheduler().runTaskLater(Loader.instance, Runnable {
                 action(player)
                 if (i == players.size - 1 && onComplete != null) {
-                    onComplete()
+                    delayRun(10) {
+                        onComplete()
+                    }
                 }
             }, i * tickGap)
         }

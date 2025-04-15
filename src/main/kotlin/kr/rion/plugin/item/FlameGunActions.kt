@@ -9,7 +9,7 @@ import kr.rion.plugin.util.Global.adjustToAboveSpecificBlock
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.HelicopterLoc
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
@@ -48,7 +48,7 @@ object FlameGunActions {
         val particleData1 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.5f)
         val particleData2 = Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0f)
 
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { onlinePlayer ->
                 object : BukkitRunnable() {
@@ -104,7 +104,7 @@ object FlameGunActions {
                             if (!startEscapecheck) {
                                 startEscapecheck = true
                                 Bukkit.broadcastMessage("${ChatColor.BOLD}${ChatColor.YELLOW}헬기가 오고있습니다..")
-                                delay.delayRun(30 * 20L) {
+                                Delay.delayRun(30 * 20L) {
 
                                     val newLocation: Location? = initialLoc.world?.let {
                                         adjustToAboveSpecificBlock(
@@ -234,7 +234,7 @@ object FlameGunActions {
                             }
                         }
                     }
-                delay.delayForEachPlayer(
+                Delay.delayForEachPlayer(
                     Bukkit.getOnlinePlayers(),
                     action = {
                         // 파티클 소환 (HelicopterLoc 기준, 50칸 아래로)

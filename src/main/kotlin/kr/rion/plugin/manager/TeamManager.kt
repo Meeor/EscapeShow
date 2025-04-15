@@ -2,7 +2,7 @@ package kr.rion.plugin.manager
 
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.teamsMaxPlayers
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.scoreboard.Team
@@ -165,7 +165,7 @@ object TeamManager {
         }
 
         // ✅ 모든 플레이어의 머리 위 닉네임, 탭 리스트 닉네임, 채팅 닉네임 초기화
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player ->
                 player.setPlayerListName(player.name) // ✅ 탭 리스트 기본값 (플레이어 이름만 표시)

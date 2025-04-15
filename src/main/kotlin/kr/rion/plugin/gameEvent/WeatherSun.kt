@@ -2,7 +2,7 @@ package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.gameEvent.GameEvent.excludedTags
 import kr.rion.plugin.util.Global.prefix
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
@@ -23,7 +23,7 @@ object WeatherSun {
                 applyAttackBoostFlat(player, 2.0)
                 // 메세지 출력
                 player.sendMessage("$prefix 날이 밝았습니다! 하루의 시작을 열심히 해볼까요?")
-                delay.delayRun(30 * 20) {
+                Delay.delayRun(30 * 20) {
                     removeAttackBoost(player)
                 }
             }

@@ -3,7 +3,7 @@ package kr.rion.plugin.util
 import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.Global.prefix
-import kr.rion.plugin.util.delay.delayForEachPlayer
+import kr.rion.plugin.util.Delay.delayForEachPlayer
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -118,7 +118,7 @@ object Teleport {
             targetChunk.load()  // 청크 강제 로드
         }
 
-        delay.delayRun(20) {
+        Delay.delayRun(20) {
             delayForEachPlayer(
                 players,
                 action = { player ->
@@ -156,7 +156,7 @@ object Teleport {
             targetChunk.load()  // 청크 강제 로드
         }
 
-        delay.delayRun(20) {
+        Delay.delayRun(20) {
             Bukkit.getScheduler().runTask(Loader.instance, Runnable {
                 player.teleport(safeLocation)
                 // 텔레포트 완료 후 중앙 위치 제거

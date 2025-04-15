@@ -18,7 +18,7 @@ import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Global.sneakingTimers
 import kr.rion.plugin.util.Global.timerReset
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -67,7 +67,7 @@ class OnEntitySpawn : Listener {
             }
 
             // 30초 후 부활 불가능 처리
-            delay.delayRun(600) {
+            Delay.delayRun(600) {
                 reviveFlags[playerName] = false // 부활 불가능 상태로 변경
             } // 30초 = 600 ticks
 

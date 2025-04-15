@@ -19,7 +19,7 @@ import kr.rion.plugin.util.Teleport.initializeSafeLocations
 import kr.rion.plugin.util.Teleport.stopPlayer
 import kr.rion.plugin.util.Teleport.teleportSoleToRandomLocation
 import kr.rion.plugin.util.Teleport.teleportTeamToRandomLocation
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -35,12 +35,12 @@ object Start {
     fun startAction() {
         if (TeamGame) {
             Bukkit.broadcastMessage("$prefix §a설정된 게임방식 : §e팀전")
-            delay.delayRun(20) {
+            Delay.delayRun(20) {
                 startTeamAction()
             }
         } else {
             Bukkit.broadcastMessage("$prefix §a설정된 게임방식 : §e개인전")
-            delay.delayRun(20) {
+            Delay.delayRun(20) {
                 startSoleAction()
             }
         }
@@ -48,11 +48,11 @@ object Start {
 
     fun startSoleAction() {
         GameAllReset()
-        delay.delayRun(20) {
+        Delay.delayRun(20) {
             initializeSafeLocations(Bukkit.getOnlinePlayers().size)//랜덤좌표 설정
-            delay.delayRun(30) {
+            Delay.delayRun(30) {
                 isStart = true
-                delay.delayForEachPlayer(
+                Delay.delayForEachPlayer(
                     Bukkit.getOnlinePlayers(),
                     action = { player ->
                         player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
@@ -74,28 +74,44 @@ object Start {
     fun startTeamAction() {
         GameAllReset()
         TeamManager.resetTeam()
-        delay.delayRun(20) {
+        Delay.delayRun(20) {
+            //팀설정시작전 안내
             Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 시작합니다.")
-            TeamManager.random()
-            Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 끝냈습니다. 게임맵에서 각팀이 이동될 좌표 선정을 시작합니다.")
-            initializeSafeLocations(TeamManager.getTeamCount())//랜덤좌표 설정
-            delay.delayRun(30) {
-                isStart = true
-                delay.delayForEachPlayer(
-                    Bukkit.getOnlinePlayers(),
-                    action = { player ->
-                        player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
-                        if (!player.scoreboardTags.contains("manager")) {
-                            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 500, 1, false, false))
-                            stopPlayer[player] = true
-                            immunePlayers.add(player)
-                        }
-                    },
-                    onComplete = {
-                        executeBlockFillingAndEffect()
-                    }
-                )
-            }//랜덤이동좌표선정이후 연출 시작.
+            Delay.delayRun(5) {
+                //팀설정시작
+                TeamManager.random()
+                Delay.delayRun(5) {
+                    //팀설정 완료
+                    Bukkit.broadcastMessage("$prefix 랜덤 팀설정을 끝냈습니다. 게임맵에서 각팀이 이동될 좌표 선정을 시작합니다.")
+                    initializeSafeLocations(TeamManager.getTeamCount())//랜덤좌표 설정
+                    Delay.delayRun(30) {
+                        isStart = true
+                        Delay.delayForEachPlayer(
+                            Bukkit.getOnlinePlayers(),
+                            action = { player ->
+                                player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
+                                if (!player.scoreboardTags.contains("manager")) {
+                                    player.addPotionEffect(
+                                        PotionEffect(
+                                            PotionEffectType.BLINDNESS,
+                                            500,
+                                            1,
+                                            false,
+                                            false
+                                        )
+                                    )
+                                    stopPlayer[player] = true
+                                    immunePlayers.add(player)
+                                }
+                            },
+                            onComplete = {
+                                executeBlockFillingAndEffect()
+                            },
+                            tickGap = 1L
+                        )
+                    }//랜덤이동좌표선정이후 연출 시작.
+                }
+            }
         }//게임시작 요청 받은후 1초뒤 팀선정 및 랜덤이동좌표선정 시작
     }
 
@@ -232,7 +248,7 @@ object Start {
 
         startSetting()
 
-        delay.delayRun(30) {
+        Delay.delayRun(30) {
             PlayerAllReset()
             Bukkit.getScheduler().runTask(Loader.instance, Runnable {
                 Bukkit.getLogger().warning("[DEBUG] 팀 갯수 : ${TeamManager.getTeamCount()}")
@@ -247,7 +263,49 @@ object Start {
                     Bukkit.getLogger().warning("[DEBUG] $team 이동 완료")
                 }
 
-                delay.delayForEachPlayer(
+                Delay.delayRun(40) {
+                    Delay.delayForEachPlayer(
+                        Bukkit.getOnlinePlayers(),
+                        action = { player ->
+                            if (!player.scoreboardTags.contains("manager")) {
+                                MissionManager.assignMission(player) //플레이어에게 미션 부여
+                                playerInventorySetting(player)
+                                player.inventory.addItem(ItemGuideBook())
+                                clearBlindnessProperly(player)
+                                player.sendTitle(
+                                    "${ChatColor.GREEN}게임을 시작합니다.",
+                                    "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
+                                )
+                                player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
+                            } else {
+                                // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
+                            }
+                        },
+                        onComplete = {
+                            immunePlayers.clear()
+                            stopPlayer.clear()
+                        })
+                }
+            })
+        }//연출이 끝난후 플레이어 세팅및 이동시작.
+    }
+
+    private fun startSoleAction2() {
+
+        startSetting()
+
+        Delay.delayRun(30) {
+            PlayerAllReset()
+            Delay.delayForEachPlayer(
+                Bukkit.getOnlinePlayers(),
+                action = { player ->
+                    teleportSoleToRandomLocation(player)
+                }
+            )
+
+            Delay.delayRun(40) {
+                Delay.delayForEachPlayer(
                     Bukkit.getOnlinePlayers(),
                     action = { player ->
                         if (!player.scoreboardTags.contains("manager")) {
@@ -269,45 +327,7 @@ object Start {
                         immunePlayers.clear()
                         stopPlayer.clear()
                     })
-            })
-        }//연출이 끝난후 플레이어 세팅및 이동시작.
-    }
-
-    private fun startSoleAction2() {
-
-        startSetting()
-
-        delay.delayRun(30) {
-            PlayerAllReset()
-            delay.delayForEachPlayer(
-                Bukkit.getOnlinePlayers(),
-                action = { player ->
-                    teleportSoleToRandomLocation(player)
-                }
-            )
-
-            delay.delayForEachPlayer(
-                Bukkit.getOnlinePlayers(),
-                action = { player ->
-                    if (!player.scoreboardTags.contains("manager")) {
-                        MissionManager.assignMission(player) //플레이어에게 미션 부여
-                        playerInventorySetting(player)
-                        player.inventory.addItem(ItemGuideBook())
-                        clearBlindnessProperly(player)
-                        player.sendTitle(
-                            "${ChatColor.GREEN}게임을 시작합니다.",
-                            "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
-                        )
-                        player.playSound(player, "custom.start", SoundCategory.MASTER, 1.0f, 1.0f)
-                    } else {
-                        // 콘솔 명령어 실행하여 해당 플레이어를 game 월드로 이동
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp ${player.name} game")
-                    }
-                },
-                onComplete = {
-                    immunePlayers.clear()
-                    stopPlayer.clear()
-                })
+            }
         }//연출이 끝난후 플레이어 세팅및 이동시작.
     }
 
@@ -321,13 +341,13 @@ object Start {
         )
 
         // 3. delayRun: 실명 재제거 + 이동속도/스프린트 초기화
-        delay.delayRun(2L) {
+        Delay.delayRun(2L) {
             player.removePotionEffect(PotionEffectType.BLINDNESS)
             player.walkSpeed = 0.2f
             player.isSprinting = false
 
             // 4. 클라 스프린트 상태 다시 활성화
-            delay.delayRun(2L) {
+            Delay.delayRun(2L) {
                 player.isSprinting = true
             }
         }

@@ -15,7 +15,7 @@ import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import org.bukkit.*
 
 object End {
@@ -47,7 +47,7 @@ object End {
         Bukkit.broadcastMessage("")
         Bukkit.broadcastMessage("$prefix 게임이 종료되었습니다.")
 
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player ->
                 player.playSound(player, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
@@ -95,12 +95,12 @@ object End {
         }
 
         // 게임 종료 후 모든 플레이어 이동 및 초기화
-        delay.delayRun(20 * 20) {
+        Delay.delayRun(20 * 20) {
             Bukkit.getScheduler().runTask(Loader.instance, Runnable {
                 loadChunkyForWorld("vip")
                 PlayerAllReset()
             })
-            delay.delayForEachPlayer(
+            Delay.delayForEachPlayer(
                 Bukkit.getOnlinePlayers(),
                 action = { player ->
                     if (worldWait != null) {
@@ -164,7 +164,7 @@ object End {
             Bukkit.broadcastMessage(message)
 
             // 최종 초기화
-            delay.delayRun(20 * 10) {
+            Delay.delayRun(20 * 10) {
                 GameAllReset2()
                 resetTeam()
                 handleGameReset()

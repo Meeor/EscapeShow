@@ -1,6 +1,6 @@
 package kr.rion.plugin.item
 
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.inventory
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -23,7 +23,7 @@ object BerriesAction {
         val currentHunger = player.foodLevel
         player.foodLevel = (currentHunger + 6).coerceAtMost(20)
 
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player -> // 파티클을 플레이어의 위치에 생성
                 player.world.spawnParticle(

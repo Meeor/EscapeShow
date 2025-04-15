@@ -394,7 +394,7 @@ object Helicopter {
             slabType = Slab.Type.BOTTOM
         )
         setBlockWithAttributes(setloc(getloc, -3.0, 9.0, 0.0), Material.POLISHED_BLACKSTONE)
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { allplayer ->
                 allplayer.playSound(allplayer, soundName, SoundCategory.MASTER, 1.0f, 1.0f)
@@ -407,7 +407,7 @@ object Helicopter {
 
     fun remove() {
         if (HelicopterLoc == null) return
-        delay.delayRun(20L * 30) {
+        Delay.delayRun(20L * 30) {
             // 블럭을 공기로 변경
             HelicopterLoc?.let { getloc ->
                 setBlockWithAttributes(setloc(getloc, 1.0, 0.0, 2.0), Material.AIR)
@@ -538,7 +538,7 @@ object Helicopter {
         flaregunstart?.cancel()
         flaregunstart = null
         bossbarEnable = 0 //보스바 업데이트 종료
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player ->
                 removeDirectionBossBar(player)

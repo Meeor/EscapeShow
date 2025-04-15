@@ -5,7 +5,7 @@ import kr.rion.plugin.manager.ChunkyManager
 import kr.rion.plugin.manager.WorldManager
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Teleport.setInitializedSafeLocations
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Delay
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -20,7 +20,7 @@ object Reset {
     fun handleGameReset(): Boolean {
         var removedCount = 0
         setInitializedSafeLocations(false)
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player ->
                 player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300 * 20, 1, false, false))
@@ -93,7 +93,7 @@ object Reset {
     }
 
     fun resetplayerAttribute() {
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player ->
                 val playerhealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)

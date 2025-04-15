@@ -3,7 +3,8 @@ package kr.rion.plugin.manager
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
 import kr.rion.plugin.util.Global.TeamGame
-import kr.rion.plugin.util.delay
+import kr.rion.plugin.util.Item.createMissionEscapePaper
+import kr.rion.plugin.util.Delay
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
@@ -158,7 +159,7 @@ object MissionManager {
     }
 
     fun endGame() {
-        delay.delayForEachPlayer(
+        Delay.delayForEachPlayer(
             Bukkit.getOnlinePlayers(),
             action = { player ->
                 val missionId = activeMissions[player.uniqueId] ?: return@delayForEachPlayer
@@ -178,6 +179,7 @@ object MissionManager {
                 )
 
                 activeMissions.remove(player.uniqueId) // 미션 완료 후 제거
+                player.inventory.addItem(createMissionEscapePaper())
             }
         )
     }
@@ -188,10 +190,6 @@ object MissionManager {
         MissionRegistry.getAllMissions().values.forEach { mission ->
             mission.reset()
         }
-    }
-
-    fun listMission(): MutableMap<UUID, Int> {
-        return activeMissions
     }
 
 }
