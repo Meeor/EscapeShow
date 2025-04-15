@@ -15,7 +15,7 @@ object SpeedAction {
         val loc = player.location.clone().add(0.0, 0.5, 0.0)
         inventory.removeItemFromInventory(player, Material.BEETROOT, 1)
         for (playerall in Bukkit.getOnlinePlayers()) {
-            playerall.playSound(player.location, Sound.ENTITY_PLAYER_BURP, 1.0f, 0.0f)
+            playerall.playSound(player.location, Sound.ENTITY_PLAYER_BURP, 1.0f, 1.0f)
         }
         val speedeffect = PotionEffect(PotionEffectType.SPEED, 5 * 20, 1, false, false)
         player.addPotionEffect(speedeffect)
