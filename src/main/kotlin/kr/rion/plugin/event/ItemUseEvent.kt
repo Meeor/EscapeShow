@@ -67,8 +67,6 @@ class ItemUseEvent : Listener {
                 if (itemName == expectedName) {
                     event.isCancelled = true
                     player.sendMessage("$prefix 아이템 ${itemMeta.displayName}${ChatColor.RESET}${ChatColor.GREEN} 을(를) 사용하셨습니다.")
-                    val item = player.inventory.itemInMainHand
-                    Bukkit.getLogger().info("[DEBUG] 현재 손에 든 아이템: $item")
                     handleAction(player, tag)
                 }
             }
