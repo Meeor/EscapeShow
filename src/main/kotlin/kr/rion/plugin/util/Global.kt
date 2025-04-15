@@ -17,7 +17,6 @@ import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
 import kr.rion.plugin.util.Item.createCustomItem
 import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Teleport.console
-import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -305,7 +304,7 @@ object Global {
         cancelAllTasks()
         door = true
         HelicopterisSpawn = false
-        stopPlayer.clear()
+        for(player in Bukkit.getOnlinePlayers()) player.walkSpeed = 0.2f
     }
 
     fun GameAllReset2() {

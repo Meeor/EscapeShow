@@ -25,7 +25,6 @@ object Teleport {
     private var destinationWorld: World? = null
     val console = Bukkit.getServer().consoleSender
     val immunePlayers = mutableSetOf<Player>() // 플레이어와 면역 시간 맵
-    val stopPlayer: MutableMap<Player, Boolean> = mutableMapOf()
 
     private var hasInitializedSafeLocations = false
 

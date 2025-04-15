@@ -4,7 +4,6 @@ import kr.rion.plugin.gameEvent.FlameGunSpawn.chestLocation
 import kr.rion.plugin.item.FlameGunActions.EscapeLocation
 import kr.rion.plugin.util.Bossbar
 import kr.rion.plugin.util.Bossbar.bossbarEnable
-import kr.rion.plugin.util.Teleport.stopPlayer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
@@ -22,21 +21,4 @@ class PlayerMoveListener : Listener {
             return
         }
     }
-
-    @EventHandler
-    fun stopPlayerMove(event: PlayerMoveEvent) {
-        if (stopPlayer[event.player] == true) {
-            val to = event.to ?: return
-            val from = event.from
-
-            // XZ 좌표만 고정 (Y와 머리 방향은 유지)
-            val fixed = to.clone().apply {
-                x = from.x
-                z = from.z
-            }
-
-            event.setTo(fixed)
-        }
-    }
-
 }

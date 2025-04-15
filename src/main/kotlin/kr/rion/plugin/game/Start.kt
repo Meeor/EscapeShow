@@ -16,7 +16,6 @@ import kr.rion.plugin.util.Item.ItemGuideBook
 import kr.rion.plugin.util.TPSManager
 import kr.rion.plugin.util.Teleport.immunePlayers
 import kr.rion.plugin.util.Teleport.initializeSafeLocations
-import kr.rion.plugin.util.Teleport.stopPlayer
 import kr.rion.plugin.util.Teleport.teleportSoleToRandomLocation
 import kr.rion.plugin.util.Teleport.teleportTeamToRandomLocation
 import kr.rion.plugin.util.Delay
@@ -58,7 +57,7 @@ object Start {
                         player.playSound(player.location, Sound.BLOCK_WOOD_BREAK, 1.0f, 1.0f)
                         if (!player.scoreboardTags.contains("manager")) {
                             player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 300, 1, false, false))
-                            stopPlayer[player] = true
+                            player.walkSpeed = 0f
                             immunePlayers.add(player)
                         }
                     },
@@ -100,7 +99,7 @@ object Start {
                                             false
                                         )
                                     )
-                                    stopPlayer[player] = true
+                                    player.walkSpeed = 0f
                                     immunePlayers.add(player)
                                 }
                             },
@@ -272,6 +271,7 @@ object Start {
                                 playerInventorySetting(player)
                                 player.inventory.addItem(ItemGuideBook())
                                 clearBlindnessProperly(player)
+                                player.walkSpeed = 0f
                                 player.sendTitle(
                                     "${ChatColor.GREEN}게임을 시작합니다.",
                                     "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
@@ -284,7 +284,7 @@ object Start {
                         },
                         onComplete = {
                             immunePlayers.clear()
-                            stopPlayer.clear()
+                            for(player in Bukkit.getOnlinePlayers()) player.walkSpeed = 0.2f
                         })
                 }
             })
@@ -313,6 +313,7 @@ object Start {
                             playerInventorySetting(player)
                             player.inventory.addItem(ItemGuideBook())
                             clearBlindnessProperly(player)
+                            player.walkSpeed = 0f
                             player.sendTitle(
                                 "${ChatColor.GREEN}게임을 시작합니다.",
                                 "${ChatColor.YELLOW}상대를 죽이고 탈출수단을 이용해서 이곳을 탈출하세요."
@@ -325,7 +326,7 @@ object Start {
                     },
                     onComplete = {
                         immunePlayers.clear()
-                        stopPlayer.clear()
+                        for(player in Bukkit.getOnlinePlayers()) player.walkSpeed = 0.2f
                     })
             }
         }//연출이 끝난후 플레이어 세팅및 이동시작.
