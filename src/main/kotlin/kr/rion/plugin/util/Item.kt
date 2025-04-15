@@ -55,7 +55,7 @@ object Item {
     //플레어건
     fun flamegun(): ItemStack {
         val flamegunName = "${ChatColor.RED}플레어건"
-        val flamegunlore = listOf("", "")
+        val flamegunlore = listOf("")
         val item = createCustomItem(flamegunName, flamegunlore, Material.FLINT, nbtKey = "flamegun", nbtValue = true)
         return item
     }
@@ -63,7 +63,7 @@ object Item {
     //농축된 열매
     fun berries(): ItemStack {
         val berriesName = "${ChatColor.GREEN}농축된 열매"
-        val berrieslore = listOf("", "")
+        val berrieslore = listOf("")
         val item =
             createCustomItem(berriesName, berrieslore, Material.GLOW_BERRIES, nbtKey = "berries", nbtValue = true)
         return item
@@ -91,15 +91,15 @@ object Item {
     ///////////////////////수정예정////////////////
     fun speedItem(): ItemStack {
         val itemName = "${ChatColor.GREEN}신속아이템"
-        val itemlore = listOf("", "")
-        val item = createCustomItem(itemName, itemlore, Material.BEETROOT, persistentDataKey = "speed")
+        val itemlore = listOf("")
+        val item = createCustomItem(itemName, itemlore, Material.BEETROOT, nbtKey = "speed", nbtValue = true)
         return item
     }
 
     fun upgradeItem(): ItemStack {
         val itemName = "${ChatColor.GREEN}강화제"
-        val itemlore = listOf( "", "")
-        val item = createCustomItem(itemName, itemlore, Material.PUFFERFISH, persistentDataKey = "upgrade")
+        val itemlore = listOf("")
+        val item = createCustomItem(itemName, itemlore, Material.PUFFERFISH, nbtKey = "upgrade", nbtValue = true)
         return item
     }
 
