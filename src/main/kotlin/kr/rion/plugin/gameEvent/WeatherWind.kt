@@ -30,7 +30,7 @@ object WeatherWind {
                 )
 
                 // 메세지 출력
-                player.sendMessage("$prefix 바람이 불기 시작합니다. 바람에 몸을 맡겨봅시다~")
+                player.sendMessage("$prefix 바람이 붑니다. 몸이가벼워집니다.")
                 Delay.delayRun(30 * 20) {
                     player.walkSpeed = defaultWalkSpeed
                 }

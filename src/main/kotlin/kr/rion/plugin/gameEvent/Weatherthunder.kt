@@ -28,7 +28,7 @@ object Weatherthunder {
                     )
                 )
                 // 메세지 출력
-                player.sendMessage("$prefix 폭풍이 칩니다! 움직이기 힘들군요...")
+                player.sendMessage("$prefix 폭풍이 옵니다. 거센 비가 옵니다.")
             }
 
     }

@@ -22,7 +22,7 @@ object WeatherSun {
             .forEach { player ->
                 applyAttackBoostFlat(player, 2.0)
                 // 메세지 출력
-                player.sendMessage("$prefix 날이 밝았습니다! 하루의 시작을 열심히 해볼까요?")
+                player.sendMessage("$prefix 해가 쨍쨍합니다. 몸에 힘이 솟습니다.")
                 Delay.delayRun(30 * 20) {
                     removeAttackBoost(player)
                 }
