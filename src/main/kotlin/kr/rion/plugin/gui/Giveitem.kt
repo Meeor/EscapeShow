@@ -7,12 +7,12 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 
 object Giveitem {
-    fun ItemGUI(player: Player) {
+    fun itemGUI(player: Player) {
         val gui = Bukkit.createInventory(null, 9, "${ChatColor.DARK_BLUE}아이템지급")
 
         val flamegunName = "${ChatColor.RED}플레어건"
         val berriesName = "${ChatColor.GREEN}농축된 열매"
-        val speedName = "${ChatColor.GREEN}신속아이템(이름수정예정)"
+        val speedName = "${ChatColor.GREEN}복숭아"
         val upgradeName = "${ChatColor.GREEN}강화제"
         val teleportName = "${ChatColor.LIGHT_PURPLE}플레이어에게 텔레포트"
         val menuName = "${ChatColor.AQUA}메뉴창 열기"

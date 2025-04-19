@@ -107,7 +107,7 @@ class ItemUseEvent : Listener {
         return when (tag) {
             "flamegun" -> "플레어건"
             "berries" -> "농축된 열매"
-            "speed" -> "신속아이템" //수정예정
+            "speed" -> "복숭아"
             "upgrade" -> "강화제"
             else -> ""
         }

@@ -88,9 +88,8 @@ object Item {
         return item
     }
 
-    ///////////////////////수정예정////////////////
     fun speedItem(): ItemStack {
-        val itemName = "${ChatColor.GREEN}신속아이템"
+        val itemName = "${ChatColor.GREEN}복숭아"
         val itemlore = listOf("")
         val item = createCustomItem(itemName, itemlore, Material.BEETROOT, nbtKey = "speed", nbtValue = true)
         return item
