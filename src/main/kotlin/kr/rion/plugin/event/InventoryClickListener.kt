@@ -10,7 +10,7 @@ import kr.rion.plugin.game.Start.startAction
 import kr.rion.plugin.gameEvent.FlameGunSpawn.spawnFlareGunChest
 import kr.rion.plugin.gameEvent.GameEvent
 import kr.rion.plugin.gui.Event.eventGUI
-import kr.rion.plugin.gui.Giveitem.ItemGUI
+import kr.rion.plugin.gui.Giveitem.itemGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.SettingMenu.settingGUI
 import kr.rion.plugin.manager.TeamManager.teamPvpBoolean
@@ -111,7 +111,7 @@ class InventoryClickListener : Listener {
                 hasCustomTag(meta, "game-giveitem") -> {
                     event.isCancelled = true
                     player.closeInventory()
-                    ItemGUI(player)
+                    itemGUI(player)
                 }
 
                 hasCustomTag(meta, "game-event") -> {
