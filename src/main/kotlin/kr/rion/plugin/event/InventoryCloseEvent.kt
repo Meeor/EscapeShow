@@ -89,7 +89,7 @@ class InventoryCloseEvent : Listener {
 
     // 미션 탈출 종이인지 체크 (PDC만)
     fun isMissionEscapePaper(item: ItemStack?): Boolean {
-        if (item == null || item.type != Material.PAPER) return false
+        if (item == null || item.type != Material.PIGLIN_BANNER_PATTERN) return false
 
         val meta = item.itemMeta ?: return false
         val key = NamespacedKey(Loader.instance, "mission_escape_paper")

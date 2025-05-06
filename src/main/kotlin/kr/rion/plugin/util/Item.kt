@@ -107,7 +107,7 @@ object Item {
         return createCustomItem(
             itemName = "§f미션 클리어 인증서",
             itemLore = listOf("§b 어딘가에 이종이를 넣으면 탈출 할 수 있다."),
-            itemType = Material.PAPER,
+            itemType = Material.PIGLIN_BANNER_PATTERN,
             persistentDataKey = "mission_escape_paper"
         )
     }
