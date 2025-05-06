@@ -6,6 +6,7 @@ import kr.rion.plugin.gameEvent.FlameGunSpawn.chestLocation
 import kr.rion.plugin.gameEvent.FlameGunSpawn.particleTask
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.missionclearSoleAction
 import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
@@ -69,6 +70,15 @@ class InventoryCloseEvent : Listener {
         if (!isMissionEscapePaperExists(holder.inventory)) return
 
         missionclearSoleAction(player)
+        // 컨테이너 내용물 비우기 (상자든 셜커든)
+        Delay.delayRun(20){
+            val block = loc.block
+            val type = block.type // 기존 블록 타입 저장 (셜커든 상자든)
+
+            block.type = Material.AIR // 블록 제거
+            block.setType(type, false) // 같은 위치에 동일 블록 다시 설치
+
+        }
     }
 
 
