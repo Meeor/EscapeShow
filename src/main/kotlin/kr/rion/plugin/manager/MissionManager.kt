@@ -155,6 +155,7 @@ object MissionManager {
             )
 
             activeMissions.remove(player.uniqueId) // 미션 완료 후 제거
+            player.inventory.addItem(createMissionEscapePaper())
         }
     }
 
