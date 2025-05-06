@@ -288,6 +288,19 @@ object Start {
                             immunePlayers.clear()
                             allUnStopPlayer()
                         })
+                    Delay.delayRun(100){
+                        val world = Bukkit.getWorld("game") ?: return@delayRun
+                        val targetLocations = listOf(
+                            Location(world, 227.0, 51.0, -669.0),
+                            Location(world, -19.0, 61.0, -460.0),
+                            Location(world, -38.0, 73.0, -13.0),
+                            Location(world, 317.0, 57.0, -213.0)
+                        )
+                        targetLocations.forEach { loc ->
+                            val block = loc.block
+                            block.type = Material.GREEN_SHULKER_BOX
+                        }
+                    }
                 }
             })
         }//연출이 끝난후 플레이어 세팅및 이동시작.
@@ -330,6 +343,19 @@ object Start {
                         immunePlayers.clear()
                         allUnStopPlayer()
                     })
+                Delay.delayRun(100){
+                    val world = Bukkit.getWorld("game") ?: return@delayRun
+                    val targetLocations = listOf(
+                        Location(world, 227.0, 51.0, -669.0),
+                        Location(world, -19.0, 61.0, -460.0),
+                        Location(world, -38.0, 73.0, -13.0),
+                        Location(world, 317.0, 57.0, -213.0)
+                    )
+                    targetLocations.forEach { loc ->
+                        val block = loc.block
+                        block.type = Material.LIME_SHULKER_BOX
+                    }
+                }
             }
         }//연출이 끝난후 플레이어 세팅및 이동시작.
     }
