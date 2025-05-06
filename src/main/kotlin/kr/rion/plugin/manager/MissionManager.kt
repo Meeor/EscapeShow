@@ -1,15 +1,18 @@
 package kr.rion.plugin.manager
 
+import kr.rion.plugin.Loader
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
 import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Item.createMissionEscapePaper
 import kr.rion.plugin.util.Delay
 import org.bukkit.Bukkit
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
+import org.bukkit.persistence.PersistentDataType
 import java.util.*
 
 object MissionManager {
@@ -155,7 +158,28 @@ object MissionManager {
             )
 
             activeMissions.remove(player.uniqueId) // 미션 완료 후 제거
-            player.inventory.addItem(createMissionEscapePaper())
+
+            if (!TeamGame) {
+                val item = createMissionEscapePaper()
+                val meta = item.itemMeta!!
+                val keyOwner = NamespacedKey(Loader.instance, "owner")
+                meta.persistentDataContainer.set(keyOwner, PersistentDataType.STRING, player.uniqueId.toString())
+                item.itemMeta = meta
+                val leftover = player.inventory.addItem(item)
+
+                // 인벤토리에 안 들어간 아이템이 있다면 바닥에 드롭
+                if (leftover.isNotEmpty()) {
+                    leftover.values.forEach { remainingItem ->
+                        val dropped = player.world.dropItemNaturally(player.location, remainingItem)
+                        dropped.customName = "§e${player.name}§a의 미션 클리어 인증서"
+                        dropped.isCustomNameVisible = true
+                        player.sendMessage("§l§c인벤토리에 공간이 부족하여 아이템을 떨궜습니다.")
+                    }
+                }
+
+                Bukkit.getLogger().info("${player.name} 님께서 미션에 성공하여 종이를 지급했습니다.\n\n아이템 정보 : \n$item\n\n")
+            }
+
         }
     }
 
@@ -180,7 +204,6 @@ object MissionManager {
                 )
 
                 activeMissions.remove(player.uniqueId) // 미션 완료 후 제거
-                player.inventory.addItem(createMissionEscapePaper())
             }
         )
     }
