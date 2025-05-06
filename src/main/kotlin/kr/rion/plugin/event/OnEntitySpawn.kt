@@ -106,7 +106,9 @@ class OnEntitySpawn : Listener {
                     player.addScoreboardTag("death")
                     // 부활 실패 이벤트 호출
                     Bukkit.getPluginManager().callEvent(RevivalEvent(player, closestPlayer, RevivalEventType.FAILED))
-                    endingPlayer()
+                    Delay.delayRun(5) {
+                        endingPlayer()
+                    }
                     return@Runnable
                 }
                 if (!corpseEntity.isValid || !reviveFlags[playerName]!!) {
@@ -124,7 +126,9 @@ class OnEntitySpawn : Listener {
                     player.removeScoreboardTag("DeathAndAlive")
                     player.addScoreboardTag("death")
 
-                    endingPlayer()
+                    Delay.delayRun(5) {
+                        endingPlayer()
+                    }
                     return@Runnable
                 }
 
@@ -192,7 +196,6 @@ class OnEntitySpawn : Listener {
                         timerReset(playerName) // 웅크리지 않으면 시간 초기화
                     }
                 }
-                Bukkit.getLogger().info("[$playerName] 부활 검사 진행 중...")
             }, 20L, 20L) // 매초마다 체크
             respawnTask[playerName] = task
         }

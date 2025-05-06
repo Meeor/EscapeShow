@@ -53,7 +53,9 @@ class RespawnEvent : Listener {
                     "${ChatColor.YELLOW}누군가${ChatColor.RED}사망${ChatColor.RESET}하였습니다. ${ChatColor.LIGHT_PURPLE} \n" +
                             "${ChatColor.LIGHT_PURPLE}남은 플레이어 : ${ChatColor.YELLOW}${survivalPlayers().count}${ChatColor.LIGHT_PURPLE}명 ${ChatColor.GREEN}${if (TeamGame) "/ ${org.bukkit.ChatColor.AQUA}남은 팀 : ${org.bukkit.ChatColor.YELLOW}${TeamManager.getSurviverCount()}${org.bukkit.ChatColor.AQUA} 팀" else ""}"
                 )
-                endingPlayer()
+                Delay.delayRun(5) {
+                    endingPlayer()
+                }
             }//10틱이후 실행
         } else {
             event.respawnLocation = Location(Bukkit.getWorld("vip"), 15.5, 58.5, -44.5)
