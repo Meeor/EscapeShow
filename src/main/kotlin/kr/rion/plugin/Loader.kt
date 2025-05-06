@@ -34,7 +34,6 @@ class Loader : JavaPlugin() {
         instance = this
 
         Teleport.initialize(this)
-        val line = "=".repeat(42)
 
         server.pluginManager.registerEvents(EventListener(), this) //이벤트 등록
         MissionList.registerAll() //미션 등록
@@ -79,11 +78,10 @@ class Loader : JavaPlugin() {
 
         object : BukkitRunnable() {
             override fun run() {
-                console.sendMessage("${ChatColor.GOLD}$line")
-                console.sendMessage("")
-                console.sendMessage("    ${ChatColor.GREEN}Escape Show 서버가 시작되었습니다.")
-                console.sendMessage("")
-                console.sendMessage("${ChatColor.GOLD}$line")
+                val line = "=".repeat(40)
+                console.sendMessage("${ChatColor.GREEN}$line")
+                console.sendMessage("${ChatColor.AQUA}  ▶ 플러그인 활성화 완료")
+                console.sendMessage("${ChatColor.GREEN}$line")
                 console.sendMessage("")
                 Global.setGameRulesForAllWorlds()
                 console.sendMessage("")
