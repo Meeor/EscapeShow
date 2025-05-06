@@ -105,8 +105,10 @@ object Global {
             }
         }
         player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
-        removeDirectionBossBar(player)
-        endingPlayer()
+        Delay.delayRun(5) {
+            removeDirectionBossBar(player)
+            endingPlayer()
+        }
     }
 
     fun missionclearTeamAction(player: Player) {
@@ -148,6 +150,9 @@ object Global {
             player.addScoreboardTag("MissionSuccessEscape")
             removeDirectionBossBar(player)
             player.sendMessage("$prefix 플라이,무적및 투명화가 활성화 되었습니다!")
+            Delay.delayRun(5) {
+                endingPlayer()
+            }
         } else {
             MissionSuccessCount++
             MissionSuccessPlayers.add(player.name)
@@ -206,15 +211,22 @@ object Global {
         val remainingTeams = TeamManager.getSurviverCount() // 생존한 팀 수 가져오기
         val remainingPlayers = survivalPlayers().count // 생존한 플레이어 수
 
+        // 생존자 없으면 게임 종료
+        if (remainingPlayers <= 0) {
+            if (isEnding) return
+            endGame()
+            Bukkit.broadcastMessage("생존자가 없는 것으로 확인되어 게임을 종료시킵니다.")
+            End.EndAction()
+        }
         // ✅ 팀전일 경우, 생존한 팀이 1팀만 남았으면 종료
         if (TeamGame && remainingTeams == 1) {
-            if (!isEnding) return
+            if (isEnding) return
             endGame()
             End.EndAction()
         }
         // ✅ 개인전일 경우, 생존한 플레이어가 1명만 남으면 종료
         else if (!TeamGame && remainingPlayers == 1) {
-            if (!isEnding) return
+            if (isEnding) return
             endGame()
 
             // 마지막 생존자 처리
@@ -225,13 +237,7 @@ object Global {
 
             End.EndAction()
         }
-        // 생존자 없으면 게임 종료
-        else if (remainingPlayers <= 0) {
-            if (!isEnding) return
-            endGame()
-            Bukkit.broadcastMessage("생존자가 없는 것으로 확인되어 게임을 종료시킵니다.")
-            End.EndAction()
-        }
+
     }
 
 
