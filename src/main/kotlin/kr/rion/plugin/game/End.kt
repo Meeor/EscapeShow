@@ -19,8 +19,7 @@ import kr.rion.plugin.util.Delay
 import org.bukkit.*
 
 object End {
-    var isEnding: Boolean = true
-
+    var isEnding: Boolean = true // 게임 종료중인지 확인하는 플래그
     val EscapePlayers: MutableSet<String> = mutableSetOf()
     val MissionSuccessPlayers: MutableSet<String> = mutableSetOf() // ✅ 미션 성공 후 탈출한 플레이어
     var LastSurvivor: String? = null // ✅ 마지막 생존자
