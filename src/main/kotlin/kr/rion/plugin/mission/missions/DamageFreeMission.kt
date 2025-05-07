@@ -43,6 +43,7 @@ class DamageFreeMission(
 
     override fun checkEventSuccess(player: Player, event: Event): Boolean {
         if (event is EntityDamageByEntityEvent) {
+            if (event.entity != player) return false // 플레이어가 맞은 게 아니면 무시
             val uuid = player.uniqueId
             if (activePlayers.contains(uuid)) { // 현재 미션 진행 중인 경우만 처리
                 lastDamageTimeMap[uuid] = System.currentTimeMillis() // 데미지 받으면 시간 초기화

@@ -149,7 +149,7 @@ class OnEntitySpawn : Listener {
                         val messagetime = 5 - currentTime
                         if (messagetime > 0) {
                             //부활시도중인 메세지 출력
-                            nearbyPlayer.sendMessage("$prefix §l§b$playerName §a이가 §e$messagetime §a후 부활됩니다.")
+                            nearbyPlayer.sendMessage("$prefix §l§d$playerName §a이가 §e$messagetime §a후 부활됩니다.")
                             Bukkit.getPlayer(playerName)?.sendMessage("$prefix §l§e$messagetime §a후 부활합니다.")
 
                             //부활시도중인 사운드를 재생

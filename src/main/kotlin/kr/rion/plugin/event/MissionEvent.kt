@@ -71,11 +71,17 @@ class MissionEvent : Listener {
     @EventHandler(ignoreCancelled = false)
     fun damager(event: EntityDamageByEntityEvent) {
         val damager = event.damager
+        val victim = event.entity
+
         if (damager is Player) {
-            // 미션 시스템에 이벤트 전달
-            MissionManager.handleEvent(damager, event)
+            MissionManager.handleEvent(damager, event) // 공격자 기준 미션
+        }
+
+        if (victim is Player) {
+            MissionManager.handleEvent(victim, event) // 피해자 기준 미션 ← ⭐ 이거 추가해야 함
         }
     }
+
 
     @EventHandler(ignoreCancelled = false)
     fun itemDrop(event: PlayerDropItemEvent) {

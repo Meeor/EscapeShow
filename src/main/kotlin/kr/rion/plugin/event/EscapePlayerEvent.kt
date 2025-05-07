@@ -98,7 +98,6 @@ class EscapePlayerEvent : Listener {
                 val meta = item.itemMeta
                 if (meta != null && hasCustomTag(meta, "teleport")) {
                     event.isCancelled = true // 나침반을 들고 있어도 블록 상호작용 차단
-                    player.sendMessage("${ChatColor.RED}나침반을 들고 블록을 클릭할 수 없습니다.")
                     return
                 }
             }
