@@ -12,6 +12,8 @@ object Weatherthunder {
         // 날씨를 폭풍으로 설정
         Bukkit.getWorlds().forEach { world ->
             world.time = 23000L
+            world.setStorm(true)
+            world.isThundering = true
         }
 
         // 플레이어에게 구속 효과 적용 (30초간)

@@ -12,6 +12,8 @@ object WeatherWind {
         // 시간을 오전으로 변경
         Bukkit.getWorlds().forEach { world ->
             world.time = 3000L
+            world.setStorm(false)
+            world.isThundering = false
         }
         val defaultWalkSpeed = 0.2f  // 기본 이동 속도
         val walkSpeed = 1.5 //이속수정 퍼센트

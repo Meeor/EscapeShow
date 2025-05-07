@@ -15,6 +15,8 @@ object WeatherSun {
         // 시간을 아침으로 변경
         Bukkit.getWorlds().forEach { world ->
             world.time = 500L
+            world.setStorm(false)
+            world.isThundering = false
         }
 
         Bukkit.getOnlinePlayers()
