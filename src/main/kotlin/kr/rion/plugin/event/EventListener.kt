@@ -26,7 +26,8 @@ class EventListener : Listener {
             OnEntitySpawn(),
             MissionEvent(),
             PlayerSlotLimiter(),
-            PickupEvent()
+            PickupEvent(),
+            PlayerChangeWorldEvent()
             //CreditEvent()
         )
 

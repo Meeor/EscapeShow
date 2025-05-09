@@ -11,6 +11,7 @@ import kr.rion.plugin.item.FlameGunActions.playersAtParticle
 import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.manager.MissionManager.endGame
 import kr.rion.plugin.manager.TeamManager
+import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.util.Bossbar.bossbarEnable
 import kr.rion.plugin.util.Bossbar.removeDirectionBossBar
 import kr.rion.plugin.util.Helicopter.HelicopterisSpawn
@@ -119,7 +120,7 @@ object Global {
         val attribute = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)
         if (attribute != null) {
             attribute.baseValue = attribute.baseValue + damageBuff
-            player.sendMessage("§a[미션 클리어] 공격력이 ${damageBuff}만큼 증가했습니다!")
+            player.sendMessage("$MISSIONPREFIX 미션 클리어! §b공격력이 §e${damageBuff}§b만큼 증가했습니다!")
         }
     }
 
@@ -161,7 +162,7 @@ object Global {
             val attribute = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)
             if (attribute != null) {
                 attribute.baseValue = attribute.baseValue + damageBuff
-                player.sendMessage("§a[미션 클리어] 공격력이 ${damageBuff}만큼 증가했습니다!")
+                player.sendMessage("$MISSIONPREFIX 미션 클리어! §b공격력이 §e${damageBuff}§b만큼 증가했습니다!")
             }
         }
     }
@@ -215,7 +216,7 @@ object Global {
         if (remainingPlayers <= 0) {
             if (isEnding) return
             endGame()
-            Bukkit.broadcastMessage("생존자가 없는 것으로 확인되어 게임을 종료시킵니다.")
+            Bukkit.broadcastMessage("$prefix 생존자가 없는 것으로 확인되어 게임을 종료시킵니다.")
             End.EndAction()
         }
         // ✅ 팀전일 경우, 생존한 팀이 1팀만 남았으면 종료

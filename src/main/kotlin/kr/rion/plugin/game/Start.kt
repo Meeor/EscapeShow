@@ -22,6 +22,7 @@ import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.allUnStopPlayer
 import kr.rion.plugin.util.Global.stopPlayer
 import org.bukkit.*
+import org.bukkit.block.ShulkerBox
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -298,7 +299,12 @@ object Start {
                         )
                         targetLocations.forEach { loc ->
                             val block = loc.block
-                            block.type = Material.GREEN_SHULKER_BOX
+                            block.type = Material.LIME_SHULKER_BOX
+                            val state = block.state
+                            if (state is ShulkerBox) {
+                                state.customName = "§e[§6MISSION §aCLEAR §b인증 상자§e]"
+                                state.update(true)
+                            }
                         }
                     }
                 }
@@ -354,6 +360,11 @@ object Start {
                     targetLocations.forEach { loc ->
                         val block = loc.block
                         block.type = Material.LIME_SHULKER_BOX
+                        val state = block.state
+                        if (state is ShulkerBox) {
+                            state.customName = "§e[§6MISSION §aCLEAR §b인증 상자§e]"
+                            state.update(true)
+                        }
                     }
                 }
             }

@@ -75,7 +75,7 @@ class VoiceChatEvent : VoicechatPlugin {
         if (sender != null && isPlayerInBroadcast(sender.name)) {
             sender.spigot().sendMessage(
                 ChatMessageType.ACTION_BAR,
-                TextComponent("§a방송모드")
+                TextComponent("§b전체 플레이어에게 §a목소리 §b전달중...")
             )
             // 서버에 있는 모든 플레이어에게 패킷 전송
             Bukkit.getServer().onlinePlayers.forEach { onlinePlayer ->
