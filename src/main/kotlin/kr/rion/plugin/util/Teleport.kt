@@ -94,10 +94,8 @@ object Teleport {
     }
 
     fun teleportTeamToRandomLocation(players: List<Player>) {
-        Bukkit.getLogger().warning("[DEBUG] 함수 호출됨.")
         if (!hasInitializedSafeLocations) {
             players.forEach { it.sendMessage("$prefix 안전한 좌표가 초기화되지 않았습니다. 나중에 다시 시도해주세요.") }
-
             Bukkit.getLogger().warning("[DEBUG] 안전한 좌표가 초기화되지 않았습니다. 나중에 다시 시도해주세요.")
             return
         }
@@ -133,7 +131,6 @@ object Teleport {
     }
 
     fun teleportSoleToRandomLocation(player: Player) {
-        Bukkit.getLogger().warning("[DEBUG] 함수 호출됨.")
         if (!hasInitializedSafeLocations) {
             player.sendMessage("$prefix 안전한 좌표가 초기화되지 않았습니다. 나중에 다시 시도해주세요.")
 
