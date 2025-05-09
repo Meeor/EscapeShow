@@ -14,6 +14,7 @@ import kr.rion.plugin.gui.Giveitem.itemGUI
 import kr.rion.plugin.gui.Resetgui.ResetGUI
 import kr.rion.plugin.gui.SettingMenu.settingGUI
 import kr.rion.plugin.manager.TeamManager.teamPvpBoolean
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.door
 import kr.rion.plugin.util.Global.prefix
@@ -25,7 +26,6 @@ import kr.rion.plugin.util.Item.mainMenu
 import kr.rion.plugin.util.Item.speedItem
 import kr.rion.plugin.util.Item.teleportCompass
 import kr.rion.plugin.util.Item.upgradeItem
-import kr.rion.plugin.util.Delay
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

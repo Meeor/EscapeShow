@@ -3,12 +3,12 @@ package kr.rion.plugin.event
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.manager.TeamManager
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.playerItem
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Global.survivalPlayers
-import kr.rion.plugin.util.Delay
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode

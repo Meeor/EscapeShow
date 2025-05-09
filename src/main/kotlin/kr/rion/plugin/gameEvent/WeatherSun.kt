@@ -1,8 +1,8 @@
 package kr.rion.plugin.gameEvent
 
 import kr.rion.plugin.gameEvent.GameEvent.excludedTags
-import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Delay
+import kr.rion.plugin.util.Global.prefix
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier

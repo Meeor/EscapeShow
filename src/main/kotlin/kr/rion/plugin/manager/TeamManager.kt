@@ -1,8 +1,8 @@
 package kr.rion.plugin.manager
 
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Global.teamsMaxPlayers
-import kr.rion.plugin.util.Delay
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.scoreboard.Team

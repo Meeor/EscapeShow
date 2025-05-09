@@ -4,12 +4,15 @@ import kr.rion.plugin.Loader
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.manager.MissionManager
 import kr.rion.plugin.manager.TeamManager
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.GameAllReset
 import kr.rion.plugin.util.Global.GameAllReset2
 import kr.rion.plugin.util.Global.PlayerAllReset
 import kr.rion.plugin.util.Global.TeamGame
+import kr.rion.plugin.util.Global.allUnStopPlayer
 import kr.rion.plugin.util.Global.playerInventorySetting
 import kr.rion.plugin.util.Global.prefix
+import kr.rion.plugin.util.Global.stopPlayer
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
 import kr.rion.plugin.util.Item.ItemGuideBook
@@ -18,9 +21,6 @@ import kr.rion.plugin.util.Teleport.immunePlayers
 import kr.rion.plugin.util.Teleport.initializeSafeLocations
 import kr.rion.plugin.util.Teleport.teleportSoleToRandomLocation
 import kr.rion.plugin.util.Teleport.teleportTeamToRandomLocation
-import kr.rion.plugin.util.Delay
-import kr.rion.plugin.util.Global.allUnStopPlayer
-import kr.rion.plugin.util.Global.stopPlayer
 import org.bukkit.*
 import org.bukkit.block.ShulkerBox
 import org.bukkit.entity.Player
@@ -289,7 +289,7 @@ object Start {
                             immunePlayers.clear()
                             allUnStopPlayer()
                         })
-                    Delay.delayRun(100){
+                    Delay.delayRun(100) {
                         val world = Bukkit.getWorld("game") ?: return@delayRun
                         val targetLocations = listOf(
                             Location(world, 227.0, 51.0, -669.0),
@@ -349,7 +349,7 @@ object Start {
                         immunePlayers.clear()
                         allUnStopPlayer()
                     })
-                Delay.delayRun(100){
+                Delay.delayRun(100) {
                     val world = Bukkit.getWorld("game") ?: return@delayRun
                     val targetLocations = listOf(
                         Location(world, 227.0, 51.0, -669.0),

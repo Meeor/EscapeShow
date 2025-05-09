@@ -8,7 +8,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.persistence.PersistentDataType
 
-class PickupEvent: Listener {
+class PickupEvent : Listener {
     @EventHandler
     fun onPickup(event: EntityPickupItemEvent) {
         val entity = event.entity

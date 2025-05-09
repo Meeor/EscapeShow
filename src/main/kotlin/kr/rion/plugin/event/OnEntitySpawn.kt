@@ -6,6 +6,7 @@ import kr.rion.plugin.customEvent.RevivalEvent
 import kr.rion.plugin.customEvent.RevivalEventType
 import kr.rion.plugin.game.End.isEnding
 import kr.rion.plugin.game.Start.isStarting
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Global.endingPlayer
 import kr.rion.plugin.util.Global.originalArmor
@@ -18,7 +19,6 @@ import kr.rion.plugin.util.Global.respawnTask
 import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Global.sneakingTimers
 import kr.rion.plugin.util.Global.timerReset
-import kr.rion.plugin.util.Delay
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location

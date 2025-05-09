@@ -6,6 +6,7 @@ import kr.rion.plugin.game.Start.isStarting
 import kr.rion.plugin.manager.ChunkyManager.loadChunkyForWorld
 import kr.rion.plugin.manager.TeamManager.getSurvivorTeams
 import kr.rion.plugin.manager.TeamManager.resetTeam
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.GameAllReset
 import kr.rion.plugin.util.Global.GameAllReset2
 import kr.rion.plugin.util.Global.PlayerAllReset
@@ -15,7 +16,6 @@ import kr.rion.plugin.util.Global.reviveFlags
 import kr.rion.plugin.util.Helicopter
 import kr.rion.plugin.util.Helicopter.fillBlocks
 import kr.rion.plugin.util.Helicopter.setBlockWithAttributes
-import kr.rion.plugin.util.Delay
 import org.bukkit.*
 
 object End {

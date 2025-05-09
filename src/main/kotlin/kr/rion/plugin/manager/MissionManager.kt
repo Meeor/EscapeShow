@@ -3,9 +3,9 @@ package kr.rion.plugin.manager
 import kr.rion.plugin.Loader
 import kr.rion.plugin.mission.Mission.Companion.MISSIONPREFIX
 import kr.rion.plugin.mission.MissionRegistry
+import kr.rion.plugin.util.Delay
 import kr.rion.plugin.util.Global.TeamGame
 import kr.rion.plugin.util.Item.createMissionEscapePaper
-import kr.rion.plugin.util.Delay
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound

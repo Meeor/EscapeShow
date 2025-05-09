@@ -9,7 +9,6 @@ import kr.rion.plugin.item.ItemAction.handleFlameGun
 import kr.rion.plugin.item.ItemAction.handleSpeed
 import kr.rion.plugin.item.ItemAction.handleUpgrade
 import kr.rion.plugin.util.Global.prefix
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey

@@ -71,7 +71,7 @@ class InventoryCloseEvent : Listener {
 
         missionclearSoleAction(player)
         // 컨테이너 내용물 비우기 (상자든 셜커든)
-        Delay.delayRun(20){
+        Delay.delayRun(20) {
             val block = loc.block
             val type = block.type // 기존 블록 타입 저장 (셜커든 상자든)
 
@@ -80,7 +80,6 @@ class InventoryCloseEvent : Listener {
 
         }
     }
-
 
 
     fun isMissionEscapePaperExists(inventory: Inventory): Boolean {

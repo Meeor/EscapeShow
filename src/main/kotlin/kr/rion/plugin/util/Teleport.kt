@@ -2,8 +2,8 @@ package kr.rion.plugin.util
 
 import kr.rion.plugin.Loader
 import kr.rion.plugin.manager.WorldManager
-import kr.rion.plugin.util.Global.prefix
 import kr.rion.plugin.util.Delay.delayForEachPlayer
+import kr.rion.plugin.util.Global.prefix
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.Location

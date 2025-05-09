@@ -373,11 +373,12 @@ object Global {
         }
     }
 
-    fun stopPlayer(player: Player){
+    fun stopPlayer(player: Player) {
         player.walkSpeed = 0f
     }
-    fun allUnStopPlayer(){
-        for(player in Bukkit.getOnlinePlayers()){
+
+    fun allUnStopPlayer() {
+        for (player in Bukkit.getOnlinePlayers()) {
             player.walkSpeed = 0.2f
         }
     }
