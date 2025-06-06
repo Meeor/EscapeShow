@@ -15,6 +15,13 @@ class ItemUsageMission(
     private val requiredUses: Int // 총 사용 횟수
 ) : Mission {
     private val playerUsageMap = mutableMapOf<UUID, Int>() // 플레이어별 사용 횟수 추적
+    // 사용자 정의 아이템 이름 매핑
+    private val itemNameMap = mapOf(
+        Material.SKULL_BANNER_PATTERN to "계약서",
+        Material.MOJANG_BANNER_PATTERN to "지도",
+        Material.NETHER_BRICK to "부목",
+        Material.PAPER to "붕대"
+    )
 
     override fun missionStart(player: Player) {
         val uuid = player.uniqueId
@@ -40,10 +47,11 @@ class ItemUsageMission(
     private fun incrementUsage(player: Player) {
         val uuid = player.uniqueId
         val currentUsage = playerUsageMap.getOrDefault(uuid, 0) + 1
+        val koreanName = itemNameMap[targetMaterial] ?: targetMaterial.name
         playerUsageMap[uuid] = currentUsage
         player.spigot().sendMessage(
             ChatMessageType.ACTION_BAR,
-            TextComponent("§d$targetMaterial §b아이템 사용 횟수: §e$currentUsage§b / §d$requiredUses")
+            TextComponent("§d$koreanName §b아이템 사용 횟수: §e$currentUsage§b / §d$requiredUses")
         )
     }
 
